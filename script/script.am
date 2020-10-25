@@ -1,0 +1,1 @@
+installuse_geocal_skeleton_DATA = @srcscript@/setup_use_geocal_skeleton.csh @srcscript@/setup_use_geocal_skeleton.sh
