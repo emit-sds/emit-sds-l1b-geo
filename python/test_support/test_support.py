@@ -2,7 +2,7 @@
 import pytest
 import os
 try:
-    from use_geocal_skeleton_swig import *
+    from emit_swig import *
     have_swig = True
 except ImportError:
     have_swig = False

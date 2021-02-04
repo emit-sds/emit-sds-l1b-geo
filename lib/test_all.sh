@@ -23,7 +23,7 @@ else
     tool_command=""
 fi
 
-name=use_geocal_skeleton
+name=emit
 source ${abs_top_builddir}/script/setup_${name}.sh
 
 if [ ${log_test} ] ; then

@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 #include <cstdlib>
 
-using namespace UseGeoCalSkeleton;
+using namespace Emit;
 //-----------------------------------------------------------------------
 /// Directory where unit test data is. This already includes the trailing
 /// slash, so you can just do unit_test_data_data() + "foo.txt" in your 

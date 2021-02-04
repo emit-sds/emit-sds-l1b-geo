@@ -4,7 +4,7 @@
 #define SWIG_MAPPER_NAMESPACE GeoCal
 #include "geocal/serialize_function.h"
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/make_shared.hpp>
 
 //-----------------------------------------------------------------------

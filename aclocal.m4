@@ -1683,8 +1683,8 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
-m4_include([config/m4_local/use_geocal_skeleton_common.m4])
-m4_include([config/m4_local/use_geocal_skeleton_source_directory.m4])
+m4_include([config/m4_local/emit_common.m4])
+m4_include([config/m4_local/emit_source_directory.m4])
 m4_include([config/m4/ac_check_found.m4])
 m4_include([config/m4/ac_doxygen.m4])
 m4_include([config/m4/ac_enable_debug.m4])

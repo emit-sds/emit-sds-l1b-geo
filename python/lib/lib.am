@@ -1,4 +1,4 @@
-use_geocal_skeletonpkgpython_PYTHON+= @srcpythonlib@/dummy.py
+emitpkgpython_PYTHON+= @srcpythonlib@/dummy.py
 
 EXTRA_DIST+=@srcpythonlib@/dummy_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py

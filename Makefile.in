@@ -113,16 +113,15 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS =
-check_PROGRAMS = use_geocal_skeleton_test_all$(EXEEXT)
+check_PROGRAMS = emit_test_all$(EXEEXT)
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@am__append_1 = $(addprefix \
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@	$(srcdir)/, \
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@	$(INCLUDE_SWIG_SRC)) \
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@	$(srcdir)/$(swigsrc)/swig_wrap.cc
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps =  \
-	$(top_srcdir)/config/m4_local/use_geocal_skeleton_common.m4 \
-	$(top_srcdir)/config/m4_local/use_geocal_skeleton_source_directory.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/config/m4_local/emit_common.m4 \
+	$(top_srcdir)/config/m4_local/emit_source_directory.m4 \
 	$(top_srcdir)/config/m4/ac_check_found.m4 \
 	$(top_srcdir)/config/m4/ac_doxygen.m4 \
 	$(top_srcdir)/config/m4/ac_enable_debug.m4 \
@@ -147,26 +146,21 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 	$(am__configure_deps) $(dist_bin_SCRIPTS) \
-	$(dist_installuse_geocal_skeleton_SCRIPTS) \
-	$(pkgpythonswig_PYTHON) $(use_geocal_skeletonpkgpython_PYTHON) \
-	$(include_HEADERS) $(use_geocal_skeletoninc_HEADERS) \
-	$(use_geocal_skeletonswiginc_HEADERS) $(am__DIST_COMMON)
+	$(dist_installemit_SCRIPTS) $(emitpkgpython_PYTHON) \
+	$(pkgpythonswig_PYTHON) $(emitinc_HEADERS) \
+	$(emitswiginc_HEADERS) $(include_HEADERS) $(am__DIST_COMMON)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = script/setup_use_geocal_skeleton.csh \
-	script/setup_use_geocal_skeleton.sh \
-	lib/global_fixture_default.cc
+CONFIG_CLEAN_FILES = script/setup_emit.csh script/setup_emit.sh \
+	lib/global_fixture_default.cc emit_version.py
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(installuse_geocal_skeletondir)" \
-	"$(DESTDIR)$(pkgpythonswigdir)" \
-	"$(DESTDIR)$(use_geocal_skeletonpkgpythondir)" \
-	"$(DESTDIR)$(installuse_geocal_skeletondir)" \
-	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" \
-	"$(DESTDIR)$(use_geocal_skeletonincdir)" \
-	"$(DESTDIR)$(use_geocal_skeletonswigincdir)"
+	"$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(emitpkgpythondir)" \
+	"$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(installemitdir)" \
+	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(emitincdir)" \
+	"$(DESTDIR)$(emitswigincdir)" "$(DESTDIR)$(includedir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -197,7 +191,7 @@ am__uninstall_files_from_dir = { \
   }
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES) \
 	$(pkgpythonswig_LTLIBRARIES)
-_swig_wrap_la_DEPENDENCIES = libuse_geocal_skeleton.la
+_swig_wrap_la_DEPENDENCIES = libemit.la
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo
 am__objects_2 = $(am__objects_1)
@@ -212,29 +206,23 @@ _swig_wrap_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) $(_swig_wrap_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
-libuse_geocal_skeleton_la_LIBADD =
-am_libuse_geocal_skeleton_la_OBJECTS =  \
-	@srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo
-libuse_geocal_skeleton_la_OBJECTS =  \
-	$(am_libuse_geocal_skeleton_la_OBJECTS)
-libuse_geocal_skeleton_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+libemit_la_LIBADD =
+am_libemit_la_OBJECTS = @srclib@/libemit_la-ecostress_scan_mirror.lo
+libemit_la_OBJECTS = $(am_libemit_la_OBJECTS)
+libemit_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(libemit_la_LDFLAGS) $(LDFLAGS) -o $@
+am_emit_test_all_OBJECTS = @srclib@/emit_test_all-test_all.$(OBJEXT) \
+	@srclib@/emit_test_all-global_fixture.$(OBJEXT) \
+	@srclib@/emit_test_all-global_fixture_default.$(OBJEXT) \
+	@srclib@/emit_test_all-ecostress_scan_mirror_test.$(OBJEXT)
+emit_test_all_OBJECTS = $(am_emit_test_all_OBJECTS)
+emit_test_all_DEPENDENCIES = libemit.la
+emit_test_all_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) \
-	$(libuse_geocal_skeleton_la_LDFLAGS) $(LDFLAGS) -o $@
-am_use_geocal_skeleton_test_all_OBJECTS =  \
-	@srclib@/use_geocal_skeleton_test_all-test_all.$(OBJEXT) \
-	@srclib@/use_geocal_skeleton_test_all-global_fixture.$(OBJEXT) \
-	@srclib@/use_geocal_skeleton_test_all-global_fixture_default.$(OBJEXT) \
-	@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.$(OBJEXT)
-use_geocal_skeleton_test_all_OBJECTS =  \
-	$(am_use_geocal_skeleton_test_all_OBJECTS)
-use_geocal_skeleton_test_all_DEPENDENCIES = libuse_geocal_skeleton.la
-use_geocal_skeleton_test_all_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) \
-	$(use_geocal_skeleton_test_all_LDFLAGS) $(LDFLAGS) -o $@
-SCRIPTS = $(dist_bin_SCRIPTS) \
-	$(dist_installuse_geocal_skeleton_SCRIPTS)
+	$(AM_CXXFLAGS) $(CXXFLAGS) $(emit_test_all_LDFLAGS) $(LDFLAGS) \
+	-o $@
+SCRIPTS = $(dist_bin_SCRIPTS) $(dist_installemit_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -250,11 +238,11 @@ am__v_at_1 =
 DEFAULT_INCLUDES = 
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Plo \
-	@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po \
-	@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po \
-	@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po \
-	@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po \
+am__depfiles_remade = @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po \
+	@srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po \
+	@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po \
+	@srclib@/$(DEPDIR)/emit_test_all-test_all.Po \
+	@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 am__mv = mv -f
@@ -276,12 +264,10 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(_swig_wrap_la_SOURCES) \
-	$(libuse_geocal_skeleton_la_SOURCES) \
-	$(use_geocal_skeleton_test_all_SOURCES)
-DIST_SOURCES = $(_swig_wrap_la_SOURCES) \
-	$(libuse_geocal_skeleton_la_SOURCES) \
-	$(use_geocal_skeleton_test_all_SOURCES)
+SOURCES = $(_swig_wrap_la_SOURCES) $(libemit_la_SOURCES) \
+	$(emit_test_all_SOURCES)
+DIST_SOURCES = $(_swig_wrap_la_SOURCES) $(libemit_la_SOURCES) \
+	$(emit_test_all_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -291,9 +277,8 @@ am__py_compile = PYTHON=$(PYTHON) $(SHELL) $(py_compile)
 am__pep3147_tweak = \
   sed -e 's|\.py$$||' -e 's|[^/]*$$|&.*.pyc\n&.*.pyo|'
 py_compile = $(top_srcdir)/config/py-compile
-DATA = $(installuse_geocal_skeleton_DATA) $(pkgconfig_DATA)
-HEADERS = $(include_HEADERS) $(use_geocal_skeletoninc_HEADERS) \
-	$(use_geocal_skeletonswiginc_HEADERS)
+DATA = $(installemit_DATA) $(pkgconfig_DATA)
+HEADERS = $(emitinc_HEADERS) $(emitswiginc_HEADERS) $(include_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -493,22 +478,22 @@ TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(srcdir)/bindings/python/python.am $(srcdir)/common.am \
-	$(srcdir)/include.am $(srcdir)/lib/lib.am \
-	$(srcdir)/python/bin/bin.am $(srcdir)/python/lib/lib.am \
-	$(srcdir)/python/python.am \
+	$(srcdir)/emit.am $(srcdir)/emit_version.py.in \
+	$(srcdir)/include.am $(srcdir)/l1b_geo/l1b_geo.am \
+	$(srcdir)/lib/lib.am $(srcdir)/python/bin/bin.am \
+	$(srcdir)/python/lib/lib.am $(srcdir)/python/python.am \
 	$(srcdir)/python/test_support/test_support.am \
 	$(srcdir)/script/script.am \
 	$(srcdir)/unit_test_data/unit_test_data.am \
-	$(srcdir)/use_geocal_skeleton.am $(top_srcdir)/config/compile \
-	$(top_srcdir)/config/config.guess \
+	$(top_srcdir)/config/compile $(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub $(top_srcdir)/config/depcomp \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
 	$(top_srcdir)/config/missing $(top_srcdir)/config/py-compile \
 	$(top_srcdir)/config/test-driver \
 	$(top_srcdir)/lib/global_fixture_default.cc.in \
-	$(top_srcdir)/script/setup_use_geocal_skeleton.csh.in \
-	$(top_srcdir)/script/setup_use_geocal_skeleton.sh.in AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README config/compile \
+	$(top_srcdir)/script/setup_emit.csh.in \
+	$(top_srcdir)/script/setup_emit.sh.in AUTHORS COPYING \
+	ChangeLog INSTALL NEWS README config/compile \
 	config/config.guess config/config.sub config/depcomp \
 	config/install-sh config/ltmain.sh config/missing \
 	config/py-compile
@@ -652,6 +637,8 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 docpythonsrc = @docpythonsrc@
 dvidir = @dvidir@
+emitpkgpythondir = @emitpkgpythondir@
+emitswigincdir = @prefix@/share/emit/swig
 exec_prefix = @exec_prefix@
 geocaldir = @geocaldir@
 host = @host@
@@ -663,7 +650,8 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-installuse_geocal_skeletondir = @installuse_geocal_skeletondir@
+installemitdir = @installemitdir@
+l1b_geo_src = @l1b_geo_src@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -686,13 +674,13 @@ pythonswigsrc = @pythonswigsrc@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
+srcemitbin = @srcemitbin@
 srclib = @srclib@
 srcpython = @srcpython@
 srcpythonbin = @srcpythonbin@
 srcpythonlib = @srcpythonlib@
 srcpythonscript = @srcpythonscript@
 srcscript = @srcscript@
-srcuse_geocal_skeletonbin = @srcuse_geocal_skeletonbin@
 swigincdir = @swigincdir@
 swigrules = @swigrules@
 swigsrc = @swigsrc@
@@ -703,8 +691,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 unittestdata = @unittestdata@
-use_geocal_skeletonpkgpythondir = @use_geocal_skeletonpkgpythondir@
-use_geocal_skeletonswigincdir = @prefix@/share/use_geocal_skeleton/swig
 
 # Don't worry about Makefile portability warnings. We can assume that we 
 # are using GNU make. Pretty much any modern system will have GNU make on it.
@@ -719,9 +705,10 @@ noop =
 # Build these up as we go
 
 # Set up for the library
-lib_LTLIBRARIES = libuse_geocal_skeleton.la
+lib_LTLIBRARIES = libemit.la
 noinst_LTLIBRARIES = 
-dist_bin_SCRIPTS = $(srcdir)/$(srcpythonbin)/dummy_sample
+dist_bin_SCRIPTS = $(srcdir)/$(srcpythonbin)/dummy_sample \
+	@l1b_geo_src@/l1b_geo_process
 AM_LDFLAGS = 
 BUILT_SOURCES = complain_if_afids $(am__append_1)
 include_HEADERS = 
@@ -763,7 +750,7 @@ check_PROGRAM =
 check_DATA = 
 
 # Build these up as we go
-dist_installuse_geocal_skeleton_SCRIPTS = 
+dist_installemit_SCRIPTS = 
 SWIG_FLAG = 
 
 # Make sure we don't have any pyc or pycache files floating around
@@ -771,28 +758,27 @@ DIST_HOOK = dist-clean-up-python
 
 # Dist check need to know where to find geocal
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-use_geocal_skeletonincdir = @includedir@/use_geocal_skeleton
-libuse_geocal_skeleton_la_SOURCES = @srclib@/ecostress_scan_mirror.cc
+emitincdir = @includedir@/emit
+libemit_la_SOURCES = @srclib@/ecostress_scan_mirror.cc
 
 #=================================================================
 # List of source files
-use_geocal_skeletoninc_HEADERS =  \
-	@srclib@/use_geocal_skeleton_serialize_support.h \
+emitinc_HEADERS = @srclib@/emit_serialize_support.h \
 	@srclib@/ecostress_scan_mirror.h
-use_geocal_skeletonswiginc_HEADERS = @srclib@/ecostress_scan_mirror.i \
-	@srclib@/use_geocal_skeleton_common.i
-use_geocal_skeleton_test_all_SOURCES = @srclib@/test_all.cc \
+emitswiginc_HEADERS = @srclib@/ecostress_scan_mirror.i \
+	@srclib@/emit_common.i
+emit_test_all_SOURCES = @srclib@/test_all.cc \
 	@srclib@/global_fixture.cc @srclib@/global_fixture_default.cc \
 	@srclib@/ecostress_scan_mirror_test.cc
 
 # Files that contain SWIG wrapper information.
 SWIG_SRC = @swigsrc@/ecostress_scan_mirror_wrap.cc
-libuse_geocal_skeleton_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
-libuse_geocal_skeleton_la_LDFLAGS = $(GEOCAL_LIBS)
-use_geocal_skeleton_test_all_LDADD = libuse_geocal_skeleton.la 
-use_geocal_skeleton_test_all_LDFLAGS = -no-install 
-use_geocal_skeleton_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
-use_geocal_skeletonpkgpython_PYTHON = @srcpython@/init/__init__.py \
+libemit_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
+libemit_la_LDFLAGS = $(GEOCAL_LIBS)
+emit_test_all_LDADD = libemit.la 
+emit_test_all_LDFLAGS = -no-install 
+emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
+emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/dummy.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
@@ -800,7 +786,7 @@ use_geocal_skeletonpkgpython_PYTHON = @srcpython@/init/__init__.py \
 PYTEST_NJOB = 10
 PYTEST_EXTRAFLAGS = 
 PYTEST_FLAGS = -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp
-pkgpythonswigdir = $(prefix)/@pythondir@/use_geocal_skeleton_swig
+pkgpythonswigdir = $(prefix)/@pythondir@/emit_swig
 pkgpythonswig_PYTHON = @pythonswigsrc@/__init__.py $(patsubst \
 	%_wrap.cc, %.py, $(INCLUDE_SWIG_SRC))
 INCLUDE_SWIG_SRC = $(SWIG_SRC)
@@ -817,7 +803,7 @@ _swig_wrap_la_CPPFLAGS = $(PYTHON_CPPFLAGS) $(PYTHON_NUMPY_CPPFLAGS) \
 	-DSWIG_TYPE_TABLE=geocal
 _swig_wrap_la_CXXFLAGS = $(AM_CXXFLAGS)
 _swig_wrap_la_LDFLAGS = -module -avoid-version
-_swig_wrap_la_LIBADD = libuse_geocal_skeleton.la
+_swig_wrap_la_LIBADD = libemit.la
 _swig_wrap_la_SOURCES = $(INCLUDE_SWIG_SRC) @swigsrc@/swig_wrap.cc
 # Only generate these files in maintainer mode, otherwise consider them
 # as input.
@@ -826,7 +812,7 @@ _swig_wrap_la_SOURCES = $(INCLUDE_SWIG_SRC) @swigsrc@/swig_wrap.cc
 # GCC know not to complain about things in the header files we can't change).
 # Just replace -isystem with -I for swig
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@GSWIG_FLAGS = $(patsubst -isystem%,-I%, $(GEOCAL_CFLAGS) $(GEOCAL_SWIG_CFLAGS))
-installuse_geocal_skeleton_DATA = @srcscript@/setup_use_geocal_skeleton.csh @srcscript@/setup_use_geocal_skeleton.sh
+installemit_DATA = @srcscript@/setup_emit.csh @srcscript@/setup_emit.sh
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -834,7 +820,7 @@ all: $(BUILT_SOURCES)
 .SUFFIXES: .cc .lo .log .o .obj .test .test$(EXEEXT) .trs
 am--refresh: Makefile
 	@:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/common.am $(srcdir)/include.am $(srcdir)/use_geocal_skeleton.am $(srcdir)/lib/lib.am $(srcdir)/python/python.am $(srcdir)/python/lib/lib.am $(srcdir)/python/bin/bin.am $(srcdir)/python/test_support/test_support.am $(srcdir)/bindings/python/python.am $(srcdir)/unit_test_data/unit_test_data.am $(srcdir)/script/script.am $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/common.am $(srcdir)/include.am $(srcdir)/emit.am $(srcdir)/lib/lib.am $(srcdir)/python/python.am $(srcdir)/python/lib/lib.am $(srcdir)/python/bin/bin.am $(srcdir)/python/test_support/test_support.am $(srcdir)/bindings/python/python.am $(srcdir)/unit_test_data/unit_test_data.am $(srcdir)/script/script.am $(srcdir)/l1b_geo/l1b_geo.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -856,7 +842,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles);; \
 	esac;
-$(srcdir)/common.am $(srcdir)/include.am $(srcdir)/use_geocal_skeleton.am $(srcdir)/lib/lib.am $(srcdir)/python/python.am $(srcdir)/python/lib/lib.am $(srcdir)/python/bin/bin.am $(srcdir)/python/test_support/test_support.am $(srcdir)/bindings/python/python.am $(srcdir)/unit_test_data/unit_test_data.am $(srcdir)/script/script.am $(am__empty):
+$(srcdir)/common.am $(srcdir)/include.am $(srcdir)/emit.am $(srcdir)/lib/lib.am $(srcdir)/python/python.am $(srcdir)/python/lib/lib.am $(srcdir)/python/bin/bin.am $(srcdir)/python/test_support/test_support.am $(srcdir)/bindings/python/python.am $(srcdir)/unit_test_data/unit_test_data.am $(srcdir)/script/script.am $(srcdir)/l1b_geo/l1b_geo.am $(am__empty):
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
@@ -866,11 +852,13 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-script/setup_use_geocal_skeleton.csh: $(top_builddir)/config.status $(top_srcdir)/script/setup_use_geocal_skeleton.csh.in
+script/setup_emit.csh: $(top_builddir)/config.status $(top_srcdir)/script/setup_emit.csh.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-script/setup_use_geocal_skeleton.sh: $(top_builddir)/config.status $(top_srcdir)/script/setup_use_geocal_skeleton.sh.in
+script/setup_emit.sh: $(top_builddir)/config.status $(top_srcdir)/script/setup_emit.sh.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 lib/global_fixture_default.cc: $(top_builddir)/config.status $(top_srcdir)/lib/global_fixture_default.cc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+emit_version.py: $(top_builddir)/config.status $(srcdir)/emit_version.py.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -1030,23 +1018,23 @@ _swig_wrap.la: $(_swig_wrap_la_OBJECTS) $(_swig_wrap_la_DEPENDENCIES) $(EXTRA__s
 @srclib@/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) @srclib@/$(DEPDIR)
 	@: > @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo:  \
+@srclib@/libemit_la-ecostress_scan_mirror.lo:  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
 
-libuse_geocal_skeleton.la: $(libuse_geocal_skeleton_la_OBJECTS) $(libuse_geocal_skeleton_la_DEPENDENCIES) $(EXTRA_libuse_geocal_skeleton_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libuse_geocal_skeleton_la_LINK) -rpath $(libdir) $(libuse_geocal_skeleton_la_OBJECTS) $(libuse_geocal_skeleton_la_LIBADD) $(LIBS)
-@srclib@/use_geocal_skeleton_test_all-test_all.$(OBJEXT):  \
+libemit.la: $(libemit_la_OBJECTS) $(libemit_la_DEPENDENCIES) $(EXTRA_libemit_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(libemit_la_LINK) -rpath $(libdir) $(libemit_la_OBJECTS) $(libemit_la_LIBADD) $(LIBS)
+@srclib@/emit_test_all-test_all.$(OBJEXT): @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/emit_test_all-global_fixture.$(OBJEXT):  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/use_geocal_skeleton_test_all-global_fixture.$(OBJEXT):  \
+@srclib@/emit_test_all-global_fixture_default.$(OBJEXT):  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/use_geocal_skeleton_test_all-global_fixture_default.$(OBJEXT):  \
-	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.$(OBJEXT):  \
+@srclib@/emit_test_all-ecostress_scan_mirror_test.$(OBJEXT):  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
 
-use_geocal_skeleton_test_all$(EXEEXT): $(use_geocal_skeleton_test_all_OBJECTS) $(use_geocal_skeleton_test_all_DEPENDENCIES) $(EXTRA_use_geocal_skeleton_test_all_DEPENDENCIES) 
-	@rm -f use_geocal_skeleton_test_all$(EXEEXT)
-	$(AM_V_CXXLD)$(use_geocal_skeleton_test_all_LINK) $(use_geocal_skeleton_test_all_OBJECTS) $(use_geocal_skeleton_test_all_LDADD) $(LIBS)
+emit_test_all$(EXEEXT): $(emit_test_all_OBJECTS) $(emit_test_all_DEPENDENCIES) $(EXTRA_emit_test_all_DEPENDENCIES) 
+	@rm -f emit_test_all$(EXEEXT)
+	$(AM_V_CXXLD)$(emit_test_all_LINK) $(emit_test_all_OBJECTS) $(emit_test_all_LDADD) $(LIBS)
 install-dist_binSCRIPTS: $(dist_bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_bin_SCRIPTS)'; test -n "$(bindir)" || list=; \
@@ -1082,12 +1070,12 @@ uninstall-dist_binSCRIPTS:
 	files=`for p in $$list; do echo "$$p"; done | \
 	       sed -e 's,.*/,,;$(transform)'`; \
 	dir='$(DESTDIR)$(bindir)'; $(am__uninstall_files_from_dir)
-install-dist_installuse_geocal_skeletonSCRIPTS: $(dist_installuse_geocal_skeleton_SCRIPTS)
+install-dist_installemitSCRIPTS: $(dist_installemit_SCRIPTS)
 	@$(NORMAL_INSTALL)
-	@list='$(dist_installuse_geocal_skeleton_SCRIPTS)'; test -n "$(installuse_geocal_skeletondir)" || list=; \
+	@list='$(dist_installemit_SCRIPTS)'; test -n "$(installemitdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(installuse_geocal_skeletondir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(installuse_geocal_skeletondir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(installemitdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(installemitdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
@@ -1106,17 +1094,17 @@ install-dist_installuse_geocal_skeletonSCRIPTS: $(dist_installuse_geocal_skeleto
 	while read type dir files; do \
 	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	     test -z "$$files" || { \
-	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(installuse_geocal_skeletondir)$$dir'"; \
-	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(installuse_geocal_skeletondir)$$dir" || exit $$?; \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(installemitdir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(installemitdir)$$dir" || exit $$?; \
 	     } \
 	; done
 
-uninstall-dist_installuse_geocal_skeletonSCRIPTS:
+uninstall-dist_installemitSCRIPTS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_installuse_geocal_skeleton_SCRIPTS)'; test -n "$(installuse_geocal_skeletondir)" || exit 0; \
+	@list='$(dist_installemit_SCRIPTS)'; test -n "$(installemitdir)" || exit 0; \
 	files=`for p in $$list; do echo "$$p"; done | \
 	       sed -e 's,.*/,,;$(transform)'`; \
-	dir='$(DESTDIR)$(installuse_geocal_skeletondir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(installemitdir)'; $(am__uninstall_files_from_dir)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -1128,11 +1116,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-test_all.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo@am__quote@ # am--include-marker
 
@@ -1180,68 +1168,68 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-swig_wrap.lo `test -f '@swigsrc@/swig_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/swig_wrap.cc
 
-@srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo: @srclib@/ecostress_scan_mirror.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libuse_geocal_skeleton_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo -MD -MP -MF @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Tpo -c -o @srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Tpo @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror.cc' object='@srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo' libtool=yes @AMDEPBACKSLASH@
+@srclib@/libemit_la-ecostress_scan_mirror.lo: @srclib@/ecostress_scan_mirror.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-ecostress_scan_mirror.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Tpo -c -o @srclib@/libemit_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Tpo @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror.cc' object='@srclib@/libemit_la-ecostress_scan_mirror.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libuse_geocal_skeleton_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libuse_geocal_skeleton_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
 
-@srclib@/use_geocal_skeleton_test_all-test_all.o: @srclib@/test_all.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-test_all.o -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/test_all.cc' object='@srclib@/use_geocal_skeleton_test_all-test_all.o' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-test_all.o: @srclib@/test_all.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-test_all.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo -c -o @srclib@/emit_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/test_all.cc' object='@srclib@/emit_test_all-test_all.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
 
-@srclib@/use_geocal_skeleton_test_all-test_all.obj: @srclib@/test_all.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-test_all.obj -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-test_all.obj `if test -f '@srclib@/test_all.cc'; then $(CYGPATH_W) '@srclib@/test_all.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/test_all.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/test_all.cc' object='@srclib@/use_geocal_skeleton_test_all-test_all.obj' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-test_all.obj: @srclib@/test_all.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-test_all.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo -c -o @srclib@/emit_test_all-test_all.obj `if test -f '@srclib@/test_all.cc'; then $(CYGPATH_W) '@srclib@/test_all.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/test_all.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/test_all.cc' object='@srclib@/emit_test_all-test_all.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-test_all.obj `if test -f '@srclib@/test_all.cc'; then $(CYGPATH_W) '@srclib@/test_all.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/test_all.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-test_all.obj `if test -f '@srclib@/test_all.cc'; then $(CYGPATH_W) '@srclib@/test_all.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/test_all.cc'; fi`
 
-@srclib@/use_geocal_skeleton_test_all-global_fixture.o: @srclib@/global_fixture.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-global_fixture.o -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture.o `test -f '@srclib@/global_fixture.cc' || echo '$(srcdir)/'`@srclib@/global_fixture.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture.cc' object='@srclib@/use_geocal_skeleton_test_all-global_fixture.o' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-global_fixture.o: @srclib@/global_fixture.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-global_fixture.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Tpo -c -o @srclib@/emit_test_all-global_fixture.o `test -f '@srclib@/global_fixture.cc' || echo '$(srcdir)/'`@srclib@/global_fixture.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Tpo @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture.cc' object='@srclib@/emit_test_all-global_fixture.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture.o `test -f '@srclib@/global_fixture.cc' || echo '$(srcdir)/'`@srclib@/global_fixture.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-global_fixture.o `test -f '@srclib@/global_fixture.cc' || echo '$(srcdir)/'`@srclib@/global_fixture.cc
 
-@srclib@/use_geocal_skeleton_test_all-global_fixture.obj: @srclib@/global_fixture.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-global_fixture.obj -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture.obj `if test -f '@srclib@/global_fixture.cc'; then $(CYGPATH_W) '@srclib@/global_fixture.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture.cc' object='@srclib@/use_geocal_skeleton_test_all-global_fixture.obj' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-global_fixture.obj: @srclib@/global_fixture.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-global_fixture.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Tpo -c -o @srclib@/emit_test_all-global_fixture.obj `if test -f '@srclib@/global_fixture.cc'; then $(CYGPATH_W) '@srclib@/global_fixture.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Tpo @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture.cc' object='@srclib@/emit_test_all-global_fixture.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture.obj `if test -f '@srclib@/global_fixture.cc'; then $(CYGPATH_W) '@srclib@/global_fixture.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-global_fixture.obj `if test -f '@srclib@/global_fixture.cc'; then $(CYGPATH_W) '@srclib@/global_fixture.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture.cc'; fi`
 
-@srclib@/use_geocal_skeleton_test_all-global_fixture_default.o: @srclib@/global_fixture_default.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-global_fixture_default.o -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture_default.o `test -f '@srclib@/global_fixture_default.cc' || echo '$(srcdir)/'`@srclib@/global_fixture_default.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture_default.cc' object='@srclib@/use_geocal_skeleton_test_all-global_fixture_default.o' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-global_fixture_default.o: @srclib@/global_fixture_default.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-global_fixture_default.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Tpo -c -o @srclib@/emit_test_all-global_fixture_default.o `test -f '@srclib@/global_fixture_default.cc' || echo '$(srcdir)/'`@srclib@/global_fixture_default.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Tpo @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture_default.cc' object='@srclib@/emit_test_all-global_fixture_default.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture_default.o `test -f '@srclib@/global_fixture_default.cc' || echo '$(srcdir)/'`@srclib@/global_fixture_default.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-global_fixture_default.o `test -f '@srclib@/global_fixture_default.cc' || echo '$(srcdir)/'`@srclib@/global_fixture_default.cc
 
-@srclib@/use_geocal_skeleton_test_all-global_fixture_default.obj: @srclib@/global_fixture_default.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-global_fixture_default.obj -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture_default.obj `if test -f '@srclib@/global_fixture_default.cc'; then $(CYGPATH_W) '@srclib@/global_fixture_default.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture_default.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture_default.cc' object='@srclib@/use_geocal_skeleton_test_all-global_fixture_default.obj' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-global_fixture_default.obj: @srclib@/global_fixture_default.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-global_fixture_default.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Tpo -c -o @srclib@/emit_test_all-global_fixture_default.obj `if test -f '@srclib@/global_fixture_default.cc'; then $(CYGPATH_W) '@srclib@/global_fixture_default.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture_default.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Tpo @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/global_fixture_default.cc' object='@srclib@/emit_test_all-global_fixture_default.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-global_fixture_default.obj `if test -f '@srclib@/global_fixture_default.cc'; then $(CYGPATH_W) '@srclib@/global_fixture_default.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture_default.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-global_fixture_default.obj `if test -f '@srclib@/global_fixture_default.cc'; then $(CYGPATH_W) '@srclib@/global_fixture_default.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture_default.cc'; fi`
 
-@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.o: @srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.o -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.o' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-ecostress_scan_mirror_test.o: @srclib@/ecostress_scan_mirror_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-ecostress_scan_mirror_test.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/emit_test_all-ecostress_scan_mirror_test.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
 
-@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.obj: @srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.obj -MD -MP -MF @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.obj' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-ecostress_scan_mirror_test.obj: @srclib@/ecostress_scan_mirror_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-ecostress_scan_mirror_test.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/emit_test_all-ecostress_scan_mirror_test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(use_geocal_skeleton_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1253,6 +1241,49 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
+install-emitpkgpythonPYTHON: $(emitpkgpython_PYTHON)
+	@$(NORMAL_INSTALL)
+	@list='$(emitpkgpython_PYTHON)'; dlist=; list2=; test -n "$(emitpkgpythondir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(emitpkgpythondir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(emitpkgpythondir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then b=; else b="$(srcdir)/"; fi; \
+	  if test -f $$b$$p; then \
+	    $(am__strip_dir) \
+	    dlist="$$dlist $$f"; \
+	    list2="$$list2 $$b$$p"; \
+	  else :; fi; \
+	done; \
+	for file in $$list2; do echo $$file; done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(emitpkgpythondir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(emitpkgpythondir)" || exit $$?; \
+	done || exit $$?; \
+	if test -n "$$dlist"; then \
+	  $(am__py_compile) --destdir "$(DESTDIR)" \
+	                    --basedir "$(emitpkgpythondir)" $$dlist; \
+	else :; fi
+
+uninstall-emitpkgpythonPYTHON:
+	@$(NORMAL_UNINSTALL)
+	@list='$(emitpkgpython_PYTHON)'; test -n "$(emitpkgpythondir)" || list=; \
+	py_files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$py_files" || exit 0; \
+	dir='$(DESTDIR)$(emitpkgpythondir)'; \
+	pyc_files=`echo "$$py_files" | sed 's|$$|c|'`; \
+	pyo_files=`echo "$$py_files" | sed 's|$$|o|'`; \
+	st=0; \
+	for files in "$$py_files" "$$pyc_files" "$$pyo_files"; do \
+	  $(am__uninstall_files_from_dir) || st=$$?; \
+	done; \
+	dir='$(DESTDIR)$(emitpkgpythondir)/__pycache__'; \
+	echo "$$py_files" | $(am__pep3147_tweak) | $(am__base_list) | \
+	  while read files; do \
+	    $(am__uninstall_files_from_dir) || st=$$?; \
+	  done || exit $$?; \
+	exit $$st
 install-pkgpythonswigPYTHON: $(pkgpythonswig_PYTHON)
 	@$(NORMAL_INSTALL)
 	@list='$(pkgpythonswig_PYTHON)'; dlist=; list2=; test -n "$(pkgpythonswigdir)" || list=; \
@@ -1296,70 +1327,27 @@ uninstall-pkgpythonswigPYTHON:
 	    $(am__uninstall_files_from_dir) || st=$$?; \
 	  done || exit $$?; \
 	exit $$st
-install-use_geocal_skeletonpkgpythonPYTHON: $(use_geocal_skeletonpkgpython_PYTHON)
+install-installemitDATA: $(installemit_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(use_geocal_skeletonpkgpython_PYTHON)'; dlist=; list2=; test -n "$(use_geocal_skeletonpkgpythondir)" || list=; \
+	@list='$(installemit_DATA)'; test -n "$(installemitdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(use_geocal_skeletonpkgpythondir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(use_geocal_skeletonpkgpythondir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then b=; else b="$(srcdir)/"; fi; \
-	  if test -f $$b$$p; then \
-	    $(am__strip_dir) \
-	    dlist="$$dlist $$f"; \
-	    list2="$$list2 $$b$$p"; \
-	  else :; fi; \
-	done; \
-	for file in $$list2; do echo $$file; done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(use_geocal_skeletonpkgpythondir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(use_geocal_skeletonpkgpythondir)" || exit $$?; \
-	done || exit $$?; \
-	if test -n "$$dlist"; then \
-	  $(am__py_compile) --destdir "$(DESTDIR)" \
-	                    --basedir "$(use_geocal_skeletonpkgpythondir)" $$dlist; \
-	else :; fi
-
-uninstall-use_geocal_skeletonpkgpythonPYTHON:
-	@$(NORMAL_UNINSTALL)
-	@list='$(use_geocal_skeletonpkgpython_PYTHON)'; test -n "$(use_geocal_skeletonpkgpythondir)" || list=; \
-	py_files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$py_files" || exit 0; \
-	dir='$(DESTDIR)$(use_geocal_skeletonpkgpythondir)'; \
-	pyc_files=`echo "$$py_files" | sed 's|$$|c|'`; \
-	pyo_files=`echo "$$py_files" | sed 's|$$|o|'`; \
-	st=0; \
-	for files in "$$py_files" "$$pyc_files" "$$pyo_files"; do \
-	  $(am__uninstall_files_from_dir) || st=$$?; \
-	done; \
-	dir='$(DESTDIR)$(use_geocal_skeletonpkgpythondir)/__pycache__'; \
-	echo "$$py_files" | $(am__pep3147_tweak) | $(am__base_list) | \
-	  while read files; do \
-	    $(am__uninstall_files_from_dir) || st=$$?; \
-	  done || exit $$?; \
-	exit $$st
-install-installuse_geocal_skeletonDATA: $(installuse_geocal_skeleton_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(installuse_geocal_skeleton_DATA)'; test -n "$(installuse_geocal_skeletondir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(installuse_geocal_skeletondir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(installuse_geocal_skeletondir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(installemitdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(installemitdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(installuse_geocal_skeletondir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(installuse_geocal_skeletondir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(installemitdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(installemitdir)" || exit $$?; \
 	done
 
-uninstall-installuse_geocal_skeletonDATA:
+uninstall-installemitDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(installuse_geocal_skeleton_DATA)'; test -n "$(installuse_geocal_skeletondir)" || list=; \
+	@list='$(installemit_DATA)'; test -n "$(installemitdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(installuse_geocal_skeletondir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(installemitdir)'; $(am__uninstall_files_from_dir)
 install-pkgconfigDATA: $(pkgconfig_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
@@ -1381,6 +1369,48 @@ uninstall-pkgconfigDATA:
 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(pkgconfigdir)'; $(am__uninstall_files_from_dir)
+install-emitincHEADERS: $(emitinc_HEADERS)
+	@$(NORMAL_INSTALL)
+	@list='$(emitinc_HEADERS)'; test -n "$(emitincdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(emitincdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(emitincdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(emitincdir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(emitincdir)" || exit $$?; \
+	done
+
+uninstall-emitincHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(emitinc_HEADERS)'; test -n "$(emitincdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(emitincdir)'; $(am__uninstall_files_from_dir)
+install-emitswigincHEADERS: $(emitswiginc_HEADERS)
+	@$(NORMAL_INSTALL)
+	@list='$(emitswiginc_HEADERS)'; test -n "$(emitswigincdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(emitswigincdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(emitswigincdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(emitswigincdir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(emitswigincdir)" || exit $$?; \
+	done
+
+uninstall-emitswigincHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(emitswiginc_HEADERS)'; test -n "$(emitswigincdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(emitswigincdir)'; $(am__uninstall_files_from_dir)
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
@@ -1402,48 +1432,6 @@ uninstall-includeHEADERS:
 	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(includedir)'; $(am__uninstall_files_from_dir)
-install-use_geocal_skeletonincHEADERS: $(use_geocal_skeletoninc_HEADERS)
-	@$(NORMAL_INSTALL)
-	@list='$(use_geocal_skeletoninc_HEADERS)'; test -n "$(use_geocal_skeletonincdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(use_geocal_skeletonincdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(use_geocal_skeletonincdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(use_geocal_skeletonincdir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(use_geocal_skeletonincdir)" || exit $$?; \
-	done
-
-uninstall-use_geocal_skeletonincHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(use_geocal_skeletoninc_HEADERS)'; test -n "$(use_geocal_skeletonincdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(use_geocal_skeletonincdir)'; $(am__uninstall_files_from_dir)
-install-use_geocal_skeletonswigincHEADERS: $(use_geocal_skeletonswiginc_HEADERS)
-	@$(NORMAL_INSTALL)
-	@list='$(use_geocal_skeletonswiginc_HEADERS)'; test -n "$(use_geocal_skeletonswigincdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(use_geocal_skeletonswigincdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(use_geocal_skeletonswigincdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(use_geocal_skeletonswigincdir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(use_geocal_skeletonswigincdir)" || exit $$?; \
-	done
-
-uninstall-use_geocal_skeletonswigincHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(use_geocal_skeletonswiginc_HEADERS)'; test -n "$(use_geocal_skeletonswigincdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(use_geocal_skeletonswigincdir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -1843,7 +1831,7 @@ all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(DATA) \
 install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(installuse_geocal_skeletondir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(use_geocal_skeletonpkgpythondir)" "$(DESTDIR)$(installuse_geocal_skeletondir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)" "$(DESTDIR)$(use_geocal_skeletonincdir)" "$(DESTDIR)$(use_geocal_skeletonswigincdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(emitpkgpythondir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(emitincdir)" "$(DESTDIR)$(emitswigincdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -1894,11 +1882,11 @@ clean-am: clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Plo
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po
+		-rm -f @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
@@ -1917,13 +1905,11 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_installuse_geocal_skeletonSCRIPTS \
-	install-includeHEADERS install-installuse_geocal_skeletonDATA \
-	install-pkgconfigDATA install-pkgpythonswigLTLIBRARIES \
-	install-pkgpythonswigPYTHON \
-	install-use_geocal_skeletonincHEADERS \
-	install-use_geocal_skeletonpkgpythonPYTHON \
-	install-use_geocal_skeletonswigincHEADERS
+install-data-am: install-dist_installemitSCRIPTS \
+	install-emitincHEADERS install-emitpkgpythonPYTHON \
+	install-emitswigincHEADERS install-includeHEADERS \
+	install-installemitDATA install-pkgconfigDATA \
+	install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
@@ -1956,11 +1942,11 @@ installcheck-am: installcheck-local
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f @srclib@/$(DEPDIR)/libuse_geocal_skeleton_la-ecostress_scan_mirror.Plo
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-ecostress_scan_mirror_test.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-global_fixture_default.Po
-	-rm -f @srclib@/$(DEPDIR)/use_geocal_skeleton_test_all-test_all.Po
+		-rm -f @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
@@ -1980,15 +1966,12 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
-	uninstall-dist_installuse_geocal_skeletonSCRIPTS \
-	uninstall-includeHEADERS \
-	uninstall-installuse_geocal_skeletonDATA \
+	uninstall-dist_installemitSCRIPTS uninstall-emitincHEADERS \
+	uninstall-emitpkgpythonPYTHON uninstall-emitswigincHEADERS \
+	uninstall-includeHEADERS uninstall-installemitDATA \
 	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
 	uninstall-pkgpythonswigLTLIBRARIES \
-	uninstall-pkgpythonswigPYTHON \
-	uninstall-use_geocal_skeletonincHEADERS \
-	uninstall-use_geocal_skeletonpkgpythonPYTHON \
-	uninstall-use_geocal_skeletonswigincHEADERS
+	uninstall-pkgpythonswigPYTHON
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 .MAKE: all check check-am install install-am install-data-am \
@@ -2006,30 +1989,26 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-binPROGRAMS install-data \
 	install-data-am install-data-hook install-dist_binSCRIPTS \
-	install-dist_installuse_geocal_skeletonSCRIPTS install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-includeHEADERS install-info \
-	install-info-am install-installuse_geocal_skeletonDATA \
+	install-dist_installemitSCRIPTS install-dvi install-dvi-am \
+	install-emitincHEADERS install-emitpkgpythonPYTHON \
+	install-emitswigincHEADERS install-exec install-exec-am \
+	install-html install-html-am install-includeHEADERS \
+	install-info install-info-am install-installemitDATA \
 	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
 	install-pkgconfigDATA install-pkgpythonswigLTLIBRARIES \
 	install-pkgpythonswigPYTHON install-ps install-ps-am \
-	install-strip install-use_geocal_skeletonincHEADERS \
-	install-use_geocal_skeletonpkgpythonPYTHON \
-	install-use_geocal_skeletonswigincHEADERS installcheck \
-	installcheck-am installcheck-local installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am recheck tags tags-am uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
-	uninstall-dist_installuse_geocal_skeletonSCRIPTS \
-	uninstall-hook uninstall-includeHEADERS \
-	uninstall-installuse_geocal_skeletonDATA \
+	install-strip installcheck installcheck-am installcheck-local \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am recheck tags tags-am \
+	uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-dist_binSCRIPTS uninstall-dist_installemitSCRIPTS \
+	uninstall-emitincHEADERS uninstall-emitpkgpythonPYTHON \
+	uninstall-emitswigincHEADERS uninstall-hook \
+	uninstall-includeHEADERS uninstall-installemitDATA \
 	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
 	uninstall-pkgpythonswigLTLIBRARIES \
-	uninstall-pkgpythonswigPYTHON \
-	uninstall-use_geocal_skeletonincHEADERS \
-	uninstall-use_geocal_skeletonpkgpythonPYTHON \
-	uninstall-use_geocal_skeletonswigincHEADERS
+	uninstall-pkgpythonswigPYTHON
 
 .PRECIOUS: Makefile
 
@@ -2066,12 +2045,12 @@ export run_test = *
 # version builds just what is needed for C++ unit tests, which is faster
 # to do during development.
 
-use-geocal-skeleton-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) use-geocal-skeleton-check-am
+emit-check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) emit-am
 
-use-geocal-skeleton-check-am: use_geocal_skeleton_test_all
+emit-check-am: emit_test_all
 	@echo "====================================================="
-	@echo "This just builds and runs the use-geocal-skeleton C++ unit tests"
+	@echo "This just builds and runs the emit C++ unit tests"
 	@echo "(useful during development). It does run the python "
 	@echo "tests, use check for that"
 	@echo "====================================================="
@@ -2088,7 +2067,7 @@ vpath %.i $(srcdir)/@srclib@
 #endif
 
 # Shortcut for just running py.test.
-python-check: script/setup_use_geocal_skeleton.sh
+python-check: script/setup_emit.sh
 	source $< && \
         $(PYTEST) $(PYTEST_FLAGS) $(PYTEST_EXTRAFLAGS) $(srcdir)/@srcpython@
 
@@ -2100,7 +2079,7 @@ dist-clean-up-python:
 vpath %.pyx $(srcdir)/@srcpythonlib@
 
 # Shortcut for building just python
-install-python-2: install-libLTLIBRARIES install-python-use_geocal_skeleton install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
+install-python-2: install-libLTLIBRARIES install-python-emit install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
 	$(noop)
 
 install-python: all

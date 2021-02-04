@@ -1,0 +1,7 @@
+For doing fully py.test, just use the standard makefile targets
+(e.g., python_check). However, if you want to run single tests because you are
+developing/debugging, then you need to make sure the current directory is
+in the python path so we get the test_support directory. You can do this with
+the test.sh here.
+
+./test.sh lib/tie_point_collect_test.py

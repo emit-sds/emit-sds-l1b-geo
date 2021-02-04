@@ -1,6 +1,6 @@
 EXTRA_DIST += @pythonswigsrc@/swig_wrap.tmpl
 
-pkgpythonswigdir = $(prefix)/@pythondir@/use_geocal_skeleton_swig
+pkgpythonswigdir = $(prefix)/@pythondir@/emit_swig
 pkgpythonswig_PYTHON = @pythonswigsrc@/__init__.py
 INCLUDE_SWIG_SRC = $(SWIG_SRC)
 # This is a duplicate of INCLUDE_SWIG_SRC right now, but in principle we could
@@ -20,7 +20,7 @@ _swig_wrap_la_CPPFLAGS+= $(AM_CPPFLAGS)
 _swig_wrap_la_CPPFLAGS+= -DSWIG_TYPE_TABLE=geocal
 _swig_wrap_la_CXXFLAGS = $(AM_CXXFLAGS)
 _swig_wrap_la_LDFLAGS = -module -avoid-version
-_swig_wrap_la_LIBADD = libuse_geocal_skeleton.la
+_swig_wrap_la_LIBADD = libemit.la
 _swig_wrap_la_SOURCES = $(INCLUDE_SWIG_SRC)
 _swig_wrap_la_SOURCES+= @swigsrc@/swig_wrap.cc
 
@@ -28,7 +28,7 @@ EXTRA_DIST+= $(FULL_SWIG_SRC)
 EXTRA_DIST+= $(srcdir)/$(swigsrc)/*_wrap.h
 
 # Shortcut for building just python
-install-python-2: install-libLTLIBRARIES install-python-use_geocal_skeleton install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
+install-python-2: install-libLTLIBRARIES install-python-emit install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
 	$(noop)
 
 install-python: all

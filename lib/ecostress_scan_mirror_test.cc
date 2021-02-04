@@ -1,7 +1,7 @@
 #include "unit_test_support.h"
 #include "ecostress_scan_mirror.h"
 
-using namespace UseGeoCalSkeleton;
+using namespace Emit;
 
 BOOST_FIXTURE_TEST_SUITE(ecostress_scan_mirror, GlobalFixture)
 

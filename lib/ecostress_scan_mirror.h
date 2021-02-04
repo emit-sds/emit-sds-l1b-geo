@@ -5,7 +5,7 @@
 #include "geocal/geocal_quaternion.h"
 #include "geocal/constant.h"
 
-namespace UseGeoCalSkeleton {
+namespace Emit {
 /****************************************************************//**
   This is the ecostress can mirror.
 
@@ -76,7 +76,7 @@ private:
 
 }
 
-BOOST_CLASS_EXPORT_KEY(UseGeoCalSkeleton::EcostressScanMirror);
+BOOST_CLASS_EXPORT_KEY(Emit::EcostressScanMirror);
 #endif
   
   

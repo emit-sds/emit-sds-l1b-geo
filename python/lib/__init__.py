@@ -13,7 +13,7 @@ import os
 import re
 import glob
 from geocal import *
-from use_geocal_skeleton_swig import *
+from emit_swig import *
 
 for i in glob.glob(os.path.dirname(__file__) + "/*.py"):
     mname = os.path.basename(i).split('.')[0]

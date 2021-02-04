@@ -2,7 +2,7 @@
 #define GLOBAL_FIXTURE_H
 #include <string>
 
-namespace UseGeoCalSkeleton {
+namespace Emit {
 /****************************************************************//**
   This is a global fixture that is available to all unit tests.
 *******************************************************************/

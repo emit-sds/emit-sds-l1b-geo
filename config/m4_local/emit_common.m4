@@ -1,7 +1,7 @@
 #=================================================================
 # A few things that are common to all our configure files.
 
-AC_DEFUN([USE_GEOCAL_SKELETON_COMMON],[
+AC_DEFUN([EMIT_COMMON],[
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])
  AC_REQUIRE([AC_PROG_CC])
 # For some bizarre reason, this doesn't fail if there isn't a C++ compiler.

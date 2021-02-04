@@ -236,7 +236,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def __init__(self, Scan_start=-25.5, Scan_end=25.5, Number_sample=5400):
         """
 
-        UseGeoCalSkeleton::EcostressScanMirror::EcostressScanMirror(double Scan_start=-25.5, double Scan_end=25.5, int
+        Emit::EcostressScanMirror::EcostressScanMirror(double Scan_start=-25.5, double Scan_end=25.5, int
         Number_sample=5400)
         Constructor.
 
@@ -252,7 +252,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def scan_mirror_angle(self, Ic_sample):
         """
 
-        double UseGeoCalSkeleton::EcostressScanMirror::scan_mirror_angle(double Ic_sample) const
+        double Emit::EcostressScanMirror::scan_mirror_angle(double Ic_sample) const
         Scan mirror angle, in degrees. 
         """
         return _ecostress_scan_mirror.EcostressScanMirror_scan_mirror_angle(self, Ic_sample)
@@ -261,7 +261,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def rotation_quaterion(self, Ic_sample):
         """
 
-        boost::math::quaternion<double> UseGeoCalSkeleton::EcostressScanMirror::rotation_quaterion(double Ic_sample) const
+        boost::math::quaternion<double> Emit::EcostressScanMirror::rotation_quaterion(double Ic_sample) const
         Rotation matrix that take the view vector for the Camera and takes it
         to the space craft coordinate system. 
         """
@@ -271,7 +271,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def _v_scan_start(self):
         """
 
-        double UseGeoCalSkeleton::EcostressScanMirror::scan_start() const
+        double Emit::EcostressScanMirror::scan_start() const
         Scan start in degrees. 
         """
         return _ecostress_scan_mirror.EcostressScanMirror__v_scan_start(self)
@@ -285,7 +285,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def _v_scan_end(self):
         """
 
-        double UseGeoCalSkeleton::EcostressScanMirror::scan_end() const
+        double Emit::EcostressScanMirror::scan_end() const
         Scan end in degrees. 
         """
         return _ecostress_scan_mirror.EcostressScanMirror__v_scan_end(self)
@@ -299,7 +299,7 @@ class EcostressScanMirror(geocal_swig.generic_object.GenericObject):
     def _v_number_sample(self):
         """
 
-        int UseGeoCalSkeleton::EcostressScanMirror::number_sample() const
+        int Emit::EcostressScanMirror::number_sample() const
         Number sample. 
         """
         return _ecostress_scan_mirror.EcostressScanMirror__v_number_sample(self)

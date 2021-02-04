@@ -1,44 +1,44 @@
 # Set up for the library
-lib_LTLIBRARIES += libuse_geocal_skeleton.la
-use_geocal_skeletonincdir = @includedir@/use_geocal_skeleton
-use_geocal_skeletonswigincdir = @prefix@/share/use_geocal_skeleton/swig
+lib_LTLIBRARIES += libemit.la
+emitincdir = @includedir@/emit
+emitswigincdir = @prefix@/share/emit/swig
 
-libuse_geocal_skeleton_la_SOURCES =
-use_geocal_skeletoninc_HEADERS =
-use_geocal_skeletonswiginc_HEADERS =
-use_geocal_skeleton_test_all_SOURCES =
+libemit_la_SOURCES =
+emitinc_HEADERS =
+emitswiginc_HEADERS =
+emit_test_all_SOURCES =
 SWIG_SRC = 
-libuse_geocal_skeleton_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
-libuse_geocal_skeleton_la_LDFLAGS = $(GEOCAL_LIBS)
+libemit_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
+libemit_la_LDFLAGS = $(GEOCAL_LIBS)
 
 #=================================================================
 # Unit test
 
-check_PROGRAMS = use_geocal_skeleton_test_all
-use_geocal_skeleton_test_all_SOURCES += @srclib@/test_all.cc
-use_geocal_skeleton_test_all_LDADD = libuse_geocal_skeleton.la 
-use_geocal_skeleton_test_all_LDFLAGS = -no-install 
-use_geocal_skeleton_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
+check_PROGRAMS = emit_test_all
+emit_test_all_SOURCES += @srclib@/test_all.cc
+emit_test_all_LDADD = libemit.la 
+emit_test_all_LDFLAGS = -no-install 
+emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 TESTS+= @srclib@/test_all.sh
 EXTRA_DIST+= @srclib@/test_all.sh
 
 #=================================================================
 # List of source files
-use_geocal_skeletoninc_HEADERS+= @srclib@/use_geocal_skeleton_serialize_support.h
-use_geocal_skeletoninc_HEADERS+= @srclib@/ecostress_scan_mirror.h
-libuse_geocal_skeleton_la_SOURCES+= @srclib@/ecostress_scan_mirror.cc
+emitinc_HEADERS+= @srclib@/emit_serialize_support.h
+emitinc_HEADERS+= @srclib@/ecostress_scan_mirror.h
+libemit_la_SOURCES+= @srclib@/ecostress_scan_mirror.cc
 
 # Files that contain SWIG wrapper information.
 SWIG_SRC += @swigsrc@/ecostress_scan_mirror_wrap.cc
-use_geocal_skeletonswiginc_HEADERS+= @srclib@/ecostress_scan_mirror.i
-use_geocal_skeletonswiginc_HEADERS+= @srclib@/use_geocal_skeleton_common.i
+emitswiginc_HEADERS+= @srclib@/ecostress_scan_mirror.i
+emitswiginc_HEADERS+= @srclib@/emit_common.i
 
 # Test files
 EXTRA_DIST+= @srclib@/unit_test_support.h
 EXTRA_DIST+= @srclib@/global_fixture.h
-use_geocal_skeleton_test_all_SOURCES+= @srclib@/global_fixture.cc
-use_geocal_skeleton_test_all_SOURCES+= @srclib@/global_fixture_default.cc
-use_geocal_skeleton_test_all_SOURCES+= @srclib@/ecostress_scan_mirror_test.cc
+emit_test_all_SOURCES+= @srclib@/global_fixture.cc
+emit_test_all_SOURCES+= @srclib@/global_fixture_default.cc
+emit_test_all_SOURCES+= @srclib@/ecostress_scan_mirror_test.cc
 
 # Variables used in testing
 export abs_top_srcdir 
@@ -53,12 +53,12 @@ AM_CPPFLAGS+= -I$(srcdir)/@srclib@
 # version builds just what is needed for C++ unit tests, which is faster
 # to do during development.
 
-use-geocal-skeleton-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) use-geocal-skeleton-check-am
+emit-check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) emit-am
 
-use-geocal-skeleton-check-am: use_geocal_skeleton_test_all
+emit-check-am: emit_test_all
 	@echo "====================================================="
-	@echo "This just builds and runs the use-geocal-skeleton C++ unit tests"
+	@echo "This just builds and runs the emit C++ unit tests"
 	@echo "(useful during development). It does run the python "
 	@echo "tests, use check for that"
 	@echo "====================================================="

@@ -1,7 +1,7 @@
 // -*- mode: c++; -*-
 // (Not really c++, but closest emacs mode)
 
-%include "use_geocal_skeleton_common.i"
+%include "emit_common.i"
 
 %{
 #include "ecostress_scan_mirror.h"
@@ -10,8 +10,8 @@
 %base_import(generic_object)
 %import "image_coordinate.i"
 
-%use_geocal_skeleton_shared_ptr(UseGeoCalSkeleton::EcostressScanMirror);
-namespace UseGeoCalSkeleton {
+%emit_shared_ptr(Emit::EcostressScanMirror);
+namespace Emit {
 class EcostressScanMirror : public GeoCal::GenericObject {
 public:
   EcostressScanMirror(double Scan_start = -25.5, double Scan_end = 25.5,

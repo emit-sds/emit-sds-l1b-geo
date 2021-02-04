@@ -3,9 +3,9 @@
 # Program to fit context cameraa
 
 import geocal
-import use_geocal_skeleton
+import emit
 
-version = "October 24, 2020"
+version = "April 3, 2021"
 usage='''Usage:
   dummy_sample [options] <fake_file> <output_base_directory>
   dummy_sample -h | --help

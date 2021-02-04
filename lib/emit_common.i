@@ -10,19 +10,19 @@
 // when we build. But we still need to supply this to get the
 // directors=1 and allprotected=1 set.
 
-%module(directors="1", allprotected="1") use_geocal_skeleton_swig
+%module(directors="1", allprotected="1") emit_swig
 
 %include "geocal_common.i"
 
 // Short cut for ingesting a base class
-%define %use_geocal_skeleton_base_import(NAME)
-%import(module="use_geocal_skeleton_swig.NAME") "NAME.i"
+%define %emit_base_import(NAME)
+%import(module="emit_swig.NAME") "NAME.i"
 %enddef
 
 %define %geocal_base_import(NAME)
 %import(module="geocal_swig.NAME") "NAME.i"
 %enddef
 
-%define %use_geocal_skeleton_shared_ptr(TYPE...)
+%define %emit_shared_ptr(TYPE...)
 %geocal_shared_ptr(TYPE)
 %enddef

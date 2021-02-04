@@ -1,4 +1,4 @@
-# Use GeoCal Skeleton
+# EMIT
 
 This provides a sample skeleton for setting up a project to extend
 [GeoCal](https://github.jpl.nasa.gov/Cartography/geocal). If you simple

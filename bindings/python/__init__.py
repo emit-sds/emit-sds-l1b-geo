@@ -6,7 +6,7 @@ import os as _os
 import glob as _glob
 
 #import ecostress_swig._swig_wrap import *
-import use_geocal_skeleton_swig._swig_wrap
+import emit_swig._swig_wrap
 
 for _i in _glob.glob(_os.path.dirname(__file__) + "/*.py"):
     exec('from .' + _os.path.basename(_i).split('.')[0] + ' import *')

@@ -1,7 +1,7 @@
 # Stuff specific to oco3
 
 # Build these up as we go
-dist_installuse_geocal_skeleton_SCRIPTS = 
+dist_installemit_SCRIPTS = 
 SWIG_FLAG =
 DIST_HOOK =
 

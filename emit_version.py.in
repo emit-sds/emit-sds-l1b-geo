@@ -1,0 +1,10 @@
+# This contains the version information for each of the build_id, build_version,
+# and pge_version. This file is loaded by each of the PGEs, so you can
+# edit this information in one place through this file.
+
+import os
+
+pge_version = {"l1b_geo" : "0.10",
+               }
+
+    

@@ -1,13 +1,14 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(use-geocal-skeleton, 1.0)
+AC_INIT(emit, 1.0)
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_MACRO_DIR([config/m4_local])
-AC_CONFIG_FILES([script/setup_use_geocal_skeleton.csh script/setup_use_geocal_skeleton.sh])
+AC_CONFIG_FILES([script/setup_emit.csh script/setup_emit.sh])
 AC_CONFIG_FILES([lib/global_fixture_default.cc])
+AC_CONFIG_FILES([emit_version.py])
 
-USE_GEOCAL_SKELETON_COMMON
+EMIT_COMMON
 
 #=================================================================
 # Find h5diff
@@ -39,7 +40,7 @@ AC_DOXYGEN(optional, cannot_build, default_search)
 
 #=================================================================
 # Location of all the source code directories
-USE_GEOCAL_SKELETON_SOURCE_DIRECTORY
+EMIT_SOURCE_DIRECTORY
 
 #=================================================================
 # Option to bypass running SWIG to update SWIG wrappers. The SWIG
@@ -78,7 +79,7 @@ fi
 
 if test "$generate_swig" = "yes" -a "$have_doxygen" != "yes"; then
      AC_MSG_ERROR([
-use_geocal_skeleton requires doxygen if you are also generating SWIG python bindings.
+emit requires doxygen if you are also generating SWIG python bindings.
 You can try specifying the location using --with-doxygen if configure
 couldn't find this. Or you can turn off the use of swig using 
 --without-swig.])
@@ -92,7 +93,7 @@ AC_OUTPUT
 #======================================================================
 
 LOC_MSG()
-LOC_MSG([UseGeoCalSkeleton is now configured])
+LOC_MSG([EMIT is now configured])
 LOC_MSG()
 LOC_MSG([  Installation directory:        ${prefix}])
 LOC_MSG([  Build debug version:           ${enable_debug}])
