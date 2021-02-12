@@ -1,6 +1,6 @@
-emitpkgpython_PYTHON+= @srcpythonlib@/dummy.py
+emitpkgpython_PYTHON+= @srcpythonlib@/envi_file.py
 
-EXTRA_DIST+=@srcpythonlib@/dummy_test.py
+EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory
