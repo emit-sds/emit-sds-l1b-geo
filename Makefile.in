@@ -717,11 +717,14 @@ include_HEADERS =
 
 # See README.md
 EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
-	@srclib@/global_fixture.h @srcpythonlib@/dummy_test.py \
+	@srclib@/global_fixture.h @srcpythonlib@/envi_file_test.py \
+	@srcpythonlib@/emit_igc_test.py \
+	@srcpythonlib@/l1b_geo_generate_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
 	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
-	@unittestdata@/SMAP_L1B_TB_SPS_RunConfig_20150228T224642376.xml
+	@unittestdata@/README.md \
+	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5
 CYTHON_SRC = 
 pkgconfig_DATA = 
 AM_CPPFLAGS = -I$(srcdir)/@srclib@
@@ -779,7 +782,8 @@ emit_test_all_LDADD = libemit.la
 emit_test_all_LDFLAGS = -no-install 
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
-	@srcpythonlib@/dummy.py
+	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
+	@srcpythonlib@/l1b_geo_generate.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.

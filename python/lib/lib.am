@@ -1,8 +1,10 @@
 emitpkgpython_PYTHON+= @srcpythonlib@/envi_file.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_igc.py
+emitpkgpython_PYTHON+= @srcpythonlib@/l1b_geo_generate.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
+EXTRA_DIST+=@srcpythonlib@/l1b_geo_generate_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory

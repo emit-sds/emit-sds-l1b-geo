@@ -1,13 +1,17 @@
 # This contains support routines for doing unit tests.
 import pytest
+import geocal
 import os
 try:
     from emit_swig import *
     have_swig = True
 except ImportError:
     have_swig = False
-    
-@pytest.yield_fixture(scope="function")
+from emit.emit_igc import emit_igc
+
+unit_test_data = os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
+
+@pytest.fixture(scope="function")
 def isolated_dir(tmpdir):
     '''This is a fixture that creates a temporary directory, and uses this
     while running a unit tests. Useful for tests that write out a test file
@@ -28,11 +32,6 @@ def isolated_dir(tmpdir):
     finally:
         os.chdir(curdir)
 
-@pytest.yield_fixture(scope="function")
-def unit_test_data():
-    '''Return the unit test directory'''
-    yield os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
-
 slow = pytest.mark.slow
 
 # Short hand for marking as unconditional skipping. Good for tests we
@@ -40,5 +39,19 @@ slow = pytest.mark.slow
 # reason.
 skip = pytest.mark.skip
 
+@pytest.fixture(scope="function")
+def orbit_fname():
+    '''Test orbit'''
+    return unit_test_data + "L1A_RAW_ATT_03663_20190227T094659_0100_01.h5"
 
-# Can add lots of other fixtures as needed for testing.        
+@pytest.fixture(scope="function")
+def scene_start():
+    '''Start time for a test scene.'''
+    return geocal.Time.parse_time("2019-02-27T10:12:22.0000Z")
+
+@pytest.fixture(scope="function")
+def igc(orbit_fname, scene_start):
+    '''ImageGroundConnection that we can use for testing'''
+    return emit_igc(orbit_fname, scene_start)
+
+

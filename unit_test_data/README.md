@@ -1,3 +1,5 @@
-This contains data needed by unit tests. Right now we just have a
-dummy xml config file used for SMAP. Once there is actual unit test
-data, you can remove the SMAP example.
+This contains data needed by unit tests.
+
+The L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 is from ECOSTRESS, it is 
+a placeholder for a EMIT orbit file. We'll get the EMIT orbit sorted out and
+then get rid of this. But for now it is useful as a placeholder.
