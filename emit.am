@@ -7,3 +7,7 @@ DIST_HOOK =
 
 # Dist check need to know where to find geocal
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
+
+# For now, we carry around our own spice kernels for testing. This can
+# perhaps go away when we have this set up on EMIT.
+export SPICEDATA = $(abs_srcdir)/@unittestdata@/spice_data

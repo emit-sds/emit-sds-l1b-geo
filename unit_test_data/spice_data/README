@@ -1,0 +1,36 @@
+This directory contains the various SPICE kernels that we install as part
+of AFIDS.
+
+You can get new/updated kernels at the NAIF SPICE site 
+http://naif.jpl.nasa.gov/naif/data.html.
+
+The only kernel that changes often in the earth_000101_xxxx.bpc files (updated
+at least twice a week). You can check the other ones also of course, but 
+they don't vary quickly.
+
+Here is the information on the earth_000101 files:
+
+   High accuracy EOP-based kernel, updated at least twice per week:
+
+      earth_000101_yymmdd_yymmdd.bpc
+      earth_latest_high_prec.bpc
+
+   The first two dates in the first file name are the file's coverage start
+   and stop times. The third date in that file name is the epoch of the
+   last datum in the source EOP file: earth orientation from this date
+   forward is predicted.
+
+   The second file is a copy of the first. The name of this file remains
+   unchanged. 
+
+We use the symbolic link earth_latest_high_prec.bpc, you can update this
+link to the latest kernel if you download a new one.
+
+***IMPORTANT***
+If you update the kernels, you should also update the file "geocal.ker".
+This lists the kernels that we actually load as part of geocal. If you update
+a file but don't update geocal.ker then we don't actually use the new
+updated file.
+
+You don't need to update geocal.ker if you just update the symbolic link
+earth_latest_high_prec.bpc.

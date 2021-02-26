@@ -27,7 +27,12 @@ def emit_igc(orbit_fname, tstart):
     # now allow 0 height where we don't have DEM data (e.g. over ocean). We
     # might actually want to consider this an error, since we don't expect
     # EMIT to be over water. But for now allow it
-    dem = geocal.SrtmDem("", False)
+    try:
+        dem = geocal.SrtmDem("/blah", False)
+    except RuntimeError:
+        # Short term, don't assume for SRTM available. It isn't on EMIT
+        # machines yet. so just fall back to a 0 height DEM
+        dem = geocal.SimpleDem()
     ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
     igc = geocal.IpiImageGroundConnection(ipi, dem, None)
     return igc

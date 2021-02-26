@@ -724,7 +724,8 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
 	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
 	@unittestdata@/README.md \
-	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5
+	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 \
+	@unittestdata@/spice_data
 CYTHON_SRC = 
 pkgconfig_DATA = 
 AM_CPPFLAGS = -I$(srcdir)/@srclib@
@@ -2037,6 +2038,10 @@ complain_if_afids:
           echo "sourcing setup_afids_env.sh or setup_afids_env.csh${default}"; \
           exit 1; \
         fi
+
+# For now, we carry around our own spice kernels for testing. This can
+# perhaps go away when we have this set up on EMIT.
+export SPICEDATA = $(abs_srcdir)/@unittestdata@/spice_data
 
 # Variables used in testing
 export abs_top_srcdir 

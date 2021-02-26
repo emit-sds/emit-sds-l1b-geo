@@ -1,0 +1,25 @@
+This is a list of kernels to load in for use by geocal. Right now, we
+always load the same kernels. We could do something more complicated if
+needed in the future.
+
+If you update the version of other kernels, you need to also update this
+file to point to the updated versions.
+
+We specify the top directory for the spice data as $A, which we can then
+move if needed.
+\begindata
+PATH_VALUES = (
+   '/opt/afids/data/cspice'
+)
+PATH_SYMBOLS = (
+  'A'
+)
+KERNELS_TO_LOAD = (
+  '$A/lsk/latest_leapseconds.tls',
+  '$A/pck/pck00010.tpc',
+  '$A/pck/earth_720101_070426.bpc',
+  '$A/pck/earth_latest_high_prec.bpc',
+  '$A/fk/planets/earth_assoc_itrf93.tf',
+  '$A/fk/planets/eci_tod.tf',
+  '$A/spk/planets/de432s.bsp'
+)
