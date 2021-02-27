@@ -3,6 +3,7 @@
 # Build these up as we go
 dist_installemit_SCRIPTS = 
 SWIG_FLAG =
+installemit_SCRIPTS = emit_version.py
 DIST_HOOK =
 
 # Dist check need to know where to find geocal

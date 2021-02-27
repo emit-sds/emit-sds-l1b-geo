@@ -4,7 +4,7 @@
 
 import os
 
-pge_version = {"l1b_geo" : "0.10",
+pge_version = {"l1b_geo" : "0.01",
                }
 
     

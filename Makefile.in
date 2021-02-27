@@ -157,7 +157,8 @@ CONFIG_CLEAN_FILES = script/setup_emit.csh script/setup_emit.sh \
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(emitpkgpythondir)" \
+	"$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(installemitdir)" \
+	"$(DESTDIR)$(emitpkgpythondir)" \
 	"$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(installemitdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(emitincdir)" \
 	"$(DESTDIR)$(emitswigincdir)" "$(DESTDIR)$(includedir)"
@@ -222,7 +223,8 @@ emit_test_all_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(emit_test_all_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SCRIPTS = $(dist_bin_SCRIPTS) $(dist_installemit_SCRIPTS)
+SCRIPTS = $(dist_bin_SCRIPTS) $(dist_installemit_SCRIPTS) \
+	$(installemit_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -756,6 +758,7 @@ check_DATA =
 # Build these up as we go
 dist_installemit_SCRIPTS = 
 SWIG_FLAG = 
+installemit_SCRIPTS = emit_version.py
 
 # Make sure we don't have any pyc or pycache files floating around
 DIST_HOOK = dist-clean-up-python
@@ -784,7 +787,8 @@ emit_test_all_LDFLAGS = -no-install
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
-	@srcpythonlib@/l1b_geo_generate.py
+	@srcpythonlib@/l1b_geo_generate.py \
+	@srcpythonlib@/l1b_geo_log_formatter.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.
@@ -1107,6 +1111,41 @@ install-dist_installemitSCRIPTS: $(dist_installemit_SCRIPTS)
 uninstall-dist_installemitSCRIPTS:
 	@$(NORMAL_UNINSTALL)
 	@list='$(dist_installemit_SCRIPTS)'; test -n "$(installemitdir)" || exit 0; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	       sed -e 's,.*/,,;$(transform)'`; \
+	dir='$(DESTDIR)$(installemitdir)'; $(am__uninstall_files_from_dir)
+install-installemitSCRIPTS: $(installemit_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	@list='$(installemit_SCRIPTS)'; test -n "$(installemitdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(installemitdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(installemitdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n' \
+	    -e 'h;s|.*|.|' \
+	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
+	      if (++n[d] == $(am__install_max)) { \
+		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
+	    else { print "f", d "/" $$4, $$1 } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	     test -z "$$files" || { \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(installemitdir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(installemitdir)$$dir" || exit $$?; \
+	     } \
+	; done
+
+uninstall-installemitSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(installemit_SCRIPTS)'; test -n "$(installemitdir)" || exit 0; \
 	files=`for p in $$list; do echo "$$p"; done | \
 	       sed -e 's,.*/,,;$(transform)'`; \
 	dir='$(DESTDIR)$(installemitdir)'; $(am__uninstall_files_from_dir)
@@ -1836,7 +1875,7 @@ all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(DATA) \
 install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(emitpkgpythondir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(emitincdir)" "$(DESTDIR)$(emitswigincdir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(emitpkgpythondir)" "$(DESTDIR)$(pkgpythonswigdir)" "$(DESTDIR)$(installemitdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(emitincdir)" "$(DESTDIR)$(emitswigincdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -1913,8 +1952,9 @@ info-am:
 install-data-am: install-dist_installemitSCRIPTS \
 	install-emitincHEADERS install-emitpkgpythonPYTHON \
 	install-emitswigincHEADERS install-includeHEADERS \
-	install-installemitDATA install-pkgconfigDATA \
-	install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON
+	install-installemitDATA install-installemitSCRIPTS \
+	install-pkgconfigDATA install-pkgpythonswigLTLIBRARIES \
+	install-pkgpythonswigPYTHON
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
@@ -1974,8 +2014,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	uninstall-dist_installemitSCRIPTS uninstall-emitincHEADERS \
 	uninstall-emitpkgpythonPYTHON uninstall-emitswigincHEADERS \
 	uninstall-includeHEADERS uninstall-installemitDATA \
-	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
-	uninstall-pkgpythonswigLTLIBRARIES \
+	uninstall-installemitSCRIPTS uninstall-libLTLIBRARIES \
+	uninstall-pkgconfigDATA uninstall-pkgpythonswigLTLIBRARIES \
 	uninstall-pkgpythonswigPYTHON
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
@@ -1999,18 +2039,19 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	install-emitswigincHEADERS install-exec install-exec-am \
 	install-html install-html-am install-includeHEADERS \
 	install-info install-info-am install-installemitDATA \
-	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
-	install-pkgconfigDATA install-pkgpythonswigLTLIBRARIES \
-	install-pkgpythonswigPYTHON install-ps install-ps-am \
-	install-strip installcheck installcheck-am installcheck-local \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am recheck tags tags-am \
-	uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-dist_binSCRIPTS uninstall-dist_installemitSCRIPTS \
-	uninstall-emitincHEADERS uninstall-emitpkgpythonPYTHON \
-	uninstall-emitswigincHEADERS uninstall-hook \
-	uninstall-includeHEADERS uninstall-installemitDATA \
+	install-installemitSCRIPTS install-libLTLIBRARIES install-man \
+	install-pdf install-pdf-am install-pkgconfigDATA \
+	install-pkgpythonswigLTLIBRARIES install-pkgpythonswigPYTHON \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installcheck-local installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am recheck tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
+	uninstall-dist_installemitSCRIPTS uninstall-emitincHEADERS \
+	uninstall-emitpkgpythonPYTHON uninstall-emitswigincHEADERS \
+	uninstall-hook uninstall-includeHEADERS \
+	uninstall-installemitDATA uninstall-installemitSCRIPTS \
 	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
 	uninstall-pkgpythonswigLTLIBRARIES \
 	uninstall-pkgpythonswigPYTHON
