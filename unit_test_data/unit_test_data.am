@@ -2,3 +2,5 @@
 EXTRA_DIST+= @unittestdata@/README.md
 EXTRA_DIST+= @unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5
 EXTRA_DIST+= @unittestdata@/spice_data
+EXTRA_DIST+= @unittestdata@/l1b_loc.hdr
+EXTRA_DIST+= @unittestdata@/l1b_loc.img

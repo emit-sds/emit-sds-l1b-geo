@@ -51,13 +51,40 @@ class L1bGeoGenerate:
         fin = self.igc.ipi.orbit.file_name
         shutil.copyfile(fin, fname)
 
-    def generate_obs(self, fname):
+    def generate_obs(self, fname, loc_fname):
         '''Generate the Level 1B Observation Geometry (OBS) File'''
+        # This is a bit slow, we may well want things to go into C++
         logger.info("Generating OBS data")
+        loc = EnviFile(loc_fname)
         d = EnviFile(fname,
                      shape=(11, self.igc.number_line, self.igc.number_sample),
                      dtype = np.float64, mode="w")
         d[:,:,:] = -999
+        lon = loc[0,:,:]
+        lat = loc[1,:, :]
+        h = loc[2,:,:]
+        for ln in range(self.igc.number_line):
+            if(ln % 100 == 0):
+                logger.info("Doing line %d" % ln)
+            pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln,0))
+            tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
+            for smp in range(self.igc.number_sample):
+                gp = geocal.Geodetic(lat[ln,smp], lon[ln,smp], h[ln,smp])
+                # TODO Double check direction here. Possible we are going in
+                # the wrong direction, so may have various 90- and -180 we
+                # need to but in place.
+                clv = geocal.CartesianFixedLookVector(pos, gp)
+                lv = geocal.LnLookVector(clv, gp)
+                slv = geocal.LnLookVector.solar_look_vector(tm, gp)
+                d[1,ln,smp] = lv.view_zenith
+                d[2,ln,smp] = lv.view_azimuth
+                d[3,ln,smp] = slv.view_zenith
+                d[4,ln,smp] = slv.view_azimuth
+                # TODO Fill in other fields here. Mostly a matter of
+                # tracking down the exact definition of each of these, we
+                # have a lot of the info available. Think we'll need to
+                # add slope and aspect to DEM, I don't think we have anything
+                # around to calculate this.
 
     def generate_glt(self, fname):
         '''Generate the Level 1B Geographic Lookup Table (GLT) File'''

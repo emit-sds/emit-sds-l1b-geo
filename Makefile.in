@@ -727,7 +727,8 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
 	@unittestdata@/README.md \
 	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 \
-	@unittestdata@/spice_data
+	@unittestdata@/spice_data @unittestdata@/l1b_loc.hdr \
+	@unittestdata@/l1b_loc.img
 CYTHON_SRC = 
 pkgconfig_DATA = 
 AM_CPPFLAGS = -I$(srcdir)/@srclib@

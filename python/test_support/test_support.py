@@ -54,4 +54,10 @@ def igc(orbit_fname, scene_start):
     '''ImageGroundConnection that we can use for testing'''
     return emit_igc(orbit_fname, scene_start)
 
+@pytest.fixture(scope="function")
+def l1b_loc():
+    '''L1B LOC file that can be used with the igc for testing'''
+    return unit_test_data + "l1b_loc.img"
+
+
 
