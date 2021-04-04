@@ -9,7 +9,7 @@ We specify the top directory for the spice data as $A, which we can then
 move if needed.
 \begindata
 PATH_VALUES = (
-   '/opt/afids/data/cspice'
+   './'
 )
 PATH_SYMBOLS = (
   'A'
