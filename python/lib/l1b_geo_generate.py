@@ -4,6 +4,7 @@ import numpy as np
 import os
 import shutil
 import logging
+import re
 
 logger = logging.getLogger('l1b_geo_process.l1b_geo_generate')
 
@@ -14,15 +15,26 @@ logger = logging.getLogger('l1b_geo_process.l1b_geo_generate')
 # Also, we'll probably want to run some of this in parallel and/or move to
 # C++. I imagine this will be a bit slow.
 class L1bGeoGenerate:
-    def __init__(self, igc, prod_dir):
+    def __init__(self, igc, prod_dir, onum = 100, snum = 1, bnum = 1,
+                 vnum = 1):
         self.igc = igc
         self.prod_dir = prod_dir
+        self.onum = onum
+        self.snum = snum
+        self.bnum = bnum
+        self.vnum = vnum
 
     def emit_file_name(self, file_type, ext=".img"):
         '''Generate a EMIT file name using the EMIT naming convention'''
-        # For now, just use the file_type. We'll add the rest later
-        return os.path.join(self.prod_dir, file_type + ext)
-
+        # Create yyyymmddthhmmss from tm
+        tm = self.igc.pixel_time(geocal.ImageCoordinate(0,0))
+        dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
+                                           re.split(r'\.', str(tm))[0]))
+        return os.path.join(self.prod_dir,
+              "emit%s_o%05d_s%03d_%s_b%03d_v%02d%s" %
+              (dstring, self.onum, self.snum, file_type, self.bnum, self.vnum,
+               ext))
+    
     def generate_quicklook(self, fname):
         '''Generate the quick look image file'''
         # Currently just a fake file
@@ -59,7 +71,7 @@ class L1bGeoGenerate:
         d = EnviFile(fname,
                      shape=(11, self.igc.number_line, self.igc.number_sample),
                      dtype = np.float64, mode="w")
-        d[:,:,:] = -999
+        d[:,:,:] = -9999
         lon = loc[0,:,:]
         lat = loc[1,:, :]
         h = loc[2,:,:]
@@ -95,7 +107,7 @@ class L1bGeoGenerate:
         d = EnviFile(fname,
                      shape=(2, self.igc.number_line, self.igc.number_sample),
                      dtype = np.int32, mode="w")
-        d[:,:,:] = -999
+        d[:,:,:] = -9999
         
     def generate_loc(self, fname):
         '''Generate the Level 1B Pixel Location (LOC) File'''

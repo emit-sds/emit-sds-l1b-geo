@@ -12,3 +12,7 @@ DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 # For now, we carry around our own spice kernels for testing. This can
 # perhaps go away when we have this set up on EMIT.
 export SPICEDATA = $(abs_srcdir)/@unittestdata@/spice_data
+
+# end to end check
+end-to-end-check:
+	source $(prefix)/setup_emit.sh && l1b_geo_process $(abs_srcdir)/@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 "2019-02-27T10:12:22.0000Z" out
