@@ -821,7 +821,7 @@ _swig_wrap_la_SOURCES = $(INCLUDE_SWIG_SRC) @swigsrc@/swig_wrap.cc
 # SWIG doesn't like the GCC extension -isystem (which is like -I, but lets
 # GCC know not to complain about things in the header files we can't change).
 # Just replace -isystem with -I for swig
-@HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@GSWIG_FLAGS = $(patsubst -isystem%,-I%, $(GEOCAL_CFLAGS) $(GEOCAL_SWIG_CFLAGS))
+@HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@GSWIG_FLAGS = $(patsubst -O2,,$(patsubst -isystem%,-I%, $(GEOCAL_CFLAGS) $(GEOCAL_SWIG_CFLAGS)))
 installemit_DATA = @srcscript@/setup_emit.csh @srcscript@/setup_emit.sh
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
