@@ -1,0 +1,15 @@
+\begindata
+   INPUT_DATA_TYPE   = 'TL_ELEMENTS'
+   OUTPUT_SPK_TYPE   = 10
+   OBJECT_ID         = 25544
+   CENTER_ID         = 399
+   REF_FRAME_NAME    = 'J2000'
+   PRODUCER_ID       = 'Mike Smyth'
+   LEAPSECONDS_FILE  = '/opt/afids/data/cspice/lsk/naif0012.tls'
+   INPUT_DATA_FILE   = 'iss_tle.txt'
+   OUTPUT_SPK_FILE   = 'iss_2020.bsp'
+   PCK_FILE          = '/opt/afids/data/cspice/pck/geophysical.ker'
+   COMMENT_FILE      = 'iss_spice.comment'
+   SEGMENT_ID        = 'segment identifier'
+   APPEND_TO_OUTPUT  = 'NO'
+\begintext
