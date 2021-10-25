@@ -788,7 +788,7 @@ emit_test_all_LDFLAGS = -no-install
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
-	@srcpythonlib@/l1b_geo_generate.py \
+	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
