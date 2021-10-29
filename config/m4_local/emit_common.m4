@@ -34,7 +34,7 @@ if test "$_cv_gnu_make_command" = "" ; then
 fi
 
 AC_COPYRIGHT(
-[Copyright 2020, California Institute of Technology. 
+[Copyright 2021, California Institute of Technology. 
 ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.])
 # The obscure looking tar-pax here sets automake to allow file names longer
 # than 99 characters to be included in the dist tar. See
@@ -95,11 +95,16 @@ export PKG_CONFIG_PATH
 
 AC_SUBST([pkgconfigdir], [${libdir}/pkgconfig])
 
+# We normally get this from anaconda, but leave a way in place to
+# select a different location
 AC_ARG_WITH([geocal],
 AS_HELP_STRING([--with-geocal=DIR], [give directory where geocal can be found (optional, default is /pkg/afids/geocal_latest)]), [ ac_geocal_dir="$withval" ], [ ac_geocal_dir="/pkg/afids/geocal_latest" ])
 PKG_CONFIG_PATH=$ac_geocal_dir/lib/pkgconfig:$PKG_CONFIG_PATH
 PKG_CHECK_MODULES([GEOCAL], [geocal])
 PKG_CHECK_VAR([GEOCAL_SWIG_CFLAGS], [geocal], [swig_cflags])
 PKG_CHECK_VAR([geocaldir], [geocal], [prefix])
+
+AC_ARG_WITH([test-data],
+AS_HELP_STRING([--with-test-data=DIR], [give directory where end to end test data can be found (optional, default is /beegfs/store/emit-test-data)]), [ ac_test_data_dir="$withval" ], [ ac_test_data_dir="/beegfs/store/emit-test-data" ]) AC_SUBST([testdatadir], ["$ac_test_data_dir"])
 
 ])

@@ -21,8 +21,8 @@ def ortho_base_directory(config):
     if("ECOSTRESS_USE_AFIDS_ENV" in os.environ):
         # Location on pistol, use if found, otherwise use setting in
         # run config file
-        if(os.path.exists("/raid22/band5_VICAR")):
-            ortho_base_dir = "/raid22"
+        if(os.path.exists("/arcdata/backup/raid22/band5_VICAR")):
+            ortho_base_dir = "/arcdata/backup/raid22"
         elif(os.path.exists("/data/smyth/Landsat/band5_VICAR")):
             ortho_base_dir = "/data/smyth/Landsat"
     return ortho_base_dir

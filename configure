@@ -9,7 +9,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# Copyright 2020, California Institute of Technology.
+# Copyright 2021, California Institute of Technology.
 # ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.
 ## -------------------- ##
 ## M4sh Initialization. ##
@@ -694,6 +694,7 @@ PYTHON_VERSION
 PYTHON
 PARALLEL
 H5DIFF
+testdatadir
 geocaldir
 GEOCAL_SWIG_CFLAGS
 GEOCAL_LIBS
@@ -847,6 +848,7 @@ with_sysroot
 enable_libtool_lock
 enable_debug
 with_geocal
+with_test_data
 with_python
 with_doxygen
 with_swig
@@ -1525,6 +1527,9 @@ Optional Packages:
                           compiler's sysroot if not specified).
   --with-geocal=DIR       give directory where geocal can be found (optional,
                           default is /pkg/afids/geocal_latest)
+  --with-test-data=DIR    give directory where end to end test data can be
+                          found (optional, default is
+                          /beegfs/store/emit-test-data)
   --with-python[=DIR]     use Python (default is yes if found) - it is
                           possible to specify the root directory for Python
                           (optional).
@@ -1649,7 +1654,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-Copyright 2020, California Institute of Technology.
+Copyright 2021, California Institute of Technology.
 ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.
 _ACEOF
   exit
@@ -17775,6 +17780,8 @@ export PKG_CONFIG_PATH
 pkgconfigdir=${libdir}/pkgconfig
 
 
+# We normally get this from anaconda, but leave a way in place to
+# select a different location
 
 # Check whether --with-geocal was given.
 if test "${with_geocal+set}" = set; then :
@@ -17921,6 +17928,16 @@ geocaldir=$pkg_cv_geocaldir
 if test "x$geocaldir" = x""; then :
 
 fi
+
+
+# Check whether --with-test-data was given.
+if test "${with_test_data+set}" = set; then :
+  withval=$with_test_data;  ac_test_data_dir="$withval"
+else
+   ac_test_data_dir="/beegfs/store/emit-test-data"
+fi
+ testdatadir="$ac_test_data_dir"
+
 
 
 
