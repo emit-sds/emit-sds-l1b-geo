@@ -6,6 +6,8 @@ endif
 
 source @geocaldir@/setup_geocal.csh
 
+setenv EMIT_TEST_DATA @testdatadir@
+
 if($?PYTHONPATH) then
   setenv PYTHONPATH ${EMITTOP}/@pythondir@:${EMITTOP}/@platpythondir@:${PYTHONPATH}
 else

@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('nitf_diff')
+logger = logging.getLogger('emit')
 
 class L1bGeoLogFormatter(logging.Formatter):
     '''Set logging format, optionally with color'''

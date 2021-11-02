@@ -40,14 +40,37 @@ slow = pytest.mark.slow
 skip = pytest.mark.skip
 
 @pytest.fixture(scope="function")
-def orbit_fname():
-    '''Test orbit'''
-    return unit_test_data + "L1A_RAW_ATT_03663_20190227T094659_0100_01.h5"
-
-@pytest.fixture(scope="function")
 def scene_start():
     '''Start time for a test scene.'''
     return geocal.Time.parse_time("2019-02-27T10:12:22.0000Z")
+
+@pytest.fixture(scope="function")
+def test_data():
+    '''Determine the directory with the test data.'''
+    if("EMIT_TEST_DATA" in os.environ):
+        tdata = os.environ["EMIT_TEST_DATA"] + "/latest/"
+    else:
+        # Location on eco-scf
+        tdata = "/beegfs/store/emit-test-data/latest/"
+        if(not os.path.exists(tdata)):
+            # Location on rifle
+            tdata="/ldata/smyth/emit-test-data/latest/"
+        if(not os.path.exists(tdata)):
+            pytest.skip("Don't have emit-test-data, so skipping test")
+    if(os.path.exists(tdata)):
+        yield tdata
+    else:
+        pytest.skip("Don't have emit-test-data, so skipping test")
+
+@pytest.fixture(scope="function")
+def orbit_fname(test_data):
+    '''Test orbit'''
+    return test_data + "orbit_l1a_sim.nc"
+
+@pytest.fixture(scope="function")
+def time_table_fname(test_data):
+    '''Test time table'''
+    return test_data + "line_time_sim.nc"
 
 @pytest.fixture(scope="function")
 def igc(orbit_fname, scene_start):
@@ -58,6 +81,7 @@ def igc(orbit_fname, scene_start):
 def l1b_loc():
     '''L1B LOC file that can be used with the igc for testing'''
     return unit_test_data + "l1b_loc.img"
+
 
 
 

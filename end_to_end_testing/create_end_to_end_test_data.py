@@ -12,7 +12,7 @@ import subprocess
 # have
 CREATE_IGC_SIM = False
 CREATE_ENVI = False
-CREATE_ORBIT = False
+CREATE_ORBIT = True
 CREATE_TT = True
 
 # We only bother simulating one band for this test. We can't realistically
@@ -82,11 +82,10 @@ if CREATE_ENVI:
     t.gdal_raster_image(0)["ENVI","emit acquisition start time"] = "foo"
     # etc.
 if CREATE_ORBIT:
-    t = L1aRawAttSimulate(orb, tt.min_time - 100, tt.max_time + 100)
-    t.create_file("orbit_l1a_sim.nc")
+    EmitOrbit.write_file("orbit_l1a_sim.nc", orb, tt.min_time - 100,
+                         tt.max_time + 100)
 if CREATE_TT:
-    t = EmitTimeTable()
-    t.write_time_table(tt, "line_time_sim.nc")
+    EmitTimeTable.write_file("line_time_sim.nc", tt)
     
     
     

@@ -723,7 +723,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srclib@/global_fixture.h @srcpythonlib@/envi_file_test.py \
 	@srcpythonlib@/emit_igc_test.py \
 	@srcpythonlib@/l1b_geo_generate_test.py \
-	@srcpythonlib@/l1a_raw_att_simulation_test.py \
+	@srcpythonlib@/emit_orbit_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
@@ -793,8 +793,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
 	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py \
-	@srcpythonlib@/l1a_raw_att_simulation.py \
-	@srcpythonlib@/emit_time_table.py
+	@srcpythonlib@/emit_orbit.py @srcpythonlib@/emit_time_table.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.
@@ -2089,6 +2088,8 @@ complain_if_afids:
 # For now, we carry around our own spice kernels for testing. This can
 # perhaps go away when we have this set up on EMIT.
 export SPICEDATA = $(abs_srcdir)/@unittestdata@/spice_data
+
+export EMIT_TEST_DATA=@testdatadir@
 
 # end to end check
 end-to-end-check:
