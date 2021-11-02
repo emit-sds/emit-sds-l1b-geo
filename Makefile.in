@@ -621,6 +621,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+afidsdatadir = @afidsdatadir@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -723,6 +724,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srclib@/global_fixture.h @srcpythonlib@/envi_file_test.py \
 	@srcpythonlib@/emit_igc_test.py \
 	@srcpythonlib@/l1b_geo_generate_test.py \
+	@srcpythonlib@/emit_camera_test.py \
 	@srcpythonlib@/emit_orbit_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
@@ -793,7 +795,8 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
 	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py \
-	@srcpythonlib@/emit_orbit.py @srcpythonlib@/emit_time_table.py
+	@srcpythonlib@/emit_camera.py @srcpythonlib@/emit_orbit.py \
+	@srcpythonlib@/emit_time_table.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.

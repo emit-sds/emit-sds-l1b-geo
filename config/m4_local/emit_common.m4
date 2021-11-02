@@ -95,6 +95,10 @@ export PKG_CONFIG_PATH
 
 AC_SUBST([pkgconfigdir], [${libdir}/pkgconfig])
 
+AC_ARG_WITH([afids-data],
+AS_HELP_STRING([--with-afids-data=DIR], [give directory where geocal can be found (optional, default is /opt/afids/data)]), [ ac_afids_data_dir="$withval" ], [ ac_afids_data_dir="/opt/afids/data" ])
+AC_SUBST([afidsdatadir], ["$ac_afids_data_dir"])
+
 # We normally get this from anaconda, but leave a way in place to
 # select a different location
 AC_ARG_WITH([geocal],
@@ -105,6 +109,7 @@ PKG_CHECK_VAR([GEOCAL_SWIG_CFLAGS], [geocal], [swig_cflags])
 PKG_CHECK_VAR([geocaldir], [geocal], [prefix])
 
 AC_ARG_WITH([test-data],
-AS_HELP_STRING([--with-test-data=DIR], [give directory where end to end test data can be found (optional, default is /beegfs/store/emit-test-data)]), [ ac_test_data_dir="$withval" ], [ ac_test_data_dir="/beegfs/store/emit-test-data" ]) AC_SUBST([testdatadir], ["$ac_test_data_dir"])
+AS_HELP_STRING([--with-test-data=DIR], [give directory where end to end test data can be found (optional, default is /beegfs/store/emit-test-data)]), [ ac_test_data_dir="$withval" ], [ ac_test_data_dir="/beegfs/store/emit-test-data" ])
+AC_SUBST([testdatadir], ["$ac_test_data_dir"])
 
 ])

@@ -7,7 +7,6 @@ try:
     have_swig = True
 except ImportError:
     have_swig = False
-from emit.emit_igc import emit_igc
 
 unit_test_data = os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
 
@@ -40,11 +39,6 @@ slow = pytest.mark.slow
 skip = pytest.mark.skip
 
 @pytest.fixture(scope="function")
-def scene_start():
-    '''Start time for a test scene.'''
-    return geocal.Time.parse_time("2019-02-27T10:12:22.0000Z")
-
-@pytest.fixture(scope="function")
 def test_data():
     '''Determine the directory with the test data.'''
     if("EMIT_TEST_DATA" in os.environ):
@@ -73,9 +67,15 @@ def time_table_fname(test_data):
     return test_data + "line_time_sim.nc"
 
 @pytest.fixture(scope="function")
-def igc(orbit_fname, scene_start):
+def l1b_rdn_fname(test_data):
+    '''L1B Radiance file to use'''
+    return test_data + "igc_sim_envi.img"
+
+@pytest.fixture(scope="function")
+def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
     '''ImageGroundConnection that we can use for testing'''
-    return emit_igc(orbit_fname, scene_start)
+    from emit.emit_igc import EmitIgc
+    return EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname)
 
 @pytest.fixture(scope="function")
 def l1b_loc():

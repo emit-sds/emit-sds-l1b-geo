@@ -4,6 +4,7 @@ if [ -z "$EMITTOP" ]; then
     export EMITTOP=@prefix@
 fi
 
+source @afidsdatadir@/setup_afids_data.sh
 source @geocaldir@/setup_geocal.sh
 
 export EMIT_TEST_DATA=@testdatadir@

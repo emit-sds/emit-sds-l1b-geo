@@ -4,6 +4,7 @@ if(! $?EMITTOP) then
     setenv EMITTOP @prefix@
 endif
 
+source @afidsdatadir@/setup_afids_data.csh
 source @geocaldir@/setup_geocal.csh
 
 setenv EMIT_TEST_DATA @testdatadir@
