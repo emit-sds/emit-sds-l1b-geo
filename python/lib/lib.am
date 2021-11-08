@@ -6,6 +6,8 @@ emitpkgpython_PYTHON+= @srcpythonlib@/l1b_geo_log_formatter.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_camera.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_time_table.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_time_table.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_orbit.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
@@ -13,6 +15,8 @@ EXTRA_DIST+=@srcpythonlib@/l1b_geo_generate_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_camera_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_time_table_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_time_table_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_orbit_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory

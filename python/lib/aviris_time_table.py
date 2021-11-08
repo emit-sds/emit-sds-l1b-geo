@@ -1,0 +1,23 @@
+import geocal
+import os
+
+class AvirisTimeTable(geocal.MeasuredTimeTable):
+    '''This create a time table from an AVIRIS obs file. We get the day
+    from parsing the file name, and the time of each line from the
+    UTC hour found in band 10 of the file.
+
+    Note that the file name must match the AVIRIS standard naming, 
+    so we can get the day going with the UTC hour.
+
+    This has nothing directly to do with EMIT, but since some of our 
+    test data is based on AVIRIS it is useful to be able to read this.
+    '''
+    def __init__(self, obs_fname):
+        t = os.path.basename(obs_fname)
+        t0 = geocal.Time.parse_time(f"20{t[1:3]}-{t[3:5]}-{t[5:7]}T00:00:00Z")
+        # The UTC hour is band 10
+        d = geocal.GdalRasterImage(obs_fname, 10).read_all_double()
+        tm = [t0 + d[i,0] * 3600 for i in range(d.shape[0])]
+        super().__init__(tm)
+        
+__all__ = ["AvirisTimeTable",]

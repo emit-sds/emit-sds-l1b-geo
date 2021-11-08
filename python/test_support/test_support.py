@@ -9,6 +9,7 @@ except ImportError:
     have_swig = False
 
 unit_test_data = os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
+aviris_test_data = unit_test_data + "AVIRIS_data/"
 
 @pytest.fixture(scope="function")
 def isolated_dir(tmpdir):
