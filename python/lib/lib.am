@@ -8,6 +8,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/emit_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_time_table.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_time_table.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_orbit.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_igm.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py

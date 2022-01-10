@@ -1,5 +1,6 @@
 import struct
 import geocal
+from .misc import create_dem
 
 class AvirisOrbit(geocal.OrbitQuaternionList):
     '''This reads the AVIRIS orbit data. Note that there are two versions
@@ -16,6 +17,7 @@ class AvirisOrbit(geocal.OrbitQuaternionList):
         tm_arr = []
         pos_arr = []
         rph_arr = []
+        dem = create_dem(None)
         for i in range(aviris_tt.max_line):
             tm, _ = aviris_tt.time(geocal.ImageCoordinate(i, 0))
             tm_arr.append(tm)
@@ -24,6 +26,9 @@ class AvirisOrbit(geocal.OrbitQuaternionList):
             # Pretty sure this is in degrees and meters
             (lon, lat, elv, roll, pitch,
              heading) = struct.unpack("<6d", fh.read(sz_to_read))
+            # The elevation is above the datum, not WGS 84. So we need
+            # to add the datum undulation to get the correct elevation
+            elv += dem.datum.undulation(geocal.Geodetic(lat, lon))
             pos_arr.append(geocal.Geodetic(lat, lon, elv))
             rph_arr.append([roll,pitch,heading])
         od = []

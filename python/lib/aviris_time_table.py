@@ -11,6 +11,13 @@ class AvirisTimeTable(geocal.MeasuredTimeTable):
 
     This has nothing directly to do with EMIT, but since some of our 
     test data is based on AVIRIS it is useful to be able to read this.
+
+    AVIRIS is a whisk broom, so the pixels aren't actually acquired all
+    at the same time. The time reported here for the line is actually the
+    time of the middle pixel. EMIT is not a whiskbroom, so for the purposes
+    of providing test data I think we can ignore the whiskbroom aspect of
+    the instrument and "pretend" that the scanline is collected all at the
+    same time.
     '''
     def __init__(self, obs_fname):
         t = os.path.basename(obs_fname)

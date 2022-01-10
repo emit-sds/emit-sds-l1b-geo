@@ -800,7 +800,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/emit_camera.py @srcpythonlib@/emit_orbit.py \
 	@srcpythonlib@/emit_time_table.py \
 	@srcpythonlib@/aviris_time_table.py \
-	@srcpythonlib@/aviris_orbit.py
+	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.
