@@ -9,6 +9,9 @@ emitpkgpython_PYTHON+= @srcpythonlib@/emit_time_table.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_time_table.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_igm.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_orbit.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_obs.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_igm.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
@@ -18,6 +21,9 @@ EXTRA_DIST+=@srcpythonlib@/emit_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_time_table_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_time_table_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_orbit_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_ng_orbit_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_ng_obs_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_ng_igm_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory

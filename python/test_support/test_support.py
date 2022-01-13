@@ -10,6 +10,7 @@ except ImportError:
 
 unit_test_data = os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
 aviris_test_data = unit_test_data + "AVIRIS_data/"
+aviris_ng_test_data = unit_test_data + "AVIRIS_NG_data/"
 
 @pytest.fixture(scope="function")
 def isolated_dir(tmpdir):
@@ -57,6 +58,22 @@ def test_data():
     else:
         pytest.skip("Don't have emit-test-data, so skipping test")
 
+@pytest.fixture(scope="function")
+def aviris_ng_full_test_data():
+    '''We have some AVIRIS NG test data in the source tree, but there is
+    a more full set in a directory Phil put together. This is too large
+    to include in our source tree, so look for this and if found run tests
+    that depend on this.'''
+    # Location on eco-scf
+    tdata = "/beegfs/store/brodrick/emit/pushbroom_demo/l1b/"
+    if(not os.path.exists(tdata)):
+        # Location on rifle
+        tdata="/bigdata/smyth/EmitTestData/aviris-ng/"
+    if(os.path.exists(tdata)):
+        yield tdata
+    else:
+        pytest.skip("Don't have aviris-ng test data, so skipping test")
+    
 @pytest.fixture(scope="function")
 def orbit_fname(test_data):
     '''Test orbit'''

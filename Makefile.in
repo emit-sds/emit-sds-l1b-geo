@@ -728,11 +728,15 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/emit_orbit_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
 	@srcpythonlib@/aviris_time_table_test.py \
-	@srcpythonlib@/aviris_orbit_test.py @srcpythonlib@/__init__.py \
-	@testsupportsrc@/test_support.py @testsupportsrc@/__init__.py \
-	@pythonswigsrc@/swig_wrap.tmpl $(FULL_SWIG_SRC) \
-	$(srcdir)/$(swigsrc)/*_wrap.h @unittestdata@/README.md \
-	@unittestdata@/AVIRS_data \
+	@srcpythonlib@/aviris_orbit_test.py \
+	@srcpythonlib@/aviris_ng_orbit_test.py \
+	@srcpythonlib@/aviris_ng_obs_test.py \
+	@srcpythonlib@/aviris_ng_igm_test.py \
+	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
+	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
+	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
+	@unittestdata@/README.md @unittestdata@/AVIRS_data \
+	@unittestdata@/AVIRS_NG_data \
 	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 \
 	@unittestdata@/spice_data @unittestdata@/l1b_loc.hdr \
 	@unittestdata@/l1b_loc.img
@@ -800,7 +804,10 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/emit_camera.py @srcpythonlib@/emit_orbit.py \
 	@srcpythonlib@/emit_time_table.py \
 	@srcpythonlib@/aviris_time_table.py \
-	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py
+	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py \
+	@srcpythonlib@/aviris_ng_orbit.py \
+	@srcpythonlib@/aviris_ng_obs.py \
+	@srcpythonlib@/aviris_ng_igm.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.

@@ -124,6 +124,7 @@ try:
     g.generate_qa(qa_fname)
     logger.info("Done with l1b_geo processing")
 except Exception as e:
+    raise
     logger.exception(e, stack_info=True)
     logger.fatal("L1b_geo processing failed")
     sys.exit(1)
