@@ -194,7 +194,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES) \
 	$(pkgpythonswig_LTLIBRARIES)
 _swig_wrap_la_DEPENDENCIES = libemit.la
 am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo
+am__objects_1 = @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo \
+	@swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo
 am__objects_2 = $(am__objects_1)
 am__swig_wrap_la_OBJECTS = $(am__objects_2) \
 	@swigsrc@/_swig_wrap_la-swig_wrap.lo
@@ -208,7 +209,8 @@ _swig_wrap_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) $(_swig_wrap_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
 libemit_la_LIBADD =
-am_libemit_la_OBJECTS = @srclib@/libemit_la-ecostress_scan_mirror.lo
+am_libemit_la_OBJECTS = @srclib@/libemit_la-ecostress_scan_mirror.lo \
+	@srclib@/libemit_la-gdal_support.lo
 libemit_la_OBJECTS = $(am_libemit_la_OBJECTS)
 libemit_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -245,7 +247,9 @@ am__depfiles_remade = @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_tes
 	@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po \
 	@srclib@/$(DEPDIR)/emit_test_all-test_all.Po \
 	@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -727,6 +731,8 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/emit_camera_test.py \
 	@srcpythonlib@/emit_orbit_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
+	@srcpythonlib@/emit_loc_test.py \
+	@srcpythonlib@/standard_metadata_test.py \
 	@srcpythonlib@/aviris_time_table_test.py \
 	@srcpythonlib@/aviris_orbit_test.py \
 	@srcpythonlib@/aviris_ng_orbit_test.py \
@@ -778,20 +784,22 @@ DIST_HOOK = dist-clean-up-python
 # Dist check need to know where to find geocal
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 emitincdir = @includedir@/emit
-libemit_la_SOURCES = @srclib@/ecostress_scan_mirror.cc
+libemit_la_SOURCES = @srclib@/ecostress_scan_mirror.cc \
+	@srclib@/gdal_support.cc
 
 #=================================================================
 # List of source files
 emitinc_HEADERS = @srclib@/emit_serialize_support.h \
-	@srclib@/ecostress_scan_mirror.h
-emitswiginc_HEADERS = @srclib@/ecostress_scan_mirror.i \
-	@srclib@/emit_common.i
+	@srclib@/ecostress_scan_mirror.h @srclib@/gdal_support.h
+emitswiginc_HEADERS = @srclib@/gdal_support.i \
+	@srclib@/ecostress_scan_mirror.i @srclib@/emit_common.i
 emit_test_all_SOURCES = @srclib@/test_all.cc \
 	@srclib@/global_fixture.cc @srclib@/global_fixture_default.cc \
 	@srclib@/ecostress_scan_mirror_test.cc
 
 # Files that contain SWIG wrapper information.
-SWIG_SRC = @swigsrc@/ecostress_scan_mirror_wrap.cc
+SWIG_SRC = @swigsrc@/gdal_support_wrap.cc \
+	@swigsrc@/ecostress_scan_mirror_wrap.cc
 libemit_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 libemit_la_LDFLAGS = $(GEOCAL_LIBS)
 emit_test_all_LDADD = libemit.la 
@@ -802,7 +810,8 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py \
 	@srcpythonlib@/emit_camera.py @srcpythonlib@/emit_orbit.py \
-	@srcpythonlib@/emit_time_table.py \
+	@srcpythonlib@/emit_time_table.py @srcpythonlib@/emit_loc.py \
+	@srcpythonlib@/standard_metadata.py \
 	@srcpythonlib@/aviris_time_table.py \
 	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py \
 	@srcpythonlib@/aviris_ng_orbit.py \
@@ -1033,6 +1042,8 @@ clean-pkgpythonswigLTLIBRARIES:
 @swigsrc@/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) @swigsrc@/$(DEPDIR)
 	@: > @swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo:  \
 	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-swig_wrap.lo: @swigsrc@/$(am__dirstamp) \
@@ -1048,6 +1059,8 @@ _swig_wrap.la: $(_swig_wrap_la_OBJECTS) $(_swig_wrap_la_DEPENDENCIES) $(EXTRA__s
 	@: > @srclib@/$(DEPDIR)/$(am__dirstamp)
 @srclib@/libemit_la-ecostress_scan_mirror.lo:  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-gdal_support.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
 
 libemit.la: $(libemit_la_OBJECTS) $(libemit_la_DEPENDENCIES) $(EXTRA_libemit_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libemit_la_LINK) -rpath $(libdir) $(libemit_la_OBJECTS) $(libemit_la_LIBADD) $(LIBS)
@@ -1184,7 +1197,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-test_all.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -1217,6 +1232,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
+@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo: @swigsrc@/gdal_support_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo `test -f '@swigsrc@/gdal_support_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/gdal_support_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/gdal_support_wrap.cc' object='@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo `test -f '@swigsrc@/gdal_support_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/gdal_support_wrap.cc
+
 @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo: @swigsrc@/ecostress_scan_mirror_wrap.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo `test -f '@swigsrc@/ecostress_scan_mirror_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/ecostress_scan_mirror_wrap.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
@@ -1237,6 +1259,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror.cc' object='@srclib@/libemit_la-ecostress_scan_mirror.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
+
+@srclib@/libemit_la-gdal_support.lo: @srclib@/gdal_support.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-gdal_support.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-gdal_support.Tpo -c -o @srclib@/libemit_la-gdal_support.lo `test -f '@srclib@/gdal_support.cc' || echo '$(srcdir)/'`@srclib@/gdal_support.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-gdal_support.Tpo @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/gdal_support.cc' object='@srclib@/libemit_la-gdal_support.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-gdal_support.lo `test -f '@srclib@/gdal_support.cc' || echo '$(srcdir)/'`@srclib@/gdal_support.cc
 
 @srclib@/emit_test_all-test_all.o: @srclib@/test_all.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-test_all.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo -c -o @srclib@/emit_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
@@ -1950,7 +1979,9 @@ distclean: distclean-am
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -2011,7 +2042,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

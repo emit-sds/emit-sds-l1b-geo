@@ -77,23 +77,25 @@ def aviris_ng_full_test_data():
 @pytest.fixture(scope="function")
 def orbit_fname(test_data):
     '''Test orbit'''
-    return test_data + "orbit_l1a_sim.nc"
+    return test_data + "emit20200610t014911_o80000_l1a_att_b001_v01.nc"
 
 @pytest.fixture(scope="function")
 def time_table_fname(test_data):
     '''Test time table'''
-    return test_data + "line_time_sim.nc"
+    return test_data + "emit20200610t015051_o80000_s001_l1a_line_time_b001_v01.nc"
 
 @pytest.fixture(scope="function")
 def l1b_rdn_fname(test_data):
     '''L1B Radiance file to use'''
-    return test_data + "igc_sim_envi.img"
+    return test_data + "emit20200610t015051_o80000_s001_l1b_rdn_b001_v01.img"
 
 @pytest.fixture(scope="function")
 def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
     '''ImageGroundConnection that we can use for testing'''
     from emit.emit_igc import EmitIgc
-    return EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname)
+    res = EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname)
+    res.title = "Scene 1"
+    return res
 
 @pytest.fixture(scope="function")
 def l1b_loc():

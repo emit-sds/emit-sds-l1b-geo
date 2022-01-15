@@ -82,7 +82,23 @@ def aster_radiance_scale_factor():
     return [1.688, 1.415, 0.862, 0.2174, 0.0696, 0.0625, 0.0597, 0.0417, 0.0318,
             6.882e-3, 6.780e-3, 6.590e-3, 5.693e-3, 5.225e-3]
 
+def emit_file_name(file_type, start_time, onum, snum, bnum, vnum, ext):
+    '''Create the emit file name for the given file_type, start_time,
+    orbit number, scene number, build number, version number, and file
+    extension. Note that scene number can be "None" for orbit based file
+    names'''
+    dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
+                                       re.split(r'\.', str(start_time))[0]))
+    if(snum is None):
+        return "emit%s_o%05d_%s_b%03d_v%02d%s" % (dstring, onum,
+                     file_type, bnum, vnum, ext)
+    return "emit%s_o%05d_s%03d_%s_b%03d_v%02d%s" % (dstring, onum, snum,
+                     file_type, bnum, vnum, ext)
+    
+    
+
 __all__ = ["create_dem", "ortho_base_directory", "band_to_landsat_band",
-           "aster_mosaic_dir", "aster_radiance_scale_factor",]
+           "aster_mosaic_dir", "aster_radiance_scale_factor",
+           "emit_file_name"]
            
 

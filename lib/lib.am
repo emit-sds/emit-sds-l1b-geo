@@ -27,8 +27,12 @@ EXTRA_DIST+= @srclib@/test_all.sh
 emitinc_HEADERS+= @srclib@/emit_serialize_support.h
 emitinc_HEADERS+= @srclib@/ecostress_scan_mirror.h
 libemit_la_SOURCES+= @srclib@/ecostress_scan_mirror.cc
+emitinc_HEADERS+= @srclib@/gdal_support.h
+libemit_la_SOURCES+= @srclib@/gdal_support.cc
 
 # Files that contain SWIG wrapper information.
+SWIG_SRC += @swigsrc@/gdal_support_wrap.cc
+emitswiginc_HEADERS+= @srclib@/gdal_support.i
 SWIG_SRC += @swigsrc@/ecostress_scan_mirror_wrap.cc
 emitswiginc_HEADERS+= @srclib@/ecostress_scan_mirror.i
 emitswiginc_HEADERS+= @srclib@/emit_common.i
