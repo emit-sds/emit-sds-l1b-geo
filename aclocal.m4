@@ -1684,6 +1684,7 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([config/m4_local/emit_common.m4])
+m4_include([config/m4_local/emit_location.m4])
 m4_include([config/m4_local/emit_source_directory.m4])
 m4_include([config/m4/ac_check_found.m4])
 m4_include([config/m4/ac_doxygen.m4])

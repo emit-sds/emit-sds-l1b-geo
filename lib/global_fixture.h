@@ -10,7 +10,9 @@ class GlobalFixture {
 public:
   GlobalFixture();
   virtual ~GlobalFixture() { /* Nothing to do now */ }
+  std::string test_data_dir() const;
   std::string unit_test_data_dir() const;
+  std::string landsat7_dir() const;
 private:
   void set_default_value();
 };

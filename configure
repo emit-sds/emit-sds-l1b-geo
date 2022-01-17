@@ -1534,6 +1534,9 @@ Optional Packages:
   --with-test-data=DIR    give directory where end to end test data can be
                           found (optional, default is
                           /beegfs/store/emit-test-data)
+  --with-test-data=DIR    give directory where end to end test data can be
+                          found (optional, default is
+                          /beegfs/store/shared/emit-test-data)
   --with-python[=DIR]     use Python (default is yes if found) - it is
                           possible to specify the root directory for Python
                           (optional).
@@ -17950,6 +17953,23 @@ if test "${with_test_data+set}" = set; then :
   withval=$with_test_data;  ac_test_data_dir="$withval"
 else
    ac_test_data_dir="/beegfs/store/emit-test-data"
+fi
+
+testdatadir="$ac_test_data_dir"
+
+
+
+
+#=================================================================
+# Find location of EMIT data
+
+
+
+# Check whether --with-test-data was given.
+if test "${with_test_data+set}" = set; then :
+  withval=$with_test_data;  ac_test_data_dir="$withval"
+else
+   ac_test_data_dir="/beegfs/store/shared/emit-test-data"
 fi
 
 testdatadir="$ac_test_data_dir"

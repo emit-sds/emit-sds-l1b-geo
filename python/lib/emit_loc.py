@@ -30,8 +30,30 @@ class EmitLoc(EnviFile):
         super().__init__(fname, shape=shape, dtype=np.float64, mode=mode,
                          description = "EMIT L1B pixel location file",
                          band_description = ["Longitude (WGS-84)", "Latitude (WGS-84)", "Elevation (m)"])
-        
 
+    @property
+    def latitude(self):
+        '''Return the latitude field'''
+        return self[1,:,:]
+
+    @property
+    def longitude(self):
+        '''Return the longitude field'''
+        return self[0,:,:]
+
+    @property
+    def height(self):
+        '''Return the height field.'''
+        return self[2,:,:]
+
+    @property
+    def crosses_date_line(self):
+        '''Returns true if we cross the dateline'''
+        return self.longitude.min() < -170 and self.longitude.max() > 160
+
+    def determine_map_rotation(self, mi):
+        pass
+        
     def run(self):
         '''Actually generate the output data.'''
         logger.info("Generating LOC data for %s", self.igc.title)
