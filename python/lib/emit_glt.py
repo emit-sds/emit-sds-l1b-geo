@@ -2,6 +2,7 @@ import geocal
 import scipy
 import numpy as np
 from emit_swig import *
+from .envi_file import EnviFile
 import subprocess
 import logging
 import cv2
@@ -9,19 +10,26 @@ import math
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
 
-class EmitGlt(object):
+class EmitGlt(EnviFile):
     '''This generate the l1b_geo GLT file. 
     
     Note that we don't actually create the data until you run "run" function.
     The EmitLoc should also have been generate (so either you are reading
     an existing file or you have done EmitLoc.run to generate the data).
     '''
-    def __init__(self, file_name, emit_loc,
+    def __init__(self, fname, emit_loc = None,
+                 standard_metadata = None,
                  resolution = 60, number_subpixel = 3):
-        self.file_name = file_name
+        self.fname = fname
         self.emit_loc = emit_loc
         self.resolution = resolution
+        self.standard_metadata = standard_metadata
         self.number_subpixel = number_subpixel
+        # Note that if we are writing the file, then we actually need to
+        # wait on calling __init__ because we don't know the size yet.
+        if(self.emit_loc is None):
+            super().__init__(fname, mode="r")
+        
 
     def map_info_rotated(self):
         mi = geocal.cib01_mapinfo(self.resolution)
@@ -61,6 +69,14 @@ class EmitGlt(object):
         s = mi.resolution_meter / mi2.resolution_meter
         mi2 = mi2.scale(s, s)
         return mi2
+
+    @property
+    def glt_line(self):
+        return self[1,:,:]
+
+    @property
+    def glt_sample(self):
+        return self[0,:,:]
     
     def run(self):
         logger.info("Generating GLT")
@@ -70,6 +86,11 @@ class EmitGlt(object):
         lon = scipy.ndimage.interpolation.zoom(self.emit_loc.longitude,
                                                self.number_subpixel, order=2)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
+        super().__init__(self.fname, shape=(2,res.map_info.number_y_pixel,
+                                            res.map_info.number_x_pixel),
+                         dtype=np.int32, mode="w",
+                         description="Emit L1B geographic lookup table file",
+                         band_description = ["GLT Sample Lookup", "GLT Line Lookup"])
         # TODO We are using the smallest line/sample here. We should change
         # this to instead use the nearest
         ln_d = np.broadcast_to(np.arange(0,self.emit_loc.shape[1])[:,np.newaxis],
@@ -80,10 +101,7 @@ class EmitGlt(object):
         ln.write(0,0,ln_d.astype(np.int))
         smp = geocal.MemoryRasterImage(smp_d.shape[0], smp_d.shape[1])
         smp.write(0,0,smp_d.astype(np.int))
-        glt_line = res.resample_field(ln, 1.0, False, -999.0, True)
-        glt_sample = res.resample_field(smp, 1.0, False, -999.0, True)
-        print(glt_line)
-        print(glt_line.max())
-        
+        self.glt_line[:,:] = res.resample_field(ln, 1.0, False, -999.0, True)
+        self.glt_sample[:,:] = res.resample_field(smp, 1.0, False, -999.0, True)
         
 __all__ = ["EmitGlt",]
