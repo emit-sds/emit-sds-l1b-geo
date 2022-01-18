@@ -10,6 +10,7 @@ class EnviFile:
     things up if needed. But for now, this is a pretty simple interface and
     it may be sufficient.'''
     def __init__(self, fname, shape = None, dtype=np.float64, mode='r+',
+                 map_info = None,
                  description = "fake description", band_description = []):
         '''Create or read a EnviFile like a numpy array. The array shape
         should be nband x nline x nsamp.'''
@@ -34,8 +35,13 @@ class EnviFile:
                 gtype = geocal.GdalRasterImage.Byte
             else:
                 raise ValueError("Unsupported data type")
-            t = geocal.GdalRasterImage(fname, "ENVI", shape[1], shape[2], shape[0],
-                                gtype, "INTERLEAVE=BIL")
+            if(map_info is not None):
+                t = geocal.GdalRasterImage(fname, "ENVI", map_info, shape[0],
+                                           gtype, "INTERLEAVE=BIL")
+            else:
+                t = geocal.GdalRasterImage(fname, "ENVI", shape[1], shape[2],
+                                           shape[0],
+                                           gtype, "INTERLEAVE=BIL")
             set_file_description(t, description)
             t.close()
             for i, desc in enumerate(band_description):

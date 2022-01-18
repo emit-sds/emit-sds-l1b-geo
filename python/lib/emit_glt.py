@@ -86,8 +86,9 @@ class EmitGlt(EnviFile):
         lon = scipy.ndimage.interpolation.zoom(self.emit_loc.longitude,
                                                self.number_subpixel, order=2)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
-        super().__init__(self.fname, shape=(2,res.map_info.number_y_pixel,
-                                            res.map_info.number_x_pixel),
+        super().__init__(self.fname, map_info = mi,
+                         shape=(2,res.map_info.number_y_pixel,
+                                res.map_info.number_x_pixel),
                          dtype=np.int32, mode="w",
                          description="Emit L1B geographic lookup table file",
                          band_description = ["GLT Sample Lookup", "GLT Line Lookup"])
