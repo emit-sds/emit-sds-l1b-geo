@@ -51,9 +51,6 @@ class EmitLoc(EnviFile):
         '''Returns true if we cross the dateline'''
         return self.longitude.min() < -170 and self.longitude.max() > 160
 
-    def determine_map_rotation(self, mi):
-        pass
-        
     def run(self):
         '''Actually generate the output data.'''
         logger.info("Generating LOC data for %s", self.igc.title)
