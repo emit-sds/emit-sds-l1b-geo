@@ -6,6 +6,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/l1b_geo_log_formatter.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_camera.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_time_table.py
+emitpkgpython_PYTHON+= @srcpythonlib@/emit_kmz_and_quicklook.py
 emitpkgpython_PYTHON+= @srcpythonlib@/emit_loc.py
 emitpkgpython_PYTHON+= @srcpythonlib@/standard_metadata.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_time_table.py
@@ -14,6 +15,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/aviris_igm.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_obs.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_igm.py
+emitpkgpython_PYTHON+= @srcpythonlib@/gaussian_stretch.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
@@ -21,6 +23,7 @@ EXTRA_DIST+=@srcpythonlib@/l1b_geo_generate_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_camera_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_time_table_test.py
+EXTRA_DIST+=@srcpythonlib@/emit_kmz_and_quicklook_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_loc_test.py
 EXTRA_DIST+=@srcpythonlib@/standard_metadata_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_time_table_test.py
@@ -28,6 +31,7 @@ EXTRA_DIST+=@srcpythonlib@/aviris_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_obs_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_igm_test.py
+EXTRA_DIST+=@srcpythonlib@/gaussian_stretch_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory

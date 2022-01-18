@@ -740,6 +740,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/emit_camera_test.py \
 	@srcpythonlib@/emit_orbit_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
+	@srcpythonlib@/emit_kmz_and_quicklook_test.py \
 	@srcpythonlib@/emit_loc_test.py \
 	@srcpythonlib@/standard_metadata_test.py \
 	@srcpythonlib@/aviris_time_table_test.py \
@@ -747,6 +748,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/aviris_ng_orbit_test.py \
 	@srcpythonlib@/aviris_ng_obs_test.py \
 	@srcpythonlib@/aviris_ng_igm_test.py \
+	@srcpythonlib@/gaussian_stretch_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
 	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
@@ -823,13 +825,15 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py \
 	@srcpythonlib@/emit_camera.py @srcpythonlib@/emit_orbit.py \
-	@srcpythonlib@/emit_time_table.py @srcpythonlib@/emit_loc.py \
-	@srcpythonlib@/standard_metadata.py \
+	@srcpythonlib@/emit_time_table.py \
+	@srcpythonlib@/emit_kmz_and_quicklook.py \
+	@srcpythonlib@/emit_loc.py @srcpythonlib@/standard_metadata.py \
 	@srcpythonlib@/aviris_time_table.py \
 	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py \
 	@srcpythonlib@/aviris_ng_orbit.py \
 	@srcpythonlib@/aviris_ng_obs.py \
-	@srcpythonlib@/aviris_ng_igm.py
+	@srcpythonlib@/aviris_ng_igm.py \
+	@srcpythonlib@/gaussian_stretch.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.

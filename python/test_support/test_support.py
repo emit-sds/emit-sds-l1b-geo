@@ -98,6 +98,13 @@ def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
     return res
 
 @pytest.fixture(scope="function")
+def emit_loc(test_data):
+    '''EmitLoc that can be used with the igc for testing'''
+    from emit.emit_loc import EmitLoc
+    loc = EmitLoc(test_data + "sample_loc.img")
+    return loc
+
+@pytest.fixture(scope="function")
 def l1b_loc():
     '''L1B LOC file that can be used with the igc for testing'''
     return unit_test_data + "l1b_loc.img"
