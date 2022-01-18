@@ -42,7 +42,7 @@ class EmitOrbit(geocal.HdfOrbit_Eci_TimeJ2000):
         g = fout.create_group("Attitude")
         t = g.create_variable("time_j2000", ('t',), data=tm)
         t.attrs["units"] = "s"
-        t = g.create_variable("quaternion", ('t', 'quaternion'), data=quat)
+        t = g.create_variable("quaternion", ('t', 'quat'), data=quat)
         t.attrs["description"] = "Attitude quaternion, goes from spacecraft to ECI. The coefficient convention used has the real part in the first column."
         t.attrs["units"] = "dimensionless"
         fout.close()
