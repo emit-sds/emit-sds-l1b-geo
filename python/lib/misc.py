@@ -1,6 +1,7 @@
 # This is various miscellaneous routines that don't fit elsewhere
 import geocal
 import os
+import re
 
 def create_dem(config):
     '''Create the SRTM DEM based on the configuration. Don't exactly know
@@ -94,11 +95,19 @@ def emit_file_name(file_type, start_time, onum, snum, bnum, vnum, ext):
                      file_type, bnum, vnum, ext)
     return "emit%s_o%05d_s%03d_%s_b%03d_v%02d%s" % (dstring, onum, snum,
                      file_type, bnum, vnum, ext)
+
+def orb_and_scene_from_file_name(fname):
+    '''Get the orbit and scene from a file name, using the emit naming
+    convention.'''
+    m = re.search(r'_o(\d+)_s(\d+)_', os.path.basename(fname))
+    if(not m):
+        raise RuntimeError(f"Don't recognize the format of file name {fname}")
+    return (m.group(1), m.group(2))
     
     
 
 __all__ = ["create_dem", "ortho_base_directory", "band_to_landsat_band",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
-           "emit_file_name"]
+           "emit_file_name", "orb_and_scene_from_file_name"]
            
 
