@@ -94,6 +94,7 @@ fi
 export PKG_CONFIG_PATH
 
 AC_SUBST([pkgconfigdir], [${libdir}/pkgconfig])
+AC_SUBST([condaprefix], ["$CONDA_PREFIX"])
 
 AC_ARG_WITH([afids-data],
 AS_HELP_STRING([--with-afids-data=DIR], [give directory where geocal can be found (optional, default is /opt/afids/data)]), [ ac_afids_data_dir="$withval" ], [ ac_afids_data_dir="/opt/afids/data" ])

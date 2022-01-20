@@ -20,7 +20,9 @@ class EmitKmzAndQuicklook(object):
     def __init__(self, file_base_name, emit_loc,
                  rad_fname, band_list = [1,1,1],
                  use_jpeg = False,
-                 resolution = 60, number_subpixel = 3):
+                 resolution = 60, number_subpixel = 3,
+                 generate_kmz = True,
+                 generate_quicklook = True):
         self.file_base_name = file_base_name
         self.emit_loc = emit_loc
         self.band_list = band_list
@@ -28,6 +30,8 @@ class EmitKmzAndQuicklook(object):
         self.resolution = resolution
         self.number_subpixel = number_subpixel
         self.rad_fname = rad_fname
+        self.generate_quicklook = generate_quicklook
+        self.generate_kmz = generate_kmz
 
     def run(self):
         logger.info("Generating KMZ and quicklook")
@@ -49,13 +53,26 @@ class EmitKmzAndQuicklook(object):
             d = None
             cmd_merge.append(fname)
         subprocess.run(cmd_merge)
-        cmd = ["gdal_translate", "-of", "KMLSUPEROVERLAY", "map_scaled.vrt",
+        cmd = ["gdal_translate", "-q", "-of", "KMLSUPEROVERLAY",
+               "map_scaled.vrt",
                self.file_base_name + ".kmz"]
         if(not self.use_jpeg):
             cmd.extend(["-co", "FORMAT=PNG"])
-        subprocess.run(cmd, check=True)
-        cmd = ["gdal_translate", "-of", "PNG", "-a_nodata", "none",
-               "map_scaled.vrt", self.file_base_name + ".png"]        
-        subprocess.run(cmd, check=True)
+        if(self.generate_kmz):
+            subprocess.run(cmd, check=True)
+        cmd = ["gdal_translate", "-q", "-of", "PNG", "-a_nodata", "none",
+               "map_scaled.vrt", self.file_base_name + ".png"]
+        if(self.generate_quicklook):
+            subprocess.run(cmd, check=True)
+        # Remove the .aux.xml file GDAL generates
+        try:
+            os.unlink(self.file_base_name + ".kmz" + ".aux.xml")
+        except FileNotFoundError:
+            pass
+        try:
+            os.unlink(self.file_base_name + ".png" + ".aux.xml")
+        except FileNotFoundError:
+            pass
+        
     
 __all__ = ["EmitKmzAndQuicklook",]

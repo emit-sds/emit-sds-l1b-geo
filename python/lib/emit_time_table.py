@@ -8,7 +8,7 @@ class EmitTimeTable(geocal.MeasuredTimeTable):
     full C++ class if there is any need.
     '''
     def __init__(self, tt_fname):
-        f = h5netcdf.File(tt_fname, "r")
+        f = h5netcdf.File(tt_fname, "r", decode_vlen_strings=False)
         tm = f["line_time_j2000"][:]
         super().__init__([geocal.Time.time_j2000(t) for t in tm])
 

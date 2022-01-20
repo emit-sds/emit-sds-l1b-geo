@@ -104,5 +104,7 @@ class EmitGlt(EnviFile):
         smp.write(0,0,smp_d.astype(np.int))
         self.glt_line[:,:] = res.resample_field(ln, 1.0, False, -999.0, True)
         self.glt_sample[:,:] = res.resample_field(smp, 1.0, False, -999.0, True)
+        if(self.standard_metadata):
+            self.standard_metadata.write_metadata(self)
         
 __all__ = ["EmitGlt",]
