@@ -18,7 +18,11 @@ def test_create_loc(igc, test_data):
     t[t< -180] = t[t < -180] + 360
     g.longitude[:,:] = t
     
-    
+
+# This is kind of long for a unit test, and we already test this
+# at the end-to-end-check level. So normally skip this, although we
+# can turn this back on to debug some kind of problem
+@slow
 def test_generate_loc(igc, isolated_dir):
     g = EmitLoc("test_loc.img", igc=igc)
     g.run()

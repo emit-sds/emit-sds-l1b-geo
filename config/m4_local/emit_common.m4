@@ -96,8 +96,13 @@ export PKG_CONFIG_PATH
 AC_SUBST([pkgconfigdir], [${libdir}/pkgconfig])
 AC_SUBST([condaprefix], ["$CONDA_PREFIX"])
 
+if test "x$CONDA_PREFIX" != x; then
+   afids_data_default="$CONDA_PREFIX/data"
+else
+   afids_data_default="/opt/afids/data"
+fi
 AC_ARG_WITH([afids-data],
-AS_HELP_STRING([--with-afids-data=DIR], [give directory where geocal can be found (optional, default is /opt/afids/data)]), [ ac_afids_data_dir="$withval" ], [ ac_afids_data_dir="/opt/afids/data" ])
+AS_HELP_STRING([--with-afids-data=DIR], [give directory where geocal can be found (optional, default is $afids_data_default)]), [ ac_afids_data_dir="$withval" ], [ ac_afids_data_dir="$afids_data_default" ])
 AC_SUBST([afidsdatadir], ["$ac_afids_data_dir"])
 
 # We normally get this from anaconda, but leave a way in place to

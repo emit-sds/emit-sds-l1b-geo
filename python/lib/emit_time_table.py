@@ -1,5 +1,6 @@
 import geocal
 import h5netcdf
+from packaging import version
 import numpy as np
 
 class EmitTimeTable(geocal.MeasuredTimeTable):
@@ -8,7 +9,12 @@ class EmitTimeTable(geocal.MeasuredTimeTable):
     full C++ class if there is any need.
     '''
     def __init__(self, tt_fname):
-        f = h5netcdf.File(tt_fname, "r", decode_vlen_strings=False)
+        # Newer version of h5netcdf needs decode_vlen_strings, but this
+        # keyword isn't in older versions
+        if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+            f = h5netcdf.File(tt_fname, "r", decode_vlen_strings=False)
+        else:
+            f = h5netcdf.File(tt_fname, "r")
         tm = f["line_time_j2000"][:]
         super().__init__([geocal.Time.time_j2000(t) for t in tm])
 

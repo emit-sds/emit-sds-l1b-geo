@@ -4,6 +4,10 @@ import glob
 import sys
 from test_support import *
 
+# This is kind of long for a unit test, and we already test this
+# at the end-to-end-check level. So normally skip this, although we
+# can turn this back on to debug some kind of problem
+@slow
 def test_l1b_geo_generate(isolated_dir, test_data):
     sys.path.append(test_data + "l1_osp_dir")
     import l1b_geo_config

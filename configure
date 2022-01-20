@@ -1529,15 +1529,12 @@ Optional Packages:
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
   --with-afids-data=DIR   give directory where geocal can be found (optional,
-                          default is /opt/afids/data)
+                          default is $afids_data_default)
   --with-geocal=DIR       give directory where geocal can be found (optional,
                           default is /pkg/afids/geocal_latest)
   --with-test-data=DIR    give directory where end to end test data can be
                           found (optional, default is
                           /beegfs/store/emit-test-data)
-  --with-test-data=DIR    give directory where end to end test data can be
-                          found (optional, default is
-                          /beegfs/store/shared/emit-test-data)
   --with-python[=DIR]     use Python (default is yes if found) - it is
                           possible to specify the root directory for Python
                           (optional).
@@ -17790,12 +17787,17 @@ pkgconfigdir=${libdir}/pkgconfig
 condaprefix="$CONDA_PREFIX"
 
 
+if test "x$CONDA_PREFIX" != x; then
+   afids_data_default="$CONDA_PREFIX/data"
+else
+   afids_data_default="/opt/afids/data"
+fi
 
 # Check whether --with-afids-data was given.
 if test "${with_afids_data+set}" = set; then :
   withval=$with_afids_data;  ac_afids_data_dir="$withval"
 else
-   ac_afids_data_dir="/opt/afids/data"
+   ac_afids_data_dir="$afids_data_default"
 fi
 
 afidsdatadir="$ac_afids_data_dir"
@@ -17814,8 +17816,8 @@ fi
 PKG_CONFIG_PATH=$ac_geocal_dir/lib/pkgconfig:$PKG_CONFIG_PATH
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for geocal" >&5
-$as_echo_n "checking for geocal... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GEOCAL" >&5
+$as_echo_n "checking for GEOCAL... " >&6; }
 
 if test -n "$GEOCAL_CFLAGS"; then
     pkg_cv_GEOCAL_CFLAGS="$GEOCAL_CFLAGS"
@@ -17855,7 +17857,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -17882,7 +17884,7 @@ Alternatively, you may set the environment variables GEOCAL_CFLAGS
 and GEOCAL_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -17956,23 +17958,6 @@ if test "${with_test_data+set}" = set; then :
   withval=$with_test_data;  ac_test_data_dir="$withval"
 else
    ac_test_data_dir="/beegfs/store/emit-test-data"
-fi
-
-testdatadir="$ac_test_data_dir"
-
-
-
-
-#=================================================================
-# Find location of EMIT data
-
-
-
-# Check whether --with-test-data was given.
-if test "${with_test_data+set}" = set; then :
-  withval=$with_test_data;  ac_test_data_dir="$withval"
-else
-   ac_test_data_dir="/beegfs/store/shared/emit-test-data"
 fi
 
 testdatadir="$ac_test_data_dir"
@@ -21723,9 +21708,7 @@ $as_echo X/"$am_mf" |
     { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "Something went wrong bootstrapping makefile fragments
-    for automatic dependency tracking.  If GNU make was not used, consider
-    re-running the configure script with MAKE=\"gmake\" (or whatever is
-    necessary).  You can also try re-running configure with the
+    for automatic dependency tracking.  Try re-running configure with the
     '--disable-dependency-tracking' option to at least be able to build
     the package (albeit without support for automatic dependency tracking).
 See \`config.log' for more details" "$LINENO" 5; }

@@ -11,11 +11,6 @@ AC_CONFIG_FILES([emit_version.py])
 EMIT_COMMON
 
 #=================================================================
-# Find location of EMIT data
-
-EMIT_LOCATION
-
-#=================================================================
 # Find h5diff
 AC_PATH_PROG([H5DIFF], [h5diff], "", [$PATH$PATH_SEPARATOR${ac_afids_dir}/bin])
 if test -z "$H5DIFF"; then
