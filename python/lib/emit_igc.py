@@ -9,16 +9,25 @@ class EmitIgc(geocal.IpiImageGroundConnection):
     a generic GeoCal IpiImageGroundConnection. We can extend
     this to a full C++ class if there is any need.'''
     def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
-                 l1b_band = 1):
+                 l1b_band = 1, igc = None):
         '''Create a EmitIgc. We can either include the raster image data
         or not. If desired, supplied l1b_rdn_fname and the band of the
-        L1B radiance file to use.'''
-        
-        orb = EmitOrbit(orbit_fname)
+        L1B radiance file to use.
+
+        Since we want to share some of the files between Igc for different 
+        scenes, you can optionally supply a igc, and we take shared object 
+        out of that'''
+
+        if(igc is None):
+            self.orbit = EmitOrbit(orbit_fname)
+            cam = EmitCamera()
+            dem = create_dem(None)
+        else:
+            self.orbit = igc.ipi.orbit
+            cam = igc.ipi.camera
+            dem = igc.dem
         tt = EmitTimeTable(tt_fname)
-        cam = EmitCamera()
-        dem = create_dem(None)
-        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
+        ipi = geocal.Ipi(self.orbit, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
             img = geocal.GdalRasterImage(l1b_rdn_fname, l1b_band)
         else:

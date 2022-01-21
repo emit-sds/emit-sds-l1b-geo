@@ -2,6 +2,7 @@ from .envi_file import EnviFile
 from .emit_igc import EmitIgc
 from .emit_loc import EmitLoc
 from .emit_glt import EmitGlt
+from .l1b_correct import L1bCorrect
 from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
 from .misc import orb_and_scene_from_file_name, emit_file_name
 from .standard_metadata import StandardMetadata
@@ -25,15 +26,31 @@ class L1bGeoGenerate:
         self.orbit_number, _ = orb_and_scene_from_file_name(l1b_rad_fname_list[0])
         self.scene_to_fname = {}
         self.l1b_rad_fname = {}
+        self.scene_to_igc = {}
         for i in range(len(l1b_rad_fname_list)):
             _, scene = orb_and_scene_from_file_name(l1b_rad_fname_list[i])
             self.scene_to_fname[scene] = (line_time_fname_list[i],
                                           l1b_rad_fname_list[i])
+        self.igccol_initial = geocal.IgcArray([])
+        self.index_to_scene = []
+        igc_first = None
+        self.uncorrected_orbit = None
+        for scene in sorted(self.scene_to_fname.keys()):
+            igc = EmitIgc(self.l1a_att_fname, *self.scene_to_fname[scene],
+                          igc = igc_first)
+            igc.title = "Scene %s" % scene
+            self.igccol_initial.add_igc(igc)
+            if(not igc_first):
+                igc_first = igc
+                self.uncorrected_orbit = igc.orbit
+            self.index_to_scene.append(scene)
+        # TODO Add this in
+        self.geo_qa = None
+        self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
+                                      self.geo_qa)
 
-    def run_scene(self, scene):
-        logger.info("Processing scene %s", scene)
-        igc = EmitIgc(self.l1a_att_fname, *self.scene_to_fname[scene])
-        igc.title = "Scene %s" % scene
+    def run_scene(self, igc, scene):
+        logger.info("Processing %s", igc.title)
         standard_metadata = StandardMetadata(igc=igc)
         loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
                                    int(self.orbit_number),
@@ -48,7 +65,7 @@ class L1bGeoGenerate:
                                    int(self.l1b_geo_config.product_version),
                                    ".img")
         # KMZ and quicklook name based on l1b_rad_fname.
-        _, rad_fname = self.scene_to_fname[scene]
+        rad_fname = igc.image.file_names[0]
         kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         glt = EmitGlt(glt_fname, emit_loc=loc,
@@ -71,10 +88,22 @@ class L1bGeoGenerate:
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
-        # TODO SBA correction
         # TODO Write out corrected ephemeris data
-        # TODO Write out QA data
-        for scene in sorted(self.scene_to_fname.keys()):
-            self.run_scene(scene)
+        self.l1b_correct.run()
+        self.igccol_corrected = self.l1b_correct.igccol_corrected
+        orb_fname = emit_file_name("l1b_att",
+                                   self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time,
+                                   int(self.orbit_number),
+                                   None,
+                                   int(self.l1b_geo_config.build_version),
+                                   int(self.l1b_geo_config.product_version),
+                                   ".nc")
+        self.uncorrected_orbit.write_corrected_orbit(orb_fname,
+                 self.igccol_corrected.image_ground_connection(0).ipi.orbit)
+        for i in range(self.igccol_corrected.number_image):
+            self.run_scene(self.igccol_corrected.image_ground_connection(i),
+                           self.index_to_scene[i])
+        if(self.geo_qa is not None):
+            geo_qa.write()
                 
 __all__ = ["L1bGeoGenerate",]
