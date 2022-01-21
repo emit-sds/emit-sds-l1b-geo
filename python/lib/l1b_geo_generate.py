@@ -34,7 +34,6 @@ class L1bGeoGenerate:
         self.igccol_initial = geocal.IgcArray([])
         self.index_to_scene = []
         igc_first = None
-        self.uncorrected_orbit = None
         for scene in sorted(self.scene_to_fname.keys()):
             igc = EmitIgc(self.l1a_att_fname, *self.scene_to_fname[scene],
                           igc = igc_first)
@@ -42,8 +41,8 @@ class L1bGeoGenerate:
             self.igccol_initial.add_igc(igc)
             if(not igc_first):
                 igc_first = igc
-                self.uncorrected_orbit = igc.orbit
             self.index_to_scene.append(scene)
+        self.uncorrected_orbit = igc_first.ipi.orbit
         # TODO Add this in
         self.geo_qa = None
         self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,

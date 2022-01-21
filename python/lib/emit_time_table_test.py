@@ -2,7 +2,7 @@ from .emit_time_table import *
 from test_support import *
 import geocal
 
-def test_emit_orbit(time_table_fname):
+def test_emit_time_table(time_table_fname):
     tt = EmitTimeTable(time_table_fname)
     #print(tt)
     # Trivial test, we are just making sure we can access the orbit

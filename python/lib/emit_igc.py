@@ -1,4 +1,4 @@
-from .emit_orbit import EmitOrbit
+from .emit_orbit_extension import EmitOrbit
 from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
 from .misc import create_dem
@@ -19,15 +19,15 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         out of that'''
 
         if(igc is None):
-            self.orbit = EmitOrbit(orbit_fname)
+            orb = EmitOrbit(orbit_fname)
             cam = EmitCamera()
             dem = create_dem(None)
         else:
-            self.orbit = igc.ipi.orbit
+            orb = igc.ipi.orbit
             cam = igc.ipi.camera
             dem = igc.dem
         tt = EmitTimeTable(tt_fname)
-        ipi = geocal.Ipi(self.orbit, cam, 0, tt.min_time, tt.max_time, tt)
+        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
             img = geocal.GdalRasterImage(l1b_rdn_fname, l1b_band)
         else:

@@ -1,4 +1,4 @@
-from .emit_orbit import *
+from .emit_orbit_extension import *
 from test_support import *
 import geocal
 

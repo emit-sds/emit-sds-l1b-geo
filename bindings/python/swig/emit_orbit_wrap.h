@@ -8,8 +8,8 @@
  * interface file instead.
  * ----------------------------------------------------------------------------- */
 
-#ifndef SWIG_ecostress_scan_mirror_WRAP_H_
-#define SWIG_ecostress_scan_mirror_WRAP_H_
+#ifndef SWIG_emit_orbit_WRAP_H_
+#define SWIG_emit_orbit_WRAP_H_
 
 #include <map>
 #include <string>
