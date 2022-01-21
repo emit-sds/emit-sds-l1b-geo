@@ -31,17 +31,21 @@ emitinc_HEADERS+= @srclib@/resampler.h
 libemit_la_SOURCES+= @srclib@/resampler.cc
 emitinc_HEADERS+= @srclib@/emit_orbit.h
 libemit_la_SOURCES+= @srclib@/emit_orbit.cc
+emitinc_HEADERS+= @srclib@/emit_igc_collection.h
+libemit_la_SOURCES+= @srclib@/emit_igc_collection.cc
 
 # Files that contain SWIG wrapper information.
+SWIG_SRC += @swigsrc@/emit_swig_array_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_swig_array.i
+emitswiginc_HEADERS+= @srclib@/emit_common.i
 SWIG_SRC += @swigsrc@/gdal_support_wrap.cc
 emitswiginc_HEADERS+= @srclib@/gdal_support.i
 SWIG_SRC += @swigsrc@/resampler_wrap.cc
 emitswiginc_HEADERS+= @srclib@/resampler.i
 SWIG_SRC += @swigsrc@/emit_orbit_wrap.cc
 emitswiginc_HEADERS+= @srclib@/emit_orbit.i
-SWIG_SRC += @swigsrc@/emit_swig_array_wrap.cc
-emitswiginc_HEADERS+= @srclib@/emit_swig_array.i
-emitswiginc_HEADERS+= @srclib@/emit_common.i
+SWIG_SRC += @swigsrc@/emit_igc_collection_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_igc_collection.i
 
 # Test files
 EXTRA_DIST+= @srclib@/unit_test_support.h

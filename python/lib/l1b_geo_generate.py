@@ -6,6 +6,7 @@ from .l1b_correct import L1bCorrect
 from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
 from .misc import orb_and_scene_from_file_name, emit_file_name
 from .standard_metadata import StandardMetadata
+from emit_swig import EmitIgcCollection
 import geocal
 import numpy as np
 import os
@@ -31,7 +32,7 @@ class L1bGeoGenerate:
             _, scene = orb_and_scene_from_file_name(l1b_rad_fname_list[i])
             self.scene_to_fname[scene] = (line_time_fname_list[i],
                                           l1b_rad_fname_list[i])
-        self.igccol_initial = geocal.IgcArray([])
+        self.igccol_initial = EmitIgcCollection()
         self.index_to_scene = []
         igc_first = None
         for scene in sorted(self.scene_to_fname.keys()):
