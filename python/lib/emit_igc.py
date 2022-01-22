@@ -10,7 +10,7 @@ class EmitIgc(geocal.IpiImageGroundConnection):
     a generic GeoCal IpiImageGroundConnection. We can extend
     this to a full C++ class if there is any need.'''
     def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
-                 l1b_band = 1):
+                 l1b_band = 1, l1b_geo_config = None):
         '''Create a EmitIgc. We can either include the raster image data
         or not. If desired, supplied l1b_rdn_fname and the band of the
         L1B radiance file to use.'''
@@ -27,7 +27,8 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         # Put in raster image
         super().__init__(ipi, dem, img)
 
-def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band):
+def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
+            l1b_geo_config = None):
     '''Create a EmitIgcCollection. This takes an orbit file name,
     a list of time table and radiance file name pairs, and the band to
     set. We get the scene number from the radiance file name, and set EmitIgc

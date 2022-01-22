@@ -27,7 +27,8 @@ class L1bGeoGenerate:
         self.tt_and_rdn_fname = zip(line_time_fname_list, l1b_rad_fname_list)
         self.igccol_initial = EmitIgcCollection.create(self.l1a_att_fname,
                                   self.tt_and_rdn_fname,
-                                  self.l1b_geo_config.match_rad_band)
+                                  self.l1b_geo_config.match_rad_band,
+                                  l1b_geo_config = self.l1b_geo_config)
         # TODO Add this in
         self.geo_qa = None
         self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,

@@ -743,6 +743,8 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/emit_igc_test.py \
 	@srcpythonlib@/l1b_geo_generate_test.py \
 	@srcpythonlib@/l1b_correct_test.py \
+	@srcpythonlib@/l1b_tp_collect_test.py \
+	@srcpythonlib@/l1b_proj_test.py \
 	@srcpythonlib@/emit_camera_test.py \
 	@srcpythonlib@/emit_orbit_extension_test.py \
 	@srcpythonlib@/emit_time_table_test.py \
@@ -831,7 +833,8 @@ emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
 	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
-	@srcpythonlib@/l1b_correct.py \
+	@srcpythonlib@/l1b_correct.py @srcpythonlib@/l1b_tp_collect.py \
+	@srcpythonlib@/l1b_proj.py \
 	@srcpythonlib@/l1b_geo_log_formatter.py \
 	@srcpythonlib@/emit_camera.py \
 	@srcpythonlib@/emit_orbit_extension.py \

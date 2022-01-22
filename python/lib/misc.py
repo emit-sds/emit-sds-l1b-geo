@@ -3,30 +3,21 @@ import geocal
 import os
 import re
 
-def create_dem(config):
+def create_dem(l1b_geo_config = None):
     '''Create the SRTM DEM based on the configuration. Don't exactly know
     how this will work once we are integrated in with SDS, but for now
     just use the placeholder function and grab the information from the
     environment.'''
-    datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
-    srtm_dir = os.environ["ELEV_ROOT"]
+    if(l1b_geo_config is None):
+        # Default data if we don't have a config file
+        datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
+        srtm_dir = os.environ["ELEV_ROOT"]
+    else:
+        # Otherwise, get from config file
+        datum = l1b_geo_config.datum
+        srtm_dir = l1b_geo_config.srtm_dir
     dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))
     return dem
-
-def ortho_base_directory(config):
-    '''Create the ortho base. In production, take the directory passed in
-    from the configuration file. But for testing, if ECOSTRESS_USE_AFIDS_ENV
-    is defined then look for the location of this on pistol'''
-    ortho_base_dir = os.path.abspath(config["StaticAncillaryFileGroup",
-                                            "OrthoBase"])
-    if("ECOSTRESS_USE_AFIDS_ENV" in os.environ):
-        # Location on pistol, use if found, otherwise use setting in
-        # run config file
-        if(os.path.exists("/arcdata/backup/raid22/band5_VICAR")):
-            ortho_base_dir = "/arcdata/backup/raid22"
-        elif(os.path.exists("/data/smyth/Landsat/band5_VICAR")):
-            ortho_base_dir = "/data/smyth/Landsat"
-    return ortho_base_dir
 
 def band_to_landsat_band(lband):
     '''Map number to the enumeration in C++'''
@@ -106,7 +97,7 @@ def orb_and_scene_from_file_name(fname):
     
     
 
-__all__ = ["create_dem", "ortho_base_directory", "band_to_landsat_band",
+__all__ = ["create_dem", "band_to_landsat_band",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
            "emit_file_name", "orb_and_scene_from_file_name"]
            
