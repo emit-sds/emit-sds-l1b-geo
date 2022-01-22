@@ -24,45 +24,49 @@ class L1bGeoGenerate:
                  l1b_rad_fname_list):
         self.l1b_geo_config = l1b_geo_config
         self.l1a_att_fname = l1a_att_fname
-        self.orbit_number, _ = orb_and_scene_from_file_name(l1b_rad_fname_list[0])
-        self.scene_to_fname = {}
-        self.l1b_rad_fname = {}
-        self.scene_to_igc = {}
-        for i in range(len(l1b_rad_fname_list)):
-            _, scene = orb_and_scene_from_file_name(l1b_rad_fname_list[i])
-            self.scene_to_fname[scene] = (line_time_fname_list[i],
-                                          l1b_rad_fname_list[i])
-        self.igccol_initial = EmitIgcCollection()
-        self.index_to_scene = []
-        igc_first = None
-        for scene in sorted(self.scene_to_fname.keys()):
-            igc = EmitIgc(self.l1a_att_fname, *self.scene_to_fname[scene],
-                          igc = igc_first)
-            igc.title = "Scene %s" % scene
-            self.igccol_initial.add_igc(igc)
-            if(not igc_first):
-                igc_first = igc
-            self.index_to_scene.append(scene)
-        self.uncorrected_orbit = igc_first.ipi.orbit
+        self.tt_and_rdn_fname = zip(line_time_fname_list, l1b_rad_fname_list)
+        self.igccol_initial = EmitIgcCollection.create(self.l1a_att_fname,
+                                  self.tt_and_rdn_fname,
+                                  self.l1b_geo_config.match_rad_band)
         # TODO Add this in
         self.geo_qa = None
         self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
                                       self.geo_qa)
 
+    @property
+    def orbit_number(self):
+        return self.igccol_initial.orbit_number
+
+    @property
+    def build_version(self):
+        return self.l1b_geo_config.build_version
+
+    @property
+    def product_version(self):
+        return self.l1b_geo_config.product_version
+
+    @property
+    def uncorrected_orbit(self):
+        return self.igccol_initial.uncorrected_orbit
+
+    @property
+    def corrected_orbit(self):
+        return self.igccol_corrected.image_ground_connection(0).ipi.orbit
+    
     def run_scene(self, igc, scene):
         logger.info("Processing %s", igc.title)
         standard_metadata = StandardMetadata(igc=igc)
         loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
                                    int(self.orbit_number),
                                    int(scene),
-                                   int(self.l1b_geo_config.build_version),
-                                   int(self.l1b_geo_config.product_version),
+                                   int(self.build_version),
+                                   int(self.product_version),
                                    ".img")
         glt_fname = emit_file_name("l1b_glt", igc.ipi.time_table.min_time,
                                    int(self.orbit_number),
                                    int(scene),
-                                   int(self.l1b_geo_config.build_version),
-                                   int(self.l1b_geo_config.product_version),
+                                   int(self.build_version),
+                                   int(self.product_version),
                                    ".img")
         # KMZ and quicklook name based on l1b_rad_fname.
         rad_fname = igc.image.file_names[0]
@@ -88,21 +92,20 @@ class L1bGeoGenerate:
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
-        # TODO Write out corrected ephemeris data
         self.l1b_correct.run()
         self.igccol_corrected = self.l1b_correct.igccol_corrected
-        orb_fname = emit_file_name("l1b_att",
-                                   self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time,
+        tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
+        orb_fname = emit_file_name("l1b_att", tstart,
                                    int(self.orbit_number),
                                    None,
-                                   int(self.l1b_geo_config.build_version),
-                                   int(self.l1b_geo_config.product_version),
+                                   int(self.build_version),
+                                   int(self.product_version),
                                    ".nc")
         self.uncorrected_orbit.write_corrected_orbit(orb_fname,
-                 self.igccol_corrected.image_ground_connection(0).ipi.orbit)
+                                                     self.corrected_orbit)
         for i in range(self.igccol_corrected.number_image):
             self.run_scene(self.igccol_corrected.image_ground_connection(i),
-                           self.index_to_scene[i])
+                           self.igccol_initial.scene_list[i])
         if(self.geo_qa is not None):
             geo_qa.write()
                 

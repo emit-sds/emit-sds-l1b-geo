@@ -7,5 +7,6 @@ create_delta.bundle
 *.pyc
 *.o
 *.lo
+igc_sim*
 .cache
 .tramp_history

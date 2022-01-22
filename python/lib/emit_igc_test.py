@@ -1,5 +1,6 @@
 from .emit_igc import *
 import geocal
+import glob
 from test_support import *
 
 def test_emit_igc(isolated_dir, orbit_fname, time_table_fname,
@@ -19,3 +20,21 @@ def test_emit_igc(isolated_dir, orbit_fname, time_table_fname,
     geocal.write_shelve("igc.xml", igc)
     igc2 = geocal.read_shelve("igc.xml")
     print(igc2)
+
+def test_create_igccollection(isolated_dir, test_data):
+    l1a_att = glob.glob(f"{test_data}/*l1a_att_*.nc")[0]
+    line_time = glob.glob(f"{test_data}/*_l1a_line_time*.nc")
+    l1b_rad = glob.glob(f"{test_data}/*_l1b_rdn_*.img")
+    rad_band = 1
+    igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
+                                      rad_band)
+    assert igccol.orbit_number == '80000'
+    assert igccol.scene_list == ['001','002','003']
+    assert igccol.number_image == 3
+    assert igccol.image_ground_connection(0).title == "Scene 001"
+    assert igccol.image_ground_connection(1).title == "Scene 002"
+    assert igccol.image_ground_connection(2).title == "Scene 003"
+    assert (igccol.image_ground_connection(0).ipi.time_table.min_time <
+            igccol.image_ground_connection(1).ipi.time_table.min_time)
+    assert (igccol.image_ground_connection(1).ipi.time_table.min_time <
+            igccol.image_ground_connection(2).ipi.time_table.min_time)

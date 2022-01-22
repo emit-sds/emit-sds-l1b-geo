@@ -1,7 +1,9 @@
 # This contains support routines for doing unit tests.
 import pytest
 import geocal
+import glob
 import os
+import sys
 try:
     from emit_swig import *
     have_swig = True
@@ -109,6 +111,24 @@ def l1b_loc():
     '''L1B LOC file that can be used with the igc for testing'''
     return unit_test_data + "l1b_loc.img"
 
+@pytest.fixture(scope="function")
+def l1b_geo_config(test_data):
+    sys.path.append(test_data + "l1_osp_dir")
+    import l1b_geo_config as res
+    return res
+
+@pytest.fixture(scope="function")
+def emit_igccol(test_data):
+    import emit.emit_igc
+    l1a_att = glob.glob(f"{test_data}/*l1a_att_*.nc")[0]
+    line_time = glob.glob(f"{test_data}/*_l1a_line_time*.nc")
+    l1b_rad = glob.glob(f"{test_data}/*_l1b_rdn_*.img")
+    rad_band = 1
+    igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
+                                      rad_band)
+    return igccol
+
+    
 
 
 
