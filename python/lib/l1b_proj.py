@@ -13,6 +13,8 @@ class L1bProj(object):
         self.igccol = igccol
         self.geo_qa = geo_qa
         self.l1b_geo_config = l1b_geo_config
+        logger.info("OrthoBase dir: %s", l1b_geo_config.ortho_base_dir)
+        logger.info("Landsat band: %d", l1b_geo_config.landsat_band)
         self.ortho = geocal.Landsat7Global(l1b_geo_config.ortho_base_dir,
                           band_to_landsat_band(l1b_geo_config.landsat_band))
         # Want to scale to roughly 60 meters. Much of the landsat data

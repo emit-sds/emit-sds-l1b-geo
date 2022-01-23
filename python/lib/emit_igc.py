@@ -3,7 +3,11 @@ from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
 from .misc import create_dem, orb_and_scene_from_file_name
 from emit_swig import EmitIgcCollection
+import logging
 import geocal
+import os
+
+logger = logging.getLogger('l1b_geo_process.emit_igc')
 
 class EmitIgc(geocal.IpiImageGroundConnection):
     '''EMIT ImageGroundConnection. Right now this is just a wrapper around 
@@ -36,9 +40,12 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     the data. We also attach the list of scenes as "scene_list", the orbit
     number as "orbit_number" and the uncorrected orbit 
     as "uncorrected_orbit".'''
+    if(l1b_geo_config):
+        os.environ["SPICEDATA"] = l1b_geo_config.spice_data_dir
+    logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
     cam = EmitCamera()
-    dem = create_dem(None)
+    dem = create_dem(l1b_geo_config)
     scene_to_igc = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene = orb_and_scene_from_file_name(rdn_fname)

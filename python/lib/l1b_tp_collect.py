@@ -1,13 +1,14 @@
 class L1bTpCollect:
     '''Project data to the surface and collect tie-points with the
     orthobase'''
-    def __init__(self, igccol, geo_qa, l1b_geo_config):
+    def __init__(self, igccol, l1b_geo_config, geo_qa):
         self.igccol = igccol
         self.geo_qa = geo_qa
         self.l1b_geo_config = l1b_geo_config
 
     def tp(self, i):
         '''Get tiepoints for the given scene number'''
+        return None
         ntpoint_initial = 0     # Initial value, so an exception below doesn't
                                 # result in "local variable referenced before
                                 # assignment" exception
@@ -49,34 +50,41 @@ class L1bTpCollect:
 
     def tpcol(self, pool=None):
         '''Return tiepoints collected. We also return the time ranges for the
-           ImageGroundConnection that we got good tiepoint for. This
-           can be used by the calling program to determine such things
-           as the breakpoints on the orbit model
+        ImageGroundConnection that we got good tiepoint for. This
+        can be used by the calling program to determine such things
+        as the breakpoints on the orbit model
         '''
         
         # First project all the data.
-        proj_res = self.p.proj(pool=pool)
+        p = L1bProj(self.igccol, self.l1b_geo_config, geo_qa)
+        proj_res = p.proj(pool=pool)
         it = []
         for i in range(self.igccol.number_image):
             if(proj_res[i]):
                 it.append(i)
-        if(pool is None):
-            tpcollist = map(self.tp, it)
-        else:
-            tpcollist = pool.map(self.tp, it)
+        # Can't pickle this with the pool, so just set to None for now.
+        # We don't actually need this for anything in tp.
+        l1b_geo_config = self.l1b_geo_config
+        try:
+            if(pool is None):
+                tpcollist = map(self.tp, it)
+            else:
+                tpcollist = pool.map(self.tp, it)
+        finally:
+            self.l1b_geo_config = l1b_geo_config    
         res = geocal.TiePointCollection()
         time_range_tp = []
         for i in range(self.igccol.number_image):
             for i2 in range(len(self.tpcollect)):
                 lf = self.log_file[i] + "_%d" %i2
                 if(os.path.exists(lf)):
-                    self.qa_file.add_tp_log(self.igccol.title(i) + "_%d" % i2, lf)
+                    self.geo_qa.add_tp_log(self.igccol.title(i) + "_%d" % i2, lf)
         j = 0
         for i in range(self.igccol.number_image):
             if(proj_res[i]):
                 (tpcol, tmin, tmax, ntpoint_initial, ntpoint_removed,
                  ntpoint_final, number_match_try) = tpcollist[j]
-                self.qa_file.add_tp_single_scene(i, self.igccol,
+                self.geo_qa.add_tp_single_scene(i, self.igccol,
                         tpcol, ntpoint_initial, ntpoint_removed, ntpoint_final,
                         number_match_try)
                 if(len(tpcol) > 0):
@@ -84,7 +92,7 @@ class L1bTpCollect:
                     time_range_tp.append([tmin, tmax])
                 j += 1
             else:
-                self.qa_file.add_tp_single_scene(i, self.igccol,
+                self.geo_qa.add_tp_single_scene(i, self.igccol,
                                                  [], 0, 0, 0, 0)
         for i in range(len(res)):
             res[i].id = i+1

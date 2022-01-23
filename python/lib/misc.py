@@ -2,6 +2,9 @@
 import geocal
 import os
 import re
+import logging
+
+logger = logging.getLogger('l1b_geo_process.emit_dem')
 
 def create_dem(l1b_geo_config = None):
     '''Create the SRTM DEM based on the configuration. Don't exactly know
@@ -16,6 +19,8 @@ def create_dem(l1b_geo_config = None):
         # Otherwise, get from config file
         datum = l1b_geo_config.datum
         srtm_dir = l1b_geo_config.srtm_dir
+    logger.info("Datum: %s", datum)
+    logger.info("SRTM Dir: %s", srtm_dir)
     dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))
     return dem
 

@@ -2,6 +2,7 @@ from .envi_file import EnviFile
 from .emit_igc import EmitIgc
 from .emit_loc import EmitLoc
 from .emit_glt import EmitGlt
+from .geo_qa import GeoQa
 from .l1b_correct import L1bCorrect
 from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
 from .misc import orb_and_scene_from_file_name, emit_file_name
@@ -29,8 +30,14 @@ class L1bGeoGenerate:
                                   self.tt_and_rdn_fname,
                                   self.l1b_geo_config.match_rad_band,
                                   l1b_geo_config = self.l1b_geo_config)
-        # TODO Add this in
-        self.geo_qa = None
+        tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
+        qa_fname = emit_file_name("l1b_geoqa", tstart,
+                                   int(self.orbit_number),
+                                   None,
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".nc")
+        self.geo_qa = GeoQa(qa_fname, "l1b_geo.log")
         self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
                                       self.geo_qa)
 
@@ -108,6 +115,7 @@ class L1bGeoGenerate:
             self.run_scene(self.igccol_corrected.image_ground_connection(i),
                            self.igccol_initial.scene_list[i])
         if(self.geo_qa is not None):
-            geo_qa.write()
+            # TODO Any flushing of log file needed?
+            self.geo_qa.close()
                 
 __all__ = ["L1bGeoGenerate",]
