@@ -19,6 +19,7 @@ class EmitKmzAndQuicklook(object):
     '''
     def __init__(self, file_base_name, emit_loc,
                  rad_fname, band_list = [1,1,1],
+                 scene = 1,
                  use_jpeg = False,
                  resolution = 60, number_subpixel = 3,
                  generate_kmz = True,
@@ -32,6 +33,7 @@ class EmitKmzAndQuicklook(object):
         self.rad_fname = rad_fname
         self.generate_quicklook = generate_quicklook
         self.generate_kmz = generate_kmz
+        self.scene = scene
 
     def run(self):
         logger.info("Generating KMZ and quicklook")
@@ -41,12 +43,13 @@ class EmitKmzAndQuicklook(object):
         lon = scipy.ndimage.interpolation.zoom(self.emit_loc.longitude,
                                                self.number_subpixel, order=2)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
-        cmd_merge = ["gdalbuildvrt", "-q", "-separate", "map_scaled.vrt"]
+        vrt_fname = "map_scaled_%03d.vrt" % self.scene
+        cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
         for b in self.band_list:
             ras = geocal.GdalRasterImage(self.rad_fname, b)
             data = res.resample_field(ras)
             data_scaled = gaussian_stretch(data)
-            fname = "map_b%d_scaled.img" % b
+            fname = "map_b%d_%00d_scaled.img" % (b, self.scene)
             d = geocal.mmap_file(fname, res.map_info, nodata=0.0,
                                  dtype=np.uint8)
             d[:] = data_scaled
@@ -54,14 +57,14 @@ class EmitKmzAndQuicklook(object):
             cmd_merge.append(fname)
         subprocess.run(cmd_merge)
         cmd = ["gdal_translate", "-q", "-of", "KMLSUPEROVERLAY",
-               "map_scaled.vrt",
+               vrt_fname,
                self.file_base_name + ".kmz"]
         if(not self.use_jpeg):
             cmd.extend(["-co", "FORMAT=PNG"])
         if(self.generate_kmz):
             subprocess.run(cmd, check=True)
         cmd = ["gdal_translate", "-q", "-of", "PNG", "-a_nodata", "none",
-               "map_scaled.vrt", self.file_base_name + ".png"]
+               vrt_fname, self.file_base_name + ".png"]
         if(self.generate_quicklook):
             subprocess.run(cmd, check=True)
         # Remove the .aux.xml file GDAL generates

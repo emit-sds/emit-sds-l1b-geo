@@ -14,6 +14,7 @@ import os
 import shutil
 import logging
 import re
+from multiprocessing import Pool
 
 logger = logging.getLogger('l1b_geo_process.l1b_geo_generate')
 
@@ -31,6 +32,9 @@ class L1bGeoGenerate:
                                   self.l1b_geo_config.match_rad_band,
                                   l1b_geo_config = self.l1b_geo_config)
         tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
+        self.build_version = self.l1b_geo_config.build_version
+        self.product_version = self.l1b_geo_config.product_version
+        self.orbit_number = self.igccol_initial.orbit_number
         qa_fname = emit_file_name("l1b_geoqa", tstart,
                                    int(self.orbit_number),
                                    None,
@@ -38,20 +42,6 @@ class L1bGeoGenerate:
                                    int(self.product_version),
                                    ".nc")
         self.geo_qa = GeoQa(qa_fname, "l1b_geo.log")
-        self.l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
-                                      self.geo_qa)
-
-    @property
-    def orbit_number(self):
-        return self.igccol_initial.orbit_number
-
-    @property
-    def build_version(self):
-        return self.l1b_geo_config.build_version
-
-    @property
-    def product_version(self):
-        return self.l1b_geo_config.product_version
 
     @property
     def uncorrected_orbit(self):
@@ -61,7 +51,9 @@ class L1bGeoGenerate:
     def corrected_orbit(self):
         return self.igccol_corrected.image_ground_connection(0).ipi.orbit
     
-    def run_scene(self, igc, scene):
+    def run_scene(self, i):
+        igc = self.igccol_corrected.image_ground_connection(i)
+        scene = self.scene_list[i]
         logger.info("Processing %s", igc.title)
         standard_metadata = StandardMetadata(igc=igc)
         loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
@@ -83,15 +75,16 @@ class L1bGeoGenerate:
         glt = EmitGlt(glt_fname, emit_loc=loc,
                       standard_metadata=standard_metadata)
         kmz = None
-        if(self.l1b_geo_config.generate_kmz or
-           self.l1b_geo_config.generate_quicklook):
+        if(self.generate_kmz or
+           self.generate_quicklook):
             kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rad_fname,
-                   band_list = self.l1b_geo_config.map_band_list,
-                   use_jpeg = self.l1b_geo_config.kmz_use_jpeg,
-                   resolution = self.l1b_geo_config.map_resolution,
-                   number_subpixel = self.l1b_geo_config.map_number_subpixel,
-                   generate_kmz = self.l1b_geo_config.generate_kmz,
-                   generate_quicklook = self.l1b_geo_config.generate_quicklook)
+                   scene = int(scene),
+                   band_list = self.map_band_list,
+                   use_jpeg = self.kmz_use_jpeg,
+                   resolution = self.map_resolution,
+                   number_subpixel = self.map_number_subpixel,
+                   generate_kmz = self.generate_kmz,
+                   generate_quicklook = self.generate_quicklook)
         loc.run()
         glt.run()
         if(kmz):
@@ -100,8 +93,15 @@ class L1bGeoGenerate:
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
-        self.l1b_correct.run()
-        self.igccol_corrected = self.l1b_correct.igccol_corrected
+        if(self.l1b_geo_config.number_process > 1):
+            logger.info("Using %d processors", self.l1b_geo_config.number_process)
+            pool = Pool(self.l1b_geo_config.number_process)
+        else:
+            logger.info("Using 1 processor")
+            pool = None
+        l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
+                                 self.geo_qa)
+        self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
         tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
         orb_fname = emit_file_name("l1b_att", tstart,
                                    int(self.orbit_number),
@@ -111,9 +111,26 @@ class L1bGeoGenerate:
                                    ".nc")
         self.uncorrected_orbit.write_corrected_orbit(orb_fname,
                                                      self.corrected_orbit)
-        for i in range(self.igccol_corrected.number_image):
-            self.run_scene(self.igccol_corrected.image_ground_connection(i),
-                           self.igccol_initial.scene_list[i])
+        # We can't pass l1b_geo_config through pickling, so grab what we
+        # need
+        self.scene_list = self.igccol_initial.scene_list
+        self.generate_kmz = self.l1b_geo_config.generate_kmz
+        self.generate_quicklook = self.l1b_geo_config.generate_quicklook
+        self.map_band_list = self.l1b_geo_config.map_band_list
+        self.kmz_use_jpeg = self.l1b_geo_config.kmz_use_jpeg
+        self.map_resolution = self.l1b_geo_config.map_resolution
+        self.map_number_subpixel = self.l1b_geo_config.map_number_subpixel
+        l1b_geo_config = self.l1b_geo_config
+        try:
+            self.l1b_geo_config = None
+            if(pool is None):
+                res = list(map(self.run_scene,
+                           list(range(self.igccol_corrected.number_image))))
+            else:
+                res = pool.map(self.run_scene,
+                               list(range(self.igccol_corrected.number_image)))
+        finally:
+            self.l1b_geo_config = l1b_geo_config
         if(self.geo_qa is not None):
             # TODO Any flushing of log file needed?
             self.geo_qa.close()
