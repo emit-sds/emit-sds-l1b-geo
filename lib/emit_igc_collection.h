@@ -18,9 +18,9 @@ public:
   (const boost::shared_ptr<GeoCal::IpiImageGroundConnection>& Igc)
   { igc_list.push_back(Igc);
     if((int) igc_list.size() == 1) {
-      add_object(Igc->ipi()->camera());
-      add_object(Igc->ipi()->orbit());
-      add_object(Igc->ipi()->time_table());
+      add_object(Igc->ipi_ptr()->camera_ptr());
+      add_object(Igc->ipi_ptr()->orbit_ptr());
+      add_object(Igc->ipi_ptr()->time_table_ptr());
     }
   }
   void nearest_attitude_time_point(const boost::shared_ptr<GeoCal::Time>& T,

@@ -42,7 +42,7 @@ boost::shared_ptr<GeoCal::Time>& Tafter) const
   if(number_image() == 0)
     return;
   auto igc = boost::dynamic_pointer_cast<GeoCal::IpiImageGroundConnection>(image_ground_connection(0));
-  auto orb = boost::dynamic_pointer_cast<GeoCal::OrbitOffsetCorrection>(igc->ipi()->orbit());
+  auto orb = boost::dynamic_pointer_cast<GeoCal::OrbitOffsetCorrection>(igc->ipi_ptr()->orbit_ptr());
   if(!orb)
     throw GeoCal::Exception("nearest_attitude_time_point only works with OrbitOffsetCorrection");
   std::vector<GeoCal::Time> att_tp = orb->attitude_time_point();
