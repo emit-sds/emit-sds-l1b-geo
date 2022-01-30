@@ -22,9 +22,13 @@ def test_emit_igc(isolated_dir, orbit_fname, time_table_fname,
     print(igc2)
 
 def test_create_igccollection(isolated_dir, test_data):
-    l1a_att = glob.glob(f"{test_data}/*l1a_att_*.nc")[0]
-    line_time = glob.glob(f"{test_data}/*_l1a_line_time*.nc")
-    l1b_rad = glob.glob(f"{test_data}/*_l1b_rdn_*.img")
+    l1a_att = glob.glob(f"{test_data}/*_o80000_l1a_att_*.nc")[0]
+    line_time = [glob.glob(f"{test_data}/*_o80000_s001_l1a_line_time*.nc")[0],
+                 glob.glob(f"{test_data}/*_o80000_s002_l1a_line_time*.nc")[0],
+                 glob.glob(f"{test_data}/*_o80000_s003_l1a_line_time*.nc")[0]]
+    l1b_rad = [glob.glob(f"{test_data}/*_o80000_s001_l1b_rdn_*.img")[0],
+               glob.glob(f"{test_data}/*_o80000_s002_l1b_rdn_*.img")[0],
+               glob.glob(f"{test_data}/*_o80000_s003_l1b_rdn_*.img")[0]]
     rad_band = 1
     igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
                                       rad_band)
@@ -36,5 +40,9 @@ def test_create_igccollection(isolated_dir, test_data):
     assert igccol.image_ground_connection(2).title == "Scene 003"
     assert (igccol.image_ground_connection(0).ipi.time_table.min_time <
             igccol.image_ground_connection(1).ipi.time_table.min_time)
+    print(glob.glob(f"{test_data}/*_l1a_line_time*.nc"))
+    print(glob.glob(f"{test_data}/*_l1b_rdn_*.img"))
+    print(igccol.image_ground_connection(1).ipi.time_table.min_time)
+    print(igccol.image_ground_connection(2).ipi.time_table.min_time)
     assert (igccol.image_ground_connection(1).ipi.time_table.min_time <
             igccol.image_ground_connection(2).ipi.time_table.min_time)
