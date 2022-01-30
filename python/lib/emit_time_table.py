@@ -21,7 +21,10 @@ class EmitTimeTable(geocal.MeasuredTimeTable):
     @classmethod
     def write_file(cls, tt_fname, tt):
         '''Write a file. This is really meant for generating test data.'''
-        fout = h5netcdf.File(tt_fname, "w")
+        if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+            fout = h5netcdf.File(tt_fname, "w", decode_vlen_strings=False)
+        else:
+            fout = h5netcdf.File(tt_fname, "w")
         tm = np.array([tt.time(geocal.ImageCoordinate(i, 0))[0].j2000
                        for i in range(tt.max_line+1)])
         t = fout.create_variable("line_time_j2000", ('t',), data=tm)

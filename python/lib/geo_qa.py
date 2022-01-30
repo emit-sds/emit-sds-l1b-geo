@@ -1,4 +1,5 @@
 import h5netcdf
+from packaging import version
 
 class GeoQa:
     '''This handles the Geo QA file.'''
@@ -18,7 +19,12 @@ class GeoQa:
 
     def close(self):
         # This is a placeholder
-        fout = h5netcdf.File(self.fname, "w")
+        # Newer version of h5netcdf needs decode_vlen_strings, but this
+        # keyword isn't in older versions
+        if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+            fout = h5netcdf.File(self.fname, "w", decode_vlen_strings=False)
+        else:
+            fout = h5netcdf.File(self.fname, "w")
         g = fout.create_group("Placeholder")
         t = g.create_variable("placeholder", ('p',), data = [1,2,3])
         fout.close()

@@ -2,6 +2,7 @@ import geocal
 from emit_swig import EmitOrbit
 import numpy as np
 import h5netcdf
+from packaging import version
 import h5py
 
 
@@ -9,7 +10,12 @@ def _write_corrected_orbit(self, orbit_fname, orb_corrected):
     '''This copies the existing data in this orbit to a new file
     as "Uncorrected" data, as well as writing out corrected orbit 
     data.'''
-    fout = h5netcdf.File(orbit_fname, "w")
+    # Newer version of h5netcdf needs decode_vlen_strings, but this
+    # keyword isn't in older versions
+    if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+        fout = h5netcdf.File(orbit_fname, "w", decode_vlen_strings=False)
+    else:
+        fout = h5netcdf.File(orbit_fname, "w")
     fin = h5py.File(self.file_name, "r")
     eph_tm_uncorr = fin["Ephemeris/time_j2000"][:]
     pos_uncorr = fin["Ephemeris/eci_position"][:]
@@ -98,7 +104,10 @@ EmitOrbit.write_corrected_orbit = _write_corrected_orbit
         
 def _write_file(cls, orbit_fname, orb, min_time, max_time):
     '''Write a file. This is really meant for generating test data.'''
-    fout = h5netcdf.File(orbit_fname, "w")
+    if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+        fout = h5netcdf.File(orbit_fname, "w", decode_vlen_strings=False)
+    else:
+        fout = h5netcdf.File(orbit_fname, "w")
     # For now, we have both ephemeris and attitude with same time spacing.
     # We could change that in the future if needed.
     tspace = 1.0
