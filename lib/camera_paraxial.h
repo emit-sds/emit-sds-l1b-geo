@@ -67,6 +67,84 @@ private:
   template<class Archive>
   void serialize(Archive & ar, const unsigned int version);
 };
+
+/****************************************************************//**
+  This is a specialized ParaxialTransform that just captures the
+  data it is called for. This is useful for collecting information
+  to fit another ParaxialTransform. You can call this once going
+  forward with the real ImageCoordinate and once going backwards with
+  the real GroundCoordinate. This then gives you the mapping between
+  x_predict, y_predict and x_actual, y_actual.
+
+  Sample of collecting the data for a IpiImageGroundConnection in
+  python:
+
+  cam.paraxial_transform.clear()
+  for smp in range(igm.shape[1]):
+     gc = igc.ground_coordinate_approx_height(ImageCoordinate(ln, smp),
+                               igm[ln,smp].height_reference_surface)
+     igc.collinearity_residual(igm[ln,smp],ImageCoordinate(ln,smp))
+  predict_x = np.array(cam.paraxial_transform.predict_x)
+  predict_y = np.array(cam.paraxial_transform.predict_y)
+  real_x = np.array(cam.paraxial_transform.real_x)
+  real_y = np.array(cam.paraxial_transform.real_y)
+
+*******************************************************************/
+  
+class CaptureParaxialTransform: public ParaxialTransform {
+public:
+  CaptureParaxialTransform() {}
+  virtual ~CaptureParaxialTransform() {}
+  virtual void print(std::ostream& Os) const
+  { Os << "CaptureParaxialTransform"; }
+  void clear() { predict_x_.clear(); predict_y_.clear();
+    real_x_.clear(); real_y_.clear(); }
+  const std::vector<double>& predict_x() const
+  {return predict_x_;}
+  const std::vector<double>& predict_y() const
+  {return predict_y_;}
+  const std::vector<double>& real_x() const
+  {return real_x_;}
+  const std::vector<double>& real_y() const
+  {return real_y_;}
+  
+  virtual void paraxial_to_real(double Paraxial_x,
+				double Paraxial_y, double& Real_x, 
+				double& Real_y) const
+  { Real_x = Paraxial_x; Real_y = Paraxial_y;
+    predict_x_.push_back(Paraxial_x);
+    predict_y_.push_back(Paraxial_y);
+  }
+  virtual void paraxial_to_real(const GeoCal::AutoDerivative<double>& Paraxial_x,
+			const GeoCal::AutoDerivative<double>& Paraxial_y,
+			GeoCal::AutoDerivative<double>& Real_x, 
+			GeoCal::AutoDerivative<double>& Real_y) const
+  { Real_x = Paraxial_x; Real_y = Paraxial_y;
+    predict_x_.push_back(Paraxial_x.value());
+    predict_y_.push_back(Paraxial_y.value());
+  }
+  virtual void real_to_paraxial(double Real_x,
+				double Real_y, double& Paraxial_x, 
+				double& Paraxial_y) const
+  { Paraxial_x = Real_x; Paraxial_y = Real_y;
+    real_x_.push_back(Real_x);
+    real_y_.push_back(Real_y);
+  }
+  virtual void real_to_paraxial(const GeoCal::AutoDerivative<double>& Real_x,
+		const GeoCal::AutoDerivative<double>& Real_y,
+		GeoCal::AutoDerivative<double>& Paraxial_x, 
+		GeoCal::AutoDerivative<double>& Paraxial_y) const
+  { Paraxial_x = Real_x; Paraxial_y = Real_y;
+    real_x_.push_back(Real_x.value());
+    real_y_.push_back(Real_y.value());
+    
+  }
+private:
+  friend class boost::serialization::access;
+  mutable std::vector<double> predict_x_, predict_y_, real_x_, real_y_;
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned int version);
+};
   
 /****************************************************************//**
   One model for a camera is to capture the nonlinearities by a 
@@ -137,5 +215,6 @@ private:
 
 BOOST_CLASS_EXPORT_KEY(Emit::ParaxialTransform);
 BOOST_CLASS_EXPORT_KEY(Emit::IdentityParaxialTransform);
+BOOST_CLASS_EXPORT_KEY(Emit::CaptureParaxialTransform);
 BOOST_CLASS_EXPORT_KEY(Emit::CameraParaxial);
 #endif

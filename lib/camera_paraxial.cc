@@ -26,6 +26,15 @@ void IdentityParaxialTransform::serialize
 }
 
 template<class Archive>
+void CaptureParaxialTransform::serialize
+(Archive & ar, const unsigned int version)
+{
+  ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(ParaxialTransform)
+    & GEOCAL_NVP_(predict_x) & GEOCAL_NVP_(predict_y)
+    & GEOCAL_NVP_(real_x) & GEOCAL_NVP_(real_y);
+}
+
+template<class Archive>
 void CameraParaxial::serialize(Archive & ar, const unsigned int version)
 {
   ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(QuaternionCamera)

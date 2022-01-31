@@ -17,6 +17,7 @@
 
 %emit_shared_ptr(Emit::ParaxialTransform);
 %emit_shared_ptr(Emit::IdentityParaxialTransform);
+%emit_shared_ptr(Emit::CaptureParaxialTransform);
 %emit_shared_ptr(Emit::CameraParaxial);
 
 namespace Emit {
@@ -54,6 +55,24 @@ public:
   %pickle_serialization();
 };
 
+class CaptureParaxialTransform : public ParaxialTransform {
+public:
+  CaptureParaxialTransform();
+  virtual void paraxial_to_real(double Paraxial_x,
+			double Paraxial_y, double& OUTPUT, 
+				double& OUTPUT) const;
+  virtual void paraxial_to_real(const GeoCal::AutoDerivative<double>& Paraxial_x,
+			const GeoCal::AutoDerivative<double>& Paraxial_y,
+			GeoCal::AutoDerivative<double>& OUTPUT, 
+			GeoCal::AutoDerivative<double>& OUTPUT) const;
+  void clear();
+  %python_attribute(predict_x, const std::vector<double>&);
+  %python_attribute(predict_y, const std::vector<double>&);
+  %python_attribute(real_x, const std::vector<double>&);
+  %python_attribute(real_y, const std::vector<double>&);
+  %pickle_serialization();
+};
+  
 class CameraParaxial : public GeoCal::QuaternionCamera {
 public:
   CameraParaxial(boost::math::quaternion<double> Frame_to_sc_q, 
@@ -72,7 +91,5 @@ public:
 }
 
 // List of things "import *" will include
-%python_export("ParaxialTransform")
-%python_export("IdentityParaxialTransform")
-%python_export("CameraParaxial")
+%python_export("ParaxialTransform", "IdentityParaxialTransform", "CaptureParaxialTransform", "CameraParaxial")
 

@@ -316,6 +316,126 @@ class IdentityParaxialTransform(ParaxialTransform):
 IdentityParaxialTransform_swigregister = _camera_paraxial.IdentityParaxialTransform_swigregister
 IdentityParaxialTransform_swigregister(IdentityParaxialTransform)
 
+class CaptureParaxialTransform(ParaxialTransform):
+    """
+
+    This is a specialized ParaxialTransform that just captures the data it
+    is called for.
+
+    This is useful for collecting information to fit another
+    ParaxialTransform. You can call this once going forward with the real
+    ImageCoordinate and once going backwards with the real
+    GroundCoordinate. This then gives you the mapping between x_predict,
+    y_predict and x_actual, y_actual.
+
+    C++ includes: camera_paraxial.h 
+    """
+
+    __swig_setmethods__ = {}
+    for _s in [ParaxialTransform]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CaptureParaxialTransform, name, value)
+    __swig_getmethods__ = {}
+    for _s in [ParaxialTransform]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CaptureParaxialTransform, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """
+
+        Emit::CaptureParaxialTransform::CaptureParaxialTransform()
+
+        """
+        this = _camera_paraxial.new_CaptureParaxialTransform()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def paraxial_to_real(self, *args):
+        """
+
+        virtual void Emit::CaptureParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform_paraxial_to_real(self, *args)
+
+
+    def clear(self):
+        """
+
+        void Emit::CaptureParaxialTransform::clear()
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform_clear(self)
+
+
+    def _v_predict_x(self):
+        """
+
+        const std::vector<double>& Emit::CaptureParaxialTransform::predict_x() const
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform__v_predict_x(self)
+
+
+    @property
+    def predict_x(self):
+        return self._v_predict_x()
+
+
+    def _v_predict_y(self):
+        """
+
+        const std::vector<double>& Emit::CaptureParaxialTransform::predict_y() const
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform__v_predict_y(self)
+
+
+    @property
+    def predict_y(self):
+        return self._v_predict_y()
+
+
+    def _v_real_x(self):
+        """
+
+        const std::vector<double>& Emit::CaptureParaxialTransform::real_x() const
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform__v_real_x(self)
+
+
+    @property
+    def real_x(self):
+        return self._v_real_x()
+
+
+    def _v_real_y(self):
+        """
+
+        const std::vector<double>& Emit::CaptureParaxialTransform::real_y() const
+
+        """
+        return _camera_paraxial.CaptureParaxialTransform__v_real_y(self)
+
+
+    @property
+    def real_y(self):
+        return self._v_real_y()
+
+
+    def __reduce__(self):
+      return _new_from_serialization, (geocal_swig.serialize_write_binary(self),)
+
+    __swig_destroy__ = _camera_paraxial.delete_CaptureParaxialTransform
+    __del__ = lambda self: None
+CaptureParaxialTransform_swigregister = _camera_paraxial.CaptureParaxialTransform_swigregister
+CaptureParaxialTransform_swigregister(CaptureParaxialTransform)
+
 class CameraParaxial(geocal_swig.quaternion_camera.QuaternionCamera):
     """
 
@@ -388,13 +508,7 @@ CameraParaxial_swigregister = _camera_paraxial.CameraParaxial_swigregister
 CameraParaxial_swigregister(CameraParaxial)
 
 
-__all__ = ["ParaxialTransform"]
-
-
-__all__ = ["IdentityParaxialTransform"]
-
-
-__all__ = ["CameraParaxial"]
+__all__ = ["ParaxialTransform","IdentityParaxialTransform","CaptureParaxialTransform","CameraParaxial"]
 
 # This file is compatible with both classic and new-style classes.
 
