@@ -43,6 +43,7 @@ void CameraParaxial::serialize(Archive & ar, const unsigned int version)
 
 EMIT_IMPLEMENT(ParaxialTransform);
 EMIT_IMPLEMENT(IdentityParaxialTransform);
+EMIT_IMPLEMENT(CaptureParaxialTransform);
 EMIT_IMPLEMENT(CameraParaxial);
 
 
@@ -74,8 +75,10 @@ void CameraParaxial::dcs_to_focal_plane(int Band,
 // Transform paraxial focal plane coordinate to real focal plane coordinate.
 // Units are millimeters.
 //-------------------------------------------------------------------------
-  
+
   paraxial_transform_->paraxial_to_real(xf, yf, Xfp, Yfp);
+  // std::cerr << "paraxial_to_real: " << xf << " " << yf << " "
+  //  	    << Xfp << " " << Yfp << "\n";
 }
 
 void CameraParaxial::dcs_to_focal_plane
@@ -111,7 +114,10 @@ CameraParaxial::focal_plane_to_dcs(int Band, double Xfp, double Yfp) const
   double xf, yf;
   paraxial_transform_->real_to_paraxial(Xfp, Yfp, xf, yf);
 
-//-------------------------------------------------------------------------
+  // std::cerr << "real_to_paraxial: " << Xfp << " " << Yfp << " "
+  // 	    << xf << " " << yf << "\n";
+
+  //-------------------------------------------------------------------------
 /// Then to detector coordinates look vector.
 //-------------------------------------------------------------------------
 

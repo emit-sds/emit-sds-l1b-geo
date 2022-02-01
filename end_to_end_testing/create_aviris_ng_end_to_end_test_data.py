@@ -7,10 +7,16 @@ from emit import *
 import pickle
 import math
 import re
+import scipy
+from multipolyfit import multipolyfit
+import pandas as pd
 
 # While developing we run this multiple times. Skip things we already
 # have
-CREATE_ORBIT = True
+CREATE_ORBIT = False
+CREATE_CAMERA_STEP1 = False
+CREATE_CAMERA_STEP2 = False
+CREATE_CAMERA_STEP3 = False
 
 emit_test_data = "/home/smyth/Local/emit-test-data/latest"
 input_test_data = f"{emit_test_data}/input_afids_ng"
@@ -55,5 +61,131 @@ if CREATE_ORBIT:
     tt = MeasuredTimeTable(line_time)
     fname = "emit%s_o%05d_l1a_line_time_full_%s.nc" % (dstring2, orbit, end_fname)
     EmitTimeTable.write_file(f"{emit_test_data}/{fname}", tt)
+
+tt_full =  EmitTimeTable(glob.glob(f"{emit_test_data}/emit*_o90000_l1a_line_time_full_b001_v01.nc")[0])
+orb = EmitOrbit(glob.glob(f"{emit_test_data}/emit*_o90000_l1a_att_b001_v01.nc")[0])
+
+# This initial camera has the pointing updated, but doesn't have the
+# nonlinearites in place yet. We do this first step and save the data.
+def residual1(x0, igc, igm):
+    igc.ipi.camera.parameter_subset = x0
+    res = []
+    #for ln in range(500,igm.shape[0],500):
+    for ln in (1000,):
+        for smp in range(0,igm.shape[1], 10):
+            ic = igc.image_coordinate(igm[ln,smp])
+            res.append(ic.line - ln)
+            res.append(ic.sample - smp)
+    return res
+
+if CREATE_CAMERA_STEP1:
+    igm = AvirisNgIgm(f"{input_test_data}/ang20170328t202059_rdn_igm", utm_zone)
+    cam = CameraParaxial(Quaternion_double(1,0,0,0), 1, 598,
+                         27e-3,27e-3,27.5,FrameCoordinate(0.5,598/2),
+                         CaptureParaxialTransform())
+    cam.fit_epsilon = True
+    cam.fit_beta = True
+    cam.fit_delta = True
+    cam.fit_focal_length = True
+    cam.fit_line_pitch = False
+    cam.fit_sample_pitch = False
+    cam.fit_principal_point_line(False, 0)
+    cam.fit_principal_point_sample(False, 0)
+    write_shelve("aviris_cam_step1.xml", cam)
+    dem = SimpleDem()
+    ipi = Ipi(orb, cam, 0, tt_full.min_time, tt_full.max_time, tt_full)
+    igc = IpiImageGroundConnection(ipi, dem, None)
+    x0 = cam.parameter_subset
+    print(residual1(x0,igc, igm))
+    r = scipy.optimize.least_squares(residual1, x0, args=(igc,igm))
+    print(r)
+    print(residual1(cam.parameter_subset, igc, igm))
+    cam.paraxial_transform.clear()
+    write_shelve("aviris_cam_step1.xml", cam)
+
+# Determine nonlinearities. We do this for one line, and assume this will
+# be the same for other lines
+ln = 1000
+if CREATE_CAMERA_STEP2:
+    cam = read_shelve("aviris_cam_step1.xml")
+    dem = SimpleDem()
+    ipi = Ipi(orb, cam, 0, tt_full.min_time, tt_full.max_time, tt_full)
+    igc = IpiImageGroundConnection(ipi, dem, None)
+    if(not os.path.exists("paraxial_data.pkl")):
+        igm = AvirisNgIgm(f"{input_test_data}/ang20170328t202059_rdn_igm", utm_zone)
+        cam.paraxial_transform.clear()
+        for smp in range(igm.shape[1]):
+            print("Sample: ", smp)
+            gc = igc.ground_coordinate_approx_height(ImageCoordinate(ln, smp),
+                               igm[ln,smp].height_reference_surface)
+            igc.collinearity_residual(igm[ln,smp],ImageCoordinate(ln,smp))
+        predict_x = np.array(cam.paraxial_transform.predict_x)
+        predict_y = np.array(cam.paraxial_transform.predict_y)
+        real_x = np.array(cam.paraxial_transform.real_x)
+        real_y = np.array(cam.paraxial_transform.real_y)
+        pred = np.empty((predict_x.shape[0], 2))
+        pred[:,0] = predict_x
+        pred[:,1] = predict_y
+        real = np.empty((real_x.shape[0], 2))
+        real[:,0] = real_x
+        real[:,1] = real_y
+        pickle.dump([pred, real], open("paraxial_data.pkl", "wb"))
+    print("Hi step 4")
+    pred,real=pickle.load(open("paraxial_data.pkl", "rb"))
+    pixel_size = cam.line_pitch
+    # Determine the needed polynomial order by just testing a
+    # given deg
+    deg = 5
+    mo = multipolyfit(real, pred[:,0], deg, model_out=True)
+    print("Real to predict x max error (pixel) ",
+          abs(np.array([(mo(*real[i,:]) - pred[i,0]) / pixel_size for i in range(real.shape[0])])).max())
+    mo = multipolyfit(real, pred[:,1], deg, model_out=True)
+    print("Real to predict y max error (pixel) ",
+          abs(np.array([(mo(*real[i,:]) - pred[i,1]) / pixel_size for i in range(real.shape[0])])).max())
+    mo = multipolyfit(pred, real[:,0], deg, model_out=True)
+    print("Predict to real x max error (pixel) ",
+          abs(np.array([(mo(*pred[i,:]) - real[i,0]) / pixel_size for i in range(real.shape[0])])).max())
+    mo = multipolyfit(pred, real[:,1], deg, model_out=True)
+    print("Predict to real y max error (pixel) ",
+          abs(np.array([(mo(*pred[i,:]) - real[i,1]) / pixel_size for i in range(real.shape[0])])).max())
+
+    # Print out powers so we know how to interpret the polynomial coefficients.
+    t, powers = multipolyfit(pred, real[:,1], deg, powers_out=True)
+    print(powers)
     
+    tran = PolynomialParaxialTransform_5d_5d()
+    tran.real_to_par[0,:] = multipolyfit(real, pred[:,0], deg)
+    tran.real_to_par[1,:] = multipolyfit(real, pred[:,1], deg)
+    tran.par_to_real[0,:] = multipolyfit(pred, real[:,0], deg)
+    tran.par_to_real[1,:] = multipolyfit(pred, real[:,1], deg)
+    cam.paraxial_transform = tran
+    write_shelve("aviris_cam_step2.xml", cam)
+
+if CREATE_CAMERA_STEP3:
+    igm = AvirisNgIgm(f"{input_test_data}/ang20170328t202059_rdn_igm", utm_zone)
+    cam = read_shelve("aviris_cam_step2.xml")
+    cam.fit_epsilon = True
+    cam.fit_beta = True
+    cam.fit_delta = True
+    cam.fit_focal_length = True
+    cam.fit_line_pitch = False
+    cam.fit_sample_pitch = False
+    cam.fit_principal_point_line(True, 0)
+    cam.fit_principal_point_sample(True, 0)
+    dem = SimpleDem()
+    ipi = Ipi(orb, cam, 0, tt_full.min_time, tt_full.max_time, tt_full)
+    igc = IpiImageGroundConnection(ipi, dem, None)
+    x0 = cam.parameter_subset
+    print(residual1(x0,igc, igm))
+    r = scipy.optimize.least_squares(residual1, x0, args=(igc,igm))
+    print(r)
+    print(residual1(cam.parameter_subset, igc, igm))
+    write_shelve("aviris_cam_step3.xml", cam)
+    # These diagnostics shows most of the geolocation is with a pixel or so
+    if False:
+        for ln in range(500,igm.shape[0],500):
+            print("ln:",ln)
+            print(pd.DataFrame([distance(igc.ground_coordinate_approx_height(ImageCoordinate(ln,smp), igm[ln,smp].height_reference_surface), igm[ln,smp]) for smp in range(igm.shape[1])]).describe())
+    write_shelve(f"{emit_test_data}/l1_osp_aviris_ng_dir/camera.xml", cam)
+        
     

@@ -35,6 +35,8 @@ emitinc_HEADERS+= @srclib@/emit_igc_collection.h
 libemit_la_SOURCES+= @srclib@/emit_igc_collection.cc
 emitinc_HEADERS+= @srclib@/camera_paraxial.h
 libemit_la_SOURCES+= @srclib@/camera_paraxial.cc
+emitinc_HEADERS+= @srclib@/polynomial_paraxial_transform.h
+libemit_la_SOURCES+= @srclib@/polynomial_paraxial_transform.cc
 
 # Files that contain SWIG wrapper information.
 SWIG_SRC += @swigsrc@/emit_swig_array_wrap.cc
@@ -50,6 +52,8 @@ SWIG_SRC += @swigsrc@/emit_igc_collection_wrap.cc
 emitswiginc_HEADERS+= @srclib@/emit_igc_collection.i
 SWIG_SRC += @swigsrc@/camera_paraxial_wrap.cc
 emitswiginc_HEADERS+= @srclib@/camera_paraxial.i
+SWIG_SRC += @swigsrc@/polynomial_paraxial_transform_wrap.cc
+emitswiginc_HEADERS+= @srclib@/polynomial_paraxial_transform.i
 
 # Test files
 EXTRA_DIST+= @srclib@/unit_test_support.h

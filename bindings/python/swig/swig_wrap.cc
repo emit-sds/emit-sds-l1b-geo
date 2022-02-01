@@ -8,6 +8,7 @@ extern "C" {
   INIT_TYPE INIT_FUNC(_emit_orbit)(void);
   INIT_TYPE INIT_FUNC(_emit_igc_collection)(void);
   INIT_TYPE INIT_FUNC(_camera_paraxial)(void);
+  INIT_TYPE INIT_FUNC(_polynomial_paraxial_transform)(void);
 }
 
 static void module_init(PyObject* module)
@@ -18,4 +19,5 @@ static void module_init(PyObject* module)
   INIT_MODULE(module, "_emit_orbit", INIT_FUNC(_emit_orbit));
   INIT_MODULE(module, "_emit_igc_collection", INIT_FUNC(_emit_igc_collection));
   INIT_MODULE(module, "_camera_paraxial", INIT_FUNC(_camera_paraxial));
+  INIT_MODULE(module, "_polynomial_paraxial_transform", INIT_FUNC(_polynomial_paraxial_transform));
 }
