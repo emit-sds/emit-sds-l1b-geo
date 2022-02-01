@@ -77,8 +77,9 @@ void CameraParaxial::dcs_to_focal_plane(int Band,
 //-------------------------------------------------------------------------
 
   paraxial_transform_->paraxial_to_real(xf, yf, Xfp, Yfp);
-  // std::cerr << "paraxial_to_real: " << xf << " " << yf << " "
-  //  	    << Xfp << " " << Yfp << "\n";
+  if(false)
+    std::cerr << "paraxial_to_real: " << xf << " " << yf << " "
+	      << Xfp << " " << Yfp << "\n";
 }
 
 void CameraParaxial::dcs_to_focal_plane
@@ -114,8 +115,9 @@ CameraParaxial::focal_plane_to_dcs(int Band, double Xfp, double Yfp) const
   double xf, yf;
   paraxial_transform_->real_to_paraxial(Xfp, Yfp, xf, yf);
 
-  // std::cerr << "real_to_paraxial: " << Xfp << " " << Yfp << " "
-  // 	    << xf << " " << yf << "\n";
+  if(false)
+    std::cerr << "real_to_paraxial: " << Xfp << " " << Yfp << " "
+	      << xf << " " << yf << "\n";
 
   //-------------------------------------------------------------------------
 /// Then to detector coordinates look vector.

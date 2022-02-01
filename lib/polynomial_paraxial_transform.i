@@ -30,6 +30,14 @@ public:
 			GeoCal::AutoDerivative<double>& OUTPUT) const;
   %python_attribute(par_to_real, blitz::Array<double, 2>&);
   %python_attribute(real_to_par, blitz::Array<double, 2>&);
+  %python_attribute_with_set(min_x_real, double);
+  %python_attribute_with_set(max_x_real, double);
+  %python_attribute_with_set(min_y_real, double);
+  %python_attribute_with_set(max_y_real, double);
+  %python_attribute_with_set(min_x_pred, double);
+  %python_attribute_with_set(max_x_pred, double);
+  %python_attribute_with_set(min_y_pred, double);
+  %python_attribute_with_set(max_y_pred, double);
   %pickle_serialization();
 };
 }

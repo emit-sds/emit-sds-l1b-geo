@@ -7144,6 +7144,1110 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_min_x_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->min_x_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_min_x_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_x_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_min_x_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_x_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_x_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_max_x_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->max_x_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_max_x_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_x_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_max_x_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_x_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_x_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_min_y_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->min_y_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_min_y_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_y_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_min_y_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_y_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_y_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_max_y_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->max_y_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_max_y_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_y_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_max_y_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_y_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_y_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_min_x_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->min_x_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_min_x_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_x_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_x_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_min_x_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_x_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_x_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_max_x_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->max_x_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_max_x_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_x_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_x_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_max_x_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_x_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_x_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_min_y_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->min_y_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_min_y_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_min_y_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_y_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_min_y_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_y_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::min_y_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_3d_3d__v_max_y_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 3,3 > const *)arg1)->max_y_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 3,3 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_3d_3d__v_max_y_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 3,3 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<3,3> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 3,3 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_3d_3d__v_max_y_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_y_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_3_3_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_3d_3d__v_max_y_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_y_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 3,3 >::max_y_pred(double const &)\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_PolynomialParaxialTransform_3d_3d(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Emit::PolynomialParaxialTransform< 3,3 > *arg1 = (Emit::PolynomialParaxialTransform< 3,3 > *) 0 ;
@@ -7636,6 +8740,1110 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_min_x_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->min_x_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_min_x_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_x_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_min_x_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_x_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_x_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_max_x_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->max_x_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_max_x_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_x_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_max_x_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_x_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_x_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_min_y_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->min_y_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_min_y_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_y_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_min_y_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_y_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_y_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_max_y_real",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->max_y_real();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_max_y_real",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_real" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_real" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_y_real((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_max_y_real'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_y_real() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_y_real(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_min_x_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->min_x_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_min_x_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_x_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_x_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_min_x_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_x_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_x_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_max_x_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->max_x_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_max_x_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_x_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_x_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_max_x_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_x_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_x_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_min_y_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->min_y_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_min_y_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_min_y_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->min_y_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_min_y_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_y_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::min_y_pred(double const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolynomialParaxialTransform_5d_5d__v_max_y_pred",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (double)((Emit::PolynomialParaxialTransform< 5,5 > const *)arg1)->max_y_pred();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
+  double *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > tempshared1 ;
+  boost::shared_ptr< Emit::PolynomialParaxialTransform< 5,5 > > *smartarg1 = 0 ;
+  double temp2 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolynomialParaxialTransform_5d_5d__v_max_y_pred",&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_pred" "', argument " "1"" of type '" "Emit::PolynomialParaxialTransform< 5,5 > *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr<  Emit::PolynomialParaxialTransform<5,5> > * >(argp1);
+      arg1 = const_cast< Emit::PolynomialParaxialTransform< 5,5 > * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolynomialParaxialTransform_5d_5d__v_max_y_pred" "', argument " "2"" of type '" "double""'");
+  } 
+  temp2 = static_cast< double >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      (arg1)->max_y_pred((double const &)*arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__shared_ptrT_Emit__PolynomialParaxialTransformT_5_5_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'PolynomialParaxialTransform_5d_5d__v_max_y_pred'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_y_pred() const\n"
+    "    Emit::PolynomialParaxialTransform< 5,5 >::max_y_pred(double const &)\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_PolynomialParaxialTransform_5d_5d(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Emit::PolynomialParaxialTransform< 5,5 > *arg1 = (Emit::PolynomialParaxialTransform< 5,5 > *) 0 ;
@@ -7727,6 +9935,46 @@ static PyMethodDef SwigMethods[] = {
 		"blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()\n"
 		"\n"
 		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_min_x_real", _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_max_x_real", _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_min_y_real", _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_max_y_real", _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_min_x_pred", _wrap_PolynomialParaxialTransform_3d_3d__v_min_x_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_max_x_pred", _wrap_PolynomialParaxialTransform_3d_3d__v_max_x_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_min_y_pred", _wrap_PolynomialParaxialTransform_3d_3d__v_min_y_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_3d_3d__v_max_y_pred", _wrap_PolynomialParaxialTransform_3d_3d__v_max_y_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)\n"
+		"\n"
+		""},
 	 { (char *)"delete_PolynomialParaxialTransform_3d_3d", _wrap_delete_PolynomialParaxialTransform_3d_3d, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::PolynomialParaxialTransform< D1, D2 >::~PolynomialParaxialTransform()\n"
@@ -7754,6 +10002,46 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolynomialParaxialTransform_5d_5d__v_real_to_par", _wrap_PolynomialParaxialTransform_5d_5d__v_real_to_par, METH_VARARGS, (char *)"\n"
 		"\n"
 		"blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_min_x_real", _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_max_x_real", _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_min_y_real", _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_max_y_real", _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_real, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_min_x_pred", _wrap_PolynomialParaxialTransform_5d_5d__v_min_x_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_max_x_pred", _wrap_PolynomialParaxialTransform_5d_5d__v_max_x_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_min_y_pred", _wrap_PolynomialParaxialTransform_5d_5d__v_min_y_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)\n"
+		"\n"
+		""},
+	 { (char *)"PolynomialParaxialTransform_5d_5d__v_max_y_pred", _wrap_PolynomialParaxialTransform_5d_5d__v_max_y_pred, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)\n"
 		"\n"
 		""},
 	 { (char *)"delete_PolynomialParaxialTransform_5d_5d", _wrap_delete_PolynomialParaxialTransform_5d_5d, METH_VARARGS, (char *)"\n"

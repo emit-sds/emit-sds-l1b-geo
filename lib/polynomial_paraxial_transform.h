@@ -74,7 +74,9 @@ public:
 //-----------------------------------------------------------------------
   PolynomialParaxialTransform()
     : par_to_real_(2, PolynomialParaxialTransformHelper<double, D1>::number_coefficient()),
-      real_to_par_(2, PolynomialParaxialTransformHelper<double, D2>::number_coefficient())
+      real_to_par_(2, PolynomialParaxialTransformHelper<double, D2>::number_coefficient()),
+      min_x_real_(0), max_x_real_(0), min_y_real_(0), max_y_real_(0),
+      min_x_pred_(0), max_x_pred_(0), min_y_pred_(0), max_y_pred_(0)
   {}
   virtual ~PolynomialParaxialTransform() {}
   virtual void print(std::ostream& Os) const
@@ -86,31 +88,79 @@ public:
 			double Paraxial_y, double& Real_x, 
 			double& Real_y) const
   {
+    double x = std::min(std::max(Paraxial_x, min_x_pred_), max_x_pred_);
+    double y = std::min(std::max(Paraxial_y, min_y_pred_), max_y_pred_);
     PolynomialParaxialTransformHelper<double, D1>::polynomial_func
-      (par_to_real_, Paraxial_x, Paraxial_y, Real_x, Real_y);
+      (par_to_real_, x, y, Real_x, Real_y);
+    if(Paraxial_x < min_x_pred_ || Paraxial_x > max_x_pred_) {
+      Real_x += Paraxial_x-x;
+      Real_y += par_to_real_(1,1)*(Paraxial_x-x);
+    }
+    if(Paraxial_y < min_y_pred_ || Paraxial_y > max_y_pred_) {
+      Real_x += par_to_real_(0,2)*(Paraxial_y-y);
+      Real_y += Paraxial_y-y;
+    }
   }
   void paraxial_to_real(const GeoCal::AutoDerivative<double>& Paraxial_x,
 			const GeoCal::AutoDerivative<double>& Paraxial_y,
 			GeoCal::AutoDerivative<double>& Real_x, 
 			GeoCal::AutoDerivative<double>& Real_y) const
   {
+    GeoCal::AutoDerivative<double> x = Paraxial_x;
+    GeoCal::AutoDerivative<double> y = Paraxial_y;
+    if(Paraxial_x.value() < min_x_pred_ || Paraxial_x.value() > max_x_pred_)
+      x = std::min(std::max(Paraxial_x.value(), min_x_pred_), max_x_pred_);
+    if(Paraxial_y.value() < min_y_pred_ || Paraxial_y.value() > max_y_pred_)
+      y = std::min(std::max(Paraxial_y.value(), min_y_pred_), max_y_pred_);
     PolynomialParaxialTransformHelper<GeoCal::AutoDerivative<double>, D1>::polynomial_func
-      (par_to_real_, Paraxial_x, Paraxial_y, Real_x, Real_y);
+      (par_to_real_, x, y, Real_x, Real_y);
+    if(Paraxial_x.value() < min_x_pred_ || Paraxial_x.value() > max_x_pred_) {
+      Real_x += Paraxial_x-x;
+      Real_y += par_to_real_(1,1)*(Paraxial_x-x);
+    }
+    if(Paraxial_y.value() < min_y_pred_ || Paraxial_y.value() > max_y_pred_) {
+      Real_x += par_to_real_(0,2)*(Paraxial_y-y);
+      Real_y += Paraxial_y-y;
+    }
   }
   void real_to_paraxial(double Real_x,
 			double Real_y, double& Paraxial_x, 
 			double& Paraxial_y) const
   {
+    double x = std::min(std::max(Real_x, min_x_real_), max_x_real_);
+    double y = std::min(std::max(Real_y, min_y_real_), max_y_real_);
     PolynomialParaxialTransformHelper<double, D2>::polynomial_func
-      (real_to_par_, Real_x, Real_y, Paraxial_x, Paraxial_y);
+      (real_to_par_, x, y, Paraxial_x, Paraxial_y);
+    if(Real_x < min_x_real_ || Real_x > max_x_real_) {
+      Paraxial_x += Real_x-x;
+      Paraxial_y += real_to_par_(1,1)*(Real_x-x);
+    }
+    if(Real_y < min_y_real_ || Real_y > max_y_real_) {
+      Paraxial_x += real_to_par_(0,2)*(Real_y-y);
+      Paraxial_y += Real_y-y;
+    }
   }
   void real_to_paraxial(const GeoCal::AutoDerivative<double>& Real_x,
 			const GeoCal::AutoDerivative<double>& Real_y,
 			GeoCal::AutoDerivative<double>& Paraxial_x, 
 			GeoCal::AutoDerivative<double>& Paraxial_y) const
   {
+    GeoCal::AutoDerivative<double> x = Real_x;
+    GeoCal::AutoDerivative<double> y = Real_y;
+    if(Real_x.value() < min_x_real_ || Real_x.value() > max_x_real_)
+      x = std::min(std::max(Real_x.value(), min_x_real_), max_x_real_);
+    if(Real_y.value() < min_y_real_ || Real_y.value() > max_y_real_)
+      y = std::min(std::max(Real_y.value(), min_y_real_), max_y_real_);
     PolynomialParaxialTransformHelper<GeoCal::AutoDerivative<double>, D2>::polynomial_func
-      (real_to_par_, Real_x, Real_y, Paraxial_x, Paraxial_y);
+      (real_to_par_, x, y, Paraxial_x, Paraxial_y);
+    if(Real_x.value() < min_x_real_ || Real_x.value() > max_x_real_) {
+      Paraxial_x += Real_x-x;
+      Paraxial_y += real_to_par_(1,1)*(Real_x-x);
+    }
+    if(Real_y.value() < min_y_real_ || Real_y.value() > max_y_real_) {
+      Paraxial_x += real_to_par_(0,2)*(Real_y-y);
+      Paraxial_y += Real_y-y;
+    }
   }
 
 //-----------------------------------------------------------------------
@@ -129,8 +179,33 @@ public:
   { return real_to_par_; }
   blitz::Array<double, 2>& real_to_par() 
   { return real_to_par_; }
+
+//-----------------------------------------------------------------------
+/// Polynomials really extrapolate badly. This is the range of x and y
+/// that we apply the polynomial over. Outside of this range we just
+/// do a linear model.
+//-----------------------------------------------------------------------
+  
+  double min_x_real() const {return min_x_real_;}
+  void min_x_real(double V) { min_x_real_ = V;}
+  double max_x_real() const {return max_x_real_;}
+  void max_x_real(double V) { max_x_real_ = V;}
+  double min_y_real() const {return min_y_real_;}
+  void min_y_real(double V) { min_y_real_ = V;}
+  double max_y_real() const {return max_y_real_;}
+  void max_y_real(double V) { max_y_real_ = V;}
+  double min_x_pred() const {return min_x_pred_;}
+  void min_x_pred(double V) { min_x_pred_ = V;}
+  double max_x_pred() const {return max_x_pred_;}
+  void max_x_pred(double V) { max_x_pred_ = V;}
+  double min_y_pred() const {return min_y_pred_;}
+  void min_y_pred(double V) { min_y_pred_ = V;}
+  double max_y_pred() const {return max_y_pred_;}
+  void max_y_pred(double V) { max_y_pred_ = V;}
 private:
   blitz::Array<double, 2>  par_to_real_, real_to_par_;
+  double min_x_real_, max_x_real_, min_y_real_, max_y_real_;
+  double min_x_pred_, max_x_pred_, min_y_pred_, max_y_pred_;
   friend class boost::serialization::access;
   template<class Archive>
   void serialize(Archive & ar, const unsigned int version);

@@ -15,8 +15,8 @@ import pandas as pd
 # have
 CREATE_ORBIT = False
 CREATE_CAMERA_STEP1 = False
-CREATE_CAMERA_STEP2 = False
-CREATE_CAMERA_STEP3 = False
+CREATE_CAMERA_STEP2 = True
+CREATE_CAMERA_STEP3 = True
 
 emit_test_data = "/home/smyth/Local/emit-test-data/latest"
 input_test_data = f"{emit_test_data}/input_afids_ng"
@@ -130,7 +130,6 @@ if CREATE_CAMERA_STEP2:
         real[:,0] = real_x
         real[:,1] = real_y
         pickle.dump([pred, real], open("paraxial_data.pkl", "wb"))
-    print("Hi step 4")
     pred,real=pickle.load(open("paraxial_data.pkl", "rb"))
     pixel_size = cam.line_pitch
     # Determine the needed polynomial order by just testing a
@@ -158,6 +157,14 @@ if CREATE_CAMERA_STEP2:
     tran.real_to_par[1,:] = multipolyfit(real, pred[:,1], deg)
     tran.par_to_real[0,:] = multipolyfit(pred, real[:,0], deg)
     tran.par_to_real[1,:] = multipolyfit(pred, real[:,1], deg)
+    tran.min_x_real = real[:,0].min()
+    tran.max_x_real = real[:,0].max()
+    tran.min_y_real = real[:,1].min()
+    tran.max_y_real = real[:,1].max()
+    tran.min_x_pred = pred[:,0].min()
+    tran.max_x_pred = pred[:,0].max()
+    tran.min_y_pred = pred[:,1].min()
+    tran.max_y_pred = pred[:,1].max()
     cam.paraxial_transform = tran
     write_shelve("aviris_cam_step2.xml", cam)
 
@@ -182,10 +189,48 @@ if CREATE_CAMERA_STEP3:
     print(residual1(cam.parameter_subset, igc, igm))
     write_shelve("aviris_cam_step3.xml", cam)
     # These diagnostics shows most of the geolocation is with a pixel or so
-    if False:
+    if True:
         for ln in range(500,igm.shape[0],500):
             print("ln:",ln)
             print(pd.DataFrame([distance(igc.ground_coordinate_approx_height(ImageCoordinate(ln,smp), igm[ln,smp].height_reference_surface), igm[ln,smp]) for smp in range(igm.shape[1])]).describe())
+
+    # Fit nonlinearities one more ti
+    igc.ipi.camera.paraxial_transform = CaptureParaxialTransform()
+    ln = 1000
+    for smp in range(igm.shape[1]):
+        gc = igc.ground_coordinate_approx_height(ImageCoordinate(ln, smp),
+                               igm[ln,smp].height_reference_surface)
+        igc.collinearity_residual(igm[ln,smp],ImageCoordinate(ln,smp))
+    predict_x = np.array(cam.paraxial_transform.predict_x)
+    predict_y = np.array(cam.paraxial_transform.predict_y)
+    real_x = np.array(cam.paraxial_transform.real_x)
+    real_y = np.array(cam.paraxial_transform.real_y)
+    pred = np.empty((predict_x.shape[0], 2))
+    pred[:,0] = predict_x
+    pred[:,1] = predict_y
+    real = np.empty((real_x.shape[0], 2))
+    real[:,0] = real_x
+    real[:,1] = real_y
+    deg = 5
+    tran = PolynomialParaxialTransform_5d_5d()
+    tran.real_to_par[0,:] = multipolyfit(real, pred[:,0], deg)
+    tran.real_to_par[1,:] = multipolyfit(real, pred[:,1], deg)
+    tran.par_to_real[0,:] = multipolyfit(pred, real[:,0], deg)
+    tran.par_to_real[1,:] = multipolyfit(pred, real[:,1], deg)
+    tran.min_x_real = real[:,0].min()
+    tran.max_x_real = real[:,0].max()
+    tran.min_y_real = real[:,1].min()
+    tran.max_y_real = real[:,1].max()
+    tran.min_x_pred = pred[:,0].min()
+    tran.max_x_pred = pred[:,0].max()
+    tran.min_y_pred = pred[:,1].min()
+    tran.max_y_pred = pred[:,1].max()
+    cam.paraxial_transform = tran
+    if True:
+        for ln in range(500,igm.shape[0],500):
+            print("ln:",ln)
+            print(pd.DataFrame([distance(igc.ground_coordinate_approx_height(ImageCoordinate(ln,smp), igm[ln,smp].height_reference_surface), igm[ln,smp]) for smp in range(igm.shape[1])]).describe())
+    write_shelve("aviris_cam_step3.xml", cam)
     write_shelve(f"{emit_test_data}/l1_osp_aviris_ng_dir/camera.xml", cam)
         
     
