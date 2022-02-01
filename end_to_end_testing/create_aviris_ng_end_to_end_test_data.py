@@ -215,16 +215,31 @@ if CREATE_CAMERA_STEP3:
     tran = PolynomialParaxialTransform_5d_5d()
     tran.real_to_par[0,:] = multipolyfit(real, pred[:,0], deg)
     tran.real_to_par[1,:] = multipolyfit(real, pred[:,1], deg)
-    tran.par_to_real[0,:] = multipolyfit(pred, real[:,0], deg)
-    tran.par_to_real[1,:] = multipolyfit(pred, real[:,1], deg)
     tran.min_x_real = real[:,0].min()
     tran.max_x_real = real[:,0].max()
     tran.min_y_real = real[:,1].min()
     tran.max_y_real = real[:,1].max()
-    tran.min_x_pred = pred[:,0].min()
-    tran.max_x_pred = pred[:,0].max()
-    tran.min_y_pred = pred[:,1].min()
-    tran.max_y_pred = pred[:,1].max()
+    # The pred to real is kind of crappy for fitting in the x direction,
+    # because the data we collected is degenerate. Go ahead and create
+    # a wider data set to fit for
+    pred2 = []
+    real2 = []
+    for x in np.arange(tran.min_x_real - cam.line_pitch * 4,
+                       tran.max_x_real + cam.line_pitch * 4,
+                       cam.line_pitch * 0.25):
+        for y in np.arange(tran.min_y_real - cam.sample_pitch * 4,
+                           tran.max_y_real + cam.sample_pitch * 4,
+                           cam.sample_pitch * 0.25):
+            real2.append([x,y])
+            pred2.append([*tran.real_to_paraxial(x,y)])
+    real2 = np.array(real2)
+    pred2 = np.array(pred2)
+    tran.par_to_real[0,:] = multipolyfit(pred2, real2[:,0], deg)
+    tran.par_to_real[1,:] = multipolyfit(pred2, real2[:,1], deg)
+    tran.min_x_pred = pred2[:,0].min()
+    tran.max_x_pred = pred2[:,0].max()
+    tran.min_y_pred = pred2[:,1].min()
+    tran.max_y_pred = pred2[:,1].max()
     cam.paraxial_transform = tran
     if True:
         for ln in range(500,igm.shape[0],500):
