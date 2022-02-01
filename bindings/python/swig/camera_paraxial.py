@@ -240,8 +240,9 @@ class ParaxialTransform(geocal_swig.generic_object.GenericObject):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::ParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
-        const =0
+        virtual void Emit::ParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
+        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
+        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const =0
 
         """
         return _camera_paraxial.ParaxialTransform_paraxial_to_real(self, *args)
@@ -250,7 +251,9 @@ class ParaxialTransform(geocal_swig.generic_object.GenericObject):
     def real_to_paraxial(self, *args):
         """
 
-        virtual void Emit::ParaxialTransform::real_to_paraxial(double Real_x, double Real_y, double &Paraxial_x, double &Paraxial_y)
+        virtual void Emit::ParaxialTransform::real_to_paraxial(const GeoCal::AutoDerivative< double > &Real_x, const
+        GeoCal::AutoDerivative< double > &Real_y, GeoCal::AutoDerivative<
+        double > &Paraxial_x, GeoCal::AutoDerivative< double > &Paraxial_y)
         const =0
 
         """
@@ -301,8 +304,9 @@ class IdentityParaxialTransform(ParaxialTransform):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::IdentityParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
-        const
+        virtual void Emit::IdentityParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
+        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
+        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
 
         """
         return _camera_paraxial.IdentityParaxialTransform_paraxial_to_real(self, *args)
@@ -327,6 +331,18 @@ class CaptureParaxialTransform(ParaxialTransform):
     ImageCoordinate and once going backwards with the real
     GroundCoordinate. This then gives you the mapping between x_predict,
     y_predict and x_actual, y_actual.
+
+    Sample of collecting the data for a IpiImageGroundConnection in
+    python:
+
+    cam.paraxial_transform.clear() for smp in range(igm.shape[1]): gc =
+    igc.ground_coordinate_approx_height(ImageCoordinate(ln, smp),
+    igm[ln,smp].height_reference_surface)
+    igc.collinearity_residual(igm[ln,smp],ImageCoordinate(ln,smp))
+    predict_x = np.array(cam.paraxial_transform.predict_x) predict_y =
+    np.array(cam.paraxial_transform.predict_y) real_x =
+    np.array(cam.paraxial_transform.real_x) real_y =
+    np.array(cam.paraxial_transform.real_y)
 
     C++ includes: camera_paraxial.h 
     """
@@ -356,8 +372,9 @@ class CaptureParaxialTransform(ParaxialTransform):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::CaptureParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
-        const
+        virtual void Emit::CaptureParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
+        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
+        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
 
         """
         return _camera_paraxial.CaptureParaxialTransform_paraxial_to_real(self, *args)

@@ -142,4 +142,40 @@ def _write_file(cls, orbit_fname, orb, min_time, max_time):
 
 EmitOrbit.write_file = classmethod(_write_file)
 
+def _write_file2(cls, orbit_fname, orbquat):
+    '''Write a file. This is really meant for generating test data. This
+    variation uses the same time spacing that the 
+    orbquat.quaternion_orbit_data uses'''
+    if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+        fout = h5netcdf.File(orbit_fname, "w", decode_vlen_strings=False)
+    else:
+        fout = h5netcdf.File(orbit_fname, "w")
+    tm =  np.array([od.time.j2000 for od in orbquat.quaternion_orbit_data])
+    pos = np.zeros((tm.shape[0], 3))
+    vel = np.zeros((tm.shape[0], 3))
+    quat = np.zeros((tm.shape[0], 4))
+    for i, od in enumerate(orbquat.quaternion_orbit_data):
+        pos[i, :] = od.position_ci.position
+        vel[i, :] = od.velocity_ci
+        quat[i, :] = geocal.quaternion_to_array(od.sc_to_ci)
+    g = fout.create_group("Ephemeris")
+    t = g.create_variable("time_j2000", ('t',), data = tm)
+    t.attrs["units"] = "s"
+    t = g.create_variable("eci_position", ('t', 'position'), data=pos)
+    t.attrs["description"] = "ECI position"
+    t.attrs["units"] = "m"
+    t = g.create_variable("eci_velocity", ('t', 'velocity'), data=vel)
+    t.attrs["description"] = "ECI velocity"
+    t.attrs["units"] = "m/s"
+        
+    g = fout.create_group("Attitude")
+    t = g.create_variable("time_j2000", ('t',), data=tm)
+    t.attrs["units"] = "s"
+    t = g.create_variable("quaternion", ('t', 'quat'), data=quat)
+    t.attrs["description"] = "Attitude quaternion, goes from spacecraft to ECI. The coefficient convention used has the real part in the first column."
+    t.attrs["units"] = "dimensionless"
+    fout.close()
+
+EmitOrbit.write_file2 = classmethod(_write_file2)
+
 __all__ = ["EmitOrbit", ]
