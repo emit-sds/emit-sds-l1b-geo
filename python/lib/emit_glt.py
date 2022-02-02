@@ -19,18 +19,36 @@ class EmitGlt(EnviFile):
     '''
     def __init__(self, fname, emit_loc = None,
                  standard_metadata = None,
-                 resolution = 60, number_subpixel = 3):
+                 resolution = 60, number_subpixel = 3,
+                 rotated_map = False):
         self.fname = fname
         self.emit_loc = emit_loc
         self.resolution = resolution
         self.standard_metadata = standard_metadata
         self.number_subpixel = number_subpixel
+        self.rotated_map = rotated_map
         # Note that if we are writing the file, then we actually need to
         # wait on calling __init__ because we don't know the size yet.
         if(self.emit_loc is None):
             super().__init__(fname, mode="r")
         
-
+    def map_info_not_rotated(self):
+        mi = geocal.cib01_mapinfo(self.resolution)
+        # We only need the edges pixels, this defines the full
+        # range of data here
+        lat = self.emit_loc.latitude
+        lon = self.emit_loc.longitude
+        pt = [geocal.Geodetic(lat[0,i], lon[0, i]) for
+              i in range(self.emit_loc.shape[2])]
+        pt.extend(geocal.Geodetic(lat[-1,i], lon[-1, i]) for
+                  i in range(self.emit_loc.shape[2]))
+        pt.extend(geocal.Geodetic(lat[i,0], lon[i,0]) for
+                  i in range(self.emit_loc.shape[2]))
+        pt.extend(geocal.Geodetic(lat[i,-1], lon[i,-1]) for
+                  i in range(self.emit_loc.shape[2]))
+        mi = mi.cover(pt)
+        return mi
+    
     def map_info_rotated(self):
         mi = geocal.cib01_mapinfo(self.resolution)
         # We only need the edges pixels, this defines the full
@@ -80,7 +98,10 @@ class EmitGlt(EnviFile):
     
     def run(self):
         logger.info("Generating GLT")
-        mi = self.map_info_rotated()
+        if(self.rotated_map):
+            mi = self.map_info_rotated()
+        else:
+            mi = self.map_info_not_rotated()
         lat = scipy.ndimage.interpolation.zoom(self.emit_loc.latitude,
                                                self.number_subpixel, order=2)
         lon = scipy.ndimage.interpolation.zoom(self.emit_loc.longitude,

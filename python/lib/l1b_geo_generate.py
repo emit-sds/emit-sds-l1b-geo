@@ -74,7 +74,8 @@ class L1bGeoGenerate:
         kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         glt = EmitGlt(glt_fname, emit_loc=loc,
-                      standard_metadata=standard_metadata)
+                      standard_metadata=standard_metadata,
+                      rotated_map=self.glt_rotated)
         kmz = None
         if(self.generate_kmz or
            self.generate_quicklook):
@@ -121,6 +122,7 @@ class L1bGeoGenerate:
         self.kmz_use_jpeg = self.l1b_geo_config.kmz_use_jpeg
         self.map_resolution = self.l1b_geo_config.map_resolution
         self.map_number_subpixel = self.l1b_geo_config.map_number_subpixel
+        self.glt_rotated = self.l1b_geo_config.glt_rotated
         l1b_geo_config = self.l1b_geo_config
         try:
             self.l1b_geo_config = None
