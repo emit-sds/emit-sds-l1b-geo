@@ -71,6 +71,7 @@ class L1bGeoGenerate:
         # KMZ and quicklook name based on l1b_rad_fname.
         rad_fname = igc.image.file_names[0]
         kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
+        kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         glt = EmitGlt(glt_fname, emit_loc=loc,
                       standard_metadata=standard_metadata)

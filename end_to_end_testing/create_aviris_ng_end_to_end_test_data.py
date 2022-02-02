@@ -15,14 +15,16 @@ import pandas as pd
 # have
 CREATE_ORBIT = False
 CREATE_CAMERA_STEP1 = False
-CREATE_CAMERA_STEP2 = True
-CREATE_CAMERA_STEP3 = True
+CREATE_CAMERA_STEP2 = False
+CREATE_CAMERA_STEP3 = False
+CREATE_SCENE = True
 
 emit_test_data = "/home/smyth/Local/emit-test-data/latest"
 input_test_data = f"{emit_test_data}/input_afids_ng"
 
 orbit = 90000
 end_fname = "b001_v01"
+nline_per_scene = 1280
 
 # This is zone_alpha, but with "S" changed to "N" - I think the data
 # is actually wrong here
@@ -247,5 +249,46 @@ if CREATE_CAMERA_STEP3:
             print(pd.DataFrame([distance(igc.ground_coordinate_approx_height(ImageCoordinate(ln,smp), igm[ln,smp].height_reference_surface), igm[ln,smp]) for smp in range(igm.shape[1])]).describe())
     write_shelve("aviris_cam_step3.xml", cam)
     write_shelve(f"{emit_test_data}/l1_osp_aviris_ng_dir/camera.xml", cam)
+
+class RadianceMetadata(StandardMetadata):
+    def __init__(self, rad_full, ttscene):
+        self.fh_in = geocal.GdalRasterImage(rad_full.file_name)
+        super().__init__(start_time = ttscene.min_time,
+                         end_time = ttscene.max_time,
+                         pge_name = "create_aviris_ng_end_to_end_test_data.py")
         
-    
+    def extra_metadata(self, fh):
+        fh["ENVI","wavelength units"] = "Nanometers"
+        fh["ENVI", "wavelength"] = self.fh_in["ENVI", "wavelength"]
+        fh["ENVI", "fwhm"] = self.fh_in["ENVI", "fwhm"]
+
+if CREATE_SCENE:
+    rad_full = EnviFile(f"{input_test_data}/ang20170328t202059_rdn_emit_syn",
+                        mode="r")
+    rset = []
+    # We chop of the first few lines, just because the boundary
+    # of the orbit file means we fail here.
+    pad = 5
+    for i in range(pad,tt_full.max_line//nline_per_scene * nline_per_scene,nline_per_scene):
+        if(i+2*nline_per_scene < tt_full.max_line-pad):
+            rset.append(range(i,i+nline_per_scene))
+        else:
+            rset.append(range(i,tt_full.max_line-pad))
+    for i, r in enumerate(rset):
+        ttscene = MeasuredTimeTable([tt_full.time_list(i) for i in r])
+        tm = ttscene.min_time
+        dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
+                                           re.split(r'\.', str(tm))[0]))
+        start_fname = "emit%s_o%05d_s%03d" % (dstring, orbit, i+1)
+        fname = f"{emit_test_data}/{start_fname}_l1a_line_time_{end_fname}.nc"
+        EmitTimeTable.write_file(fname, ttscene)
+        smeta = RadianceMetadata(rad_full, ttscene)
+        fname = f"{emit_test_data}/{start_fname}_l1b_rdn_{end_fname}.img"
+        fout = EnviFile(fname, dtype=np.float32,
+                        shape=(rad_full.shape[0], len(r),
+                               rad_full.shape[2]), mode="w",
+                        description="EMIT L1B calibrated spectral radiance (units: uW nm-1 cm-2 sr-1)")
+        fout.data[:,:,:] = rad_full[:, r, :]
+        smeta.write_metadata(fout)
+            
+        

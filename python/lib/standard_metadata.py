@@ -31,6 +31,10 @@ class StandardMetadata:
         self.documentation_version = documentation_version
         self.product_version = product_version
 
+    def extra_metadata(self, fh):
+        '''Place for derived classes to put in extra metadata'''
+        pass
+
     def write_metadata(self, envi_file):
         '''Write out the metadata to the given EnviFile'''
         envi_file.flush()
@@ -48,6 +52,7 @@ class StandardMetadata:
         fh["ENVI", "emit documentation version"] = self.documentation_version
         fh["ENVI", "emit data product creation time"] = self.creation_time
         fh["ENVI", "emit data product version"] = "v%02d" % self.product_version
+        self.extra_metadata(fh)
         fh.close()
         # Remove the auxilary file GDAL creates, we don't want this around
         # after we have created the file

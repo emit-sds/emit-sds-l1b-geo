@@ -30,6 +30,8 @@ class L1bProj(object):
         '''Project data for a scene.'''
         igc = self.igccol.image_ground_connection(i)
         mibase = self.ortho.map_info.scale(self.ortho_scale, self.ortho_scale)
+        geocal.write_shelve("igccol.xml", self.igccol)
+        geocal.write_shelve("mibase.xml", mibase)
         mi = igc.cover(mibase)
         mi_fname = "map_info_%03d.xml" % (i+1)
         igc_fname = "igc_initial_%03d.xml" % (i+1)

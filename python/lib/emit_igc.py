@@ -44,7 +44,7 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
         os.environ["SPICEDATA"] = l1b_geo_config.spice_data_dir
     logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
-    cam = EmitCamera()
+    cam = geocal.read_shelve(os.path.dirname(l1b_geo_config.__file__) + "/camera.xml")
     dem = create_dem(l1b_geo_config)
     scene_to_igc = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
