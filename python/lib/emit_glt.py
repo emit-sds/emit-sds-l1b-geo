@@ -48,6 +48,32 @@ class EmitGlt(EnviFile):
                   i in range(self.emit_loc.shape[2]))
         mi = mi.cover(pt)
         return mi
+
+    def gring(self):
+        '''Return the gring, which is latitude/longitude of the bounding
+        rectangle'''
+        mi = geocal.cib01_mapinfo(self.resolution)
+        # We only need the edges pixels, this defines the full
+        # range of data here
+        f = mi.coordinate_converter.convert_to_coordinate
+        lat = self.emit_loc.latitude
+        lon = self.emit_loc.longitude
+        pt = [f(geocal.Geodetic(lat[0,i], lon[0, i])) for
+              i in range(self.emit_loc.shape[2])]
+        pt.extend(f(geocal.Geodetic(lat[-1,i], lon[-1, i]))
+                  for i in range(self.emit_loc.shape[2]))
+        pt.extend(f(geocal.Geodetic(lat[i,0], lon[i, 0]))
+                   for i in range(self.emit_loc.shape[1]))
+        pt.extend(f(geocal.Geodetic(lat[i,-1], lon[i, -1]))
+                   for i in range(self.emit_loc.shape[1]))
+        # Note cv2 convexhull can't work with noncontigous array. The
+        # error message returned is very confusing, it complains that the
+        # type isn't float32 - even though it is. But we just make sure
+        # to make a contiguous array and this works ok.
+        pt = np.ascontiguousarray(np.array(pt)[:,0:2], dtype=np.float32)
+        rect = cv2.minAreaRect(pt)
+        t = cv2.boxPoints(rect)
+        return f"{{ Geographic Lon/Lat, {t[0,0]}, {t[0,1]}, {t[1,0]}, {t[1,1]}, {t[2,0]}, {t[2,1]}, {t[3,0]}, {t[3,1]} }}"
     
     def map_info_rotated(self):
         mi = geocal.cib01_mapinfo(self.resolution)
@@ -125,6 +151,10 @@ class EmitGlt(EnviFile):
         smp.write(0,0,smp_d.astype(np.int))
         self.glt_line[:,:] = res.resample_field(ln, 1.0, False, -999.0, True)
         self.glt_sample[:,:] = res.resample_field(smp, 1.0, False, -999.0, True)
+        self.flush()
+        fh = geocal.GdalRasterImage(self.file_name, 1, 4, True)
+        fh["ENVI", "GRing"] = self.gring()
+        fh.close()
         if(self.standard_metadata):
             self.standard_metadata.write_metadata(self)
         
