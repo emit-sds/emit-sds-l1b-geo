@@ -6,10 +6,12 @@ import emit
 import logging
 import os
 import sys
+import json
 
 version = "1.0.0"
 usage='''Usage:
   l1b_geo_process [options] <prod_dir> <l1_osp_dir> <l1a_att> (<line_time> <l1b_rad>)...
+  l1b_geo_process [options] <prod_dir> <l1_osp_dir> <run_config>
   l1b_geo_process -h | --help
   l1b_geo_process -v | --version
 
@@ -99,9 +101,23 @@ else:
     logger.setLevel(logging.INFO)
 
 # Run actual process
-l1a_att = os.path.abspath(args.l1a_att)
-line_time = [os.path.abspath(f) for f in args.line_time]
-l1b_rad = [os.path.abspath(f) for f in args.l1b_rad]
+if(args.l1a_att):
+    l1a_att = os.path.abspath(args.l1a_att)
+    line_time = [os.path.abspath(f) for f in args.line_time]
+    l1b_rad = [os.path.abspath(f) for f in args.l1b_rad]
+else:
+    curdir = os.getcwd()
+    try:
+        f = json.load(open(args.run_config))
+        os.chdir(os.path.dirname(args.run_config))
+        l1a_att = os.path.abspath(f["attitude_ephemeris_file"])
+        line_time = [os.path.abspath(t['timestamps_file']) for t in f["timestamp_radiance_pairs"]]
+        l1b_rad = [os.path.abspath(t['radiance_file']) for t in f["timestamp_radiance_pairs"]]
+    finally:
+        os.chdir(curdir)
+logger.info("l1_att file: %s", l1a_att)
+logger.info("line_time files %s", line_time)
+logger.info("l1b_rad files %s", l1b_rad)
 try:
     logger.info("Starting %s version %s processing", l1b_geo_config.pge_name,
                 l1b_geo_config.pge_version)
