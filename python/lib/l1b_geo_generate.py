@@ -1,6 +1,7 @@
 from .envi_file import EnviFile
 from .emit_igc import EmitIgc
 from .emit_loc import EmitLoc
+from .emit_obs import EmitObs
 from .emit_glt import EmitGlt
 from .geo_qa import GeoQa
 from .l1b_correct import L1bCorrect
@@ -62,6 +63,12 @@ class L1bGeoGenerate:
                                    int(self.build_version),
                                    int(self.product_version),
                                    ".img")
+        obs_fname = emit_file_name("l1b_obs", igc.ipi.time_table.min_time,
+                                   int(self.orbit_number),
+                                   int(scene),
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".img")
         glt_fname = emit_file_name("l1b_glt", igc.ipi.time_table.min_time,
                                    int(self.orbit_number),
                                    int(scene),
@@ -73,6 +80,8 @@ class L1bGeoGenerate:
         kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
         kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
+        obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata,
+                      emit_loc = loc)
         glt = EmitGlt(glt_fname, emit_loc=loc,
                       standard_metadata=standard_metadata,
                       rotated_map=self.glt_rotated)
@@ -88,6 +97,7 @@ class L1bGeoGenerate:
                    generate_kmz = self.generate_kmz,
                    generate_quicklook = self.generate_quicklook)
         loc.run()
+        obs.run()
         glt.run()
         if(kmz):
             kmz.run()

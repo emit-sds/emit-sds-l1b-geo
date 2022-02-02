@@ -758,6 +758,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/emit_time_table_test.py \
 	@srcpythonlib@/emit_kmz_and_quicklook_test.py \
 	@srcpythonlib@/emit_loc_test.py \
+	@srcpythonlib@/emit_obs_test.py \
 	@srcpythonlib@/emit_glt_test.py @srcpythonlib@/geo_qa_test.py \
 	@srcpythonlib@/standard_metadata_test.py \
 	@srcpythonlib@/aviris_time_table_test.py \
@@ -855,8 +856,8 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/emit_orbit_extension.py \
 	@srcpythonlib@/emit_time_table.py \
 	@srcpythonlib@/emit_kmz_and_quicklook.py \
-	@srcpythonlib@/emit_loc.py @srcpythonlib@/emit_glt.py \
-	@srcpythonlib@/standard_metadata.py \
+	@srcpythonlib@/emit_loc.py @srcpythonlib@/emit_obs.py \
+	@srcpythonlib@/emit_glt.py @srcpythonlib@/standard_metadata.py \
 	@srcpythonlib@/aviris_time_table.py \
 	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py \
 	@srcpythonlib@/aviris_ng_orbit.py \
