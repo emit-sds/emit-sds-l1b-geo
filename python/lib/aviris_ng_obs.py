@@ -40,12 +40,12 @@ class AvirisNgObs:
         return self.data[2,:,:]
 
     @property
-    def view_azimuth(self):
+    def solar_azimuth(self):
         '''To-sun azimuth (0 to 360 degrees cw from N)'''
         return self.data[3,:,:]
 
     @property
-    def view_zenith(self):
+    def solar_zenith(self):
         '''To-sun zenith (0 to 90 degrees from zenith)'''
         return self.data[4,:,:]
 
@@ -73,6 +73,11 @@ class AvirisNgObs:
     def time(self):
         '''Time of each line'''
         return self._time
+
+    @property
+    def utc_time(self):
+        '''Return the UTC Time field'''
+        return self.data[9,:,:]
 
     @property
     def earth_sun_distance(self):
