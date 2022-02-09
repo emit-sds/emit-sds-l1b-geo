@@ -1,132 +1,151 @@
 from .envi_file import EnviFile
+from .emit_igc import EmitIgc
+from .emit_loc import EmitLoc
+from .emit_obs import EmitObs
+from .emit_glt import EmitGlt
+from .geo_qa import GeoQa
+from .l1b_correct import L1bCorrect
+from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
+from .misc import orb_and_scene_from_file_name, emit_file_name
+from .standard_metadata import StandardMetadata
+from emit_swig import EmitIgcCollection
 import geocal
 import numpy as np
 import os
 import shutil
 import logging
 import re
+from multiprocessing import Pool
 
 logger = logging.getLogger('l1b_geo_process.l1b_geo_generate')
 
-# Not sure if we really want this to be a class or not, but I think there
-# may be enough overlap between calculations that we want to keep these
-# together.
-#
-# Also, we'll probably want to run some of this in parallel and/or move to
-# C++. I imagine this will be a bit slow.
 class L1bGeoGenerate:
-    def __init__(self, igc, prod_dir, onum = 100, snum = 1, bnum = 1,
-                 vnum = 1):
-        self.igc = igc
-        self.prod_dir = prod_dir
-        self.onum = onum
-        self.snum = snum
-        self.bnum = bnum
-        self.vnum = vnum
+    '''This is the overall l1b_geo process. This class writes output
+    and temporary files to the current directory, and processes all
+    the scenes.'''
+    def __init__(self, l1b_geo_config, l1a_att_fname, line_time_fname_list,
+                 l1b_rad_fname_list):
+        self.l1b_geo_config = l1b_geo_config
+        self.l1a_att_fname = l1a_att_fname
+        self.tt_and_rdn_fname = zip(line_time_fname_list, l1b_rad_fname_list)
+        self.igccol_initial = EmitIgcCollection.create(self.l1a_att_fname,
+                                  self.tt_and_rdn_fname,
+                                  self.l1b_geo_config.match_rad_band,
+                                  l1b_geo_config = self.l1b_geo_config)
+        tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
+        self.build_version = self.l1b_geo_config.build_version
+        self.product_version = self.l1b_geo_config.product_version
+        self.orbit_number = self.igccol_initial.orbit_number
+        qa_fname = emit_file_name("l1b_geoqa", tstart,
+                                   int(self.orbit_number),
+                                   None,
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".nc")
+        self.geo_qa = GeoQa(qa_fname, "l1b_geo.log")
 
-    def emit_file_name(self, file_type, ext=".img"):
-        '''Generate a EMIT file name using the EMIT naming convention'''
-        # Create yyyymmddthhmmss from tm
-        tm = self.igc.pixel_time(geocal.ImageCoordinate(0,0))
-        dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
-                                           re.split(r'\.', str(tm))[0]))
-        return os.path.join(self.prod_dir,
-              "emit%s_o%05d_s%03d_%s_b%03d_v%02d%s" %
-              (dstring, self.onum, self.snum, file_type, self.bnum, self.vnum,
-               ext))
+    @property
+    def uncorrected_orbit(self):
+        return self.igccol_initial.uncorrected_orbit
+
+    @property
+    def corrected_orbit(self):
+        return self.igccol_corrected.image_ground_connection(0).ipi.orbit
     
-    def generate_quicklook(self, fname):
-        '''Generate the quick look image file'''
-        # Currently just a fake file
-        logger.info("Generating Quicklook data")
-        with open(fname, "w") as fh:
-            print("Fake data", file=fh)
+    def run_scene(self, i):
+        igc = self.igccol_corrected.image_ground_connection(i)
+        scene = self.scene_list[i]
+        logger.info("Processing %s", igc.title)
+        standard_metadata = StandardMetadata(igc=igc)
+        loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
+                                   int(self.orbit_number),
+                                   int(scene),
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".img")
+        obs_fname = emit_file_name("l1b_obs", igc.ipi.time_table.min_time,
+                                   int(self.orbit_number),
+                                   int(scene),
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".img")
+        glt_fname = emit_file_name("l1b_glt", igc.ipi.time_table.min_time,
+                                   int(self.orbit_number),
+                                   int(scene),
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".img")
+        # KMZ and quicklook name based on l1b_rad_fname.
+        rad_fname = igc.image.file_names[0]
+        kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
+        kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
+        loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
+        obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata,
+                      emit_loc = loc)
+        glt = EmitGlt(glt_fname, emit_loc=loc,
+                      standard_metadata=standard_metadata,
+                      rotated_map=self.glt_rotated)
+        kmz = None
+        if(self.generate_kmz or
+           self.generate_quicklook):
+            kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rad_fname,
+                   scene = int(scene),
+                   band_list = self.map_band_list,
+                   use_jpeg = self.kmz_use_jpeg,
+                   resolution = self.map_resolution,
+                   number_subpixel = self.map_number_subpixel,
+                   generate_kmz = self.generate_kmz,
+                   generate_quicklook = self.generate_quicklook)
+        loc.run()
+        obs.run()
+        glt.run()
+        if(kmz):
+            kmz.run()
+        # obs file
 
-    def generate_kmz(self, fname):
-        '''Generate KMZ quick look image file'''
-        # Currently just a fake file
-        logger.info("Generating KMZ data")
-        with open(fname, "w") as fh:
-            print("Fake data", file=fh)
-
-    def generate_qa(self, fname):
-        '''Generate QA file'''
-        # Currently just a fake file
-        logger.info("Generating QA data")
-        with open(fname, "w") as fh:
-            print("Fake data", file=fh)
-
-    def generate_att(self, fname):
-        '''Generate a corrected ATT file'''
-        # Currently just a place holder, we copy the input file to the output
-        logger.info("Generating ATT data")
-        fin = self.igc.ipi.orbit.file_name
-        shutil.copyfile(fin, fname)
-
-    def generate_obs(self, fname, loc_fname):
-        '''Generate the Level 1B Observation Geometry (OBS) File'''
-        # This is a bit slow, we may well want things to go into C++
-        logger.info("Generating OBS data")
-        loc = EnviFile(loc_fname)
-        d = EnviFile(fname,
-                     shape=(11, self.igc.number_line, self.igc.number_sample),
-                     dtype = np.float64, mode="w")
-        d[:,:,:] = -9999
-        lon = loc[0,:,:]
-        lat = loc[1,:, :]
-        h = loc[2,:,:]
-        for ln in range(self.igc.number_line):
-            if(ln % 100 == 0):
-                logger.info("Doing line %d" % ln)
-            pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln,0))
-            tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
-            for smp in range(self.igc.number_sample):
-                gp = geocal.Geodetic(lat[ln,smp], lon[ln,smp], h[ln,smp])
-                # TODO Double check direction here. Possible we are going in
-                # the wrong direction, so may have various 90- and -180 we
-                # need to but in place.
-                clv = geocal.CartesianFixedLookVector(pos, gp)
-                lv = geocal.LnLookVector(clv, gp)
-                slv = geocal.LnLookVector.solar_look_vector(tm, gp)
-                d[1,ln,smp] = lv.view_zenith
-                d[2,ln,smp] = lv.view_azimuth
-                d[3,ln,smp] = slv.view_zenith
-                d[4,ln,smp] = slv.view_azimuth
-                # TODO Fill in other fields here. Mostly a matter of
-                # tracking down the exact definition of each of these, we
-                # have a lot of the info available. Think we'll need to
-                # add slope and aspect to DEM, I don't think we have anything
-                # around to calculate this.
-
-    def generate_glt(self, fname):
-        '''Generate the Level 1B Geographic Lookup Table (GLT) File'''
-        # TODO Note we talked with Phil about generating 2 versions of these, one
-        # with a rotated UTM and one with rotated geographic. We'll need to
-        # come back to this, and figure out the file names
-        logger.info("Generating GLT data")
-        d = EnviFile(fname,
-                     shape=(2, self.igc.number_line, self.igc.number_sample),
-                     dtype = np.int32, mode="w")
-        d[:,:,:] = -9999
-        
-    def generate_loc(self, fname):
-        '''Generate the Level 1B Pixel Location (LOC) File'''
-        # This will likely be a bit on the slow side
-        logger.info("Generating LOC data")
-        d = EnviFile(fname,
-                     shape=(3, self.igc.number_line, self.igc.number_sample),
-                     dtype = np.float64, mode="w")
-        # We pick a large resolution here to force the subpixels to be 1.
-        rcast = geocal.IgcRayCaster(self.igc,0,-1,1,10000)
-        while(not rcast.last_position):
-            gpos = rcast.next_position()
-            for i in range(gpos.shape[1]):
-                gp = geocal.Geodetic(geocal.Ecr(gpos[0,i,0,0,0,0],
-                                                gpos[0,i,0,0,0,1],
-                                                gpos[0,i,0,0,0,2]))
-                d[0,rcast.current_position, i] = gp.longitude
-                d[1,rcast.current_position, i] = gp.latitude
-                d[2,rcast.current_position, i] = gp.height_reference_surface
-                
+    def run(self):
+        logger.info("Starting L1bGeoGenerate")
+        if(self.l1b_geo_config.number_process > 1):
+            logger.info("Using %d processors", self.l1b_geo_config.number_process)
+            pool = Pool(self.l1b_geo_config.number_process)
+        else:
+            logger.info("Using 1 processor")
+            pool = None
+        l1b_correct = L1bCorrect(self.igccol_initial, self.l1b_geo_config,
+                                 self.geo_qa)
+        self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
+        tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
+        orb_fname = emit_file_name("l1b_att", tstart,
+                                   int(self.orbit_number),
+                                   None,
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   ".nc")
+        self.uncorrected_orbit.write_corrected_orbit(orb_fname,
+                                                     self.corrected_orbit)
+        # We can't pass l1b_geo_config through pickling, so grab what we
+        # need
+        self.scene_list = self.igccol_initial.scene_list
+        self.generate_kmz = self.l1b_geo_config.generate_kmz
+        self.generate_quicklook = self.l1b_geo_config.generate_quicklook
+        self.map_band_list = self.l1b_geo_config.map_band_list
+        self.kmz_use_jpeg = self.l1b_geo_config.kmz_use_jpeg
+        self.map_resolution = self.l1b_geo_config.map_resolution
+        self.map_number_subpixel = self.l1b_geo_config.map_number_subpixel
+        self.glt_rotated = self.l1b_geo_config.glt_rotated
+        l1b_geo_config = self.l1b_geo_config
+        try:
+            self.l1b_geo_config = None
+            if(pool is None):
+                res = list(map(self.run_scene,
+                           list(range(self.igccol_corrected.number_image))))
+            else:
+                res = pool.map(self.run_scene,
+                               list(range(self.igccol_corrected.number_image)))
+        finally:
+            self.l1b_geo_config = l1b_geo_config
+        if(self.geo_qa is not None):
+            # TODO Any flushing of log file needed?
+            self.geo_qa.close()
                 
 __all__ = ["L1bGeoGenerate",]

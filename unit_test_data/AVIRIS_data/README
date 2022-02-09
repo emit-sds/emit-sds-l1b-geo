@@ -1,0 +1,4 @@
+This is AVIRIS data, which we use to supply some of the test data.
+These files originally came from /beegfs/store/aviris_cl/y18/L1/f180522t01p00r07rdn_e.
+These are binary format, but see the various Aviris* classes we have for
+reading these.

@@ -1,40 +1,68 @@
+from .emit_orbit_extension import EmitOrbit
+from .emit_time_table import EmitTimeTable
+from .emit_camera import EmitCamera
+from .misc import create_dem, orb_and_scene_from_file_name
+from emit_swig import EmitIgcCollection
+import logging
 import geocal
+import os
 
-# We may well need to implement this in C++ for performance, but for now
-# just do a simple ImageGroundConnection.
+logger = logging.getLogger('l1b_geo_process.emit_igc')
 
-def emit_igc(orbit_fname, tstart):
-    # As a placeholder, we use and ECOSTRESS orbit data file. We'll replace
-    # this with a real EMIT orbit later
-    orb = geocal.HdfOrbit_Eci_TimeJ2000(orbit_fname, "", "Ephemeris/time_j2000",
-         "Ephemeris/eci_position", "Ephemeris/eci_velocity",
-         "Attitude/time_j2000", "Attitude/quaternion")
-    # We should get the time directly from an EMIT file, but for now
-    # just use fixed time spacing
-    tspace = 9.26e-3
-    nline = 1000
-    tt = geocal.ConstantSpacingTimeTable(tstart, tstart + nline * tspace, tspace)
-    # Simple pinhole camera, we'll replace with the calibrated camera
-    focal_length = 193.5e-3
-    line_pitch = 30e-6
-    sample_pitch = 30e-6
-    nsamp = 1240
-    spectral_channel = 480
-    cam = geocal.SimpleCamera(0,0,0,focal_length, line_pitch, sample_pitch,
-                              1, nsamp)
-    # Probably should get the directory through some kind of configuration, but
-    # for now just use the default through environment variables. Also, for
-    # now allow 0 height where we don't have DEM data (e.g. over ocean). We
-    # might actually want to consider this an error, since we don't expect
-    # EMIT to be over water. But for now allow it
-    try:
-        dem = geocal.SrtmDem("/blah", False)
-    except RuntimeError:
-        # Short term, don't assume for SRTM available. It isn't on EMIT
-        # machines yet. so just fall back to a 0 height DEM
-        dem = geocal.SimpleDem()
-    ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
-    igc = geocal.IpiImageGroundConnection(ipi, dem, None)
-    return igc
+class EmitIgc(geocal.IpiImageGroundConnection):
+    '''EMIT ImageGroundConnection. Right now this is just a wrapper around 
+    a generic GeoCal IpiImageGroundConnection. We can extend
+    this to a full C++ class if there is any need.'''
+    def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
+                 l1b_band = 1, l1b_geo_config = None):
+        '''Create a EmitIgc. We can either include the raster image data
+        or not. If desired, supplied l1b_rdn_fname and the band of the
+        L1B radiance file to use.'''
 
-__all__ = ["emit_igc", ]    
+        orb = EmitOrbit(orbit_fname)
+        cam = EmitCamera()
+        dem = create_dem(None)
+        tt = EmitTimeTable(tt_fname)
+        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
+        if(l1b_rdn_fname is not None):
+            img = geocal.GdalRasterImage(l1b_rdn_fname, l1b_band)
+        else:
+            img = None
+        # Put in raster image
+        super().__init__(ipi, dem, img)
+
+def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
+            l1b_geo_config = None):
+    '''Create a EmitIgcCollection. This takes an orbit file name,
+    a list of time table and radiance file name pairs, and the band to
+    set. We get the scene number from the radiance file name, and set EmitIgc
+    title based on it. If the files happen to be out of order, we sort
+    the data. We also attach the list of scenes as "scene_list", the orbit
+    number as "orbit_number" and the uncorrected orbit 
+    as "uncorrected_orbit".'''
+    if(l1b_geo_config):
+        os.environ["SPICEDATA"] = l1b_geo_config.spice_data_dir
+    logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
+    orb = EmitOrbit(orbit_fname)
+    cam = geocal.read_shelve(os.path.dirname(l1b_geo_config.__file__) + "/camera.xml")
+    dem = create_dem(l1b_geo_config)
+    scene_to_igc = {}
+    for tt_fname, rdn_fname in tt_and_rdn_fname:
+        orbit_number, scene = orb_and_scene_from_file_name(rdn_fname)
+        tt = EmitTimeTable(tt_fname)
+        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
+        img = geocal.GdalRasterImage(rdn_fname, l1b_band)
+        igc = geocal.IpiImageGroundConnection(ipi, dem, img)
+        scene_to_igc[scene] = igc
+        igc.title = f"Scene {scene}"
+    igccol = EmitIgcCollection()
+    igccol.orbit_number = orbit_number
+    igccol.scene_list = sorted(scene_to_igc.keys())
+    for scene in igccol.scene_list:
+        igccol.add_igc(scene_to_igc[scene])
+    igccol.uncorrected_orbit = orb
+    return igccol
+
+EmitIgcCollection.create = classmethod(_create)
+
+__all__ = ["EmitIgc", ]    

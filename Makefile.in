@@ -32,7 +32,7 @@
 
 # List of automakes to include.
 
-# Stuff specific to oco3
+# Stuff specific to emit
 
 
 
@@ -194,7 +194,13 @@ LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES) \
 	$(pkgpythonswig_LTLIBRARIES)
 _swig_wrap_la_DEPENDENCIES = libemit.la
 am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo
+am__objects_1 = @swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo \
+	@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo \
+	@swigsrc@/_swig_wrap_la-resampler_wrap.lo \
+	@swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo \
+	@swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo \
+	@swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo \
+	@swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo
 am__objects_2 = $(am__objects_1)
 am__swig_wrap_la_OBJECTS = $(am__objects_2) \
 	@swigsrc@/_swig_wrap_la-swig_wrap.lo
@@ -208,7 +214,12 @@ _swig_wrap_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) $(_swig_wrap_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
 libemit_la_LIBADD =
-am_libemit_la_OBJECTS = @srclib@/libemit_la-ecostress_scan_mirror.lo
+am_libemit_la_OBJECTS = @srclib@/libemit_la-gdal_support.lo \
+	@srclib@/libemit_la-resampler.lo \
+	@srclib@/libemit_la-emit_orbit.lo \
+	@srclib@/libemit_la-emit_igc_collection.lo \
+	@srclib@/libemit_la-camera_paraxial.lo \
+	@srclib@/libemit_la-polynomial_paraxial_transform.lo
 libemit_la_OBJECTS = $(am_libemit_la_OBJECTS)
 libemit_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -216,7 +227,8 @@ libemit_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 am_emit_test_all_OBJECTS = @srclib@/emit_test_all-test_all.$(OBJEXT) \
 	@srclib@/emit_test_all-global_fixture.$(OBJEXT) \
 	@srclib@/emit_test_all-global_fixture_default.$(OBJEXT) \
-	@srclib@/emit_test_all-ecostress_scan_mirror_test.$(OBJEXT)
+	@srclib@/emit_test_all-resampler_test.$(OBJEXT) \
+	@srclib@/emit_test_all-emit_orbit_test.$(OBJEXT)
 emit_test_all_OBJECTS = $(am_emit_test_all_OBJECTS)
 emit_test_all_DEPENDENCIES = libemit.la
 emit_test_all_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
@@ -240,12 +252,25 @@ am__v_at_1 =
 DEFAULT_INCLUDES = 
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po \
+am__depfiles_remade =  \
+	@srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po \
 	@srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po \
 	@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po \
+	@srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po \
 	@srclib@/$(DEPDIR)/emit_test_all-test_all.Po \
-	@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo \
-	@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-resampler.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -621,6 +646,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+afidsdatadir = @afidsdatadir@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -634,6 +660,7 @@ build_os = @build_os@
 build_python = @build_python@
 build_vendor = @build_vendor@
 builddir = @builddir@
+condaprefix = @condaprefix@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
@@ -688,6 +715,7 @@ swigrules = @swigrules@
 swigsrc = @swigsrc@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+testdatadir = @testdatadir@
 testsupportsrc = @testsupportsrc@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
@@ -722,10 +750,28 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srclib@/global_fixture.h @srcpythonlib@/envi_file_test.py \
 	@srcpythonlib@/emit_igc_test.py \
 	@srcpythonlib@/l1b_geo_generate_test.py \
+	@srcpythonlib@/l1b_correct_test.py \
+	@srcpythonlib@/l1b_tp_collect_test.py \
+	@srcpythonlib@/l1b_proj_test.py \
+	@srcpythonlib@/emit_camera_test.py \
+	@srcpythonlib@/emit_orbit_extension_test.py \
+	@srcpythonlib@/emit_time_table_test.py \
+	@srcpythonlib@/emit_kmz_and_quicklook_test.py \
+	@srcpythonlib@/emit_loc_test.py \
+	@srcpythonlib@/emit_obs_test.py \
+	@srcpythonlib@/emit_glt_test.py @srcpythonlib@/geo_qa_test.py \
+	@srcpythonlib@/standard_metadata_test.py \
+	@srcpythonlib@/aviris_time_table_test.py \
+	@srcpythonlib@/aviris_orbit_test.py \
+	@srcpythonlib@/aviris_ng_orbit_test.py \
+	@srcpythonlib@/aviris_ng_obs_test.py \
+	@srcpythonlib@/aviris_ng_igm_test.py \
+	@srcpythonlib@/gaussian_stretch_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
 	$(FULL_SWIG_SRC) $(srcdir)/$(swigsrc)/*_wrap.h \
-	@unittestdata@/README.md \
+	@unittestdata@/README.md @unittestdata@/AVIRS_data \
+	@unittestdata@/AVIRS_NG_data \
 	@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 \
 	@unittestdata@/spice_data @unittestdata@/l1b_loc.hdr \
 	@unittestdata@/l1b_loc.img
@@ -757,7 +803,7 @@ check_PROGRAM =
 check_DATA = 
 
 # Build these up as we go
-dist_installemit_SCRIPTS = 
+dist_installemit_SCRIPTS = @l1b_geo_src@/l1b_geo_pge
 SWIG_FLAG = 
 installemit_SCRIPTS = emit_version.py
 
@@ -767,20 +813,34 @@ DIST_HOOK = dist-clean-up-python
 # Dist check need to know where to find geocal
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 emitincdir = @includedir@/emit
-libemit_la_SOURCES = @srclib@/ecostress_scan_mirror.cc
+libemit_la_SOURCES = @srclib@/gdal_support.cc @srclib@/resampler.cc \
+	@srclib@/emit_orbit.cc @srclib@/emit_igc_collection.cc \
+	@srclib@/camera_paraxial.cc \
+	@srclib@/polynomial_paraxial_transform.cc
 
 #=================================================================
 # List of source files
 emitinc_HEADERS = @srclib@/emit_serialize_support.h \
-	@srclib@/ecostress_scan_mirror.h
-emitswiginc_HEADERS = @srclib@/ecostress_scan_mirror.i \
-	@srclib@/emit_common.i
+	@srclib@/gdal_support.h @srclib@/resampler.h \
+	@srclib@/emit_orbit.h @srclib@/emit_igc_collection.h \
+	@srclib@/camera_paraxial.h \
+	@srclib@/polynomial_paraxial_transform.h
+emitswiginc_HEADERS = @srclib@/emit_swig_array.i \
+	@srclib@/emit_common.i @srclib@/gdal_support.i \
+	@srclib@/resampler.i @srclib@/emit_orbit.i \
+	@srclib@/emit_igc_collection.i @srclib@/camera_paraxial.i \
+	@srclib@/polynomial_paraxial_transform.i
 emit_test_all_SOURCES = @srclib@/test_all.cc \
 	@srclib@/global_fixture.cc @srclib@/global_fixture_default.cc \
-	@srclib@/ecostress_scan_mirror_test.cc
+	@srclib@/resampler_test.cc @srclib@/emit_orbit_test.cc
 
 # Files that contain SWIG wrapper information.
-SWIG_SRC = @swigsrc@/ecostress_scan_mirror_wrap.cc
+SWIG_SRC = @swigsrc@/emit_swig_array_wrap.cc \
+	@swigsrc@/gdal_support_wrap.cc @swigsrc@/resampler_wrap.cc \
+	@swigsrc@/emit_orbit_wrap.cc \
+	@swigsrc@/emit_igc_collection_wrap.cc \
+	@swigsrc@/camera_paraxial_wrap.cc \
+	@swigsrc@/polynomial_paraxial_transform_wrap.cc
 libemit_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 libemit_la_LDFLAGS = $(GEOCAL_LIBS)
 emit_test_all_LDADD = libemit.la 
@@ -788,8 +848,22 @@ emit_test_all_LDFLAGS = -no-install
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
-	@srcpythonlib@/l1b_geo_generate.py \
-	@srcpythonlib@/l1b_geo_log_formatter.py
+	@srcpythonlib@/misc.py @srcpythonlib@/l1b_geo_generate.py \
+	@srcpythonlib@/l1b_correct.py @srcpythonlib@/l1b_tp_collect.py \
+	@srcpythonlib@/l1b_proj.py \
+	@srcpythonlib@/l1b_geo_log_formatter.py \
+	@srcpythonlib@/geo_qa.py @srcpythonlib@/emit_camera.py \
+	@srcpythonlib@/emit_orbit_extension.py \
+	@srcpythonlib@/emit_time_table.py \
+	@srcpythonlib@/emit_kmz_and_quicklook.py \
+	@srcpythonlib@/emit_loc.py @srcpythonlib@/emit_obs.py \
+	@srcpythonlib@/emit_glt.py @srcpythonlib@/standard_metadata.py \
+	@srcpythonlib@/aviris_time_table.py \
+	@srcpythonlib@/aviris_orbit.py @srcpythonlib@/aviris_igm.py \
+	@srcpythonlib@/aviris_ng_orbit.py \
+	@srcpythonlib@/aviris_ng_obs.py \
+	@srcpythonlib@/aviris_ng_igm.py \
+	@srcpythonlib@/gaussian_stretch.py
 
 # Number of jobs to run at once. Default is to automatically determine this,
 # but you can specify a different number.
@@ -1015,7 +1089,19 @@ clean-pkgpythonswigLTLIBRARIES:
 @swigsrc@/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) @swigsrc@/$(DEPDIR)
 	@: > @swigsrc@/$(DEPDIR)/$(am__dirstamp)
-@swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo:  \
+@swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-resampler_wrap.lo: @swigsrc@/$(am__dirstamp) \
+	@swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo: @swigsrc@/$(am__dirstamp) \
+	@swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo:  \
 	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-swig_wrap.lo: @swigsrc@/$(am__dirstamp) \
 	@swigsrc@/$(DEPDIR)/$(am__dirstamp)
@@ -1028,7 +1114,17 @@ _swig_wrap.la: $(_swig_wrap_la_OBJECTS) $(_swig_wrap_la_DEPENDENCIES) $(EXTRA__s
 @srclib@/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) @srclib@/$(DEPDIR)
 	@: > @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/libemit_la-ecostress_scan_mirror.lo:  \
+@srclib@/libemit_la-gdal_support.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-resampler.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-emit_orbit.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-emit_igc_collection.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-camera_paraxial.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-polynomial_paraxial_transform.lo:  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
 
 libemit.la: $(libemit_la_OBJECTS) $(libemit_la_DEPENDENCIES) $(EXTRA_libemit_la_DEPENDENCIES) 
@@ -1039,7 +1135,9 @@ libemit.la: $(libemit_la_OBJECTS) $(libemit_la_DEPENDENCIES) $(EXTRA_libemit_la_
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
 @srclib@/emit_test_all-global_fixture_default.$(OBJEXT):  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
-@srclib@/emit_test_all-ecostress_scan_mirror_test.$(OBJEXT):  \
+@srclib@/emit_test_all-resampler_test.$(OBJEXT):  \
+	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/emit_test_all-emit_orbit_test.$(OBJEXT):  \
 	@srclib@/$(am__dirstamp) @srclib@/$(DEPDIR)/$(am__dirstamp)
 
 emit_test_all$(EXEEXT): $(emit_test_all_OBJECTS) $(emit_test_all_DEPENDENCIES) $(EXTRA_emit_test_all_DEPENDENCIES) 
@@ -1161,12 +1259,24 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/emit_test_all-test_all.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-resampler.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -1199,12 +1309,54 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-@swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo: @swigsrc@/ecostress_scan_mirror_wrap.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo `test -f '@swigsrc@/ecostress_scan_mirror_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/ecostress_scan_mirror_wrap.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/ecostress_scan_mirror_wrap.cc' object='@swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo: @swigsrc@/emit_swig_array_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo `test -f '@swigsrc@/emit_swig_array_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_swig_array_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/emit_swig_array_wrap.cc' object='@swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-ecostress_scan_mirror_wrap.lo `test -f '@swigsrc@/ecostress_scan_mirror_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/ecostress_scan_mirror_wrap.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo `test -f '@swigsrc@/emit_swig_array_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_swig_array_wrap.cc
+
+@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo: @swigsrc@/gdal_support_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo `test -f '@swigsrc@/gdal_support_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/gdal_support_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/gdal_support_wrap.cc' object='@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-gdal_support_wrap.lo `test -f '@swigsrc@/gdal_support_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/gdal_support_wrap.cc
+
+@swigsrc@/_swig_wrap_la-resampler_wrap.lo: @swigsrc@/resampler_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-resampler_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-resampler_wrap.lo `test -f '@swigsrc@/resampler_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/resampler_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/resampler_wrap.cc' object='@swigsrc@/_swig_wrap_la-resampler_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-resampler_wrap.lo `test -f '@swigsrc@/resampler_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/resampler_wrap.cc
+
+@swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo: @swigsrc@/emit_orbit_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo `test -f '@swigsrc@/emit_orbit_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_orbit_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/emit_orbit_wrap.cc' object='@swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo `test -f '@swigsrc@/emit_orbit_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_orbit_wrap.cc
+
+@swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo: @swigsrc@/emit_igc_collection_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo `test -f '@swigsrc@/emit_igc_collection_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_igc_collection_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/emit_igc_collection_wrap.cc' object='@swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo `test -f '@swigsrc@/emit_igc_collection_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_igc_collection_wrap.cc
+
+@swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo: @swigsrc@/camera_paraxial_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo `test -f '@swigsrc@/camera_paraxial_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/camera_paraxial_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/camera_paraxial_wrap.cc' object='@swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo `test -f '@swigsrc@/camera_paraxial_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/camera_paraxial_wrap.cc
+
+@swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo: @swigsrc@/polynomial_paraxial_transform_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo `test -f '@swigsrc@/polynomial_paraxial_transform_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/polynomial_paraxial_transform_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/polynomial_paraxial_transform_wrap.cc' object='@swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-polynomial_paraxial_transform_wrap.lo `test -f '@swigsrc@/polynomial_paraxial_transform_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/polynomial_paraxial_transform_wrap.cc
 
 @swigsrc@/_swig_wrap_la-swig_wrap.lo: @swigsrc@/swig_wrap.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-swig_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-swig_wrap.lo `test -f '@swigsrc@/swig_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/swig_wrap.cc
@@ -1213,12 +1365,47 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-swig_wrap.lo `test -f '@swigsrc@/swig_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/swig_wrap.cc
 
-@srclib@/libemit_la-ecostress_scan_mirror.lo: @srclib@/ecostress_scan_mirror.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-ecostress_scan_mirror.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Tpo -c -o @srclib@/libemit_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Tpo @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror.cc' object='@srclib@/libemit_la-ecostress_scan_mirror.lo' libtool=yes @AMDEPBACKSLASH@
+@srclib@/libemit_la-gdal_support.lo: @srclib@/gdal_support.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-gdal_support.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-gdal_support.Tpo -c -o @srclib@/libemit_la-gdal_support.lo `test -f '@srclib@/gdal_support.cc' || echo '$(srcdir)/'`@srclib@/gdal_support.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-gdal_support.Tpo @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/gdal_support.cc' object='@srclib@/libemit_la-gdal_support.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-ecostress_scan_mirror.lo `test -f '@srclib@/ecostress_scan_mirror.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-gdal_support.lo `test -f '@srclib@/gdal_support.cc' || echo '$(srcdir)/'`@srclib@/gdal_support.cc
+
+@srclib@/libemit_la-resampler.lo: @srclib@/resampler.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-resampler.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-resampler.Tpo -c -o @srclib@/libemit_la-resampler.lo `test -f '@srclib@/resampler.cc' || echo '$(srcdir)/'`@srclib@/resampler.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-resampler.Tpo @srclib@/$(DEPDIR)/libemit_la-resampler.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/resampler.cc' object='@srclib@/libemit_la-resampler.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-resampler.lo `test -f '@srclib@/resampler.cc' || echo '$(srcdir)/'`@srclib@/resampler.cc
+
+@srclib@/libemit_la-emit_orbit.lo: @srclib@/emit_orbit.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-emit_orbit.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Tpo -c -o @srclib@/libemit_la-emit_orbit.lo `test -f '@srclib@/emit_orbit.cc' || echo '$(srcdir)/'`@srclib@/emit_orbit.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Tpo @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_orbit.cc' object='@srclib@/libemit_la-emit_orbit.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-emit_orbit.lo `test -f '@srclib@/emit_orbit.cc' || echo '$(srcdir)/'`@srclib@/emit_orbit.cc
+
+@srclib@/libemit_la-emit_igc_collection.lo: @srclib@/emit_igc_collection.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-emit_igc_collection.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Tpo -c -o @srclib@/libemit_la-emit_igc_collection.lo `test -f '@srclib@/emit_igc_collection.cc' || echo '$(srcdir)/'`@srclib@/emit_igc_collection.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Tpo @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_igc_collection.cc' object='@srclib@/libemit_la-emit_igc_collection.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-emit_igc_collection.lo `test -f '@srclib@/emit_igc_collection.cc' || echo '$(srcdir)/'`@srclib@/emit_igc_collection.cc
+
+@srclib@/libemit_la-camera_paraxial.lo: @srclib@/camera_paraxial.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-camera_paraxial.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Tpo -c -o @srclib@/libemit_la-camera_paraxial.lo `test -f '@srclib@/camera_paraxial.cc' || echo '$(srcdir)/'`@srclib@/camera_paraxial.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Tpo @srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/camera_paraxial.cc' object='@srclib@/libemit_la-camera_paraxial.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-camera_paraxial.lo `test -f '@srclib@/camera_paraxial.cc' || echo '$(srcdir)/'`@srclib@/camera_paraxial.cc
+
+@srclib@/libemit_la-polynomial_paraxial_transform.lo: @srclib@/polynomial_paraxial_transform.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-polynomial_paraxial_transform.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Tpo -c -o @srclib@/libemit_la-polynomial_paraxial_transform.lo `test -f '@srclib@/polynomial_paraxial_transform.cc' || echo '$(srcdir)/'`@srclib@/polynomial_paraxial_transform.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Tpo @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/polynomial_paraxial_transform.cc' object='@srclib@/libemit_la-polynomial_paraxial_transform.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-polynomial_paraxial_transform.lo `test -f '@srclib@/polynomial_paraxial_transform.cc' || echo '$(srcdir)/'`@srclib@/polynomial_paraxial_transform.cc
 
 @srclib@/emit_test_all-test_all.o: @srclib@/test_all.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-test_all.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-test_all.Tpo -c -o @srclib@/emit_test_all-test_all.o `test -f '@srclib@/test_all.cc' || echo '$(srcdir)/'`@srclib@/test_all.cc
@@ -1262,19 +1449,33 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-global_fixture_default.obj `if test -f '@srclib@/global_fixture_default.cc'; then $(CYGPATH_W) '@srclib@/global_fixture_default.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/global_fixture_default.cc'; fi`
 
-@srclib@/emit_test_all-ecostress_scan_mirror_test.o: @srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-ecostress_scan_mirror_test.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/emit_test_all-ecostress_scan_mirror_test.o' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-resampler_test.o: @srclib@/resampler_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-resampler_test.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Tpo -c -o @srclib@/emit_test_all-resampler_test.o `test -f '@srclib@/resampler_test.cc' || echo '$(srcdir)/'`@srclib@/resampler_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/resampler_test.cc' object='@srclib@/emit_test_all-resampler_test.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.o `test -f '@srclib@/ecostress_scan_mirror_test.cc' || echo '$(srcdir)/'`@srclib@/ecostress_scan_mirror_test.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-resampler_test.o `test -f '@srclib@/resampler_test.cc' || echo '$(srcdir)/'`@srclib@/resampler_test.cc
 
-@srclib@/emit_test_all-ecostress_scan_mirror_test.obj: @srclib@/ecostress_scan_mirror_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-ecostress_scan_mirror_test.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/ecostress_scan_mirror_test.cc' object='@srclib@/emit_test_all-ecostress_scan_mirror_test.obj' libtool=no @AMDEPBACKSLASH@
+@srclib@/emit_test_all-resampler_test.obj: @srclib@/resampler_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-resampler_test.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Tpo -c -o @srclib@/emit_test_all-resampler_test.obj `if test -f '@srclib@/resampler_test.cc'; then $(CYGPATH_W) '@srclib@/resampler_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/resampler_test.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/resampler_test.cc' object='@srclib@/emit_test_all-resampler_test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-ecostress_scan_mirror_test.obj `if test -f '@srclib@/ecostress_scan_mirror_test.cc'; then $(CYGPATH_W) '@srclib@/ecostress_scan_mirror_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/ecostress_scan_mirror_test.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-resampler_test.obj `if test -f '@srclib@/resampler_test.cc'; then $(CYGPATH_W) '@srclib@/resampler_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/resampler_test.cc'; fi`
+
+@srclib@/emit_test_all-emit_orbit_test.o: @srclib@/emit_orbit_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-emit_orbit_test.o -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Tpo -c -o @srclib@/emit_test_all-emit_orbit_test.o `test -f '@srclib@/emit_orbit_test.cc' || echo '$(srcdir)/'`@srclib@/emit_orbit_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_orbit_test.cc' object='@srclib@/emit_test_all-emit_orbit_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-emit_orbit_test.o `test -f '@srclib@/emit_orbit_test.cc' || echo '$(srcdir)/'`@srclib@/emit_orbit_test.cc
+
+@srclib@/emit_test_all-emit_orbit_test.obj: @srclib@/emit_orbit_test.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/emit_test_all-emit_orbit_test.obj -MD -MP -MF @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Tpo -c -o @srclib@/emit_test_all-emit_orbit_test.obj `if test -f '@srclib@/emit_orbit_test.cc'; then $(CYGPATH_W) '@srclib@/emit_orbit_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/emit_orbit_test.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Tpo @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_orbit_test.cc' object='@srclib@/emit_test_all-emit_orbit_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emit_test_all_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/emit_test_all-emit_orbit_test.obj `if test -f '@srclib@/emit_orbit_test.cc'; then $(CYGPATH_W) '@srclib@/emit_orbit_test.cc'; else $(CYGPATH_W) '$(srcdir)/@srclib@/emit_orbit_test.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1927,12 +2128,24 @@ clean-am: clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+		-rm -f @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
-	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
-	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-resampler.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1988,12 +2201,24 @@ installcheck-am: installcheck-local
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f @srclib@/$(DEPDIR)/emit_test_all-ecostress_scan_mirror_test.Po
+		-rm -f @srclib@/$(DEPDIR)/emit_test_all-emit_orbit_test.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-global_fixture_default.Po
+	-rm -f @srclib@/$(DEPDIR)/emit_test_all-resampler_test.Po
 	-rm -f @srclib@/$(DEPDIR)/emit_test_all-test_all.Po
-	-rm -f @srclib@/$(DEPDIR)/libemit_la-ecostress_scan_mirror.Plo
-	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-ecostress_scan_mirror_wrap.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-camera_paraxial.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-resampler.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-camera_paraxial_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-swig_wrap.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
@@ -2085,9 +2310,14 @@ complain_if_afids:
 # perhaps go away when we have this set up on EMIT.
 export SPICEDATA = $(abs_srcdir)/@unittestdata@/spice_data
 
+export EMIT_TEST_DATA=@testdatadir@/latest
+
 # end to end check
 end-to-end-check:
-	source $(prefix)/setup_emit.sh && l1b_geo_process $(abs_srcdir)/@unittestdata@/L1A_RAW_ATT_03663_20190227T094659_0100_01.h5 "2019-02-27T10:12:22.0000Z" out
+	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_geo_run $(EMIT_TEST_DATA)/l1_osp_dir $(EMIT_TEST_DATA)/*o80000_l1a_att*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s002_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s002_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s003_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s003_l1b_rdn*.img
+
+end-to-end-aviris-check:
+	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_aviris_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir $(EMIT_TEST_DATA)/*o90000_l1a_att*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1b_rdn*.img
 
 # Variables used in testing
 export abs_top_srcdir 

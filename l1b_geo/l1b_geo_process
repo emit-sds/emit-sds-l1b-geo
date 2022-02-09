@@ -5,30 +5,35 @@ import geocal
 import emit
 import logging
 import os
-import re
-import shutil
-import h5py
-import traceback
-from multiprocessing import Pool
-import numpy as np
-
-# Get version information, in the top directory
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(sys.path[0])))
-from emit_version import *
+import json
 
-version = "0.01"
+version = "1.0.0"
 usage='''Usage:
-  l1b_geo_process [options] <l1a_raw_att> <start_time> <prod_dir>
+  l1b_geo_process [options] <prod_dir> <l1_osp_dir> <l1a_att> (<line_time> <l1b_rad>)...
+  l1b_geo_process [options] <prod_dir> <l1_osp_dir> <run_config>
   l1b_geo_process -h | --help
   l1b_geo_process -v | --version
 
-This runs the L1B Geo process. 
+This runs the l1b_geo process. 
 
-Right now we take an ecostress L1A_RAW_ATT (as a placeholder for an EMIT
-orbit file) and a start time (in CCSDS format, e.g "2019-02-27T10:12:22.0000Z").
-We don't take radiance data now, but of course we will need that later as we
-flesh out this program.
+This takes the production directory, which we also use as a scratch area.
+For performance, this should be a local directory - we do memory mapping of
+files and this tends to work much faster with local drives.
+
+This takes the L1 operational support directory (e.g. 
+/beegfs/store/shared/emit-test-data/latest/l1_osp_dir), the L1A 
+ephemeris/attitude file, and a list of line time/radiance data file
+pairs. The line time and radiance should be paired together, so for
+example give scene 1 for both files, scene 2, etc.
+
+Right now we extract the orbit and scene information from the file
+names. We might want to actually put this into metadata for the file,
+but for now we just extract this.
+
+A log file will be written to the output directory - l1b_geo.log. By
+default this is also written to the screen, but you can turn this off
+using the --log-file-only option.
 
 Options:
   -h --help         
@@ -37,10 +42,6 @@ Options:
   --debug
        Turn debugging information on
        
-  --log-file=f
-       Give a path for the logs to be written to. This goes to both the screen
-       an the log file, compare with --log-file-only
-
   --log-file-only=f
        Write logs only to the log file, not also to the screen.
 
@@ -49,8 +50,7 @@ Options:
        color into log files.
 
   --number-cpu=d
-       Number of CPUs to use when processing. Ignored if we are using a 
-       run_config file, this is instead passed through the config file.
+       Number of CPUs to use when processing. 
        [default: 10]
 
   --quiet
@@ -65,20 +65,19 @@ Options:
 
 args = geocal.docopt_simple(usage, version=version)
 
-# Can use this to wait a short time so we can attach strace to this
-# process, useful to find all the files that we are accessing.
-if(False):
-    print("Waiting a short time")
-    import time
-    time.sleep(20)
+# Read in additional configuration parameters
+sys.path.append(args.l1_osp_dir)
+import l1b_geo_config
 
+# Set up logging. 
+os.makedirs(args.prod_dir, exist_ok=True)
+log_fname = args.prod_dir + "/l1b_geo.log"
 logger = logging.getLogger('l1b_geo_process')
 fh = None
-if(args.log_file_only or args.log_file):
-    fh = logging.FileHandler(args.log_file_only or args.log_file)
-    fh.setFormatter(pynitf.DifferenceFormatter(add_color = False))
-    fh.setLevel(logging.INFO)
-    logger.addHandler(fh)
+fh = logging.FileHandler(log_fname)
+fh.setFormatter(emit.L1bGeoLogFormatter(add_color = False))
+fh.setLevel(logging.INFO)
+logger.addHandler(fh)
 lformat = emit.L1bGeoLogFormatter(add_color = not args.no_color)
 if(not args.log_file_only):    
     h = logging.StreamHandler()
@@ -101,29 +100,38 @@ else:
         h.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
 
+# Run actual process
+if(args.l1a_att):
+    l1a_att = os.path.abspath(args.l1a_att)
+    line_time = [os.path.abspath(f) for f in args.line_time]
+    l1b_rad = [os.path.abspath(f) for f in args.l1b_rad]
+else:
+    curdir = os.getcwd()
+    try:
+        f = json.load(open(args.run_config))
+        os.chdir(os.path.dirname(args.run_config))
+        l1a_att = os.path.abspath(f["attitude_ephemeris_file"])
+        line_time = [os.path.abspath(t['timestamps_file']) for t in f["timestamp_radiance_pairs"]]
+        l1b_rad = [os.path.abspath(t['radiance_file']) for t in f["timestamp_radiance_pairs"]]
+    finally:
+        os.chdir(curdir)
+logger.info("l1_att file: %s", l1a_att)
+logger.info("line_time files %s", line_time)
+logger.info("l1b_rad files %s", l1b_rad)
 try:
-    logger.info("Starting l1b_geo %s processing", pge_version["l1b_geo"])
-    os.makedirs(args.prod_dir, exist_ok=True)
-    igc = emit.emit_igc(args.l1a_raw_att, geocal.Time.parse_time(args.start_time))
-    g = emit.L1bGeoGenerate(igc, args.prod_dir)
-    loc_fname = g.emit_file_name("l1b_loc")
-    obs_fname = g.emit_file_name("l1b_obs")
-    glt_fname = g.emit_file_name("l1b_glt")
-    att_fname = g.emit_file_name("l1b_att", ext=".nc")
-    quicklook_fname = g.emit_file_name("l1b_rdn", ext=".png")
-    kmz_fname = g.emit_file_name("l1b_rdn", ext=".kmz")
-    qa_fname = g.emit_file_name("l1b_geoqa", ext=".nc")
-    g.generate_loc(loc_fname)
-    g.generate_obs(obs_fname, loc_fname)
-    g.generate_glt(glt_fname)
-    # TODO Need to add a geographic version of GLT also. Need to find the 
-    # file name and actually implement
-    g.generate_att(att_fname)
-    g.generate_quicklook(quicklook_fname)
-    g.generate_kmz(kmz_fname)
-    g.generate_qa(qa_fname)
+    logger.info("Starting %s version %s processing", l1b_geo_config.pge_name,
+                l1b_geo_config.pge_version)
+    curdir = os.getcwd()
+    try:
+        os.chdir(args.prod_dir)
+        t = emit.L1bGeoGenerate(l1b_geo_config, l1a_att, line_time,
+                                l1b_rad)
+        t.run()
+    finally:
+        os.chdir(curdir)
     logger.info("Done with l1b_geo processing")
 except Exception as e:
+    raise
     logger.exception(e, stack_info=True)
     logger.fatal("L1b_geo processing failed")
     sys.exit(1)

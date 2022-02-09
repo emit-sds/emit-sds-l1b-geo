@@ -1,15 +1,18 @@
 # This contains support routines for doing unit tests.
 import pytest
 import geocal
+import glob
 import os
+import sys
 try:
     from emit_swig import *
     have_swig = True
 except ImportError:
     have_swig = False
-from emit.emit_igc import emit_igc
 
 unit_test_data = os.path.abspath(os.path.dirname(__file__) + "/../../unit_test_data") + "/"
+aviris_test_data = unit_test_data + "AVIRIS_data/"
+aviris_ng_test_data = unit_test_data + "AVIRIS_NG_data/"
 
 @pytest.fixture(scope="function")
 def isolated_dir(tmpdir):
@@ -40,24 +43,92 @@ slow = pytest.mark.slow
 skip = pytest.mark.skip
 
 @pytest.fixture(scope="function")
-def orbit_fname():
+def test_data():
+    '''Determine the directory with the test data.'''
+    if("EMIT_TEST_DATA" in os.environ):
+        tdata = os.environ["EMIT_TEST_DATA"] + "/latest/"
+    else:
+        # Location on eco-scf
+        tdata = "/beegfs/store/emit-test-data/latest/"
+        if(not os.path.exists(tdata)):
+            # Location on rifle
+            tdata="/ldata/smyth/emit-test-data/latest/"
+        if(not os.path.exists(tdata)):
+            pytest.skip("Don't have emit-test-data, so skipping test")
+    if(os.path.exists(tdata)):
+        yield tdata
+    else:
+        pytest.skip("Don't have emit-test-data, so skipping test")
+
+@pytest.fixture(scope="function")
+def aviris_ng_full_test_data():
+    '''We have some AVIRIS NG test data in the source tree, but there is
+    a more full set in a directory Phil put together. This is too large
+    to include in our source tree, so look for this and if found run tests
+    that depend on this.'''
+    # Location on eco-scf
+    tdata = "/beegfs/store/brodrick/emit/pushbroom_demo/l1b/"
+    if(not os.path.exists(tdata)):
+        # Location on rifle
+        tdata="/bigdata/smyth/EmitTestData/aviris-ng/"
+    if(os.path.exists(tdata)):
+        yield tdata
+    else:
+        pytest.skip("Don't have aviris-ng test data, so skipping test")
+    
+@pytest.fixture(scope="function")
+def orbit_fname(test_data):
     '''Test orbit'''
-    return unit_test_data + "L1A_RAW_ATT_03663_20190227T094659_0100_01.h5"
+    return test_data + "emit20200610t014911_o80000_l1a_att_b001_v01.nc"
 
 @pytest.fixture(scope="function")
-def scene_start():
-    '''Start time for a test scene.'''
-    return geocal.Time.parse_time("2019-02-27T10:12:22.0000Z")
+def time_table_fname(test_data):
+    '''Test time table'''
+    return test_data + "emit20200610t015051_o80000_s001_l1a_line_time_b001_v01.nc"
 
 @pytest.fixture(scope="function")
-def igc(orbit_fname, scene_start):
+def l1b_rdn_fname(test_data):
+    '''L1B Radiance file to use'''
+    return test_data + "emit20200610t015051_o80000_s001_l1b_rdn_b001_v01.img"
+
+@pytest.fixture(scope="function")
+def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
     '''ImageGroundConnection that we can use for testing'''
-    return emit_igc(orbit_fname, scene_start)
+    from emit.emit_igc import EmitIgc
+    res = EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname)
+    res.title = "Scene 1"
+    return res
+
+@pytest.fixture(scope="function")
+def emit_loc(test_data):
+    '''EmitLoc that can be used with the igc for testing'''
+    from emit.emit_loc import EmitLoc
+    loc = EmitLoc(test_data + "sample_loc.img")
+    return loc
 
 @pytest.fixture(scope="function")
 def l1b_loc():
     '''L1B LOC file that can be used with the igc for testing'''
     return unit_test_data + "l1b_loc.img"
+
+@pytest.fixture(scope="function")
+def l1b_geo_config(test_data):
+    sys.path.append(test_data + "l1_osp_dir")
+    import l1b_geo_config as res
+    return res
+
+@pytest.fixture(scope="function")
+def emit_igccol(test_data):
+    import emit.emit_igc
+    l1a_att = glob.glob(f"{test_data}/*l1a_att_*.nc")[0]
+    line_time = glob.glob(f"{test_data}/*_l1a_line_time*.nc")
+    l1b_rad = glob.glob(f"{test_data}/*_l1b_rdn_*.img")
+    rad_band = 1
+    igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
+                                      rad_band)
+    return igccol
+
+    
 
 
 

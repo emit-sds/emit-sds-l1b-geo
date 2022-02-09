@@ -1,5 +1,6 @@
 import geocal
 import numpy as np
+from emit_swig import set_file_description, set_band_description
 
 class EnviFile:
     '''This is a little wrapper to make a ENVI file, and treat it like
@@ -8,9 +9,13 @@ class EnviFile:
     This is a little clumsy, we can move this down to the C++ level and clean
     things up if needed. But for now, this is a pretty simple interface and
     it may be sufficient.'''
-    def __init__(self, fname, shape = None, dtype=np.float64, mode='r+'):
+    def __init__(self, fname, shape = None, dtype=np.float64, mode='r+',
+                 map_info = None,
+                 description = "fake description", band_description = []):
         '''Create or read a EnviFile like a numpy array. The array shape
         should be nband x nline x nsamp.'''
+        self.file_name = fname
+        self.description = description
         if(mode not in ("w", "r", "r+")):
             raise ValueError("Unknown mode")
         if(mode == "w"):
@@ -30,12 +35,22 @@ class EnviFile:
                 gtype = geocal.GdalRasterImage.Byte
             else:
                 raise ValueError("Unsupported data type")
-            t = geocal.GdalRasterImage(fname, "ENVI", shape[1], shape[2], shape[0],
-                                gtype, "INTERLEAVE=BIL")
+            if(map_info is not None):
+                t = geocal.GdalRasterImage(fname, "ENVI", map_info, shape[0],
+                                           gtype, "INTERLEAVE=BIL")
+            else:
+                t = geocal.GdalRasterImage(fname, "ENVI", shape[1], shape[2],
+                                           shape[0],
+                                           gtype, "INTERLEAVE=BIL")
+            set_file_description(t, description)
             t.close()
+            for i, desc in enumerate(band_description):
+                t = geocal.GdalRasterImage(fname, i+1, 4, True)
+                set_band_description(t, desc)
+                t.close()
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
-            self.d_ = np.memmap(fname, shape=(shape[1],shape[0],shape[2]),
+            self._d = np.memmap(fname, shape=(shape[1],shape[0],shape[2]),
                                 dtype = dtype, mode="r+").transpose(1,0,2)
         else:
             t = geocal.GdalMultiBand(fname)
@@ -56,19 +71,25 @@ class EnviFile:
                 dtype = np.int8
             else:
                 raise ValueError("Unsupported data type")
+
+            # TODO Add a check here that we actually are BIL format.
+            # The data we generate will be, but if we are reading from a
+            # different file it might not be. Possibly just get the right
+            # transpose set up
+            
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
-            self.d_ = np.memmap(fname,
+            self._d = np.memmap(fname,
                                 shape=(t.raster_image(0).number_line,
                                        t.number_band,
                                        t.raster_image(0).number_sample),
-                                dtype = dtype, mode="r+").transpose(1,0,2)
+                                dtype = dtype, mode=mode).transpose(1,0,2)
 
     @property
     def data(self):
         '''Give access to the underlying data, as a memory mapped numpy
            array'''
-        return self.d_
+        return self._d
     
     def __getitem__(self, key):
         return self.data[key]

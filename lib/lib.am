@@ -25,20 +25,43 @@ EXTRA_DIST+= @srclib@/test_all.sh
 #=================================================================
 # List of source files
 emitinc_HEADERS+= @srclib@/emit_serialize_support.h
-emitinc_HEADERS+= @srclib@/ecostress_scan_mirror.h
-libemit_la_SOURCES+= @srclib@/ecostress_scan_mirror.cc
+emitinc_HEADERS+= @srclib@/gdal_support.h
+libemit_la_SOURCES+= @srclib@/gdal_support.cc
+emitinc_HEADERS+= @srclib@/resampler.h
+libemit_la_SOURCES+= @srclib@/resampler.cc
+emitinc_HEADERS+= @srclib@/emit_orbit.h
+libemit_la_SOURCES+= @srclib@/emit_orbit.cc
+emitinc_HEADERS+= @srclib@/emit_igc_collection.h
+libemit_la_SOURCES+= @srclib@/emit_igc_collection.cc
+emitinc_HEADERS+= @srclib@/camera_paraxial.h
+libemit_la_SOURCES+= @srclib@/camera_paraxial.cc
+emitinc_HEADERS+= @srclib@/polynomial_paraxial_transform.h
+libemit_la_SOURCES+= @srclib@/polynomial_paraxial_transform.cc
 
 # Files that contain SWIG wrapper information.
-SWIG_SRC += @swigsrc@/ecostress_scan_mirror_wrap.cc
-emitswiginc_HEADERS+= @srclib@/ecostress_scan_mirror.i
+SWIG_SRC += @swigsrc@/emit_swig_array_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_swig_array.i
 emitswiginc_HEADERS+= @srclib@/emit_common.i
+SWIG_SRC += @swigsrc@/gdal_support_wrap.cc
+emitswiginc_HEADERS+= @srclib@/gdal_support.i
+SWIG_SRC += @swigsrc@/resampler_wrap.cc
+emitswiginc_HEADERS+= @srclib@/resampler.i
+SWIG_SRC += @swigsrc@/emit_orbit_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_orbit.i
+SWIG_SRC += @swigsrc@/emit_igc_collection_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_igc_collection.i
+SWIG_SRC += @swigsrc@/camera_paraxial_wrap.cc
+emitswiginc_HEADERS+= @srclib@/camera_paraxial.i
+SWIG_SRC += @swigsrc@/polynomial_paraxial_transform_wrap.cc
+emitswiginc_HEADERS+= @srclib@/polynomial_paraxial_transform.i
 
 # Test files
 EXTRA_DIST+= @srclib@/unit_test_support.h
 EXTRA_DIST+= @srclib@/global_fixture.h
 emit_test_all_SOURCES+= @srclib@/global_fixture.cc
 emit_test_all_SOURCES+= @srclib@/global_fixture_default.cc
-emit_test_all_SOURCES+= @srclib@/ecostress_scan_mirror_test.cc
+emit_test_all_SOURCES+= @srclib@/resampler_test.cc
+emit_test_all_SOURCES+= @srclib@/emit_orbit_test.cc
 
 # Variables used in testing
 export abs_top_srcdir 

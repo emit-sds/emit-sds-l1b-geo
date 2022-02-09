@@ -9,7 +9,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# Copyright 2020, California Institute of Technology.
+# Copyright 2021, California Institute of Technology.
 # ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.
 ## -------------------- ##
 ## M4sh Initialization. ##
@@ -694,10 +694,13 @@ PYTHON_VERSION
 PYTHON
 PARALLEL
 H5DIFF
+testdatadir
 geocaldir
 GEOCAL_SWIG_CFLAGS
 GEOCAL_LIBS
 GEOCAL_CFLAGS
+afidsdatadir
+condaprefix
 pkgconfigdir
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
@@ -846,7 +849,9 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 enable_debug
+with_afids_data
 with_geocal
+with_test_data
 with_python
 with_doxygen
 with_swig
@@ -1523,8 +1528,13 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-afids-data=DIR   give directory where geocal can be found (optional,
+                          default is $afids_data_default)
   --with-geocal=DIR       give directory where geocal can be found (optional,
                           default is /pkg/afids/geocal_latest)
+  --with-test-data=DIR    give directory where end to end test data can be
+                          found (optional, default is
+                          /beegfs/store/shared/emit-test-data)
   --with-python[=DIR]     use Python (default is yes if found) - it is
                           possible to specify the root directory for Python
                           (optional).
@@ -1649,7 +1659,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-Copyright 2020, California Institute of Technology.
+Copyright 2021, California Institute of Technology.
 ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.
 _ACEOF
   exit
@@ -17774,7 +17784,27 @@ export PKG_CONFIG_PATH
 
 pkgconfigdir=${libdir}/pkgconfig
 
+condaprefix="$CONDA_PREFIX"
 
+
+if test "x$CONDA_PREFIX" != x; then
+   afids_data_default="$CONDA_PREFIX/data"
+else
+   afids_data_default="/opt/afids/data"
+fi
+
+# Check whether --with-afids-data was given.
+if test "${with_afids_data+set}" = set; then :
+  withval=$with_afids_data;  ac_afids_data_dir="$withval"
+else
+   ac_afids_data_dir="$afids_data_default"
+fi
+
+afidsdatadir="$ac_afids_data_dir"
+
+
+# We normally get this from anaconda, but leave a way in place to
+# select a different location
 
 # Check whether --with-geocal was given.
 if test "${with_geocal+set}" = set; then :
@@ -17921,6 +17951,17 @@ geocaldir=$pkg_cv_geocaldir
 if test "x$geocaldir" = x""; then :
 
 fi
+
+
+# Check whether --with-test-data was given.
+if test "${with_test_data+set}" = set; then :
+  withval=$with_test_data;  ac_test_data_dir="$withval"
+else
+   ac_test_data_dir="/beegfs/store/shared/emit-test-data"
+fi
+
+testdatadir="$ac_test_data_dir"
+
 
 
 
@@ -19837,7 +19878,7 @@ fi
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cannot find 'swig' program. You should look at http://www.swig.org" >&5
 $as_echo "$as_me: WARNING: cannot find 'swig' program. You should look at http://www.swig.org" >&2;}
                 SWIG='echo "Error: SWIG is not installed. You should look at http://www.swig.org" ; false'
-        elif test -n "4.0.2" ; then
+        elif test -n "3.0.7" ; then
                 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SWIG version" >&5
 $as_echo_n "checking for SWIG version... " >&6; }
                 swig_version=`$SWIG -version 2>&1 | grep 'SWIG Version' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`
@@ -19845,7 +19886,7 @@ $as_echo_n "checking for SWIG version... " >&6; }
 $as_echo "$swig_version" >&6; }
                 if test -n "$swig_version" ; then
                         # Calculate the required version number components
-                        required=4.0.2
+                        required=3.0.7
                         required_major=`echo $required | sed 's/[^0-9].*//'`
                         if test -z "$required_major" ; then
                                 required_major=0
@@ -19879,9 +19920,9 @@ $as_echo "$swig_version" >&6; }
                         if test $available_major -ne $required_major \
                                 -o $available_minor -ne $required_minor \
                                 -o $available_patch -lt $required_patch ; then
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: SWIG version >= 4.0.2 is required.  You have $swig_version.  You should look at http://www.swig.org" >&5
-$as_echo "$as_me: WARNING: SWIG version >= 4.0.2 is required.  You have $swig_version.  You should look at http://www.swig.org" >&2;}
-                                SWIG='echo "Error: SWIG version >= 4.0.2 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: SWIG version >= 3.0.7 is required.  You have $swig_version.  You should look at http://www.swig.org" >&5
+$as_echo "$as_me: WARNING: SWIG version >= 3.0.7 is required.  You have $swig_version.  You should look at http://www.swig.org" >&2;}
+                                SWIG='echo "Error: SWIG version >= 3.0.7 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
                         else
 			        have_swig=yes
                                 { $as_echo "$as_me:${as_lineno-$LINENO}: SWIG executable is '$SWIG'" >&5
@@ -19906,6 +19947,9 @@ else
 fi
 
 
+# Note we don't support SWIG 4 yet. Nothing super hard, just need to get
+# geocal and afids updated. But for now, just stick to the older swig version
+#AC_PROG_SWIG(4.0.2)
 
 
 
