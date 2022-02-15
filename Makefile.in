@@ -844,7 +844,7 @@ SWIG_SRC = @swigsrc@/emit_swig_array_wrap.cc \
 libemit_la_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 libemit_la_LDFLAGS = $(GEOCAL_LIBS)
 emit_test_all_LDADD = libemit.la 
-emit_test_all_LDFLAGS = -no-install 
+emit_test_all_LDFLAGS = -no-install $(GEOCAL_LIBS)
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/envi_file.py @srcpythonlib@/emit_igc.py \
