@@ -16,7 +16,8 @@ class AvirisNgLoc(EnviFile):
     But I think shortly after working through the SHIFT campaign we can
     join this together with the EmitLoc, either as just a set of options
     or perhaps a derived vlass.'''
-    def __init__(self, fname, igc = None, standard_metadata = None):
+    def __init__(self, fname, igc = None, standard_metadata = None,
+                 number_line_process = 1000):
         '''Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
 
@@ -26,6 +27,7 @@ class AvirisNgLoc(EnviFile):
         Note that the shape is (3, number_line, number_sample)
         '''
         self.igc = igc
+        self.number_line_process = number_line_process
         if(self.igc is None):
             mode = 'r'
             shape = None
@@ -59,8 +61,26 @@ class AvirisNgLoc(EnviFile):
         '''Returns true if we cross the dateline'''
         return self.longitude.min() < -170 and self.longitude.max() > 160
 
+    def run_scene(self, i):
+        nline = min(self.number_line_process, self.igc.number_line-i)
+        logger.info("Generating LOC data for %s (%d, %d)", self.igc.title,
+                    i, i+nline)
+        with self.multiprocess_data():
+            # We pick a large resolution here to force the subpixels to be 1.
+            rcast = geocal.IgcRayCaster(self.igc,i,nline,1,10000)
+            while(not rcast.last_position):
+                gpos = rcast.next_position()
+                for j in range(gpos.shape[1]):
+                    gp = geocal.Geodetic(geocal.Ecr(gpos[0,j,0,0,0,0],
+                                                    gpos[0,j,0,0,0,1],
+                                                    gpos[0,j,0,0,0,2]))
+                    self[0,rcast.current_position, j] = gp.longitude
+                    self[1,rcast.current_position, j] = gp.latitude
+                    self[2,rcast.current_position, j] = gp.height_reference_surface
+        return None
+
     # TODO Make this parallel
-    def run(self):
+    def run(self, pool=None):
         '''Actually generate the output data.'''
         logger.info("Generating LOC data for %s", self.igc.title)
         # We could run this in parallel if needed. However our
@@ -68,17 +88,11 @@ class AvirisNgLoc(EnviFile):
         # worth worry about this, at least initially. We can probably handle
         # the parallelization at the scene level if performance is an issue.
         #
-        # We pick a large resolution here to force the subpixels to be 1.
-        rcast = geocal.IgcRayCaster(self.igc,0,-1,1,10000)
-        while(not rcast.last_position):
-            gpos = rcast.next_position()
-            for i in range(gpos.shape[1]):
-                gp = geocal.Geodetic(geocal.Ecr(gpos[0,i,0,0,0,0],
-                                                gpos[0,i,0,0,0,1],
-                                                gpos[0,i,0,0,0,2]))
-                self[0,rcast.current_position, i] = gp.longitude
-                self[1,rcast.current_position, i] = gp.latitude
-                self[2,rcast.current_position, i] = gp.height_reference_surface
+        ilist = list(range(0, self.igc.number_line, self.number_line_process))
+        if(pool is None):
+            res = list(map(self.run_scene, ilist))
+        else:
+            res = pool.map(self.run_scene, ilist)
         self.standard_metadata.write_metadata(self)
         
 __all__ = ["AvirisNgLoc", ]

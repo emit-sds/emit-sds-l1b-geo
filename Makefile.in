@@ -766,6 +766,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/aviris_ng_orbit_test.py \
 	@srcpythonlib@/aviris_ng_obs_test.py \
 	@srcpythonlib@/aviris_ng_igm_test.py \
+	@srcpythonlib@/aviris_ng_log_test.py \
 	@srcpythonlib@/gaussian_stretch_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
 	@testsupportsrc@/__init__.py @pythonswigsrc@/swig_wrap.tmpl \
@@ -863,6 +864,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/aviris_ng_orbit.py \
 	@srcpythonlib@/aviris_ng_obs.py \
 	@srcpythonlib@/aviris_ng_igm.py \
+	@srcpythonlib@/aviris_ng_loc.py \
 	@srcpythonlib@/gaussian_stretch.py
 
 # Number of jobs to run at once. Default is to automatically determine this,

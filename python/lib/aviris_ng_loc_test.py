@@ -1,6 +1,7 @@
 from .aviris_ng_loc import *
 import geocal
 from test_support import *
+from multiprocessing import Pool
 
 # Only need to run if we have to regenerate the test data
 @skip
@@ -18,9 +19,13 @@ def test_create_loc(igc, test_data):
 # can turn this back on to debug some kind of problem
 @slow
 def test_generate_avris_loc(aviris_igc_full, isolated_dir):
-    print(aviris_igc_full)
-    #g = AvirisLoc("test_loc.img", igc=aviris_igc_full)
-    #pg.run()
+    print(aviris_igc_full.ipi.time_table)
+    print(aviris_igc_full.image)
+    geocal.write_shelve("igc.xml", aviris_igc_full)
+    g = AvirisNgLoc("test_loc.img", igc=aviris_igc_full)
+    pool = Pool(20)
+    #pool = None
+    g.run(pool=pool)
     
     
     

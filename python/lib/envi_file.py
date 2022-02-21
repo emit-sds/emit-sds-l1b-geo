@@ -1,6 +1,7 @@
 import geocal
 import numpy as np
 from emit_swig import set_file_description, set_band_description
+from contextlib import contextmanager
 
 class EnviFile:
     '''This is a little wrapper to make a ENVI file, and treat it like
@@ -84,6 +85,23 @@ class EnviFile:
                                        t.number_band,
                                        t.raster_image(0).number_sample),
                                 dtype = dtype, mode=mode).transpose(1,0,2)
+
+    @contextmanager
+    def multiprocess_data(self):
+        '''When we are using multiprocessing, we need to reopen the
+        memmap. This just has to do with how the memmap is shared with
+        other processes. We handle this as a context block, shuffling
+        stuff around so you can just use the data as normal.'''
+        doriginal = self._d
+        self._d = np.memmap(self.file_name, shape=(self.shape[1], self.shape[0],
+                                                   self.shape[2]),
+                            dtype=self.data.dtype,
+                            mode="r+").transpose(1,0,2)
+        try:
+            yield self._d
+        finally:
+            self._d.flush()
+            self._d = doriginal
 
     @property
     def data(self):

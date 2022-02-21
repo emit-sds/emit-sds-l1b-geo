@@ -21,6 +21,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/aviris_igm.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_obs.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_igm.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_loc.py
 emitpkgpython_PYTHON+= @srcpythonlib@/gaussian_stretch.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
@@ -43,6 +44,7 @@ EXTRA_DIST+=@srcpythonlib@/aviris_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_orbit_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_obs_test.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_igm_test.py
+EXTRA_DIST+=@srcpythonlib@/aviris_ng_log_test.py
 EXTRA_DIST+=@srcpythonlib@/gaussian_stretch_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 

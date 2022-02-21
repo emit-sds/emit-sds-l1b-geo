@@ -92,12 +92,12 @@ def l1b_rdn_fname(test_data):
     return test_data + "emit20200610t015051_o80000_s001_l1b_rdn_b001_v01.img"
 
 @pytest.fixture(scope="function")
-def aviris_orbit_fname(orbit_fname):
+def aviris_orbit_fname(test_data):
     '''AVIRIS NG Orbit name'''
     # We currently just use the EMIT one. This is in a netCDF file format,
     # but we use this as a place holder. Can replace with a more direct
     # aviris GPS file when ready.
-    return orbit_fname
+    return test_data + "emit20170328t202050_o90000_l1a_att_b001_v01.nc"
 
 @pytest.fixture(scope="function")
 def aviris_time_table_fname(test_data):
@@ -129,12 +129,18 @@ def aviris_igc_full(aviris_camera, aviris_orbit_fname, aviris_time_table_fname,
     camera_band = 0
     # Band to use for image matching
     l1b_band = 39               # This is red band of the simulated data.
-    tt = EmitTimeTable(aviris_time_table_fname)
+    # We have some values outside the orbit range at the start and end.
+    # We just trim this off, since this is test data. "Real" data will
+    # need to figure out how to handle this.
+    trim_pad = 5
+    tt = EmitTimeTable(aviris_time_table_fname, trim_pad = trim_pad)
     orb = EmitOrbit(aviris_orbit_fname)
     ipi = geocal.Ipi(orb, aviris_camera, camera_band, tt.min_time,
                      tt.max_time, tt)
     dem = geocal.SrtmDem()
     img = geocal.GdalRasterImage(aviris_l1b_rdn_fname, l1b_band)
+    img = geocal.SubRasterImage(img, trim_pad, 0, tt.max_line,
+                                img.number_sample)
     igc = geocal.IpiImageGroundConnection(ipi, dem, img)
     return igc
 
