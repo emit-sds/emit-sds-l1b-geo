@@ -92,6 +92,54 @@ def l1b_rdn_fname(test_data):
     return test_data + "emit20200610t015051_o80000_s001_l1b_rdn_b001_v01.img"
 
 @pytest.fixture(scope="function")
+def aviris_orbit_fname(orbit_fname):
+    '''AVIRIS NG Orbit name'''
+    # We currently just use the EMIT one. This is in a netCDF file format,
+    # but we use this as a place holder. Can replace with a more direct
+    # aviris GPS file when ready.
+    return orbit_fname
+
+@pytest.fixture(scope="function")
+def aviris_time_table_fname(test_data):
+    '''AVIRIS NG Test time table. This is in netCDF file format. Can
+    replace with real AVIRIS NG time table when ready.'''
+    return test_data + "emit20170328t202050_o90000_l1a_line_time_full_b001_v01.nc"
+
+@pytest.fixture(scope="function")
+def aviris_l1b_rdn_fname(test_data):
+    '''AVIRIS NG L1B Radiance file to use. This is actually resampled to
+    EMIT wavelengths, we might want to replace this data set'''
+    return test_data + "input_afids_ng/ang20170328t202059_rdn_emit_syn"
+
+@pytest.fixture(scope="function")
+def aviris_camera(test_data):
+    '''This was a camera model fitted in a quick and dirty way in
+    our end_to_end_testing. We'll want to replace this is a more careful
+    camera model.'''
+    return geocal.read_shelve(test_data + "l1_osp_aviris_ng_dir/camera.xml")
+
+@pytest.fixture(scope="function")
+def aviris_igc_full(aviris_camera, aviris_orbit_fname, aviris_time_table_fname,
+                    aviris_l1b_rdn_fname):
+    '''ImageGroundConnection that we can use for testing'''
+    from emit.emit_time_table import EmitTimeTable
+    from emit.emit_orbit_extension import EmitOrbit
+    # Band here is the band in the camera model. Our camera only has 1 band,
+    # so this is 0 even if we are using a difference radiance band
+    camera_band = 0
+    # Band to use for image matching
+    l1b_band = 39               # This is red band of the simulated data.
+    tt = EmitTimeTable(aviris_time_table_fname)
+    orb = EmitOrbit(aviris_orbit_fname)
+    ipi = geocal.Ipi(orb, aviris_camera, camera_band, tt.min_time,
+                     tt.max_time, tt)
+    dem = geocal.SrtmDem()
+    img = geocal.GdalRasterImage(aviris_l1b_rdn_fname, l1b_band)
+    igc = geocal.IpiImageGroundConnection(ipi, dem, img)
+    return igc
+
+
+@pytest.fixture(scope="function")
 def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
     '''ImageGroundConnection that we can use for testing'''
     from emit.emit_igc import EmitIgc
