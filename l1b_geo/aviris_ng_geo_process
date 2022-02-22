@@ -1,0 +1,112 @@
+#! /usr/bin/env python
+#
+# This runs the L1B Geo process.
+import geocal
+import emit
+import logging
+import os
+import sys
+import json
+
+version = "1.0.0"
+usage='''Usage:
+  aviris_ng_geo_process [options] <prod_dir> <l1_osp_dir> <igc_file>
+  aviris_ng_geo_process -h | --help
+  aviris_ng_process -v | --version
+
+This runs the aviris_ng_geo process. 
+
+This takes the production directory, which we also use as a scratch area.
+For performance, this should be a local directory - we do memory mapping of
+files and this tends to work much faster with local drives.
+
+This takes the L1 operational support directory (e.g. 
+/beegfs/store/shared/emit-test-data/latest/l1_osp_dir), and the IGC
+as a XML shelve file.
+
+A log file will be written to the output directory - aviris_ng_geo.log. By
+default this is also written to the screen, but you can turn this off
+using the --log-file-only option.
+
+Options:
+  -h --help         
+       Print this message
+
+  --debug
+       Turn debugging information on
+       
+  --log-file-only=f
+       Write logs only to the log file, not also to the screen.
+
+  --no-color
+       Don't colorize output. Only applies to the screen, we never put
+       color into log files.
+
+  --number-cpu=d
+       Number of CPUs to use when processing. 
+       [default: 10]
+
+  --quiet
+       Don't print any messages, just return an overall status code.
+
+  --verbose
+       Give more verbose messages. Synonym for debug.
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+
+# Read in additional configuration parameters
+l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
+
+# Set up logging. 
+os.makedirs(args.prod_dir, exist_ok=True)
+log_fname = args.prod_dir + "/aviris_ng_geo.log"
+logger = logging.getLogger('l1b_geo_process')
+fh = None
+fh = logging.FileHandler(log_fname)
+fh.setFormatter(emit.L1bGeoLogFormatter(add_color = False))
+fh.setLevel(logging.INFO)
+logger.addHandler(fh)
+lformat = emit.L1bGeoLogFormatter(add_color = not args.no_color)
+if(not args.log_file_only):    
+    h = logging.StreamHandler()
+    h.setFormatter(lformat)
+    logger.addHandler(h)
+if(args.debug):
+    if(h):
+        h.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
+elif(args.verbose):
+    if(h):
+        h.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
+elif(args.quiet):
+    if(h):
+        h.setLevel(1000)
+    logger.setLevel(1000)
+else:    
+    if(h):
+        h.setLevel(logging.INFO)
+    logger.setLevel(logging.INFO)
+
+try:
+    logger.info("Starting %s version %s processing", l1_osp_dir.l1b_geo_config.pge_name,
+                l1_osp_dir.l1b_geo_config.pge_version)
+    igc = geocal.read_shelve(args.igc_file)
+    curdir = os.getcwd()
+    try:
+        os.chdir(args.prod_dir)
+        t = emit.AvirisNgGeoGenerate(igc, l1_osp_dir)
+        t.run()
+    finally:
+        os.chdir(curdir)
+    logger.info("Done with aviris_ng_geo processing")
+except Exception as e:
+    raise
+    logger.exception(e, stack_info=True)
+    logger.fatal("aviris_ng_geo processing failed")
+    sys.exit(1)
+

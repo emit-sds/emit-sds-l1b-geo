@@ -1,6 +1,7 @@
 import geocal
 import numpy as np
 from emit_swig import set_file_description, set_band_description
+from contextlib import contextmanager
 
 class EnviFile:
     '''This is a little wrapper to make a ENVI file, and treat it like
@@ -52,8 +53,10 @@ class EnviFile:
             # assumes C order
             self._d = np.memmap(fname, shape=(shape[1],shape[0],shape[2]),
                                 dtype = dtype, mode="r+").transpose(1,0,2)
+            interleave = "bil"
         else:
             t = geocal.GdalMultiBand(fname)
+            interleave = t.raster_image(0)["ENVI", "interleave"]
             gtype = t.raster_image(0).raster_data_type
             if(gtype == geocal.GdalRasterImage.Float64):
                 dtype = np.float64
@@ -79,11 +82,38 @@ class EnviFile:
             
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
-            self._d = np.memmap(fname,
-                                shape=(t.raster_image(0).number_line,
-                                       t.number_band,
-                                       t.raster_image(0).number_sample),
-                                dtype = dtype, mode=mode).transpose(1,0,2)
+            if(interleave == "bil"):
+                self._d = np.memmap(fname,
+                                    shape=(t.raster_image(0).number_line,
+                                           t.number_band,
+                                           t.raster_image(0).number_sample),
+                                    dtype = dtype, mode=mode).transpose(1,0,2)
+            elif(interleave == "bip"):
+                self._d = np.memmap(fname,
+                                    shape=(t.raster_image(0).number_line,
+                                           t.raster_image(0).number_sample,
+                                           t.number_band),
+                                    dtype = dtype, mode=mode).transpose(2,0,1)
+            else:
+                raise RuntimeError(f"Don't recognize interleave type '#{interleave}'")
+                
+
+    @contextmanager
+    def multiprocess_data(self):
+        '''When we are using multiprocessing, we need to reopen the
+        memmap. This just has to do with how the memmap is shared with
+        other processes. We handle this as a context block, shuffling
+        stuff around so you can just use the data as normal.'''
+        doriginal = self._d
+        self._d = np.memmap(self.file_name, shape=(self.shape[1], self.shape[0],
+                                                   self.shape[2]),
+                            dtype=self.data.dtype,
+                            mode="r+").transpose(1,0,2)
+        try:
+            yield self._d
+        finally:
+            self._d.flush()
+            self._d = doriginal
 
     @property
     def data(self):
