@@ -27,7 +27,7 @@ class AvirisNgStandardMetadata:
         # time GDAL writes it out. So reset the description, even though
         # this was already set.
         set_file_description(fh, envi_file.description)
-        fh["ENVI", "line avaeraging"] = self.line_averaging
+        fh["ENVI", "line averaging"] = str(self.line_averaging)
         fh.close()
         # Remove the auxilary file GDAL creates, we don't want this around
         # after we have created the file

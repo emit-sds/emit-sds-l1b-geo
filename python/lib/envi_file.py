@@ -53,8 +53,10 @@ class EnviFile:
             # assumes C order
             self._d = np.memmap(fname, shape=(shape[1],shape[0],shape[2]),
                                 dtype = dtype, mode="r+").transpose(1,0,2)
+            interleave = "bil"
         else:
             t = geocal.GdalMultiBand(fname)
+            interleave = t.raster_image(0)["ENVI", "interleave"]
             gtype = t.raster_image(0).raster_data_type
             if(gtype == geocal.GdalRasterImage.Float64):
                 dtype = np.float64
@@ -80,11 +82,21 @@ class EnviFile:
             
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
-            self._d = np.memmap(fname,
-                                shape=(t.raster_image(0).number_line,
-                                       t.number_band,
-                                       t.raster_image(0).number_sample),
-                                dtype = dtype, mode=mode).transpose(1,0,2)
+            if(interleave == "bil"):
+                self._d = np.memmap(fname,
+                                    shape=(t.raster_image(0).number_line,
+                                           t.number_band,
+                                           t.raster_image(0).number_sample),
+                                    dtype = dtype, mode=mode).transpose(1,0,2)
+            elif(interleave == "bip"):
+                self._d = np.memmap(fname,
+                                    shape=(t.raster_image(0).number_line,
+                                           t.raster_image(0).number_sample,
+                                           t.number_band),
+                                    dtype = dtype, mode=mode).transpose(2,0,1)
+            else:
+                raise RuntimeError(f"Don't recognize interleave type '#{interleave}'")
+                
 
     @contextmanager
     def multiprocess_data(self):

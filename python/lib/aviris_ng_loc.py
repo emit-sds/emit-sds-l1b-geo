@@ -15,7 +15,7 @@ class AvirisNgLoc(EnviFile):
 
     But I think shortly after working through the SHIFT campaign we can
     join this together with the EmitLoc, either as just a set of options
-    or perhaps a derived vlass.'''
+    or perhaps a derived class.'''
     def __init__(self, fname, igc = None, standard_metadata = None,
                  number_line_process = 1000):
         '''Open a file. As a convention if the IGC is supplied we just
