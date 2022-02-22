@@ -53,6 +53,8 @@ class AvirisNgGlt(EnviFile):
     def map_info_rotated(self):
         cconv = geocal.OgrCoordinateConverter(self.igm.ogrw)
         mi = geocal.MapInfo(cconv, 0,0,self.resolution,self.resolution,1,1)
+        mi = geocal.cib01_mapinfo(self.resolution)
+        
         # We only need the edges pixels, this defines the full
         # range of data here
         f = mi.coordinate_converter.convert_to_coordinate
@@ -73,7 +75,7 @@ class AvirisNgGlt(EnviFile):
         pt = np.ascontiguousarray(np.array(pt)[:,0:2], dtype=np.float32)
         rect = cv2.minAreaRect(pt)
         t = cv2.boxPoints(rect)
-        a = math.atan2(t[0,0] - t[-1,0], t[0,1] - t[-1,1])
+        a = -math.atan2(t[0,0] - t[-1,0], t[0,1] - t[-1,1])
         logger.info("Rotated minimum area rectangle is angle %f",
                     a * geocal.rad_to_deg)
         rot = np.array([[math.cos(a), -math.sin(a)],[math.sin(a),math.cos(a)]])
@@ -109,7 +111,7 @@ class AvirisNgGlt(EnviFile):
         lon = scipy.ndimage.interpolation.zoom(self.loc.longitude,
                                                self.number_subpixel, order=2)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
-        super().__init__(self.fname, map_info = mi,
+        super().__init__(self.fname, map_info = res.map_info,
                          shape=(2,res.map_info.number_y_pixel,
                                 res.map_info.number_x_pixel),
                          dtype=np.int32, mode="w",
