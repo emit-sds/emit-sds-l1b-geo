@@ -3,15 +3,18 @@ from .standard_metadata import *
 import logging
 import numpy as np
 import re
+import math
 import geocal
 
 logger = logging.getLogger('l1b_geo_process.avirs_ng_igm')
 
 class AvirisNgIgm(EnviFile):
     '''Generate or read the IGM file for AVIRIS-NG.'''
-    def __init__(self, fname, igc = None, loc = None, standard_metadata = None):
+    def __init__(self, fname, igc = None, loc = None, standard_metadata = None,
+                 number_line_process=1000):
         self.igc = igc
         self.loc = loc
+        self.number_line_process = number_line_process
         if(self.igc is None):
             mode = 'r'
             shape = None
@@ -29,7 +32,7 @@ class AvirisNgIgm(EnviFile):
             shape = (3, self.igc.number_line, self.igc.number_sample)
             gp = igc.ground_coordinate(geocal.ImageCoordinate(igc.number_line / 2.0,
                                           igc.number_sample / 2.0))
-            self.utm_zone = int(floor(((gp.longitude + 180.0) / 6.0) + 1.0))
+            self.utm_zone = int(math.floor(((gp.longitude + 180.0) / 6.0) + 1.0))
             if(gp.latitude < 0):
                 self.utm_zone *= -1
         super().__init__(fname, shape=shape, dtype=np.float64, mode=mode,
@@ -60,5 +63,28 @@ class AvirisNgIgm(EnviFile):
         '''Return the UTM point for the given line/sample'''                 
         east, north, elv = self.data[:,ln, smp]
         return geocal.OgrCoordinate(self.ogrw, east, north, elv)
+
+    def run_scene(self, i):
+        nline = min(self.number_line_process, self.igc.number_line-i)
+        logger.info("Generating IGM data for %s (%d, %d)", self.igc.title,
+                    i, i+nline)
+        with self.multiprocess_data():
+            for ln in range(i, i+nline):
+                for smp in range(self.shape[2]):
+                    g = geocal.OgrCoordinate(self.ogrw, self.loc.ground_coordinate(ln,smp))
+                    self[0,ln,smp] = g.x
+                    self[1,ln,smp] = g.y
+                    self[2,ln,smp] = g.z
+
+    def run(self, pool=None):
+        '''Actually generate the output data.'''
+        logger.info("Generating IGM data for %s", self.igc.title)
+        ilist = list(range(0, self.igc.number_line, self.number_line_process))
+        if(pool is None):
+            res = list(map(self.run_scene, ilist))
+        else:
+            res = pool.map(self.run_scene, ilist)
+        self.standard_metadata.write_metadata(self)
+                    
         
 __all__ = ["AvirisNgIgm"]

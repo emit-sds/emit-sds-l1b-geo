@@ -61,6 +61,12 @@ class AvirisNgLoc(EnviFile):
         '''Returns true if we cross the dateline'''
         return self.longitude.min() < -170 and self.longitude.max() > 160
 
+    def ground_coordinate(self, ln, smp):
+        '''Return the Geodetic point for the given line/sample''' 
+        lon, lat, elv = self.data[:,ln, smp]
+        return geocal.Geodetic(lat, lon, elv)
+    
+
     def run_scene(self, i):
         nline = min(self.number_line_process, self.igc.number_line-i)
         logger.info("Generating LOC data for %s (%d, %d)", self.igc.title,
@@ -79,15 +85,9 @@ class AvirisNgLoc(EnviFile):
                     self[2,rcast.current_position, j] = gp.height_reference_surface
         return None
 
-    # TODO Make this parallel
     def run(self, pool=None):
         '''Actually generate the output data.'''
         logger.info("Generating LOC data for %s", self.igc.title)
-        # We could run this in parallel if needed. However our
-        # scene size is fairly small (1280 lines) so that it probably isn't
-        # worth worry about this, at least initially. We can probably handle
-        # the parallelization at the scene level if performance is an issue.
-        #
         ilist = list(range(0, self.igc.number_line, self.number_line_process))
         if(pool is None):
             res = list(map(self.run_scene, ilist))

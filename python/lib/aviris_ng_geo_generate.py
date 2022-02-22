@@ -1,4 +1,5 @@
 from .aviris_ng_loc import AvirisNgLoc
+from .aviris_ng_igm import AvirisNgIgm
 from .aviris_ng_standard_metadata import AvirisNgStandardMetadata
 import logging
 import re
@@ -31,11 +32,14 @@ class AvirisNgGeoGenerate:
         # TODO: Tiepoint/correction goes here. We'll need to add this
         # TODO: Write corrected orbit
         loc_fname = self.basename + "loc"
+        igm_fname = self.basename + "igm"
         loc = AvirisNgLoc(loc_fname, igc=self.igc,
                           standard_metadata=standard_metadata)
-        # IGM
+        igm = AvirisNgIgm(igm_fname, igc=self.igc, loc=loc,
+                          standard_metadata=standard_metadata)
         # OBS
         # GLT
         loc.run(pool=pool)
+        igm.run(pool=pool)
         
 __all__ = ["AvirisNgGeoGenerate", ]
