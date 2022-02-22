@@ -1,5 +1,6 @@
 from .aviris_ng_loc import AvirisNgLoc
 from .aviris_ng_igm import AvirisNgIgm
+from .aviris_ng_obs import AvirisNgObs
 from .aviris_ng_standard_metadata import AvirisNgStandardMetadata
 import logging
 import re
@@ -33,13 +34,17 @@ class AvirisNgGeoGenerate:
         # TODO: Write corrected orbit
         loc_fname = self.basename + "loc"
         igm_fname = self.basename + "igm"
+        obs_fname = self.basename + "obs"
         loc = AvirisNgLoc(loc_fname, igc=self.igc,
                           standard_metadata=standard_metadata)
         igm = AvirisNgIgm(igm_fname, igc=self.igc, loc=loc,
                           standard_metadata=standard_metadata)
-        # OBS
+        obs = AvirisNgObs(obs_fname, igc=self.igc, loc=loc,
+                          standard_metadata=standard_metadata)
         # GLT
         loc.run(pool=pool)
         igm.run(pool=pool)
+        obs.run(pool=pool)
+        logger.info("Skipping GLT, we don't yet work with UTM")
         
 __all__ = ["AvirisNgGeoGenerate", ]
