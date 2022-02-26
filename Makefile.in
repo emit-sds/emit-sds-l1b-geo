@@ -769,6 +769,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/aviris_ng_igm_test.py \
 	@srcpythonlib@/aviris_ng_glt_test.py \
 	@srcpythonlib@/aviris_ng_loc_test.py \
+	@srcpythonlib@/aviris_ng_raw.py \
 	@srcpythonlib@/aviris_ng_raw_orbit_test.py \
 	@srcpythonlib@/aviris_ng_raw_time_table_test.py \
 	@srcpythonlib@/l1_osp_dir_test.py \
@@ -873,6 +874,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/aviris_ng_igm.py \
 	@srcpythonlib@/aviris_ng_glt.py \
 	@srcpythonlib@/aviris_ng_loc.py \
+	@srcpythonlib@/aviris_ng_raw.py \
 	@srcpythonlib@/aviris_ng_raw_orbit.py \
 	@srcpythonlib@/aviris_ng_raw_time_table.py \
 	@srcpythonlib@/aviris_ng_geo_generate.py \

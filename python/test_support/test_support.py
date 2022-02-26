@@ -118,9 +118,22 @@ def aviris_gps_fname(test_data):
     return test_data + "input_afids_ng/ang20170328t202059_gps"
 
 @pytest.fixture(scope="function")
+def aviris_raw_fname(test_data):
+    '''AVIRIS NG raw data.''' 
+    return test_data + "input_afids_ng/ang20170328t202059_raw"
+
+@pytest.fixture(scope="function")
 def aviris_pps_fname(test_data):
     '''AVIRIS NG PPS data.''' 
     return test_data + "input_afids_ng/ang20170328t202059_pps"
+
+@pytest.fixture(scope="function")
+def aviris_frame_meta(test_data):
+    '''This returns pickled data we saved from the original pyortho
+    program, which we can compare against to make sure we get the same
+    results.'''
+    frame_meta, gpstime, filedate, zone_alpha = pickle.load(open(test_data + "input_afids_ng/pyortho_20170328t202059.pkl", "rb"), encoding="bytes")
+    return frame_meta
 
 @pytest.fixture(scope="function")
 def aviris_gps_table(test_data):
