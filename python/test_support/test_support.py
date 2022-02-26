@@ -4,6 +4,7 @@ import geocal
 import glob
 import os
 import sys
+import pickle
 try:
     from emit_swig import *
     have_swig = True
@@ -110,6 +111,18 @@ def aviris_l1b_rdn_fname(test_data):
     '''AVIRIS NG L1B Radiance file to use. This is actually resampled to
     EMIT wavelengths, we might want to replace this data set'''
     return test_data + "input_afids_ng/ang20170328t202059_rdn_emit_syn"
+
+@pytest.fixture(scope="function")
+def aviris_gps_fname(test_data):
+    '''AVIRIS NG GPS data.''' 
+    return test_data + "input_afids_ng/ang20170328t202059_gps"
+
+@pytest.fixture(scope="function")
+def aviris_gps_table(test_data):
+    '''AVIRIS NG GPS data.'''
+    # The "bytes" here is needed because we pickled using python 2.7. See
+    # https://groups.google.com/g/sage-devel/c/nLG8zMSKSD0
+    return pickle.load(open(test_data + "input_afids_ng/gps_table_raw.pkl", "rb"),encoding="bytes")
 
 @pytest.fixture(scope="function")
 def aviris_camera(test_data):
