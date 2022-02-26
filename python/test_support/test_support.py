@@ -118,11 +118,23 @@ def aviris_gps_fname(test_data):
     return test_data + "input_afids_ng/ang20170328t202059_gps"
 
 @pytest.fixture(scope="function")
+def aviris_pps_fname(test_data):
+    '''AVIRIS NG PPS data.''' 
+    return test_data + "input_afids_ng/ang20170328t202059_pps"
+
+@pytest.fixture(scope="function")
 def aviris_gps_table(test_data):
     '''AVIRIS NG GPS data.'''
     # The "bytes" here is needed because we pickled using python 2.7. See
     # https://groups.google.com/g/sage-devel/c/nLG8zMSKSD0
     return pickle.load(open(test_data + "input_afids_ng/gps_table_raw.pkl", "rb"),encoding="bytes")
+
+@pytest.fixture(scope="function")
+def aviris_pps_table(test_data):
+    '''AVIRIS NG PPS data.'''
+    # The "bytes" here is needed because we pickled using python 2.7. See
+    # https://groups.google.com/g/sage-devel/c/nLG8zMSKSD0
+    return pickle.load(open(test_data + "input_afids_ng/pps_table_raw.pkl", "rb"),encoding="bytes")
 
 @pytest.fixture(scope="function")
 def aviris_camera(test_data):

@@ -3,6 +3,7 @@ import numpy as np
 import os
 import re
 import math
+import struct
 
 class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
     '''This reads the raw gps data. This should perhaps get moved to
@@ -60,6 +61,7 @@ class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
                       
 
     def _format_cmigits_words(self, words,scale):
+        # Note, this seems to be the C-MIGITS INS/GPS System
         # map words into an nbits-sized bitmask in reverse bsig order
         nw    = len(words)
         nbits = nw*16
@@ -122,7 +124,7 @@ class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
                     if msg_skipped < start_line:
                         f.seek(msg_bytes,os.SEEK_CUR)
                         msg_skipped+=1
-                    else:                    
+                    else:
                         gpsdata = np.fromfile(f,count=4,dtype='<u2')
                         gpstime = self._format_cmigits_words(gpsdata,20)
 
