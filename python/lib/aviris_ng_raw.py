@@ -3,6 +3,7 @@ import numpy as np
 import geocal
 import os
 import struct
+import scipy.interpolate
 
 logger = logging.getLogger('l1b_geo_process.avirs_ng_raw')
 
@@ -107,6 +108,13 @@ class AvirisCMigitsFile:
     def read_uint16(self, count=1):
         return struct.unpack(f'<{count}H', self.fh.read(2*count))
 
+    def read_clock(self, count=1):
+        res = np.zeros((count,), dtype=np.int64)
+        for i in range(count):
+            msw, lsw = struct.unpack('<2H', self.fh.read(2*2))
+            res[i] = np.int64(msw)<<16 | lsw
+        return res
+
     def skip(self, nbytes):
         self.fh.seek(nbytes, os.SEEK_CUR)
 
@@ -165,5 +173,49 @@ class AvirisNgGpsTable:
             # pyortho
             self.gps_table = smoothaxis(self.gps_table,axis=0)
               
+class AvirisNgPpsTable:
+    '''Class for reading the raw _pps file. This contains a number
+    of time points, giving the time in gpstime and clock ticks, which
+    we can use to relate the AVIRIS lines (with time measured in clock ticks)
+    to gpstime (used by things like AvirisNgGpsTable).
+
+    In addition to pps_table, this has clock_to_gpstime which can be
+    use to interpolate a clock value to the corresponding gpstime value
+    (note that the gpstime is the gps offset for the gps week, you need to
+    also have the gps week to convert to a GeoCal time (see AvirisNgTimeTable
+    for an example of this).'''
+    def __init__(self, fname, msg_words=13, smooth=False):
+        '''Read the given file.'''
+        self.file_name = fname
+        f = AvirisCMigitsFile(fname)
+        gpstime = []
+        cnt = []
+        clock = []
+        while f.can_read(msg_words * 2 - 1):
+            header=f.read_uint16(count=5)
+            if header[0] != f.SYNC_MSG:
+                # Skip to next message
+                f.skip((msg_words-5)*2)
+                print("hi there")
+                continue
+            gpstime.append(f.read_int64(count=1)[0])
+            cnt.append(f.read_uint16(count=1)[0])
+            clock.append(f.read_clock(count=1)[0])
+            f.skip(msg_words*2-(5*2+1*8+1*2+1*4))
+        gpstime = np.array(gpstime, dtype=np.float64) * f.scale_factor(20,64)
+        mask_14bit = np.uint32(0x3fff)
+        cnt = (np.array(cnt, dtype=np.int32) & mask_14bit).astype(np.float64)
+        clock = np.array(clock, dtype=np.float64)
+        self.pps_table = np.stack([gpstime,clock,cnt],axis=-1)
+        if smooth:
+            raise NotImplementedError("We don't support smooth")
+            # We don't actually have this in place. Not sure that
+            # we need this, but if we do we should get this from
+            # pyortho
+            self.pps_table = smoothaxis(self.pps_table,axis=0)
+        self.clock_to_gpstime = scipy.interpolate.interp1d(self.pps_table[:,1],
+                                                           self.pps_table[:,0])
+        
     
-__all__ = ["AvirisNgRaw", "AvirisCMigitsFile", "AvirisNgGpsTable"]    
+__all__ = ["AvirisNgRaw", "AvirisCMigitsFile", "AvirisNgGpsTable",
+           "AvirisNgPpsTable"]

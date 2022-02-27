@@ -22,6 +22,12 @@ def test_aviris_ng_gps_table(aviris_gps_fname, aviris_gps_table):
     # Check that we read the same data as we read using pyortho, and
     # then saved as a pickle file
     npt.assert_allclose(f.gps_table, aviris_gps_table)
+
+def test_aviris_ng_pps_table(aviris_pps_fname, aviris_pps_table):
+    f = AvirisNgPpsTable(aviris_pps_fname)
+    # Check that we read the same data as we read using pyortho, and
+    # then saved as a pickle file
+    npt.assert_allclose(f.pps_table, aviris_pps_table)
     
     
     
