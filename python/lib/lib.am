@@ -28,6 +28,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_raw.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_raw_orbit.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_raw_time_table.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_geo_generate.py
+emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_l1a_orbit_generate.py
 emitpkgpython_PYTHON+= @srcpythonlib@/l1_osp_dir.py
 emitpkgpython_PYTHON+= @srcpythonlib@/gaussian_stretch.py
 

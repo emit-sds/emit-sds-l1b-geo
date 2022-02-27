@@ -23,4 +23,4 @@ end-to-end-aviris-check:
 	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_aviris_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir $(EMIT_TEST_DATA)/*o90000_l1a_att*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1b_rdn*.img
 
 end-to-end-aviris-ng-check:
-	source $(prefix)/setup_emit.sh && aviris_ng_geo_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir $(EMIT_TEST_DATA)/aviris_ng_igc_full_sample.xml
+	source $(prefix)/setup_emit.sh && aviris_ng_l1a_orbit_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_raw

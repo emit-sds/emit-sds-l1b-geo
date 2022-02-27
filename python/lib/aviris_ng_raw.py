@@ -38,9 +38,9 @@ class AvirisNgRaw:
         '''This reads the given fname to get the clock and obc values. 
         The data files tend to be big, we read it with the given chunking
         size.'''
-        self.fname = fname
-        f = geocal.GdalRasterImage(self.fname)
-        logger.info("Reading the raw file %s", self.fname)
+        self.file_name = fname
+        f = geocal.GdalRasterImage(self.file_name)
+        logger.info("Reading the raw file %s", self.file_name)
         self.clock = np.zeros((f.number_line,), dtype=np.int64)
         self.obc = np.zeros_like(self.clock, dtype=np.uint16)
         for i in range(0,self.clock.shape[0],chunk_size):
