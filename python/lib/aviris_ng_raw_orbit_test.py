@@ -5,14 +5,11 @@ from test_support import *
 import numpy.testing as npt
 import numpy as np
 
-def test_aviris_ng_raw_orbit(aviris_gps_fname, aviris_gps_table):
+def test_aviris_ng_raw_orbit(aviris_gps_fname):
     orb = AvirisNgRawOrbit(aviris_gps_fname)
     print(orb)
     if False:
         geocal.write_shelve("temp_orb.xml", orb)
-    # Check that we read the same data as we read using pyortho, and
-    # then saved as a pickle file
-    npt.assert_allclose(orb.gps_table, aviris_gps_table)
     # A few values we captured from clock2location in the original
     # pyortho.
     # Results of clock2location(1777609046, pps_table, gps_table)

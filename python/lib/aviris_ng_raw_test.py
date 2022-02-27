@@ -16,6 +16,13 @@ def test_aviris_ng_raw(aviris_raw_fname, aviris_frame_meta):
     frame_meta_clock = np.array([f[0] for f in aviris_frame_meta])
     clock_avg = r.clock_average(line_average=9)
     npt.assert_allclose(clock_avg, frame_meta_clock)
+
+def test_aviris_ng_gps_table(aviris_gps_fname, aviris_gps_table):
+    f = AvirisNgGpsTable(aviris_gps_fname)
+    # Check that we read the same data as we read using pyortho, and
+    # then saved as a pickle file
+    npt.assert_allclose(f.gps_table, aviris_gps_table)
+    
     
     
     
