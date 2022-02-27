@@ -1,3 +1,4 @@
+from .misc import file_name_to_gps_week
 import logging
 import numpy as np
 import geocal
@@ -57,15 +58,17 @@ class AvirisNgRaw:
         return self.clock[img_sl:][self.obc[img_sl:] == self.OBC_SCIENCE]
 
     def clock_average(self, img_sl = 800, line_average = 9):
-        '''The processing averages a given number of lines (given
-        by the binfac file). I'm not actually sure how this number
-        gets calculated, we'll assume here it is just "known". We
-        also trim off the start of raw data, I'm guessing there is just
-        some garbage here. This value came from the config file in
-        the pyortho code.
+        '''The processing averages a given number of lines. 
 
-        Once we have this, the science data is averaged. The time
-        for the averaged data is just the average of the times.'''
+        We also trim off the start of raw data, I'm guessing there is
+        just some garbage here. This value came from the config file
+        in the pyortho code.
+
+        The science data is averaged when the radiance data is
+        generated (which we don't do here). The time for the averaged
+        data is just the average of the times that make up the lines
+        that were averaged.
+        '''
         self.img_sl = img_sl
         self.line_average = line_average
         clock_sci = self.clock_science(img_sl=img_sl)
@@ -90,7 +93,7 @@ class AvirisCMigitsFile:
     def can_read(self, nbytes):
         '''Return True if we have enough data left in the file to read
         fh bytes.'''
-        return self.fh.tell() + nbytes < self.file_size
+        return self.fh.tell() + nbytes <= self.file_size
 
     def read_int64(self, count=1):
         '''Read a int64 value.'''
@@ -184,14 +187,18 @@ class AvirisNgPpsTable:
     (note that the gpstime is the gps offset for the gps week, you need to
     also have the gps week to convert to a GeoCal time (see AvirisNgTimeTable
     for an example of this).'''
-    def __init__(self, fname, msg_words=13, smooth=False):
+    def __init__(self, fname, msg_words=13, gps_week=None,
+                 smooth=False):
         '''Read the given file.'''
         self.file_name = fname
+        self.gps_week = gps_week
+        if(not self.gps_week):
+            self.gps_week = file_name_to_gps_week(fname)
         f = AvirisCMigitsFile(fname)
         gpstime = []
         cnt = []
         clock = []
-        while f.can_read(msg_words * 2 - 1):
+        while f.can_read(msg_words * 2):
             header=f.read_uint16(count=5)
             if header[0] != f.SYNC_MSG:
                 # Skip to next message
@@ -215,6 +222,15 @@ class AvirisNgPpsTable:
             self.pps_table = smoothaxis(self.pps_table,axis=0)
         self.clock_to_gpstime = scipy.interpolate.interp1d(self.pps_table[:,1],
                                                            self.pps_table[:,0])
+
+    def clock_to_time(self, clock):
+        '''Convert from the 'clock' value to a geocal time. Clock can either
+        be a array/list like object, or a single value.'''
+        gtime = self.clock_to_gpstime(clock)
+        if(len(gtime.shape) == 0):
+            return geocal.Time.time_gps(self.gps_week, gtime[()])
+        return [geocal.Time.time_gps(self.gps_week, g) for g in gtime]
+    
         
     
 __all__ = ["AvirisNgRaw", "AvirisCMigitsFile", "AvirisNgGpsTable",

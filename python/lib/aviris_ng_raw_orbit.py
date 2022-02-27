@@ -8,24 +8,8 @@ import math
 import struct
 
 class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
-    '''This reads the raw gps data. This should perhaps get moved to
-    a C++ class at some point, but for right now we just handle the
-    reading of the data here.
-
-    This was extracted from the old pyortho code. We may well want to
-    clean this up/modify this in the future. But for now we just have
-    this quick and dirty code here.
-
-    Note that this code is kind of slow, we are doing low level bit 
-    manipulation in python. We can probably speed this up considerable 
-    by moving _format_cmigits_words to C++. But for now, this is 
-    fast enough, we just process the data once and then save this out in
-    some simpler format (e.g., a netcdf or CSV file).
+    '''This reads the raw gps data
     '''
-    # Various constants used by raw GPS file
-    SYNC_MSG    = 33279
-    NAV_MSG     = 3501
-    
     def __init__(self, fname, gps_week=None):
         '''Read the given raw gps file for AVIRIS-NG.
 

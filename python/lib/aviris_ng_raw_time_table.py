@@ -17,16 +17,4 @@ class AvirisNgRawTimeTable:
         # but if we get weird results perhaps this should be 14. Perhaps
         # we should move this into the l1_osp_dir files.
         msg_words = 13
-        self.gps_week = gps_week
-        if(not self.gps_week):
-            self.gps_week = file_name_to_gps_week(fname)
         self.pps_table = AvirisNgPpsTable(fname, msg_words=msg_words)
-
-    def clock_to_time(self, clock):
-        '''Convert from the 'clock' value to a geocal time. Clock can either
-        be a array/list like object, or a single value.'''
-        gtime = self.pps_table.clock_to_gpstime(clock)
-        if(len(gtime.shape) == 0):
-            return geocal.Time.time_gps(self.gps_week, gtime[()])
-        return [geocal.Time.time_gps(self.gps_week, g) for g in gtime]
-    
