@@ -47,6 +47,12 @@ class AvirisNgRaw:
             d = f.read(r.start,321,len(r),1)
             self.obc[r] = d[:,0] >> 8
 
+    def clock_science(self, img_sl = 800):
+        '''Return all the clock values when we are in science mode. Note
+        that is isn't line averaged yet, so normally you would only use these
+        values for figuring out the line_average'''
+        return self.clock[img_sl:][self.obc[img_sl:] == self.OBC_SCIENCE]
+
     def clock_average(self, img_sl = 800, line_average = 9):
         '''The processing averages a given number of lines (given
         by the binfac file). I'm not actually sure how this number
@@ -59,11 +65,11 @@ class AvirisNgRaw:
         for the averaged data is just the average of the times.'''
         self.img_sl = img_sl
         self.line_average = line_average
-        clock_science = self.clock[self.img_sl:][self.obc[img_sl:] == self.OBC_SCIENCE]
+        clock_sci = self.clock_science(img_sl=img_sl)
         clock_avg = []
-        for i in range(0,len(clock_science),self.line_average):
-            if(i+self.line_average <= len(clock_science)):
-                clock_avg.append(clock_science[i:i+self.line_average].mean())
+        for i in range(0,len(clock_sci),self.line_average):
+            if(i+self.line_average <= len(clock_sci)):
+                clock_avg.append(clock_sci[i:i+self.line_average].mean())
         return np.array(clock_avg)
         
             

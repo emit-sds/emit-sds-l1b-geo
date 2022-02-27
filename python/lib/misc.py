@@ -2,6 +2,7 @@
 import geocal
 import os
 import re
+import math
 import logging
 
 logger = logging.getLogger('l1b_geo_process.emit_dem')
@@ -99,10 +100,20 @@ def orb_and_scene_from_file_name(fname):
     if(not m):
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
     return (m.group(1), m.group(2))
-    
-    
 
-__all__ = ["create_dem", "band_to_landsat_band",
+def file_name_to_gps_week(fname, filebase="ang"):
+    '''Extract the start time from the file name, using the standard
+    AVIRIS-NG file format (e.g, ang20170328t202059_gps), and use that 
+    time to determine the gps week we are in.'''
+    m = re.search(filebase + r'(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})_',
+                  os.path.basename(fname))
+    if not m:
+        raise RuntimeError(f"Don't recognize the file naming convention for {fname}")
+    tm = geocal.Time.parse_time(f"{m[1]}-{m[2]}-{m[3]}T{m[4]}:{m[5]}:{m[6]}Z")
+    gps_week = math.floor(tm.gps / (7 * 24 * 60 * 60))
+    return int(gps_week)
+
+__all__ = ["create_dem", "band_to_landsat_band", "file_name_to_gps_week",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
            "emit_file_name", "orb_and_scene_from_file_name"]
            

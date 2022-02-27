@@ -1,3 +1,4 @@
+from .misc import file_name_to_gps_week
 import os
 import numpy as np
 import math
@@ -21,27 +22,20 @@ class AvirisNgRawTimeTable:
         msg_words = 13
         self.gps_week = gps_week
         if(not self.gps_week):
-            t = self._fname_to_time(fname)
-            self.gps_week = math.floor(t.gps / (7 * 24 * 60 * 60))
+            self.gps_week = file_name_to_gps_week(fname)
         self.pps_table = self.read_pps(fname, msg_words)
         self.clock_to_gpstime = scipy.interpolate.interp1d(self.pps_table[:,1],
                                                            self.pps_table[:,0])
         
 
     def clock_to_time(self, clock):
-        '''Convert from the 'clock' value to a geocal time.'''
-        return geocal.Time.time_gps(self.gps_week,
-                                    self.clock_to_gpstime(clock)[()])
+        '''Convert from the 'clock' value to a geocal time. Clock can either
+        be a array/list like object, or a single value.'''
+        gtime = self.clock_to_gpstime(clock)
+        if(len(gtime.shape) == 0):
+            return geocal.Time.time_gps(self.gps_week, gtime[()])
+        return [geocal.Time.time_gps(self.gps_week, g) for g in gtime]
     
-    def _fname_to_time(self, fname):
-        '''Extracts out the start time for the file from the filename,
-        using the standard AVIRIS-NG file format (e.g., ang20170328t202059_gps).'''
-        m = re.search(r'ang(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})_',
-                      os.path.basename(fname))
-        if not m:
-            raise RuntimeError(f"Don't recognize the file naming convention for {fname}")
-        return geocal.Time.parse_time(f"{m[1]}-{m[2]}-{m[3]}T{m[4]}:{m[5]}:{m[6]}Z")
-
     def _format_clock_words(self,msw,lsw):
         return (np.int64(msw)<<16)+lsw
 

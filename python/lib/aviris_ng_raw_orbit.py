@@ -1,3 +1,4 @@
+from .misc import file_name_to_gps_week
 import geocal
 import numpy as np
 import os
@@ -30,10 +31,10 @@ class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
         The GPS week can be passed in explicitly, or we extract this
         from the file name.'''
         self.gps_table, _ = self.read_gps(fname)
-        if(not gps_week):
-            t = self._fname_to_time(fname)
-            gps_week = math.floor(t.gps / (7 * 24 * 60 * 60))
-        tm = [geocal.Time.time_gps(gps_week, self.gps_table[i, 0])
+        self.gps_week = gps_week
+        if(not self.gps_week):
+            self.gps_week = file_name_to_gps_week(fname)
+        tm = [geocal.Time.time_gps(self.gps_week, self.gps_table[i, 0])
               for i in range(self.gps_table.shape[0])]
         pos = [geocal.Geodetic(self.gps_table[i,1],self.gps_table[i,2],
                                self.gps_table[i,3])
@@ -49,16 +50,6 @@ class AvirisNgRawOrbit(geocal.OrbitQuaternionList):
                                                tm[isecond],pos[isecond],
                                                prh[i,1],prh[i,0],prh[i,2]))
         super().__init__(od)
-
-    def _fname_to_time(self, fname):
-        '''Extracts out the start time for the file from the filename,
-        using the standard AVIRIS-NG file format (e.g., ang20170328t202059_gps).'''
-        m = re.search(r'ang(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})_',
-                      os.path.basename(fname))
-        if not m:
-            raise RuntimeError(f"Don't recognize the file naming convention for {fname}")
-        return geocal.Time.parse_time(f"{m[1]}-{m[2]}-{m[3]}T{m[4]}:{m[5]}:{m[6]}Z")
-                      
 
     def _format_cmigits_words(self, words,scale):
         # Note, this seems to be the C-MIGITS INS/GPS System
