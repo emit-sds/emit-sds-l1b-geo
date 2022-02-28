@@ -1,4 +1,5 @@
 import importlib.util
+import geocal
 
 class L1OspDir:
     '''This class handles the L1OspDir, such as reading the l1b_geo_config
@@ -6,6 +7,9 @@ class L1OspDir:
     def __init__(self, l1_osp_dir):
         self.l1_osp_dir = l1_osp_dir
         self.load_config()
+
+    def camera(self):
+        return geocal.read_shelve(self.l1_osp_dir + "/camera.xml")
 
     def load_config(self):
         spec = importlib.util.spec_from_file_location("l1b_geo_config",

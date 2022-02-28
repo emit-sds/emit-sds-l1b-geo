@@ -5,7 +5,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py
 PYTEST_NJOB=10
 
 PYTEST_EXTRAFLAGS=
-PYTEST_FLAGS= -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp
+PYTEST_FLAGS= -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp -rxXs
 #if CODE_COVERAGE_ENABLED
 #PYTEST_FLAGS+= --cov-report term
 #PYTEST_FLAGS+= --cov-report html:$(PACKAGE)-coverage-python

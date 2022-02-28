@@ -771,8 +771,7 @@ EXTRA_DIST = @srclib@/test_all.sh @srclib@/unit_test_support.h \
 	@srcpythonlib@/aviris_ng_glt_test.py \
 	@srcpythonlib@/aviris_ng_loc_test.py \
 	@srcpythonlib@/aviris_ng_raw.py \
-	@srcpythonlib@/aviris_ng_raw_orbit_test.py \
-	@srcpythonlib@/aviris_ng_raw_time_table_test.py \
+	@srcpythonlib@/aviris_ng_time_table_test.py \
 	@srcpythonlib@/l1_osp_dir_test.py \
 	@srcpythonlib@/gaussian_stretch_test.py \
 	@srcpythonlib@/__init__.py @testsupportsrc@/test_support.py \
@@ -877,8 +876,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 	@srcpythonlib@/aviris_ng_glt.py \
 	@srcpythonlib@/aviris_ng_loc.py \
 	@srcpythonlib@/aviris_ng_raw.py \
-	@srcpythonlib@/aviris_ng_raw_orbit.py \
-	@srcpythonlib@/aviris_ng_raw_time_table.py \
+	@srcpythonlib@/aviris_ng_time_table.py \
 	@srcpythonlib@/aviris_ng_geo_generate.py \
 	@srcpythonlib@/aviris_ng_l1a_orbit_generate.py \
 	@srcpythonlib@/l1_osp_dir.py \
@@ -888,7 +886,7 @@ emitpkgpython_PYTHON = @srcpython@/init/__init__.py \
 # but you can specify a different number.
 PYTEST_NJOB = 10
 PYTEST_EXTRAFLAGS = 
-PYTEST_FLAGS = -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp
+PYTEST_FLAGS = -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp -rxXs
 pkgpythonswigdir = $(prefix)/@pythondir@/emit_swig
 pkgpythonswig_PYTHON = @pythonswigsrc@/__init__.py $(patsubst \
 	%_wrap.cc, %.py, $(INCLUDE_SWIG_SRC))
@@ -2339,7 +2337,11 @@ end-to-end-aviris-check:
 	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_aviris_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir $(EMIT_TEST_DATA)/*o90000_l1a_att*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o90000_s001_l1b_rdn*.img
 
 end-to-end-aviris-ng-check:
-	source $(prefix)/setup_emit.sh && aviris_ng_l1a_orbit_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_raw
+	source $(prefix)/setup_emit.sh && aviris_ng_l1a_orbit_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_raw && aviris_ng_geo_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir aviris_ng_geo_run/ang20170328t202059_att.nc aviris_ng_geo_run/ang20170328t202059_line_time.nc $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_rdn_v2p5_clip
+
+# Short cut for debugging, assume we have already run end-to-end-aviris-ng-check for the L1A stuff, and just need to rerun geo
+end-to-end-aviris-geo-only-ng-check:
+	source $(prefix)/setup_emit.sh && aviris_ng_geo_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir aviris_ng_geo_run/ang20170328t202059_att.nc aviris_ng_geo_run/ang20170328t202059_line_time.nc $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_rdn_v2p5_clip
 
 # Variables used in testing
 export abs_top_srcdir 

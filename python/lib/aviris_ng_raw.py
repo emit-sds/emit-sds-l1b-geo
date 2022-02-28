@@ -45,7 +45,7 @@ class AvirisNgRaw:
         self.obc = np.zeros_like(self.clock, dtype=np.uint16)
         for i in range(0,self.clock.shape[0],chunk_size):
             r = range(i,min(i+chunk_size, self.clock.shape[0]))
-            logger.info(f"Reading line %d of %d", i, self.clock.shape[0])
+            logger.debug(f"Reading line %d of %d", i, self.clock.shape[0])
             d = f.read(r.start,0,len(r),2)
             self.clock[r] = d[:,0].astype(np.int64) << 16 | d[:,1]
             d = f.read(r.start,321,len(r),1)
@@ -203,7 +203,6 @@ class AvirisNgPpsTable:
             if header[0] != f.SYNC_MSG:
                 # Skip to next message
                 f.skip((msg_words-5)*2)
-                print("hi there")
                 continue
             gpstime.append(f.read_int64(count=1)[0])
             cnt.append(f.read_uint16(count=1)[0])

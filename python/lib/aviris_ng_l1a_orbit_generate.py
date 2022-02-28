@@ -1,3 +1,6 @@
+from .aviris_ng_orbit import AvirisNgOrbit
+from .aviris_ng_raw import AvirisNgRaw
+from .aviris_ng_time_table import AvirisNgTimeTable
 import logging
 import re
 import os
@@ -19,5 +22,16 @@ class AvirisNgL1aOrbitGenerate:
         logger.info("L1 OSP dir: %s", self.l1_osp_dir.l1_osp_dir)
     def run(self):
         logger.info("Starting AvirisNgL1aOrbitGenerate")
+        orb = AvirisNgOrbit(self.gps_fname)
+        orb.write_orbit(self.basename + "_att.nc")
+        r = AvirisNgRaw(self.raw_fname)
+        # TODO calculate this
+        line_average = 9
+        tt = AvirisNgTimeTable(self.pps_fname, raw=r,
+                               line_average=line_average)
+        tt.write(self.basename + "_line_time.nc")
+        with open(self.basename + "_raw.binfac", "w") as fh:
+            print(line_average, file=fh)
+            
         
 __all__ = ["AvirisNgL1aOrbitGenerate", ]
