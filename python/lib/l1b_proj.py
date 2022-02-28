@@ -36,7 +36,7 @@ class L1bProj(object):
         mi_fname = "map_info_%03d.xml" % (i+1)
         igc_fname = "igc_initial_%03d.xml" % (i+1)
         proj_fname = "proj_initial_%03d.img" % (i+1)
-        ref_fname = "ref_%03d.img" % (i+i)
+        ref_fname = "ref_%03d.img" % (i+1)
         logger.info("Creating %s", proj_fname)
         geocal.write_shelve(mi_fname, mi)
         geocal.write_shelve(igc_fname, igc)
