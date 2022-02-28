@@ -1,45 +1,116 @@
-import struct
+from .misc import file_name_to_gps_week
+from .aviris_ng_raw import AvirisNgGpsTable
 import geocal
-from .misc import create_dem
+import numpy as np
+import os
+import re
+import math
+import struct
+import h5py
+from packaging import version
+import h5netcdf
 
 class AvirisNgOrbit(geocal.OrbitQuaternionList):
-    '''This reads the AVIRIS NG orbit data. Note that the time is given
-    as GPS time for a the GPS week, but we don't independently have the
-    week number.
-
-    We could probably write something that keys off the file name, but we
-    don't actually have all that much data so it doesn't seem worth it. 
-    A quick way to calculate this is something like:
-
-    math.floor(Time.parse_time("2017-03-23T00:00:00Z").gps / (7 * 24 * 60 * 60))
-
-    I'm *pretty* sure the height is relative to WGS-84 rather than the
-    datum. Error is small, and since this is pretend test data perhaps
-    it doesn't matter so much
+    '''This reads the raw gps data
     '''
-    def __init__(self, fname, gps_week):
-        # We use a GdalMultiBand here just for convenience. It just
-        # figures out the shape etc. for us from the hdr file
-        d = geocal.GdalMultiBand(fname).read_all_double()
-        # GPS time
-        tm_arr = [geocal.Time.time_gps(gps_week, gps_offset) for
-                  gps_offset in d[0,:,0]]
-        # Lat, lon, height
-        pos_arr = d[1:4,:,0].transpose()
-        # Pitch, roll, heading
-        prh_arr = d[4:7,:,0].transpose()
-        od = []
-        for i in range(pos_arr.shape[0]):
-            i2 = i + 1
-            # Special handling for the last point, we get the
-            # velocity by looking at the previous point
-            if(i2 >= pos_arr.shape[0]):
-                i2 = i - 1
-            # Temp, this might actually be switched
-            od.append(geocal.AircraftOrbitData(tm_arr[i],
-                geocal.Geodetic(*pos_arr[i]),
-                tm_arr[i2], geocal.Geodetic(*pos_arr[i2]),
-                prh_arr[i][1], prh_arr[i][0], prh_arr[i][2]))
+    def __init__(self, fname, gps_week=None):
+        '''Read the given raw gps file for AVIRIS-NG, or the given netCDF 
+        file.
+
+        The GPS week can be passed in explicitly, or we extract this
+        from the file name.'''
+        if(h5py.is_hdf5(fname)):
+            f = h5py.File(fname, "r")
+            self.gps_table = None
+            self.gps_week = f["Orbit"].attrs['gps_week']
+            tm = f["Orbit/time_gps"][:]
+            tm = [geocal.Time.time_gps(t) for t in tm]
+            lat = f["Orbit/latitude"][:]
+            lon = f["Orbit/longitude"][:]
+            altitude = f["Orbit/altitude"][:]
+            pos = [geocal.Geodetic(lat[i],lon[i],altitude[i])
+                   for i in range(len(lat))]
+            roll = f["Orbit/roll"][:]
+            pitch = f["Orbit/pitch"][:]
+            heading = f["Orbit/heading"][:]
+            od = []
+            for i in range(len(pos)):
+                isecond = i+1
+                if(isecond >= len(pos)):
+                    isecond = i-1
+                od.append(geocal.AircraftOrbitData(tm[i],pos[i],
+                                                   tm[isecond],pos[isecond],
+                                                   roll[i],pitch[i],
+                                                   heading[i]))
+        else:
+            self.gps_table = AvirisNgGpsTable(fname)
+            self.gps_week = gps_week
+            if(not self.gps_week):
+                self.gps_week = file_name_to_gps_week(fname)
+            gtable = self.gps_table.gps_table
+            tm = [geocal.Time.time_gps(self.gps_week, gtable[i, 0])
+                  for i in range(gtable.shape[0])]
+            pos = [geocal.Geodetic(gtable[i,1],gtable[i,2],
+                                   gtable[i,3])
+                   for i in range(gtable.shape[0])]
+            # This is pitch, roll, and heading in degrees
+            prh = gtable[:,-3:] 
+            od = []
+            for i in range(len(pos)):
+                isecond = i+1
+                if(isecond >= len(pos)):
+                    isecond = i-1
+                od.append(geocal.AircraftOrbitData(tm[i],pos[i],
+                                                   tm[isecond],pos[isecond],
+                                                   prh[i,1],prh[i,0],prh[i,2]))
         super().__init__(od)
+
+    def write_orbit(self, orbit_fname):
+        '''This write the data to a netCDF file.'''
+        if version.parse(h5netcdf.__version__) >= version.parse("0.13.0"):
+            fout = h5netcdf.File(orbit_fname, "w", decode_vlen_strings=False)
+        else:
+            fout = h5netcdf.File(orbit_fname, "w")
+        tm = []
+        lat = []
+        lon = []
+        alt = []
+        roll = []
+        pitch = []
+        heading = []
+        for od in self.quaternion_orbit_data:
+            aod = geocal.AircraftOrbitData(od)
+            tm.append(aod.time.gps)
+            lat.append(aod.position_geodetic.latitude)
+            lon.append(aod.position_geodetic.longitude)
+            alt.append(aod.position_geodetic.height_reference_surface)
+            roll.append(aod.roll)
+            pitch.append(aod.pitch)
+            heading.append(aod.heading)
+        g = fout.create_group("Orbit")
+        g.attrs["gps_week"] = self.gps_week
+        t = g.create_variable("time_gps", ('t',),
+                              data = np.array(tm, dtype=np.float64))
+        t.attrs["units"] = "s"
+        t.attrs["description"] = "Time in seconds from GPS epoch"
+        t = g.create_variable("latitude", ('t',),
+                              data = np.array(lat, dtype=np.float64))
+        t.attrs["units"] = "degrees"
+        t = g.create_variable("longitude", ('t',),
+                              data = np.array(lon, dtype=np.float64))
+        t.attrs["units"] = "degrees"
+        t = g.create_variable("altitude", ('t',),
+                              data = np.array(alt, dtype=np.float64))
+        t.attrs["units"] = "m"
+        t.attrs["description"] = "Altitude in meters above WGS-84 ellipsoid"
+        t = g.create_variable("roll", ('t',),
+                              data = np.array(roll, dtype=np.float64))
+        t.attrs["units"] = "degrees"
+        t = g.create_variable("pitch", ('t',),
+                              data = np.array(pitch, dtype=np.float64))
+        t.attrs["units"] = "degrees"
+        t = g.create_variable("heading", ('t',),
+                              data = np.array(heading, dtype=np.float64))
+        t.attrs["units"] = "degrees"
         
 __all__ = ["AvirisNgOrbit",]    

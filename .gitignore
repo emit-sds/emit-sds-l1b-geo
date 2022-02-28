@@ -10,3 +10,5 @@ create_delta.bundle
 igc_sim*
 .cache
 .tramp_history
+end_to_end_testing/*.xml
+end_to_end_testing/*.pkl
