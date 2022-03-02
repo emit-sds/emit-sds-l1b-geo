@@ -44,9 +44,13 @@ public:
 
 %emit_shared_ptr(Emit::PolynomialParaxialTransform<3, 3>);
 %template(PolynomialParaxialTransform_3d_3d) Emit::PolynomialParaxialTransform<3, 3>;
+%emit_shared_ptr(Emit::PolynomialParaxialTransform<3, 5>);
+%template(PolynomialParaxialTransform_3d_5d) Emit::PolynomialParaxialTransform<3, 5>;
+%emit_shared_ptr(Emit::PolynomialParaxialTransform<5, 3>);
+%template(PolynomialParaxialTransform_5d_3d) Emit::PolynomialParaxialTransform<5, 3>;
 %emit_shared_ptr(Emit::PolynomialParaxialTransform<5, 5>);
 %template(PolynomialParaxialTransform_5d_5d) Emit::PolynomialParaxialTransform<5, 5>;
 
 // List of things "import *" will include
-%python_export("PolynomialParaxialTransform_3d_3d", "PolynomialParaxialTransform_5d_5d")
+%python_export("PolynomialParaxialTransform_3d_3d", "PolynomialParaxialTransform_3d_5d", "PolynomialParaxialTransform_5d_3d", "PolynomialParaxialTransform_5d_5d")
 
