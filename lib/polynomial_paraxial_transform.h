@@ -196,10 +196,14 @@ private:
 };
 
 typedef PolynomialParaxialTransform<3, 3> PolynomialParaxialTransform_3d_3d;  
+typedef PolynomialParaxialTransform<5, 3> PolynomialParaxialTransform_5d_3d;  
+typedef PolynomialParaxialTransform<3, 5> PolynomialParaxialTransform_3d_5d;  
 typedef PolynomialParaxialTransform<5, 5> PolynomialParaxialTransform_5d_5d;  
 }
 
 BOOST_CLASS_EXPORT_KEY(Emit::PolynomialParaxialTransform_3d_3d);
+BOOST_CLASS_EXPORT_KEY(Emit::PolynomialParaxialTransform_5d_3d);
+BOOST_CLASS_EXPORT_KEY(Emit::PolynomialParaxialTransform_3d_5d);
 BOOST_CLASS_EXPORT_KEY(Emit::PolynomialParaxialTransform_5d_5d);
 #endif
 
