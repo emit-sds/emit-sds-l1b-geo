@@ -1,0 +1,12 @@
+===========================================================
+Can specify run_test=<exp> on command line to run subset of
+unit tests. See boost unit test documentation for details
+
+If log_test is defined, add verbose information as each
+test is run.
+
+If valgrind is defined, then we run the test with valgrind.
+
+===========================================================
+./emit_test_all: error while loading shared libraries: libgeocal.so.0: cannot open shared object file: No such file or directory
+FAIL lib/test_all.sh (exit status: 127)
