@@ -14,14 +14,14 @@ class EmitIgc(geocal.IpiImageGroundConnection):
     a generic GeoCal IpiImageGroundConnection. We can extend
     this to a full C++ class if there is any need.'''
     def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
-                 l1b_band = 1, l1b_geo_config = None):
+                 l1b_band = 1, l1_osp_dir = None):
         '''Create a EmitIgc. We can either include the raster image data
         or not. If desired, supplied l1b_rdn_fname and the band of the
         L1B radiance file to use.'''
 
         orb = EmitOrbit(orbit_fname)
         cam = EmitCamera()
-        dem = create_dem(None)
+        dem = create_dem(l1_osp_dir)
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
@@ -32,7 +32,7 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         super().__init__(ipi, dem, img)
 
 def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
-            l1b_geo_config = None):
+            l1_osp_dir):
     '''Create a EmitIgcCollection. This takes an orbit file name,
     a list of time table and radiance file name pairs, and the band to
     set. We get the scene number from the radiance file name, and set EmitIgc
@@ -40,12 +40,12 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     the data. We also attach the list of scenes as "scene_list", the orbit
     number as "orbit_number" and the uncorrected orbit 
     as "uncorrected_orbit".'''
-    if(l1b_geo_config):
-        os.environ["SPICEDATA"] = l1b_geo_config.spice_data_dir
+    if(l1_osp_dir):
+        os.environ["SPICEDATA"] = l1_osp_dir.l1b_geo_config.spice_data_dir
     logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
-    cam = geocal.read_shelve(os.path.dirname(l1b_geo_config.__file__) + "/camera.xml")
-    dem = create_dem(l1b_geo_config)
+    cam = l1_osp_dir.camera()
+    dem = create_dem(l1_osp_dir)
     scene_to_igc = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene = orb_and_scene_from_file_name(rdn_fname)

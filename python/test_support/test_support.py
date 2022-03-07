@@ -204,20 +204,23 @@ def l1b_loc():
     return unit_test_data + "l1b_loc.img"
 
 @pytest.fixture(scope="function")
-def l1b_geo_config(test_data):
-    sys.path.append(test_data + "l1_osp_dir")
-    import l1b_geo_config as res
-    return res
+def l1_osp_dir(test_data):
+    from emit.l1_osp_dir import L1OspDir
+    return L1OspDir(test_data + "l1_osp_dir")
 
 @pytest.fixture(scope="function")
-def emit_igccol(test_data):
+def l1b_geo_config(l1_osp_dir):
+    return l1_osp_dir.l1b_geo_config
+
+@pytest.fixture(scope="function")
+def emit_igccol(test_data, l1_osp_dir):
     import emit.emit_igc
-    l1a_att = glob.glob(f"{test_data}/*l1a_att_*.nc")[0]
-    line_time = glob.glob(f"{test_data}/*_l1a_line_time*.nc")
-    l1b_rad = glob.glob(f"{test_data}/*_l1b_rdn_*.img")
+    l1a_att = glob.glob(f"{test_data}/*_o80000_l1a_att_*.nc")[0]
+    line_time = glob.glob(f"{test_data}/*_o80000_*_l1a_line_time*.nc")
+    l1b_rad = glob.glob(f"{test_data}/*_o80000_*_l1b_rdn_*.img")
     rad_band = 1
     igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
-                                      rad_band)
+                                      rad_band, l1_osp_dir)
     return igccol
 
     
