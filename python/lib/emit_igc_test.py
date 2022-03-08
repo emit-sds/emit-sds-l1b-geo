@@ -21,7 +21,7 @@ def test_emit_igc(isolated_dir, orbit_fname, time_table_fname,
     igc2 = geocal.read_shelve("igc.xml")
     print(igc2)
 
-def test_create_igccollection(isolated_dir, test_data, l1b_geo_config):
+def test_create_igccollection(isolated_dir, test_data, l1_osp_dir):
     l1a_att = glob.glob(f"{test_data}/*_o80000_l1a_att_*.nc")[0]
     line_time = [glob.glob(f"{test_data}/*_o80000_s001_l1a_line_time*.nc")[0],
                  glob.glob(f"{test_data}/*_o80000_s002_l1a_line_time*.nc")[0],
@@ -32,7 +32,7 @@ def test_create_igccollection(isolated_dir, test_data, l1b_geo_config):
     rad_band = 1
     igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
                                       rad_band,
-                                      l1b_geo_config=l1b_geo_config)
+                                      l1_osp_dir=l1_osp_dir)
     assert igccol.orbit_number == '80000'
     assert igccol.scene_list == ['001','002','003']
     assert igccol.number_image == 3

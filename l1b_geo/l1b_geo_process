@@ -66,8 +66,7 @@ Options:
 args = geocal.docopt_simple(usage, version=version)
 
 # Read in additional configuration parameters
-sys.path.append(args.l1_osp_dir)
-import l1b_geo_config
+l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
 
 # Set up logging. 
 os.makedirs(args.prod_dir, exist_ok=True)
@@ -119,12 +118,13 @@ logger.info("l1_att file: %s", l1a_att)
 logger.info("line_time files %s", line_time)
 logger.info("l1b_rad files %s", l1b_rad)
 try:
-    logger.info("Starting %s version %s processing", l1b_geo_config.pge_name,
-                l1b_geo_config.pge_version)
+    logger.info("Starting %s version %s processing",
+                l1_osp_dir.l1b_geo_config.pge_name,
+                l1_osp_dir.l1b_geo_config.pge_version)
     curdir = os.getcwd()
     try:
         os.chdir(args.prod_dir)
-        t = emit.L1bGeoGenerate(l1b_geo_config, l1a_att, line_time,
+        t = emit.L1bGeoGenerate(l1_osp_dir, l1a_att, line_time,
                                 l1b_rad)
         t.run()
     finally:

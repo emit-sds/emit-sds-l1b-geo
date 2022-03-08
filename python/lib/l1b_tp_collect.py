@@ -9,12 +9,12 @@ logger = logging.getLogger('l1b_geo_process.l1b_tp_collect')
 class L1bTpCollect:
     '''Project data to the surface and collect tie-points with the
     orthobase'''
-    def __init__(self, igccol, l1b_geo_config, geo_qa):
+    def __init__(self, igccol, l1_osp_dir, geo_qa):
         self.igccol = igccol
         self.geo_qa = geo_qa
-        self.l1b_geo_config = l1b_geo_config
-        self.num_x = l1b_geo_config.num_x
-        self.num_y = l1b_geo_config.num_y
+        self.l1_osp_dir = l1_osp_dir
+        self.num_x = l1_osp_dir.l1b_geo_config.num_x
+        self.num_y = l1_osp_dir.l1b_geo_config.num_y
         self.log_file = ["tpmatch_%03d.log" % (i + 1) for i in range(self.igccol.number_image)]
         self.run_dir_name = ["tpmatch_%03d" % (i + 1) for i in range(self.igccol.number_image)]
         
@@ -26,11 +26,11 @@ class L1bTpCollect:
         # Note the log and run directory gets updated before use, so it
         # is ok they have the same name here (these are just placeholders)
         self.tpcollect = []
-        fftsize = l1b_geo_config.fftsize
-        magnify = l1b_geo_config.magnify
-        magmin = l1b_geo_config.magmin
-        toler = l1b_geo_config.toler
-        redo = l1b_geo_config.redo
+        fftsize = l1_osp_dir.l1b_geo_config.fftsize
+        magnify = l1_osp_dir.l1b_geo_config.magnify
+        magmin = l1_osp_dir.l1b_geo_config.magmin
+        toler = l1_osp_dir.l1b_geo_config.toler
+        redo = l1_osp_dir.l1b_geo_config.redo
         # Original try
         self.tpcollect.append(geocal.TiePointCollectPicmtch(self.igccol,
                               ["placeholder",], image_index1=0,
@@ -76,7 +76,7 @@ class L1bTpCollect:
                               log_file="placeholder",
                               run_dir_name="placeholder"))
 
-        self.min_tp_per_scene = l1b_geo_config.min_tp_per_scene
+        self.min_tp_per_scene = l1_osp_dir.l1b_geo_config.min_tp_per_scene
 
     def tp(self, i):
         '''Get tiepoints for the given scene number'''
@@ -131,23 +131,16 @@ class L1bTpCollect:
         '''
         
         # First project all the data.
-        p = L1bProj(self.igccol, self.l1b_geo_config, self.geo_qa)
+        p = L1bProj(self.igccol, self.l1_osp_dir, self.geo_qa)
         proj_res = p.proj(pool=pool)
         self.ref_fname = [t[1] if t is not None else "" for t in proj_res]
         self.proj_fname = [t[0] if t is not None else "" for t in proj_res]
         it = [i for i in range(self.igccol.number_image)
               if proj_res[i] is not None]
-        # Can't pickle this with the pool, so just set to None for now.
-        # We don't actually need this for anything in tp.
-        l1b_geo_config = self.l1b_geo_config
-        try:
-            self.l1b_geo_config = None
-            if(pool is None):
-                tpcollist = map(self.tp, it)
-            else:
-                tpcollist = pool.map(self.tp, it)
-        finally:
-            self.l1b_geo_config = l1b_geo_config    
+        if(pool is None):
+            tpcollist = map(self.tp, it)
+        else:
+            tpcollist = pool.map(self.tp, it)
         res = geocal.TiePointCollection()
         time_range_tp = []
         for i in range(self.igccol.number_image):

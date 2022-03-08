@@ -7,19 +7,19 @@ import logging
 
 logger = logging.getLogger('l1b_geo_process.emit_dem')
 
-def create_dem(l1b_geo_config = None):
+def create_dem(l1_osp_dir = None):
     '''Create the SRTM DEM based on the configuration. Don't exactly know
     how this will work once we are integrated in with SDS, but for now
     just use the placeholder function and grab the information from the
     environment.'''
-    if(l1b_geo_config is None):
+    if(l1_osp_dir is None):
         # Default data if we don't have a config file
         datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
         srtm_dir = os.environ["ELEV_ROOT"]
     else:
         # Otherwise, get from config file
-        datum = l1b_geo_config.datum
-        srtm_dir = l1b_geo_config.srtm_dir
+        datum = l1_osp_dir.l1b_geo_config.datum
+        srtm_dir = l1_osp_dir.l1b_geo_config.srtm_dir
     logger.info("Datum: %s", datum)
     logger.info("SRTM Dir: %s", srtm_dir)
     dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))

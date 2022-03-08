@@ -99,7 +99,7 @@ class AvirisNgGeoGenerate:
             pool = None
         self.create_scene()
         l1b_correct = L1bCorrect(self.igccol_initial,
-                                 self.l1_osp_dir.l1b_geo_config,
+                                 self.l1_osp_dir,
                                  self.geo_qa)
         self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
         # TODO Propogate changes from self.igccol_corrected to the
