@@ -41,7 +41,7 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     number as "orbit_number" and the uncorrected orbit 
     as "uncorrected_orbit".'''
     if(l1_osp_dir):
-        os.environ["SPICEDATA"] = l1_osp_dir.l1b_geo_config.spice_data_dir
+        os.environ["SPICEDATA"] = l1_osp_dir.spice_data_dir
     logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
     cam = l1_osp_dir.camera()

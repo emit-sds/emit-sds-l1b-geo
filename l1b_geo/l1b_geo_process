@@ -119,8 +119,8 @@ logger.info("line_time files %s", line_time)
 logger.info("l1b_rad files %s", l1b_rad)
 try:
     logger.info("Starting %s version %s processing",
-                l1_osp_dir.l1b_geo_config.pge_name,
-                l1_osp_dir.l1b_geo_config.pge_version)
+                l1_osp_dir.pge_name,
+                l1_osp_dir.pge_version)
     curdir = os.getcwd()
     try:
         os.chdir(args.prod_dir)

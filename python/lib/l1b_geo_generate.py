@@ -30,11 +30,11 @@ class L1bGeoGenerate:
         self.tt_and_rdn_fname = zip(line_time_fname_list, l1b_rad_fname_list)
         self.igccol_initial = EmitIgcCollection.create(self.l1a_att_fname,
                                   self.tt_and_rdn_fname,
-                                  self.l1_osp_dir.l1b_geo_config.match_rad_band,
+                                  self.l1_osp_dir.match_rad_band,
                                   l1_osp_dir = self.l1_osp_dir)
         tstart = self.igccol_initial.image_ground_connection(0).ipi.time_table.min_time
-        self.build_version = self.l1_osp_dir.l1b_geo_config.build_version
-        self.product_version = self.l1_osp_dir.l1b_geo_config.product_version
+        self.build_version = self.l1_osp_dir.build_version
+        self.product_version = self.l1_osp_dir.product_version
         self.orbit_number = self.igccol_initial.orbit_number
         qa_fname = emit_file_name("l1b_geoqa", tstart,
                                    int(self.orbit_number),
@@ -105,9 +105,9 @@ class L1bGeoGenerate:
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
-        if(self.l1_osp_dir.l1b_geo_config.number_process > 1):
-            logger.info("Using %d processors", self.l1_osp_dir.l1b_geo_config.number_process)
-            pool = Pool(self.l1_osp_dir.l1b_geo_config.number_process)
+        if(self.l1_osp_dir.number_process > 1):
+            logger.info("Using %d processors", self.l1_osp_dir.number_process)
+            pool = Pool(self.l1_osp_dir.number_process)
         else:
             logger.info("Using 1 processor")
             pool = None
@@ -126,13 +126,13 @@ class L1bGeoGenerate:
         # For convenience, grab data for l1b_geo_config, just so we don't
         # have lots of long strings
         self.scene_list = self.igccol_initial.scene_list
-        self.generate_kmz = self.l1_osp_dir.l1b_geo_config.generate_kmz
-        self.generate_quicklook = self.l1_osp_dir.l1b_geo_config.generate_quicklook
-        self.map_band_list = self.l1_osp_dir.l1b_geo_config.map_band_list
-        self.kmz_use_jpeg = self.l1_osp_dir.l1b_geo_config.kmz_use_jpeg
-        self.map_resolution = self.l1_osp_dir.l1b_geo_config.map_resolution
-        self.map_number_subpixel = self.l1_osp_dir.l1b_geo_config.map_number_subpixel
-        self.glt_rotated = self.l1_osp_dir.l1b_geo_config.glt_rotated
+        self.generate_kmz = self.l1_osp_dir.generate_kmz
+        self.generate_quicklook = self.l1_osp_dir.generate_quicklook
+        self.map_band_list = self.l1_osp_dir.map_band_list
+        self.kmz_use_jpeg = self.l1_osp_dir.kmz_use_jpeg
+        self.map_resolution = self.l1_osp_dir.map_resolution
+        self.map_number_subpixel = self.l1_osp_dir.map_number_subpixel
+        self.glt_rotated = self.l1_osp_dir.glt_rotated
         if(pool is None):
             res = list(map(self.run_scene,
                            list(range(self.igccol_corrected.number_image))))

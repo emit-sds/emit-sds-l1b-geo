@@ -93,8 +93,8 @@ else:
     logger.setLevel(logging.INFO)
 
 try:
-    logger.info("Starting %s version %s processing", l1_osp_dir.l1b_geo_config.pge_name,
-                l1_osp_dir.l1b_geo_config.pge_version)
+    logger.info("Starting %s version %s processing", l1_osp_dir.pge_name,
+                l1_osp_dir.pge_version)
     orb_fname = os.path.abspath(args.orbit_file)
     tt_fname = os.path.abspath(args.line_time_file)
     rad_fname = os.path.abspath(args.rad_file)

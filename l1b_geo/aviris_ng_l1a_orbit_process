@@ -91,8 +91,8 @@ else:
 
 try:
     logger.info("Starting %s version %s processing",
-                l1_osp_dir.l1b_geo_config.l1a_pge_name,
-                l1_osp_dir.l1b_geo_config.pge_version)
+                l1_osp_dir.l1a_pge_name,
+                l1_osp_dir.pge_version)
     raw_fname = os.path.abspath(args.raw_file)
     if(args.gps_file):
         gps_fname = os.path.abspath(args.gps_file)
