@@ -9,18 +9,20 @@ logger = logging.getLogger('l1b_geo_process.l1b_proj')
 class L1bProj(object):
     '''This handles projection the Igc to the surface, forming a vicar file
     that we can match against.'''
-    def __init__(self, igccol, l1_osp_dir, geo_qa):
+    def __init__(self, igccol, l1_osp_dir, geo_qa,
+                 img_type="initial"):
         self.igccol = igccol
         self.geo_qa = geo_qa
         self.l1_osp_dir = l1_osp_dir
-        logger.info("OrthoBase dir: %s", l1_osp_dir.l1b_geo_config.ortho_base_dir)
-        logger.info("Landsat band: %d", l1_osp_dir.l1b_geo_config.landsat_band)
-        self.ortho = geocal.Landsat7Global(l1_osp_dir.l1b_geo_config.ortho_base_dir,
-                          band_to_landsat_band(l1_osp_dir.l1b_geo_config.landsat_band))
+        self.img_type = img_type
+        logger.info("OrthoBase dir: %s", l1_osp_dir.ortho_base_dir)
+        logger.info("Landsat band: %d", l1_osp_dir.landsat_band)
+        self.ortho = geocal.Landsat7Global(l1_osp_dir.ortho_base_dir,
+                          band_to_landsat_band(l1_osp_dir.landsat_band))
         # Want to scale to roughly 60 meters. Much of the landsat data
         # is at a higher resolution, but emit is roughly 60 meter, so
         # we want to data to roughly match
-        self.ortho_scale = round(l1_osp_dir.l1b_geo_config.match_resolution /
+        self.ortho_scale = round(l1_osp_dir.match_resolution /
                                  self.ortho.map_info.resolution_meter)
         if(not os.path.exists("extra_python_init.py")):
             with open("extra_python_init.py", "w") as fh:
@@ -30,13 +32,11 @@ class L1bProj(object):
         '''Project data for a scene.'''
         igc = self.igccol.image_ground_connection(i)
         mibase = self.ortho.map_info.scale(self.ortho_scale, self.ortho_scale)
-        geocal.write_shelve("igccol.xml", self.igccol)
-        geocal.write_shelve("mibase.xml", mibase)
         mi = igc.cover(mibase)
-        mi_fname = "map_info_%03d.xml" % (i+1)
-        igc_fname = "igc_initial_%03d.xml" % (i+1)
-        proj_fname = "proj_initial_%03d.img" % (i+1)
-        ref_fname = "ref_%03d.img" % (i+1)
+        mi_fname = "map_info_%s_%03d.xml" % (self.img_type, i+1)
+        igc_fname = "igc_%s_%03d.xml" % (self.img_type, i+1)
+        proj_fname = "proj_%s_%03d.img" % (self.img_type, i+1)
+        ref_fname = "ref_%s_%03d.img" % (self.img_type, i+1)
         logger.info("Creating %s", proj_fname)
         geocal.write_shelve(mi_fname, mi)
         geocal.write_shelve(igc_fname, igc)

@@ -13,8 +13,8 @@ class L1bTpCollect:
         self.igccol = igccol
         self.geo_qa = geo_qa
         self.l1_osp_dir = l1_osp_dir
-        self.num_x = l1_osp_dir.l1b_geo_config.num_x
-        self.num_y = l1_osp_dir.l1b_geo_config.num_y
+        self.num_x = l1_osp_dir.num_x
+        self.num_y = l1_osp_dir.num_y
         self.log_file = ["tpmatch_%03d.log" % (i + 1) for i in range(self.igccol.number_image)]
         self.run_dir_name = ["tpmatch_%03d" % (i + 1) for i in range(self.igccol.number_image)]
         
@@ -26,11 +26,11 @@ class L1bTpCollect:
         # Note the log and run directory gets updated before use, so it
         # is ok they have the same name here (these are just placeholders)
         self.tpcollect = []
-        fftsize = l1_osp_dir.l1b_geo_config.fftsize
-        magnify = l1_osp_dir.l1b_geo_config.magnify
-        magmin = l1_osp_dir.l1b_geo_config.magmin
-        toler = l1_osp_dir.l1b_geo_config.toler
-        redo = l1_osp_dir.l1b_geo_config.redo
+        fftsize = l1_osp_dir.fftsize
+        magnify = l1_osp_dir.magnify
+        magmin = l1_osp_dir.magmin
+        toler = l1_osp_dir.toler
+        redo = l1_osp_dir.redo
         # Original try
         self.tpcollect.append(geocal.TiePointCollectPicmtch(self.igccol,
                               ["placeholder",], image_index1=0,
@@ -76,7 +76,7 @@ class L1bTpCollect:
                               log_file="placeholder",
                               run_dir_name="placeholder"))
 
-        self.min_tp_per_scene = l1_osp_dir.l1b_geo_config.min_tp_per_scene
+        self.min_tp_per_scene = l1_osp_dir.min_tp_per_scene
 
     def tp(self, i):
         '''Get tiepoints for the given scene number'''

@@ -18,8 +18,8 @@ def create_dem(l1_osp_dir = None):
         srtm_dir = os.environ["ELEV_ROOT"]
     else:
         # Otherwise, get from config file
-        datum = l1_osp_dir.l1b_geo_config.datum
-        srtm_dir = l1_osp_dir.l1b_geo_config.srtm_dir
+        datum = l1_osp_dir.datum
+        srtm_dir = l1_osp_dir.srtm_dir
     logger.info("Datum: %s", datum)
     logger.info("SRTM Dir: %s", srtm_dir)
     dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))

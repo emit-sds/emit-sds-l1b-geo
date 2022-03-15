@@ -6,6 +6,7 @@ from .aviris_ng_time_table import AvirisNgTimeTable
 from .aviris_ng_standard_metadata import AvirisNgStandardMetadata
 from .geo_qa import GeoQa
 from .l1b_correct import L1bCorrect
+from .l1b_proj import L1bProj
 import geocal
 import logging
 import re
@@ -29,7 +30,7 @@ class AvirisNgGeoGenerate:
         self.orb = AvirisNgOrbit(self.orb_fname)
         self.tt = AvirisNgTimeTable(self.tt_fname)
         self.rad = geocal.GdalRasterImage(rad_fname,
-                            l1_osp_dir.l1b_geo_config.match_rad_band)
+                            l1_osp_dir.match_rad_band)
         # The range of the data is small as DNs, since this is in radiance
         # units. Scale so we get a wider range to match on.
         # TODO Number should be calculated, or passed in as a configuration
@@ -46,8 +47,7 @@ class AvirisNgGeoGenerate:
     def create_scene(self):
         # For tiepointing, we want to break the data up into roughly square
         # scenes, because image matching works better
-        # TODO Move this constant to the configuration file
-        nline_per_scene = 1000
+        nline_per_scene = self.l1_osp_dir.number_line_per_scene
         rset = []
         for i in range(0,
                        self.tt.max_line // nline_per_scene * nline_per_scene,
@@ -91,9 +91,9 @@ class AvirisNgGeoGenerate:
     def run(self):
         logger.info("Starting AvirisNgGeoGenerate")
         standard_metadata = AvirisNgStandardMetadata(line_averaging=self.tt.line_average)
-        if(self.l1_osp_dir.l1b_geo_config.number_process > 1):
-            logger.info("Using %d processors", self.l1_osp_dir.l1b_geo_config.number_process)
-            pool = Pool(self.l1_osp_dir.l1b_geo_config.number_process)
+        if(self.l1_osp_dir.number_process > 1):
+            logger.info("Using %d processors", self.l1_osp_dir.number_process)
+            pool = Pool(self.l1_osp_dir.number_process)
         else:
             logger.info("Using 1 processor")
             pool = None
@@ -102,12 +102,16 @@ class AvirisNgGeoGenerate:
                                  self.l1_osp_dir,
                                  self.geo_qa)
         self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
-        # TODO Propogate changes from self.igccol_corrected to the
-        # full self.igc. This should just involve copying parameters
-        # from the camera and orbit update to the self.igc version of
-        # these
+        self.cam.parameter = self.igccol_corrected.image_ground_connection(0).ipi.camera.parameter
+        # TODO Put in copy orbit parameter when we have an orbit model that
+        # gets updated.
         
-        # TODO: Write corrected orbit and updated camera model
+        if(self.l1_osp_dir.do_final_projection):
+            proj = L1bProj(self.igccol_corrected, self.l1_osp_dir,
+                           self.geo_qa, img_type="final")
+            proj.proj(pool=pool)
+        # TODO: Write corrected orbit
+        geocal.write_shelve(self.basename + "_camera.xml", self.cam)
         loc_fname = self.basename + "_loc"
         igm_fname = self.basename + "_igm"
         obs_fname = self.basename + "_obs"

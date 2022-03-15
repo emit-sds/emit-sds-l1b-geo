@@ -1,5 +1,6 @@
 import importlib.util
 import geocal
+import numpy as np
 
 class L1OspDir:
     '''This class handles the L1OspDir, such as reading the l1b_geo_config
@@ -8,8 +9,20 @@ class L1OspDir:
         self.l1_osp_dir = l1_osp_dir
         self.load_config()
 
+    def __getattr__(self, name):
+        '''Forward attributes to the l1b_geo_config if it is found there.'''
+        if(hasattr(self.l1b_geo_config, name)):
+            return getattr(self.l1b_geo_config,name)
+        raise AttributeError
+
     def camera(self):
-        return geocal.read_shelve(self.l1_osp_dir + "/camera.xml")
+        cam = geocal.read_shelve(self.l1_osp_dir + "/camera.xml")
+        # We store the euler angles and focal length separately, so we can
+        # more easily update this. Get the updated values from the
+        # config file.
+        cam.euler = self.instrument_to_sc_euler
+        cam.focal_length = self.camera_focal_length
+        return cam
 
     def load_config(self):
         spec = importlib.util.spec_from_file_location("l1b_geo_config",

@@ -72,8 +72,10 @@ class L1bCorrect:
         x0 = cam.parameter_subset.copy()
         self.summarize_residual(x0, desc= "Initial")
         # Now fit the data. Can play with this, but for right now
-        # just use the default scipy least squares optimization
-        r = scipy.optimize.least_squares(self.collinearity_residual, x0)
+        # just use the default scipy least squares optimization. We choose
+        # a version of this that works a bit better with outliers
+        r = scipy.optimize.least_squares(self.collinearity_residual, x0,
+                                         loss = "huber")
         logger.info("Fitting results: %s", r)
         logger.info("Fitted camera value:")
         for v, desc in zip(cam.parameter_subset,cam.parameter_name_subset):
@@ -81,7 +83,7 @@ class L1bCorrect:
         self.summarize_residual(r.x, desc= "Fitted")
 
     def igccol_corrected(self, pool=None):
-        if(self.l1_osp_dir.l1b_geo_config.skip_sba):
+        if(self.l1_osp_dir.skip_sba):
             logger.info("Skipping SBA correction, using uncorrected ephemeris and attitude")
             return self.igccol_initial
         self.tpcol, self.time_range_tp = self.l1b_tp_collect.tpcol(pool)
