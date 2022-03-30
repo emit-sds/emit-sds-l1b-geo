@@ -1,0 +1,123 @@
+#! /usr/bin/env python
+#
+# This projects L1B geo data
+import geocal
+import emit
+import os
+import subprocess
+import scipy
+
+version = "1.0"
+usage='''Usage:
+  l1b_project [options] <loc_file> <rad_file> <output_base>
+  l1b_project -h | --help
+  l1b_project -v | --version
+
+This takes loc output and uses it to project radiance fields.
+
+You can either project a single band, or 3 bands (we could add different 
+combinations if useful, but it seems like this will cover most of the data).
+The output can either be scaled integer data or float. We scale the data
+by a factor of 100.0 for integer data (so this is good for looking in xvd).
+
+Options:
+  -h --help         
+       Print this message
+
+  --band-list=l
+       List of bands to use. [default: (54,34,16)]
+
+  --erdas
+       In addition to producing vicar format, convert the output to erdas
+       imagine file.
+
+  --exactly-match-map-info
+       Default behavior is to use the resolution of the supplied or default
+       map info, but adjust the bounding box to cover the full 
+       latitude/longitude range. But you can optionally specify this option
+       to exactly match the supplied map info, useful if you want the output
+       file to match an existing file for more direct comparison.
+       
+  --file-type=f
+       The output file type. Default is REAL, but you can specify any VICAR
+       type (e.g., HALF, BYTE). [default: REAL]
+
+  --map-info=f
+       Use the resolution of the supplied file. Default is to use our
+       Landsat orthobase as native resolution, rotated.
+
+  --negative-to-zero
+       If specified, map all negative values to zero in the output. Useful
+       to view data without large bad values (e.g., -9999).
+
+  --number-subpixel=d
+       Number of subpixels to use in resampling. Should be chosen to we are
+       at a high enough resolution to cover the desired pixel output size
+       without holes in the data. [default: 3]
+
+  --resolution=r
+       Scale the given/default map info to the give resolution in meters.
+       Default is to use the native resolution of the center pixel 
+       (something like 5 m)
+       [default: -1]
+
+  --scale-data=d
+       Value to scale the output data by. Useful if you want to convert from
+       radiance floating point to a scaled integer output. [default: 1.0]
+
+  --single-band
+       Do one band only, default is to do 3. Bands selected by --bands
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+blist = eval(args.band_list)
+if(args.single_band):
+    blist = [blist[0],]
+loc = emit.AvirisNgLoc(args.loc_file)
+if(args.map_info):
+    mi = geocal.GdalRasterImage(args.map_info).map_info
+else:
+    if(os.path.exists("/store/shared/landsat")):
+        mi = geocal.Landsat7Global("/store/shared/landsat",
+                                   geocal.Landsat7Global.BAND8).map_info
+    elif(os.path.exists("/raid22/band5_VICAR")):
+       # pistol location
+        mi = geocal.Landsat7Global("/raid22",
+                                   geocal.Landsat7Global.BAND8).map_info
+    else:
+        raise RuntimeError("Can't find Landsat global orthobase data")
+
+if(args.resolution > 0):
+    resbase = mi.resolution_meter
+    mi = mi.scale(args.resolution / resbase, args.resolution / resbase)
+else:
+    p1 = loc.ground_coordinate(loc.shape[1] // 2,loc.shape[2] // 2)
+    p2 = loc.ground_coordinate(loc.shape[1] // 2,loc.shape[2] // 2 + 1)
+    p1 = geocal.SimpleDem().surface_point(p1)
+    p2 = geocal.SimpleDem().surface_point(p2)
+    resolution = geocal.distance(p1,p2)
+    resbase = mi.resolution_meter
+    mi = mi.scale(resolution / resbase, resolution / resbase)
+
+lat = scipy.ndimage.interpolation.zoom(loc.latitude,
+                                       args.number_subpixel, order=2)
+lon = scipy.ndimage.interpolation.zoom(loc.longitude,
+                                       args.number_subpixel, order=2)
+res = emit.Resampler(lat, lon, mi, args.number_subpixel,
+                     args.exactly_match_map_info)
+flist = []
+for b in blist:
+    data = geocal.GdalRasterImage(args.rad_file, b)
+    print(f"Doing band {b}")
+    fname = "%s_b%d.img" % (args.output_base, b)
+    res.resample_field(fname, data, args.scale_data, args.file_type,
+                       args.negative_to_zero)
+    flist.append(fname)
+if(args.erdas):
+    cmd = ["gdal_to_erdas", "--multiple-band",
+           args.output_base + "_erdas.img"]
+    cmd.extend(flist)
+    subprocess.run(cmd)

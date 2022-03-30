@@ -1,0 +1,47 @@
+#! /usr/bin/env python
+#
+# This creates a shapefile with the footprint of a number of LOC files.
+import geocal
+import emit
+import os
+import sys
+import glob
+from osgeo import ogr
+
+version = "1.0.0"
+usage='''Usage:
+  footprint_shapefile [options] <shape_file> <dir_or_file>... 
+  footprint_shapefile -h | --help
+  footprint_shapefile -v | --version
+
+This process a number of LOC files, and creates a shapefile with the
+footprint. The footprint is a bit approximate, we look at every 100 lines
+of data.
+
+This takes a list of files or directories. For directories, we process
+every file with the name "*_loc".
+
+Options:
+  -h --help         
+       Print this message
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+
+shp = geocal.ShapeFile(args.shape_file, "w")
+lay = shp.add_layer("footprint", ogr.wkbPolygon,
+                    [["LOC File", ogr.OFTString, 1000],])
+for f in args.dir_or_file:
+    if(os.path.isdir(f)):
+        for f2 in glob.glob(f"{f}/*_loc"):
+            t = emit.AvirisNgLoc(f2)
+            lay.add_feature({"LOC File": f2,
+                             "Geometry": t.ogr_shape()})
+    else:
+        lay.add_feature({"LOC File": f,
+                         "Geometry": t.ogr_shape()})
+shp.close()
+
