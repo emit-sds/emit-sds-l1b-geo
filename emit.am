@@ -28,3 +28,9 @@ end-to-end-aviris-ng-check:
 # Short cut for debugging, assume we have already run end-to-end-aviris-ng-check for the L1A stuff, and just need to rerun geo
 end-to-end-aviris-geo-only-ng-check:
 	source $(prefix)/setup_emit.sh && aviris_ng_geo_process aviris_ng_geo_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_geo_dir aviris_ng_geo_run/ang20170328t202059_att.nc aviris_ng_geo_run/ang20170328t202059_line_time.nc $(EMIT_TEST_DATA)/input_afids_ng/ang20170328t202059_rdn_v2p5_clip
+
+real_data=/beegfs/scratch/mhessflores/shift_runs/ang20220224t211618_output
+end-to-end-aviris-real-data-check:
+	source $(prefix)/setup_emit.sh && aviris_ng_geo_process aviris_ng_geo_real_run /home/smyth/aviris-ng-l1-osp $(real_data)/*_att.nc $(real_data)/*_line_time.nc /beegfs/store/ang/y22/rdn/ang20220224t211618_rdn_v2z4_clip
+
+

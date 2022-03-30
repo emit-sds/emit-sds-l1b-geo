@@ -54,43 +54,7 @@ class AvirisNgGlt(EnviFile):
         cconv = geocal.OgrCoordinateConverter(self.igm.ogrw)
         mi = geocal.MapInfo(cconv, 0,0,self.resolution,self.resolution,1,1)
         mi = geocal.cib01_mapinfo(self.resolution)
-        
-        # We only need the edges pixels, this defines the full
-        # range of data here
-        f = mi.coordinate_converter.convert_to_coordinate
-        lat = self.loc.latitude
-        lon = self.loc.longitude
-        pt = [f(geocal.Geodetic(lat[0,i], lon[0, i])) for
-              i in range(self.loc.shape[2])]
-        pt.extend(f(geocal.Geodetic(lat[-1,i], lon[-1, i]))
-                  for i in range(self.loc.shape[2]))
-        pt.extend(f(geocal.Geodetic(lat[i,0], lon[i, 0]))
-                   for i in range(self.loc.shape[1]))
-        pt.extend(f(geocal.Geodetic(lat[i,-1], lon[i, -1]))
-                   for i in range(self.loc.shape[1]))
-        # Note cv2 convexhull can't work with noncontigous array. The
-        # error message returned is very confusing, it complains that the
-        # type isn't float32 - even though it is. But we just make sure
-        # to make a contiguous array and this works ok.
-        pt = np.ascontiguousarray(np.array(pt)[:,0:2], dtype=np.float32)
-        rect = cv2.minAreaRect(pt)
-        t = cv2.boxPoints(rect)
-        a = -math.atan2(t[0,0] - t[-1,0], t[0,1] - t[-1,1])
-        logger.info("Rotated minimum area rectangle is angle %f",
-                    a * geocal.rad_to_deg)
-        rot = np.array([[math.cos(a), -math.sin(a)],[math.sin(a),math.cos(a)]])
-        p = mi.transform
-        pm = np.array([[p[1], p[2]],[p[4], p[5]]])
-        pm2 = np.matmul(rot,pm)
-        mi2 = geocal.MapInfo(mi.coordinate_converter,
-                             np.array([p[0],pm2[0,0],pm2[0,1],p[3],pm2[1,0],pm2[1,1]]),
-                             mi.number_x_pixel, mi.number_y_pixel, mi.is_point)
-        # In general, mi2 will cover invalid lat/lon. Just pull in to a
-        # reasonable area, we handling the actual cover later
-        mi2 = mi2.cover([geocal.Geodetic(10,10),geocal.Geodetic(20,20)])
-        s = mi.resolution_meter / mi2.resolution_meter
-        mi2 = mi2.scale(s, s)
-        return mi2
+        return self.loc.map_info_rotated(mi)
 
     @property
     def glt_line(self):

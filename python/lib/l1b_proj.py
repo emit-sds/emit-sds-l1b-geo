@@ -6,6 +6,15 @@ import logging
 
 logger = logging.getLogger('l1b_geo_process.l1b_proj')
 
+# Temp, this should probably get moved into geocal. But for now place here
+# This should also get expanded, right now this doesn't handle resizing etc.
+def _create_subset_file(self, fname, driver, Desired_map_info = None,
+                        Translate_arg = None):
+    r = geocal.SubRasterImage(self, Desired_map_info)
+    geocal.GdalRasterImage.save(fname, driver, r, geocal.GdalRasterImage.Int16)
+
+geocal.GdalRasterImage.create_subset_file = _create_subset_file    
+
 class L1bProj(object):
     '''This handles projection the Igc to the surface, forming a vicar file
     that we can match against.'''
@@ -17,13 +26,17 @@ class L1bProj(object):
         self.img_type = img_type
         logger.info("OrthoBase dir: %s", l1_osp_dir.ortho_base_dir)
         logger.info("Landsat band: %d", l1_osp_dir.landsat_band)
-        self.ortho = geocal.Landsat7Global(l1_osp_dir.ortho_base_dir,
-                          band_to_landsat_band(l1_osp_dir.landsat_band))
+        #self.ortho = geocal.Landsat7Global(l1_osp_dir.ortho_base_dir,
+        #                  band_to_landsat_band(l1_osp_dir.landsat_band))
+        self.ortho = geocal.GdalRasterImage("/beegfs/scratch/brodrick/shift/pre_campaign_analyses/ancillary_data/sentinel_2_20220307.tif", 1)        
+
         # Want to scale to roughly 60 meters. Much of the landsat data
         # is at a higher resolution, but emit is roughly 60 meter, so
         # we want to data to roughly match
-        self.ortho_scale = round(l1_osp_dir.match_resolution /
-                                 self.ortho.map_info.resolution_meter)
+        #self.ortho_scale = round(l1_osp_dir.match_resolution /
+        #                         self.ortho.map_info.resolution_meter)
+        # Use full resolution of aviris-ng
+        self.ortho_scale = 1
         if(not os.path.exists("extra_python_init.py")):
             with open("extra_python_init.py", "w") as fh:
                 print("from emit import *\n", file=fh)
