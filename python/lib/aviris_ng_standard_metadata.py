@@ -11,8 +11,7 @@ class AvirisNgStandardMetadata:
     This is very similar to StandardMetadata, but is for the AVIRIS NG
     product.'''
     def __init__(self, line_averaging = 9):
-        '''Not really sure what line_averaging is. We are just copying
-        what pyortho had here. Will likely need to modify this.'''
+        '''Data is collected at a higher rate, so line averaging needs to be performed as part of l1a processing in order to make square pixels.'''
         self.line_averaging = line_averaging
 
     def extra_metadata(self, fh):

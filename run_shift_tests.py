@@ -1,5 +1,7 @@
 #!/shared/conda-shared-env/geocal-20220215/bin/python
 
+import geocal
+from geocal import *
 import os
 import sys
 import subprocess
@@ -10,7 +12,8 @@ import subprocess
 
 # This script processes all SHIFT files for a given date
 
-shift_line_lists_directory = "/home/mhessflores/aviris-ng/shift_line_lists/"
+# shift_line_lists_directory = "/home/mhessflores/aviris-ng/shift_line_lists/"  # initial tests
+shift_line_lists_directory = "/beegfs/scratch/brodrick/shift/line_lists/"
 raw_data_directory = "/beegfs/store/ang/y22/raw/"
 radiance_directory = "/beegfs/store/ang/y22/rdn/"
 output_directory = "/beegfs/scratch/mhessflores/shift_runs/"
@@ -21,6 +24,18 @@ geo_exe = "/home/mhessflores/emit-build/bin/aviris_ng_geo_process"
 # run_params = "/beegfs/store/shared/emit-test-data/latest/l1_osp_aviris_ng_geo_dir"
 # Mike's modifications to improve tiepointing and exterior orientation:
 run_params = "/home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp"
+
+# 20220224_all_lines.txt      20220308_hires_lines.txt
+# 20220224_aquatic_lines.txt  20220308_tie_lines.txt
+# 20220224_box_lines.txt      20220316_all_lines.txt
+# 20220224_tie_lines.txt      20220316_aquatic_lines.txt
+# 20220228_all_lines.txt      20220316_box_lines.txt
+# 20220228_aquatic_lines.txt  20220316_tie_lines.txt
+# 20220228_box_lines.txt      20220322_all_lines.txt
+# 20220228_tie_lines.txt      20220322_aquatic_lines.txt
+# 20220308_all_lines.txt      20220322_box_lines.txt
+# 20220308_aquatic_lines.txt  20220322_tie_lines.txt
+# 20220308_box_lines.txt
 
 file_20220224 = "20220224_all_lines.txt"
 file_20220228 = "20220228_all_lines.txt"
@@ -54,20 +69,27 @@ for line in f:
 	f2 = open(currentlogfile2, "w")
 	print(proc2.stdout, file=f2)
 	f2.close()
+	# Compute the ground distance between the initial and final IGC's, and print the value.
+	# Doing this for the first pair only right now as a basic sanity check, but can extend 
+	# this to take an average:
+	igc1 = read_shelve(os.path.join(currentshiftrun, "igc_initial_001.xml"))
+     	igc2 = read_shelve(os.path.join(currentshiftrun, "igc_final_001.xml"))
+     	ic = ImageCoordinate(igc1.number_line/2, igc1.number_sample/2)
+     	print('Ground distance: ', distance(igc1.ground_coordinate(ic),igc2.ground_coordinate(ic)))
 
 
 """
-The runs should look something like this:
+The runs should look something like this (l1a process followed by l1b):
 
 /home/mhessflores/emit-build/bin/aviris_ng_l1a_orbit_process /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output /home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp /beegfs/store/ang/y22/raw/ang20220224t195402_raw > /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output/aviris_ng_l1a_orbit_process_log.txt
 
 /home/mhessflores/emit-build/bin/aviris_ng_geo_process /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output /home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output/ang20220224t195402_att.nc /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output/ang20220224t195402_line_time.nc /beegfs/store/ang/y22/rdn/ang20220224t195402_rdn_v2z4_clip > /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output/aviris_ng_geo_process_log.txt
 
+/home/mhessflores/emit-build/bin/aviris_ng_geo_process /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_sentinel /home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_sentinel/ang20220224t195402_att.nc /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_sentinel/ang20220224t195402_line_time.nc /beegfs/store/ang/y22/rdn/ang20220224t195402_rdn_v2z4_clip > /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_sentinel/aviris_ng_geo_process_log.txt
+
 No SBA run:
 
 /home/mhessflores/emit-build/bin/aviris_ng_l1a_orbit_process /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba /home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp_no_sba /beegfs/store/ang/y22/raw/ang20220224t195402_raw > /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba/aviris_ng_l1a_orbit_process_log.txt
-
-/home/mhessflores/emit-build/bin/aviris_ng_geo_process /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba /home/mhessflores/aviris-ng/aviris-ng-test-data/l1_osp_no_sba /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba/ang20220224t195402_att.nc /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba/ang20220224t195402_line_time.nc /beegfs/store/ang/y22/rdn/ang20220224t195402_rdn_v2z4_clip > /beegfs/scratch/mhessflores/shift_runs/ang20220224t195402_output_no_sba/aviris_ng_geo_process_log.txt
 
 *****Can use sbatch or srun from Slurm to run on a full node (40 cores and 180G of memory for this example):
 	sbatch -N 1 -c 40 --mem=180G --wrap=“python program.py parameters”
