@@ -31,16 +31,19 @@ Options:
 
 args = geocal.docopt_simple(usage, version=version)
 
-shp = geocal.ShapeFile(args.shape_file, "w")
+shp = geocal.ShapeFile(args.shape_file, mode="w")
 lay = shp.add_layer("footprint", ogr.wkbPolygon,
                     [["LOC File", ogr.OFTString, 1000],])
 for f in args.dir_or_file:
     if(os.path.isdir(f)):
         for f2 in glob.glob(f"{f}/*_loc"):
+            print(f"Processing {f2}")
             t = emit.AvirisNgLoc(f2)
             lay.add_feature({"LOC File": f2,
                              "Geometry": t.ogr_shape()})
     else:
+        print(f"Processing {f}")
+        t = emit.AvirisNgLoc(f)
         lay.add_feature({"LOC File": f,
                          "Geometry": t.ogr_shape()})
 shp.close()

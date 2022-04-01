@@ -50,6 +50,11 @@ Options:
        If specified, map all negative values to zero in the output. Useful
        to view data without large bad values (e.g., -9999).
 
+  --rotate
+       Default is to create a north is up map, but you can select this to
+       create a rotated map. Note ERDAS doesn't seem to like rotated maps 
+       much.
+
   --number-subpixel=d
        Number of subpixels to use in resampling. Should be chosen to we are
        at a high enough resolution to cover the desired pixel output size
@@ -102,6 +107,9 @@ else:
     resbase = mi.resolution_meter
     mi = mi.scale(resolution / resbase, resolution / resbase)
 
+if(args.rotate):
+    mi = loc.map_info_rotated(mi)
+    
 lat = scipy.ndimage.interpolation.zoom(loc.latitude,
                                        args.number_subpixel, order=2)
 lon = scipy.ndimage.interpolation.zoom(loc.longitude,
@@ -117,7 +125,20 @@ for b in blist:
                        args.negative_to_zero)
     flist.append(fname)
 if(args.erdas):
-    cmd = ["gdal_to_erdas", "--multiple-band",
-           args.output_base + "_erdas.img"]
-    cmd.extend(flist)
-    subprocess.run(cmd)
+    if(args.rotate):
+        # --multiple-band doesn't work for rotated map projections in
+        # gdal_to_erdas, so we merge before calling it
+        cmd = ["gdal_merge.py", "-separate", "-n", "0",
+               "-o", args.output_base + ".tif"]
+        cmd.extend(flist)
+        subprocess.run(cmd, check=True)
+        cmd = ["gdal_to_erdas", args.output_base + ".tif",
+               args.output_base + "_erdas.img"]
+        subprocess.run(cmd, check=True)
+    else:
+        cmd = ["gdal_to_erdas", "--multiple-band",
+               args.output_base + "_erdas.img"]
+        cmd.extend(flist)
+        subprocess.run(cmd, check=True)
+        
+        

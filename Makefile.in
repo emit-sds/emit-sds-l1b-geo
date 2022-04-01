@@ -812,7 +812,8 @@ check_DATA =
 # Build these up as we go
 dist_installemit_SCRIPTS = @l1b_geo_src@/l1b_geo_pge \
 	@l1b_geo_src@/aviris_ng_geo_pge \
-	@l1b_geo_src@/aviris_ng_l1a_orbit_pge
+	@l1b_geo_src@/aviris_ng_l1a_orbit_pge \
+	@l1b_geo_src@/footprint_shapefile @l1b_geo_src@/l1b_project
 SWIG_FLAG = 
 installemit_SCRIPTS = emit_version.py
 
