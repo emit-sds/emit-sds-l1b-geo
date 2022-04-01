@@ -30,9 +30,7 @@ class L1bProj(object):
         #                  band_to_landsat_band(l1_osp_dir.landsat_band))
         self.ortho = geocal.GdalRasterImage("/beegfs/scratch/brodrick/shift/pre_campaign_analyses/ancillary_data/sentinel_2_20220307.tif", 1)        
 
-        # Want to scale to roughly 60 meters. Much of the landsat data
-        # is at a higher resolution, but emit is roughly 60 meter, so
-        # we want to data to roughly match
+        # Want to scale to the reference resolution:
         #self.ortho_scale = round(l1_osp_dir.match_resolution /
         #                         self.ortho.map_info.resolution_meter)
         # Use full resolution of aviris-ng
