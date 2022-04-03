@@ -62,10 +62,14 @@ class L1bCorrect:
         # it can change over time a small amount (e.g., 1%). For now,
         # include this
         cam.fit_focal_length = True
-        cam.fit_sample_pitch = False
-        cam.fit_line_pitch = False
-        cam.fit_principal_point_sample(False,0)
-        cam.fit_principal_point_line(False,0)
+        # We have used both GlasGfm and CameraParaxial as a camera. They
+        # have a different set of possible parameters, so determine
+        # if we need to set the extra ones for CameraParaxial or not
+        if(hasattr(cam, "fit_principal_point_sample")):
+            cam.fit_sample_pitch = False
+            cam.fit_line_pitch = False
+            cam.fit_principal_point_sample(False,0)
+            cam.fit_principal_point_line(False,0)
         logger.info("Initial camera value:")
         for v, desc in zip(cam.parameter_subset,cam.parameter_name_subset):
             logger.info(f"{desc}: {v}")

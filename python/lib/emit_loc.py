@@ -58,9 +58,9 @@ class EmitLoc(EnviFile):
         # scene size is fairly small (1280 lines) so that it probably isn't
         # worth worry about this, at least initially. We can probably handle
         # the parallelization at the scene level if performance is an issue.
-        #
-        # We pick a large resolution here to force the subpixels to be 1.
-        rcast = geocal.IgcRayCaster(self.igc,0,-1,1,10000)
+        rcast = geocal.IgcRayCaster(self.igc,0,-1,1,30)
+        rcast.number_sub_line = 1
+        rcast.number_sub_sample = 1
         while(not rcast.last_position):
             gpos = rcast.next_position()
             for i in range(gpos.shape[1]):

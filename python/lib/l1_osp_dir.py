@@ -20,7 +20,15 @@ class L1OspDir:
         # We store the euler angles and focal length separately, so we can
         # more easily update this. Get the updated values from the
         # config file.
-        cam.euler = self.instrument_to_sc_euler
+        
+        # We have used both GlasGfm and CameraParaxial as a camera. They
+        # have the camera angles expressed differently
+        if(hasattr(cam, "euler")):
+            cam.euler = self.instrument_to_sc_euler
+        else:
+            cam.angoff = [self.instrument_to_sc_euler[2],
+                          self.instrument_to_sc_euler[1],
+                          self.instrument_to_sc_euler[0]]
         cam.focal_length = self.camera_focal_length
         return cam
 

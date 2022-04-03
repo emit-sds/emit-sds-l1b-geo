@@ -129,8 +129,9 @@ class AvirisNgLoc(EnviFile):
         logger.info("Generating LOC data for %s (%d, %d)", self.igc.title,
                     i, i+nline)
         with self.multiprocess_data():
-            # We pick a large resolution here to force the subpixels to be 1.
-            rcast = geocal.IgcRayCaster(self.igc,i,nline,1,10000)
+            rcast = geocal.IgcRayCaster(self.igc,i,nline,1,4)
+            rcast.number_sub_line = 1
+            rcast.number_sub_sample = 1
             while(not rcast.last_position):
                 gpos = rcast.next_position()
                 for j in range(gpos.shape[1]):

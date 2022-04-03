@@ -98,7 +98,7 @@ else:
 if(args.resolution > 0):
     resbase = mi.resolution_meter
     mi = mi.scale(args.resolution / resbase, args.resolution / resbase)
-else:
+elif(not args.exactly_match_map_info):
     p1 = loc.ground_coordinate(loc.shape[1] // 2,loc.shape[2] // 2)
     p2 = loc.ground_coordinate(loc.shape[1] // 2,loc.shape[2] // 2 + 1)
     p1 = geocal.SimpleDem().surface_point(p1)
@@ -109,7 +109,7 @@ else:
 
 if(args.rotate):
     mi = loc.map_info_rotated(mi)
-    
+
 lat = scipy.ndimage.interpolation.zoom(loc.latitude,
                                        args.number_subpixel, order=2)
 lon = scipy.ndimage.interpolation.zoom(loc.longitude,
