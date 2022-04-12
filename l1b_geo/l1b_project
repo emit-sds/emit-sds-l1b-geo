@@ -116,6 +116,9 @@ lon = scipy.ndimage.interpolation.zoom(loc.longitude,
                                        args.number_subpixel, order=2)
 res = emit.Resampler(lat, lon, mi, args.number_subpixel,
                      args.exactly_match_map_info)
+if(res.map_info.number_x_pixel > 100000 or
+   res.map_info.number_y_pixel > 100000):
+    raise RuntimeError(f"Something looks wrong with the data. We are trying to process a mapinfo with\n{res.map_info}")
 flist = []
 for b in blist:
     data = geocal.GdalRasterImage(args.rad_file, b)
