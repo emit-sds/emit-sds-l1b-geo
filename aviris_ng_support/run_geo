@@ -24,4 +24,7 @@ for f in glob.glob("ang*_output"):
         job_count = job_count + 1
 fh.close()
 subprocess.run(["mkdir", "-p", "logs"])
-subprocess.run(f"sbatch -n 1 -c 10 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh geo_job_list.txt", shell=True)
+# 3GB is probably total overkill, but for now we don't need to be overly
+# efficient. Just ask "for a lot" of memory. We can tune this down once
+# we figure this out.
+subprocess.run(f"sbatch -n 1 -c 10 --mem=3000 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh geo_job_list.txt", shell=True)
