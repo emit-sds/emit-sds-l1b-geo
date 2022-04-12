@@ -1,0 +1,24 @@
+#! /usr/bin/env python
+#
+# Set up slurm jobs to run geo for all the data we find
+
+import glob
+import os
+import subprocess
+
+fh = open("erdas_job_list.txt", "w")
+job_count = 0
+for f in glob.glob("ang*_output"):
+    bname = os.path.basename(f).split("_")[0]
+    prod_dir = f"/home/smyth/Scratch/AvirisNg/{bname}_output"
+    loc_file = f"{prod_dir}/{bname}_loc"
+    proj_file = f"{prod_dir}/{bname}_proj"
+    rad_file = f"/beegfs/store/ang/y22/rdn/{bname}_rdn_v2z4_clip"
+    # Skip files that have already been created
+    if(os.path.exists(loc_file) and
+       not os.path.exists(proj_file + "_erdas.img")):
+        print(f"source /home/smyth/emit-build/install/setup_emit.sh && l1b_project --erdas {loc_file} {rad_file} {proj_file}", file=fh)
+        job_count = job_count + 1
+fh.close()
+subprocess.run(["mkdir", "-p", "logs"])
+subprocess.run(f"sbatch -n 1 -c 10 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh erdas_job_list.txt", shell=True)
