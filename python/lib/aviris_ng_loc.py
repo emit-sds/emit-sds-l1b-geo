@@ -104,13 +104,16 @@ class AvirisNgLoc(EnviFile):
         a reasonable size estimate.'''
         lat = self.latitude
         lon = self.longitude
+        # Note the convention is for the point to be in longitude, latitude
+        # (x,y) order for a shapefile. This is the opposite of the lat/lon
+        # order we typically use in geocal.
         border = []
         for i in range(0, self.shape[1], spacing):
-           border.append([lat[i,0],lon[i,0]])
-        border.append([lat[-1,0],lon[-1,0]])
+           border.append([lon[i,0],lat[i,0]])
+        border.append([lon[-1,0],lat[-1,0]])
         for i in range(1, self.shape[1], spacing):
-            border.append([lat[-i,-1],lon[-i,-1]])
-        border.append([lat[0,-1],lon[0,-1]])
+            border.append([lon[-i,-1],lat[-i,-1]])
+        border.append([lon[0,-1],lat[0,-1]])
         return geocal.ShapeLayer.polygon_2d(border)
                        
     @property

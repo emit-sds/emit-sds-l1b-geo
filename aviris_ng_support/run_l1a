@@ -1,0 +1,25 @@
+#! /usr/bin/env python
+#
+# Set up slurm jobs to run l1a for all the raw data we find
+
+import glob
+import os
+import subprocess
+
+# Trigger off the loc file. There might possibly be a reason why the
+# raw data wasn't run, we'll just assume that is the case
+fh = open("l1a_job_list.txt", "w")
+l1_osp_dir = "/home/smyth/Scratch/AvirisNg/l1_osp"
+job_count = 0
+for f in glob.glob("/beegfs/store/ang/y22/raw/*_loc"):
+    bname = os.path.basename(f).split("_")[0]
+    prod_dir = f"/home/smyth/Scratch/AvirisNg/{bname}_output"
+    raw_file = f"{os.path.dirname(f)}/{bname}_raw"
+    # Skip files that have already been created
+    if(not os.path.exists(prod_dir)):
+        print(f"/home/smyth/emit-build/install/aviris_ng_l1a_orbit_pge {prod_dir} {l1_osp_dir} {raw_file}", file=fh)
+        job_count = job_count + 1
+fh.close()
+subprocess.run(["mkdir", "-p", "logs"])
+print(f"sbatch -n 1 -c 1 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh l1a_job_list.txt")
+subprocess.run(f"sbatch -n 1 -c 1 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh l1a_job_list.txt", shell=True)
