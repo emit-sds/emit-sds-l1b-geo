@@ -139,6 +139,16 @@ if(args.erdas):
         cmd = ["gdal_to_erdas", "--multiple-band",
                args.output_base + "_erdas.img"]
         cmd.extend(flist)
+        # Allow to fail. For some reason building the overviews fails
+        # sometimes. We still want to go on to the next step when
+        # this happens
+        #subprocess.run(cmd, check=True)
+        subprocess.run(cmd)
+        cmd = ["gdal_translate", "-co", "COMPRESS=DEFLATE",
+               args.output_base + "_erdas.img",
+               args.output_base + ".tif"]
         subprocess.run(cmd, check=True)
+        
+        
         
         
