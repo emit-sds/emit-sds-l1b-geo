@@ -741,7 +741,7 @@ dist_bin_SCRIPTS = $(srcdir)/$(srcpythonbin)/dummy_sample \
 	@l1b_geo_src@/l1b_geo_process \
 	@l1b_geo_src@/aviris_ng_geo_process \
 	@l1b_geo_src@/aviris_ng_l1a_orbit_process \
-	@l1b_geo_src@/footprint_shapefile @l1b_geo_src@/l1b_project
+	@l1b_geo_src@/l1b_project
 AM_LDFLAGS = 
 BUILT_SOURCES = complain_if_afids $(am__append_1)
 include_HEADERS = 
