@@ -131,8 +131,9 @@ try:
         os.chdir(curdir)
     logger.info("Done with l1b_geo processing")
 except Exception as e:
-    raise
-    logger.exception(e, stack_info=True)
+    logger.exception(e)
+    logger.exception("Traceback:")
+    logger.exception(traceback.format_exc())
     logger.fatal("L1b_geo processing failed")
     sys.exit(1)
 

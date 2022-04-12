@@ -112,8 +112,9 @@ try:
         os.chdir(curdir)
     logger.info("Done with aviris_ng_l1a_orbit processing")
 except Exception as e:
-    raise
-    logger.exception(e, stack_info=True)
+    logger.exception(e)
+    logger.exception("Traceback:")
+    logger.exception(traceback.format_exc())
     logger.fatal("aviris_ng_l1a_orbit processing failed")
     sys.exit(1)
 

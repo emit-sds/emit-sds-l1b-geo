@@ -4,6 +4,7 @@
 import geocal
 import emit
 import logging
+import traceback
 import os
 import sys
 import json
@@ -108,8 +109,9 @@ try:
         os.chdir(curdir)
     logger.info("Done with aviris_ng_geo processing")
 except Exception as e:
-    raise
-    logger.exception(e, stack_info=True)
+    logger.exception(e)
+    logger.exception("Traceback:")
+    logger.exception(traceback.format_exc())
     logger.fatal("aviris_ng_geo processing failed")
     sys.exit(1)
 
