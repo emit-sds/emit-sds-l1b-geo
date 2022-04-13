@@ -85,7 +85,7 @@ NOTE: This is specific to AVIRIS, not AVIRIS-NG!
 
  - envi_file.py: Wrapper to make a ENVI file, and treat it like a memory mapped numpy array.
 
- - misc.py: Includes functions create_dem, band_to_landsat_band, and others.
+ - misc.py: Includes functions band_to_landsat_band, and others.
 
  - gaussian_stretch.py: This does histogram equalization on the given data, doing a Gaussian stretch. This currently this uses the vicar program 'stretch'. It is assumed that all negative values are fill, and map them to 0. Data is returned as integer data.
 

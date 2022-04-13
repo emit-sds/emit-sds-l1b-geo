@@ -51,6 +51,10 @@ class L1bCorrect:
         probably things are small enough to just do something like
         this.
         '''
+        # TODO This is hardcode for AVIRIS-NG exterior camera orientation
+        # fitting only. Should instead generalize this for working
+        # with EMIT also
+        
         # Grab the camera object. Probably should put nearer the top,
         # but for now we just go through the object structure
         cam = self.igccolcorr.image_ground_connection(0).ipi.camera
@@ -70,10 +74,13 @@ class L1bCorrect:
             cam.fit_line_pitch = False
             cam.fit_principal_point_sample(False,0)
             cam.fit_principal_point_line(False,0)
+        x0 = cam.parameter_subset.copy()
+        if(len(x0) == 0):
+            logger.info("Nothing to fit")
+            return
         logger.info("Initial camera value:")
         for v, desc in zip(cam.parameter_subset,cam.parameter_name_subset):
             logger.info(f"{desc}: {v}")
-        x0 = cam.parameter_subset.copy()
         self.summarize_residual(x0, desc= "Initial")
         # Now fit the data. Can play with this, but for right now
         # just use the default scipy least squares optimization. We choose

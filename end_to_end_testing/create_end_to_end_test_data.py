@@ -43,7 +43,7 @@ cam = SimpleCamera(0,0,0,focal_length, line_pitch, sample_pitch,
                    1, nsamp)
 
 # DEM
-dem = create_dem(None)
+dem = geocal.SrtmDem()
 
 # Time was determined by looking as iss_orbit_determine.py along with
 # http://www.isstracker.com/historical to view the

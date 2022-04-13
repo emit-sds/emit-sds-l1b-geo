@@ -1,5 +1,4 @@
 from .envi_file import EnviFile
-from .misc import create_dem
 import geocal
 
 class AvirisIgm:
@@ -7,7 +6,7 @@ class AvirisIgm:
     and returning the ground location from this file.'''
     def __init__(self, igm_fname):
         self.f = EnviFile(igm_fname)
-        self.datum = create_dem(None).datum
+        self.datum = geocal.DatumGeoid96()
 
     @property 
     def shape(self):

@@ -7,24 +7,6 @@ import logging
 
 logger = logging.getLogger('l1b_geo_process.emit_dem')
 
-def create_dem(l1_osp_dir = None):
-    '''Create the SRTM DEM based on the configuration. Don't exactly know
-    how this will work once we are integrated in with SDS, but for now
-    just use the placeholder function and grab the information from the
-    environment.'''
-    if(l1_osp_dir is None):
-        # Default data if we don't have a config file
-        datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
-        srtm_dir = os.environ["ELEV_ROOT"]
-    else:
-        # Otherwise, get from config file
-        datum = l1_osp_dir.datum
-        srtm_dir = l1_osp_dir.srtm_dir
-    logger.info("Datum: %s", datum)
-    logger.info("SRTM Dir: %s", srtm_dir)
-    dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))
-    return dem
-
 def band_to_landsat_band(lband):
     '''Map number to the enumeration in C++'''
     if(lband == 1):
@@ -113,7 +95,7 @@ def file_name_to_gps_week(fname, filebase="ang"):
     gps_week = math.floor(tm.gps / (7 * 24 * 60 * 60))
     return int(gps_week)
 
-__all__ = ["create_dem", "band_to_landsat_band", "file_name_to_gps_week",
+__all__ = ["band_to_landsat_band", "file_name_to_gps_week",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
            "emit_file_name", "orb_and_scene_from_file_name"]
            

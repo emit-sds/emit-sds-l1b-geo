@@ -1,0 +1,38 @@
+#! /usr/bin/env python
+#
+# This generates a summary of a run
+import geocal
+import emit
+import os
+import sys
+import glob
+
+version = "1.0.0"
+usage='''Usage:
+  summarize_aviris_geo_run [options] <run_dir>
+  summarize_aviris_geo_run -h | --help
+  summarize_aviris_geo_run -v | --version
+
+This summarizes a aviris_ng_geo_process run. We'll likely change this a 
+bit over time, and ideally move some of this into a QA file. But for now
+we have the separate as we work out exactly what we want here.
+
+Options:
+  -h --help         
+       Print this message
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+
+dir = args.run_dir
+bname = os.path.basename(dir).split("_")[0]
+locname = f"{dir}/{bname}_loc"
+with open(f"{dir}/summary.txt", "w") as fh:
+    if(not os.path.exists(locname)):
+        print("Run FAILED. See aviris_ng_geo.log for details", file=fh)
+        sys.exit(0)
+    print("Run produced output files", file=fh)
+

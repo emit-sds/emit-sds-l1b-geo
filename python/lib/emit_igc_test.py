@@ -30,6 +30,8 @@ def test_create_igccollection(isolated_dir, test_data, l1_osp_dir):
                glob.glob(f"{test_data}/*_o80000_s002_l1b_rdn_*.img")[0],
                glob.glob(f"{test_data}/*_o80000_s003_l1b_rdn_*.img")[0]]
     rad_band = 1
+    print(l1_osp_dir)
+    print(l1_osp_dir.spice_data_dir)
     igccol = EmitIgcCollection.create(l1a_att, zip(line_time, l1b_rad),
                                       rad_band,
                                       l1_osp_dir=l1_osp_dir)

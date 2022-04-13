@@ -13,8 +13,6 @@ class L1bTpCollect:
         self.igccol = igccol
         self.geo_qa = geo_qa
         self.l1_osp_dir = l1_osp_dir
-        self.num_x = l1_osp_dir.num_x
-        self.num_y = l1_osp_dir.num_y
         self.log_file = ["tpmatch_%03d.log" % (i + 1) for i in range(self.igccol.number_image)]
         self.run_dir_name = ["tpmatch_%03d" % (i + 1) for i in range(self.igccol.number_image)]
         
@@ -96,7 +94,8 @@ class L1bTpCollect:
                 shutil.rmtree(tpcol.run_dir_name, ignore_errors=True)
                 logger.info("Collecting tp for %s try %d" %
                                    (self.igccol.title(i), i2+1))
-                res = tpcol.tie_point_grid(self.num_x, self.num_y)
+                res = tpcol.tie_point_grid(self.l1_osp_dir.num_tiepoint_x,
+                                           self.l1_osp_dir.num_tiepoint_y)
                 # Try this, and see how it works
                 ntpoint_initial = len(res)
                 ntpoint_removed = 0

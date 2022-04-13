@@ -1,7 +1,7 @@
 from .emit_orbit_extension import EmitOrbit
 from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
-from .misc import create_dem, orb_and_scene_from_file_name
+from .misc import orb_and_scene_from_file_name
 from emit_swig import EmitIgcCollection
 import logging
 import geocal
@@ -21,7 +21,10 @@ class EmitIgc(geocal.IpiImageGroundConnection):
 
         orb = EmitOrbit(orbit_fname)
         cam = EmitCamera()
-        dem = create_dem(l1_osp_dir)
+        if(l1_osp_dir):
+            dem = l1_osp_dir.dem
+        else:
+            dem = geocal.SrtmDem()
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
@@ -41,11 +44,11 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     number as "orbit_number" and the uncorrected orbit 
     as "uncorrected_orbit".'''
     if(l1_osp_dir):
-        os.environ["SPICEDATA"] = l1_osp_dir.spice_data_dir
+        l1_osp_dir.setup_spice()
     logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
     cam = l1_osp_dir.camera()
-    dem = create_dem(l1_osp_dir)
+    dem = l1_osp_dir.dem
     scene_to_igc = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene = orb_and_scene_from_file_name(rdn_fname)
