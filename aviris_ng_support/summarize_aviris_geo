@@ -1,0 +1,78 @@
+#! /usr/bin/env python
+#
+# This generates a summary of a all the runs
+import geocal
+import emit
+import os
+import sys
+import glob
+import pandas as pd
+import subprocess
+
+version = "1.0.0"
+usage='''Usage:
+  summarize_aviris_geo [options] [<dir>]
+  summarize_aviris_geo -h | --help
+  summarize_aviris_geo -v | --version
+
+This produces an overall summary of AVIRIS-NG runs, either for the current
+directory or the supplied parent directory name. We look for directories
+with the name "ang*_output".
+
+Options:
+  -h --help         
+       Print this message
+
+  --force
+       Rerun all the run summaries using summarize_aviris_geo_run, rather than
+       the default of just running these on directories without an existing
+       summary.
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+dir = "."
+if(args.dir):
+    dir = args.dir
+
+run_list = list(glob.glob(f"{dir}/ang*_output"))
+
+# Run the summary for each run, either ones without already having a summary
+# or for all of them if requested.
+if(args.force):
+    process_list = list(run_list)
+else:
+    process_list = [d for d in run_list
+                    if not os.path.exists(f"{d}/summary.pkl")]
+if(len(process_list) > 0):
+    subprocess.run(f"echo {' '.join(process_list)} | tr ' ' '\n' | parallel --gnu './summarize_aviris_geo_run {{}}'", shell=True)
+    
+df = pd.concat([pd.read_pickle(f"{d}/summary.pkl") for d in run_list])
+df.to_pickle(f"{dir}/summary.pkl")
+
+wr = pd.ExcelWriter(f"{dir}/summary.xlsx", engine='xlsxwriter')
+df.to_excel(wr, sheet_name='Sheet1', index_label = "Name")
+ws = wr.sheets['Sheet1']
+bad_format = wr.book.add_format({'bg_color':   '#FFC7CE',
+                                 'font_color' : '#9C0006'})
+good_format = wr.book.add_format({'bg_color':   '#C6EFCE',
+                                 'font_color' : '#006100'})
+neutral_format = wr.book.add_format({'bg_color':   '#FFEB9C',
+                                     'font_color' : '#9C6500'})
+ws.set_column(0,0,25)
+ws.set_column(1,1,len("run_finished"))
+ws.conditional_format(1,1,df.shape[0],1,
+                      {'type': 'cell',
+                       'criteria' : 'equal to',
+                       'value' : 'FALSE',
+                       'format': bad_format})
+ws.conditional_format(1,1,df.shape[0],1,
+                      {'type': 'cell',
+                       'criteria' : 'equal to',
+                       'value' : 'TRUE',
+                       'format': good_format})
+wr.save()
+
+
