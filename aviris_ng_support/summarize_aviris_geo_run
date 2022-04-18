@@ -7,6 +7,8 @@ import os
 import sys
 import glob
 import pandas as pd
+import numpy as np
+from aviris_ng_util import create_igc
 
 version = "1.0.0"
 usage='''Usage:
@@ -33,17 +35,58 @@ Options:
 args = geocal.docopt_simple(usage, version=version)
 
 dir = args.run_dir
+# Strip off trailing "/" if it is supplied
+if(os.path.basename(dir) == ''):
+    dir = os.path.dirname(dir)
 bname = os.path.basename(dir).split("_")[0]
 locname = f"{dir}/{bname}_loc"
-data = {"run_finished" : True, }
-with open(f"{dir}/summary.txt", "w") as fh:
-    if(not os.path.exists(locname)):
-        print("Run FAILED. See aviris_ng_geo.log for details", file=fh)
-        data["run_finished"] = False
-    else:
-        print("Run produced output files", file=fh)
+data = {"Run finished" : True, "Pixel Resolution" : None,
+        "Euler Epsilon": None, "Euler Beta" : None,
+        "Euler Delta" : None, "Focal Length" : None,
+        "Number tiepoint" : None,
+        "95% tiepoint distance" : None,
+        "95% distance pyortho sample 0" : None,
+        "95% distance pyortho sample 10" : None,
+        "95% distance pyortho sample 300" : None,
+        "95% distance pyortho sample 587" : None,
+        "95% distance pyortho sample 597" : None,
+        }
+try:
+    igc = create_igc(dir, with_rad=False, pyortho_loc=True)
+except:
+    # Ignore problems creating IGC, we just skip data that depends on this
+    igc = None
+fh = open(f"{dir}/summary.txt", "w") 
+if(not os.path.exists(locname)):
+    print("Run FAILED. See aviris_ng_geo.log for details", file=fh)
+    data["Run finished"] = False
+else:
+    print("Run produced output files", file=fh)
+if(igc):
+    data["Pixel Resolution"] = igc.resolution_meter()
+    p = igc.ipi.camera.parameter_subset
+    data["Euler Epsilon"] = p[0]
+    data["Euler Beta"] = p[1]
+    data["Euler Delta"] = p[2]
+    data["Focal Length"] = p[3]
+    if(igc.loc):
+        igccol = geocal.IgcArray([igc,])
+        tpcol = geocal.read_shelve(f"{dir}/tpcol.xml")
+        df = tpcol.data_frame(igccol,0)
+        data["Number tiepoint"] = len(tpcol)
+        d = np.nanpercentile(df["ground_2d_distance"],95)
+        data["95% tiepoint distance"] = d
+    if(igc.loc and igc.pyortho_loc and
+       igc.loc.shape == igc.pyortho_loc.shape):
+        for s in (0,10,300,587,597):
+            d = np.percentile(emit.AvirisNgLoc.distance_compare2(igc.loc,
+                                   igc.pyortho_loc,s),95)
+            data[f"95% distance pyortho sample {s}"] = d
+
 df = pd.DataFrame(data, index=[bname,])
 df.to_pickle(f"{dir}/summary.pkl")
+for lbl in df.keys():
+    print(f"{lbl}: {df[lbl][0]}", file=fh)
 
 
     

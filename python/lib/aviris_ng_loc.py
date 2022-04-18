@@ -58,7 +58,33 @@ class AvirisNgLoc(EnviFile):
     def height(self):
         '''Return the height field.'''
         return self[2,:,:]
+    @classmethod
+    def distance_compare(self, loc1, loc2, lspace=100,sspace=10):
+        '''Return the distance, not counting the DEM between two loc 
+        files'''
+        if(loc1.shape != loc2.shape):
+            raise RuntimeError("loc1 and loc2 need to have the same shape to compare")
+        res = []
+        for i in range(0,loc1.shape[1],lspace):
+            for j in range(0,loc1.shape[2],sspace):
+                res.append(geocal.distance(
+                    geocal.Geodetic(loc1.latitude[i,j],loc1.longitude[i,j]),
+                    geocal.Geodetic(loc2.latitude[i,j],loc2.longitude[i,j])))
+        return np.array(res)
 
+    @classmethod
+    def distance_compare2(self, loc1, loc2, smp, lspace=1):
+        '''Return the distance, not counting the DEM between two loc 
+        files'''
+        if(loc1.shape != loc2.shape):
+            raise RuntimeError("loc1 and loc2 need to have the same shape to compare")
+        res = []
+        for i in range(0,loc1.shape[1],lspace):
+                res.append(geocal.distance(
+                    geocal.Geodetic(loc1.latitude[i,smp],loc1.longitude[i,smp]),
+                    geocal.Geodetic(loc2.latitude[i,smp],loc2.longitude[i,smp])))
+        return np.array(res)
+    
     def map_info_rotated(self, mi):
         '''Calculate the rotated map info'''
         # We only need the edges pixels, this defines the full

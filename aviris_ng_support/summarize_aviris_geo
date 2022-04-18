@@ -50,6 +50,7 @@ if(len(process_list) > 0):
     subprocess.run(f"echo {' '.join(process_list)} | tr ' ' '\n' | parallel --gnu './summarize_aviris_geo_run {{}}'", shell=True)
     
 df = pd.concat([pd.read_pickle(f"{d}/summary.pkl") for d in run_list])
+df.sort_index(inplace=True)
 df.to_pickle(f"{dir}/summary.pkl")
 
 wr = pd.ExcelWriter(f"{dir}/summary.xlsx", engine='xlsxwriter')
@@ -61,8 +62,14 @@ good_format = wr.book.add_format({'bg_color':   '#C6EFCE',
                                  'font_color' : '#006100'})
 neutral_format = wr.book.add_format({'bg_color':   '#FFEB9C',
                                      'font_color' : '#9C6500'})
+wrap_format = wr.book.add_format()
+wrap_format.set_text_wrap()
 ws.set_column(0,0,25)
-ws.set_column(1,1,len("run_finished"))
+for i, lbl in enumerate(df.keys()):
+    ws.set_column(i+1,i+1,min(len(lbl),16))
+# Doesn't actually work, because data has been formatted. Not a big priority,
+# but may want to investigate how to do this.
+ws.set_row(0,None,wrap_format)
 ws.conditional_format(1,1,df.shape[0],1,
                       {'type': 'cell',
                        'criteria' : 'equal to',
