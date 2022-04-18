@@ -6,12 +6,13 @@ import glob
 import os
 import subprocess
 
+basedir = "/home/smyth/Scratch/AvirisNg20220418"
 fh = open("geo_job_list.txt", "w")
-l1_osp_dir = "/home/smyth/Scratch/AvirisNg/l1_osp"
+l1_osp_dir = f"{basedir}/l1_osp"
 job_count = 0
 for f in glob.glob("ang*_output"):
     bname = os.path.basename(f).split("_")[0]
-    prod_dir = f"/home/smyth/Scratch/AvirisNg/{bname}_output"
+    prod_dir = f"{basedir}/{bname}_output"
     orb_file = f"{prod_dir}/{bname}_att.nc"
     line_time_file = f"{prod_dir}/{bname}_line_time.nc"
     loc_file = f"{prod_dir}/{bname}_loc"

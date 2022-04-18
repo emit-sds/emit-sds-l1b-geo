@@ -2,6 +2,7 @@ import subprocess
 import geocal
 import os
 import logging
+import re
 
 logger = logging.getLogger('l1b_geo_process.l1b_proj')
 
@@ -29,9 +30,15 @@ class L1bProj(object):
         logger.info("Creating %s", proj_fname)
         geocal.write_shelve(mi_fname, mi)
         geocal.write_shelve(igc_fname, igc)
+        try:
+            self.l1_osp_dir.write_ortho_base_subset(ref_fname, mi)
+        except RuntimeError as e:
+            if(not re.search("RasterImage doesn't cover any of the area", str(e))):
+                raise
+            logger.info("Don't have reference data for scene %03d, skipping", i+1)
+            return None
         subprocess.run(["igc_raycast_project", f"--map-info={mi_fname}",
                         igc_fname, proj_fname], check=True)
-        self.l1_osp_dir.write_ortho_base_subset(ref_fname, mi)
         return (proj_fname, ref_fname)
 
     def proj(self, pool=None):

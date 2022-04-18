@@ -83,6 +83,7 @@ class L1bTpCollect:
                                 # assignment" exception
         ntpoint_removed = 0
         ntpoint_final = 0
+        number_match_try = 0
         try:
             tt = self.igccol.image_ground_connection(i).ipi.time_table
             for i2, tpcol in enumerate(self.tpcollect):
