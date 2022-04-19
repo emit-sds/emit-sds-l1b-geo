@@ -11,9 +11,10 @@ logger = logging.getLogger('l1b_geo_process.avirs_ng_igm')
 class AvirisNgIgm(EnviFile):
     '''Generate or read the IGM file for AVIRIS-NG.'''
     def __init__(self, fname, igc = None, loc = None, standard_metadata = None,
-                 number_line_process=1000):
+                 number_line_process=1000, l1_osp_dir = None):
         self.igc = igc
         self.loc = loc
+        self.l1_osp_dir = l1_osp_dir
         self.number_line_process = number_line_process
         if(self.igc is None):
             mode = 'r'

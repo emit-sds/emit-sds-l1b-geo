@@ -24,9 +24,9 @@ class AvirisNgGeoGenerate:
         self.tt_fname = tt_fname
         self.rad_fname = rad_fname
         self.l1_osp_dir = l1_osp_dir
+        self.l1_osp_dir.setup_spice()
         self.basename = re.sub(r'_att.nc$', '', os.path.basename(self.orb_fname) )
         # TODO Change DEM, possibly from config file
-        self.dem = geocal.SrtmDem()
         self.orb = AvirisNgOrbit(self.orb_fname)
         self.tt = AvirisNgTimeTable(self.tt_fname)
         self.rad = geocal.GdalRasterImage(rad_fname,
@@ -40,7 +40,8 @@ class AvirisNgGeoGenerate:
         self.cam = l1_osp_dir.camera()
         self.ipi = geocal.Ipi(self.orb,self.cam,0,self.tt.min_time,
                               self.tt.max_time,self.tt)
-        self.igc = geocal.IpiImageGroundConnection(self.ipi, self.dem,
+        self.igc = geocal.IpiImageGroundConnection(self.ipi,
+                                                   self.l1_osp_dir.dem,
                                                    self.rad)
         self.geo_qa = GeoQa(self.basename + "_geoqa.nc", "aviris_ng_geo.log")
 
@@ -49,15 +50,16 @@ class AvirisNgGeoGenerate:
         # scenes, because image matching works better
         nline_per_scene = self.l1_osp_dir.number_line_per_scene
         rset = []
+        max_line = min(self.rad.number_line, self.tt.max_line)
         for i in range(0,
-                       self.tt.max_line // nline_per_scene * nline_per_scene,
+                       max_line // nline_per_scene * nline_per_scene,
                        nline_per_scene):
-            if(i + 2 * nline_per_scene < self.tt.max_line):
+            if(i + 2 * nline_per_scene < max_line):
                 rset.append(range(i,i+nline_per_scene))
             else:
                 # Special handling for last scene, we add in the extra
                 # lines so we don't have a small runt at the end
-                rset.append(range(i,self.tt.max_line))
+                rset.append(range(i,max_line))
 
         tline = [self.tt.time_list(i) for i in range(self.tt.size_time_list)]
         # Extra pad added by MeasuredTimeTable, we just want the actual times
@@ -81,7 +83,8 @@ class AvirisNgGeoGenerate:
                                     len(r), self.rad.number_sample)
             ipisub = geocal.Ipi(self.orb,self.cam,0,ttsub.min_time,
                                 ttsub.max_time,ttsub)
-            igcsub = geocal.IpiImageGroundConnection(ipisub, self.dem,
+            igcsub = geocal.IpiImageGroundConnection(ipisub,
+                                                     self.l1_osp_dir.dem,
                                                      radsub, f"Scene {i+1}")
             self.igccol_initial.add_igc(igcsub)
         self.igccol_initial.add_object(self.cam)
@@ -98,15 +101,19 @@ class AvirisNgGeoGenerate:
             logger.info("Using 1 processor")
             pool = None
         self.create_scene()
-        l1b_correct = L1bCorrect(self.igccol_initial,
-                                 self.l1_osp_dir,
-                                 self.geo_qa)
-        self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
-        self.cam.parameter = self.igccol_corrected.image_ground_connection(0).ipi.camera.parameter
+        if(self.igccol_initial.number_image == 0):
+            logger.info("Not enough lines of image data to do matching, using original guess as exterior orientation")
+        else:
+            l1b_correct = L1bCorrect(self.igccol_initial,
+                                     self.l1_osp_dir,
+                                     self.geo_qa)
+            self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
+            self.cam.parameter = self.igccol_corrected.image_ground_connection(0).ipi.camera.parameter
         # TODO Put in copy orbit parameter when we have an orbit model that
         # gets updated.
         
-        if(self.l1_osp_dir.do_final_projection):
+        if(self.l1_osp_dir.do_final_projection and
+           self.igccol_initial.number_image > 0):
             proj = L1bProj(self.igccol_corrected, self.l1_osp_dir,
                            self.geo_qa, img_type="final")
             proj.proj(pool=pool)
@@ -116,11 +123,14 @@ class AvirisNgGeoGenerate:
         igm_fname = self.basename + "_igm"
         obs_fname = self.basename + "_obs"
         loc = AvirisNgLoc(loc_fname, igc=self.igc,
-                          standard_metadata=standard_metadata)
+                          standard_metadata=standard_metadata,
+                          l1_osp_dir=self.l1_osp_dir)
         igm = AvirisNgIgm(igm_fname, igc=self.igc, loc=loc,
-                          standard_metadata=standard_metadata)
+                          standard_metadata=standard_metadata,
+                          l1_osp_dir=self.l1_osp_dir)
         obs = AvirisNgObs(obs_fname, igc=self.igc, loc=loc,
-                          standard_metadata=standard_metadata)
+                          standard_metadata=standard_metadata,
+                          l1_osp_dir=self.l1_osp_dir)
         # GLT
         loc.run(pool=pool)
         igm.run(pool=pool)

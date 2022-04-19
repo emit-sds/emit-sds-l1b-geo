@@ -24,12 +24,14 @@ class L1OspDir:
         self.l1_osp_dir = l1_osp_dir
         self.load_config()
 
-    def setup_spice(self):
+    def setup_spice(self): 
         '''Setup the SPICEDATA environment variable'''
         v = self.spice_data_dir
         if(v is None):
             raise RuntimeError("Need to set spice_data_dir in the l1b_geo_config.py file")
         os.environ["SPICEDATA"] = v
+        geocal.SpiceHelper.spice_setup("geocal.ker", True)
+        logger.info("SPICEDATA: %s", self.spice_data_dir)
 
     # We use to just forward any variable in the l1b_geo_config module
     # to this class as an attribute. However this became a bit of a
@@ -164,6 +166,7 @@ class L1OspDir:
                                         self.l1_osp_dir + "/l1b_geo_config.py")
         self.l1b_geo_config = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.l1b_geo_config)
+        self.setup_spice()
 
     def __getstate__(self):
         return {'l1_osp_dir' : self.l1_osp_dir}

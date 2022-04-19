@@ -17,6 +17,7 @@ class AvirisNgL1aOrbitGenerate:
         self.gps_fname = gps_fname
         self.pps_fname = pps_fname
         self.l1_osp_dir = l1_osp_dir
+        self.l1_osp_dir.setup_spice()
         self.basename = re.sub(r'_raw$', '', os.path.basename(self.raw_fname) )
         logger.info("Raw file:   %s", self.raw_fname)
         logger.info("GPS file:   %s", self.gps_fname)
@@ -35,7 +36,7 @@ class AvirisNgL1aOrbitGenerate:
         are minor differences in the details. It is possible pyortho might
         calculate a value off by 1 or 2 from what we calculate here.'''
         cam = self.l1_osp_dir.camera()
-        dem = geocal.SrtmDem()
+        dem = self.l1_osp_dir.dem
         # Full resolution time table, no line averaging
         tt = AvirisNgTimeTable(self.pps_fname, raw=self.r)
         ipi = geocal.Ipi(self.orb,cam,0,tt.min_time, tt.max_time,tt)

@@ -20,7 +20,7 @@ class AvirisNgLoc(EnviFile):
     join this together with the EmitLoc, either as just a set of options
     or perhaps a derived class.'''
     def __init__(self, fname, igc = None, standard_metadata = None,
-                 number_line_process = 1000):
+                 number_line_process = 1000, l1_osp_dir = None):
         '''Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
 
@@ -31,6 +31,7 @@ class AvirisNgLoc(EnviFile):
         '''
         self.igc = igc
         self.number_line_process = number_line_process
+        self.l1_osp_dir = l1_osp_dir
         if(self.igc is None):
             mode = 'r'
             shape = None

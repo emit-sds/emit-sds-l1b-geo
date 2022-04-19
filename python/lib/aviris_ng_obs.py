@@ -11,7 +11,8 @@ logger = logging.getLogger('l1b_geo_process.aviris_ng_obs')
 class AvirisNgObs(EnviFile):
     '''This reads the AVIRIS NG obs data.'''
     def __init__(self, fname, loc = None, igc = None,
-                 standard_metadata = None, number_line_process=1000):
+                 standard_metadata = None, number_line_process=1000,
+                 l1_osp_dir = None):
         '''Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
 
@@ -22,6 +23,7 @@ class AvirisNgObs(EnviFile):
         '''
         self.igc = igc
         self.loc = loc
+        self.l1_osp_dir = l1_osp_dir
         self.number_line_process = number_line_process
         if(self.igc is None):
             mode = 'r'
