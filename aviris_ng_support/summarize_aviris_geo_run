@@ -71,11 +71,14 @@ if(igc):
     data["Focal Length"] = p[3]
     if(igc.loc):
         igccol = geocal.IgcArray([igc,])
-        tpcol = geocal.read_shelve(f"{dir}/tpcol.xml")
-        df = tpcol.data_frame(igccol,0)
-        data["Number tiepoint"] = len(tpcol)
-        d = np.nanpercentile(df["ground_2d_distance"],95)
-        data["95% tiepoint distance"] = d
+        if(os.path.exists(f"{dir}/tpcol.xml")):
+            tpcol = geocal.read_shelve(f"{dir}/tpcol.xml")
+            df = tpcol.data_frame(igccol,0)
+            data["Number tiepoint"] = len(tpcol)
+            d = np.nanpercentile(df["ground_2d_distance"],95)
+            data["95% tiepoint distance"] = d
+        else:
+            data["Number tiepoint"] = 0
     if(igc.loc and igc.pyortho_loc and
        igc.loc.shape == igc.pyortho_loc.shape):
         for s in (0,10,300,587,597):
