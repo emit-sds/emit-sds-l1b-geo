@@ -33,6 +33,10 @@ Options:
   -h --help         
        Print this message
 
+  --binfac-fname=f
+       Use the given line average from the binfac file, rather than calculating
+       this. Useful for backwards compatibility with pyortho.
+
   --debug
        Turn debugging information on
        
@@ -106,7 +110,8 @@ try:
     try:
         os.chdir(args.prod_dir)
         g = emit.AvirisNgL1aOrbitGenerate(raw_fname, gps_fname, pps_fname,
-                                          l1_osp_dir)
+                                          l1_osp_dir,
+                                          raw_binfac_fname=args.binfac_fname)
         g.run()
     finally:
         os.chdir(curdir)

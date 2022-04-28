@@ -6,7 +6,7 @@ import glob
 import os
 import subprocess
 
-basedir = "/home/smyth/Scratch/AvirisNg20220418"
+basedir = os.getcwd()
 fh = open("geo_job_list.txt", "w")
 l1_osp_dir = f"{basedir}/l1_osp"
 job_count = 0

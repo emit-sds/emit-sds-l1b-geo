@@ -6,11 +6,12 @@ import glob
 import os
 import subprocess
 
+basedir = "/home/smyth/Scratch/AvirisNg20220419"
 fh = open("erdas_job_list.txt", "w")
 job_count = 0
 for f in glob.glob("ang*_output"):
     bname = os.path.basename(f).split("_")[0]
-    prod_dir = f"/home/smyth/Scratch/AvirisNg/{bname}_output"
+    prod_dir = f"{basedir}/{bname}_output"
     loc_file = f"{prod_dir}/{bname}_loc"
     proj_file = f"{prod_dir}/{bname}_proj"
     rad_file = f"/beegfs/store/ang/y22/rdn/{bname}_rdn_v2z4_clip"

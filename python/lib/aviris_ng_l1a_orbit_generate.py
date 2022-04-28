@@ -12,10 +12,12 @@ logger = logging.getLogger('l1b_geo_process.aviris_ng_l1a_orbit_generate')
 class AvirisNgL1aOrbitGenerate:
     '''This is the overall l1a orbit process for AVIRIS NG. This
     creates the initial orbit, time table, and line averaging files'''
-    def __init__(self, raw_fname, gps_fname, pps_fname, l1_osp_dir):
+    def __init__(self, raw_fname, gps_fname, pps_fname, l1_osp_dir,
+                 raw_binfac_fname = None):
         self.raw_fname = raw_fname
         self.gps_fname = gps_fname
         self.pps_fname = pps_fname
+        self.raw_binfac_fname = raw_binfac_fname
         self.l1_osp_dir = l1_osp_dir
         self.l1_osp_dir.setup_spice()
         self.basename = re.sub(r'_raw$', '', os.path.basename(self.raw_fname) )
@@ -35,6 +37,10 @@ class AvirisNgL1aOrbitGenerate:
         This is almost the same as what the pyortho program did, but there
         are minor differences in the details. It is possible pyortho might
         calculate a value off by 1 or 2 from what we calculate here.'''
+        # Allow the line average to be overridden, for backwards compatibility
+        # with pyortho
+        if(self.raw_binfac_fname):
+            return int(open(self.raw_binfac_fname).read())
         cam = self.l1_osp_dir.camera()
         dem = self.l1_osp_dir.dem
         # Full resolution time table, no line averaging
