@@ -1,0 +1,9 @@
+This contains data from the original pyortho code (at
+git@github.jpl.nasa.gov:bbue/pyortho.git). This was found in the "camera_model"
+directory.
+
+The data is a simple binary format, see ingest_camera_to_flas.py for
+reading this data.
+
+We have taken this data, imported it into AFIDS/Geocal, and saved it out as an
+xml file that Geocal can read.
