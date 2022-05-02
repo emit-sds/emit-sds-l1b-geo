@@ -1,0 +1,5 @@
+This is the camera model that we fitted using AVIRIS-NG SHIFT data in
+April, 2022.
+
+The code for this is in aviris_ng_support/fit_camera.py. See the power point
+in the same directory for a bit more detail and what was done here.
