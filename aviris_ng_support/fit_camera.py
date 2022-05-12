@@ -7,6 +7,7 @@ import math
 from multiprocessing import Pool
 import logging
 import pandas as pd
+from pptx import Presentation
 
 # This uses tie-points between a couple of lines and a
 # cross "tie" line
@@ -18,6 +19,14 @@ igc1 = create_igc("ang20220224t204803_output")
 igc2 = create_igc("ang20220224t211618_output")
 # Tie line, sample 0 is west of sample 598
 igc3 = create_igc("ang20220224t223027_output")
+
+# Save IGC, just for reference
+write_shelve("camera_model_fitted/igc1.xml",
+             create_igc("ang20220224t204803_output", with_rad=False))
+write_shelve("camera_model_fitted/igc2.xml",
+             create_igc("ang20220224t211618_output", with_rad=False))
+write_shelve("camera_model_fitted/igc3.xml",
+             create_igc("ang20220224t223027_output", with_rad=False))
 
 # Determine overlap area and use for creating two sets
 # of tiepoints
@@ -54,16 +63,17 @@ if False:
     tcol = TpPairCol(igccol3_1, rot_mi(igc3), matcher=m)
     pool = Pool(20)
     tpcol = tcol.tpcol(pool=pool, llist=range(lnstart_3_1,lnend_3_1,10))
-    write_shelve("tpcol_3_1.xml", tpcol)
+    write_shelve("camera_model_fitted/tpcol_3_1.xml", tpcol)
     pool.close()
 if False:
     tcol = TpPairCol(igccol3_2, rot_mi(igc3), matcher=m)
     pool = Pool(20)
     tpcol = tcol.tpcol(pool=pool, llist=range(lnstart_3_2,lnend_3_2,10))
-    write_shelve("tpcol_3_2.xml", tpcol)
+    write_shelve("camera_model_fitted/tpcol_3_2.xml", tpcol)
     pool.close()
-tpcol_3_2 = read_shelve("tpcol_3_2.xml")
-tpcol_3_1 = read_shelve("tpcol_3_1.xml")
+tpcol_3_2 = read_shelve("camera_model_fitted/tpcol_3_2.xml")
+tpcol_3_1 = read_shelve("camera_model_fitted/tpcol_3_1.xml")
+
 
 # Residual before we recreate the camera
 df_bfit_3_1 = TpPairCol.tp_to_df(tpcol_3_1, igc3, igc1)
@@ -89,12 +99,10 @@ fa[:,1] = cp_y(np.array(list(range(598)),dtype=np.float64))
 fa[:,2] = cp_x(np.array(list(range(1,599)),dtype=np.float64))
 fa[:,3] = cp_y(np.array(list(range(1,599)),dtype=np.float64))
 cam.field_alignment = fa
-write_shelve("cam_cal_glas.xml", cam)
-# Dump the data out in a form that we can easily plot using gnuplot
-with open("cam_cal_glas_fa.txt", "w") as fh:
-    print("# Sample X Y", file=fh)
-    for i in range(cam.number_sample(0)):
-        print(i, cam.field_alignment[i,0],
-              cam.field_alignment[i,1], file=fh)
+write_shelve("camera_model_fitted/cam_cal_2022_04_11_glas.xml", cam)
+ppt = Presentation()        
+plot_camera_data(cam, f"Calibrated 4/11/2022 Field Alignment")
+ppt_save(ppt)
+ppt.save("camera_model_fitted/camera_model.ppt")
 
 

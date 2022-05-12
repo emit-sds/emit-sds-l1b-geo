@@ -4,7 +4,35 @@ import emit
 import glob
 import os
 import multiprocessing
+import matplotlib.pyplot as plt
+from pptx import Presentation
+from pptx.util import Inches
+from io import BytesIO
 
+def ppt_save(ppt_file):
+    '''Write out the latest matplotlib data to the powerpoint file'''
+    blank_slide_layout = ppt_file.slide_layouts[6]
+    slide = ppt_file.slides.add_slide(blank_slide_layout)
+    img = BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, dpi=300)
+    pic = slide.shapes.add_picture(img, Inches(0), Inches(0), height=Inches(7.5))
+
+def plot_camera_data(gcam, title):
+    '''Plot the camera data out.'''
+    plt.clf()
+    fig, ax = plt.subplots(2,1)
+    fig.suptitle(title)
+    ax[0].plot(list(range(gcam.field_alignment.shape[0])),
+            gcam.field_alignment[:,0])
+    ax[0].set(xlabel="Camera Sample", ylabel="Field Alignment X",
+              title="Camera field aligment X")
+    ax[1].plot(list(range(gcam.field_alignment.shape[0])),
+          gcam.field_alignment[:,1])
+    ax[1].set(xlabel="Camera Sample", ylabel="Field Alignment Y",
+              title="Camera field aligment Y")
+    plt.tight_layout()
+    
 def find_exactly_one_file(pattern):
     f = glob.glob(pattern)
     if(len(f) == 0):

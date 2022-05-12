@@ -9682,13 +9682,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ParaxialTransform_paraxial_to_real", _wrap_ParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::ParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
-		"const =0\n"
+		"virtual void Emit::ParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
+		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
+		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const =0\n"
 		"\n"
 		""},
 	 { (char *)"ParaxialTransform_real_to_paraxial", _wrap_ParaxialTransform_real_to_paraxial, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::ParaxialTransform::real_to_paraxial(double Real_x, double Real_y, double &Paraxial_x, double &Paraxial_y)\n"
+		"virtual void Emit::ParaxialTransform::real_to_paraxial(const GeoCal::AutoDerivative< double > &Real_x, const\n"
+		"GeoCal::AutoDerivative< double > &Real_y, GeoCal::AutoDerivative<\n"
+		"double > &Paraxial_x, GeoCal::AutoDerivative< double > &Paraxial_y)\n"
 		"const =0\n"
 		"\n"
 		""},
@@ -9706,8 +9709,9 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"IdentityParaxialTransform_paraxial_to_real", _wrap_IdentityParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::IdentityParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
-		"const\n"
+		"virtual void Emit::IdentityParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
+		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
+		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const\n"
 		"\n"
 		""},
 	 { (char *)"delete_IdentityParaxialTransform", _wrap_delete_IdentityParaxialTransform, METH_VARARGS, (char *)"\n"
@@ -9723,8 +9727,9 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"CaptureParaxialTransform_paraxial_to_real", _wrap_CaptureParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::CaptureParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
-		"const\n"
+		"virtual void Emit::CaptureParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
+		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
+		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const\n"
 		"\n"
 		""},
 	 { (char *)"CaptureParaxialTransform_clear", _wrap_CaptureParaxialTransform_clear, METH_VARARGS, (char *)"\n"
