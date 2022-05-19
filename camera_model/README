@@ -1,0 +1,5 @@
+This contains the camera model. See the powerpoint for a description of
+measurement, coordinate system, etc.
+
+The measured data is in the spreadsheet. We have a short script to import
+this into a geocal camera model (a GlasGfmCamera).
