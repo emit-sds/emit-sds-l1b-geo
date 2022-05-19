@@ -1,4 +1,10 @@
-# AVIRIS-NG-GEO
+<h1 align="center"> emit-sds-l1b-geo </h1>
+
+_NOTE - See the **develop** branch - set as default - for the latest updates._
+
+Welcome to the EMIT Level Level 1B Geo science data system repository.  To understand how this repository is linked to the rest of the emit-sds repositories, please see [the repository guide](https://github.com/emit-sds/emit-main/wiki/Repository-Guide).
+
+
 
 This project provide geolocation support for AVIRIS-NG, and is based on similar support for EMIT. The code performs the following basic steps:
 
