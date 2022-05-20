@@ -110,29 +110,29 @@ def aviris_time_table_fname(test_data):
 def aviris_l1b_rdn_fname(test_data):
     '''AVIRIS NG L1B Radiance file to use. This is actually resampled to
     EMIT wavelengths, we might want to replace this data set'''
-    return test_data + "input_afids_ng/ang20170328t202059_rdn_emit_syn"
+    return test_data + "aviris_ng_old/input_afids_ng/ang20170328t202059_rdn_emit_syn"
 
 @pytest.fixture(scope="function")
 def aviris_gps_fname(test_data):
     '''AVIRIS NG GPS data.''' 
-    return test_data + "input_afids_ng/ang20170328t202059_gps"
+    return test_data + "aviris_ng_old/input_afids_ng/ang20170328t202059_gps"
 
 @pytest.fixture(scope="function")
 def aviris_raw_fname(test_data):
     '''AVIRIS NG raw data.''' 
-    return test_data + "input_afids_ng/ang20170328t202059_raw"
+    return test_data + "aviris_ng_old/input_afids_ng/ang20170328t202059_raw"
 
 @pytest.fixture(scope="function")
 def aviris_pps_fname(test_data):
     '''AVIRIS NG PPS data.''' 
-    return test_data + "input_afids_ng/ang20170328t202059_pps"
+    return test_data + "aviris_ng_old/input_afids_ng/ang20170328t202059_pps"
 
 @pytest.fixture(scope="function")
 def aviris_frame_meta(test_data):
     '''This returns pickled data we saved from the original pyortho
     program, which we can compare against to make sure we get the same
     results.'''
-    frame_meta, gpstime, filedate, zone_alpha = pickle.load(open(test_data + "input_afids_ng/pyortho_20170328t202059.pkl", "rb"), encoding="bytes")
+    frame_meta, gpstime, filedate, zone_alpha = pickle.load(open(test_data + "aviris_ng_old/input_afids_ng/pyortho_20170328t202059.pkl", "rb"), encoding="bytes")
     return frame_meta
 
 @pytest.fixture(scope="function")
@@ -140,14 +140,14 @@ def aviris_gps_table(test_data):
     '''AVIRIS NG GPS data.'''
     # The "bytes" here is needed because we pickled using python 2.7. See
     # https://groups.google.com/g/sage-devel/c/nLG8zMSKSD0
-    return pickle.load(open(test_data + "input_afids_ng/gps_table_raw.pkl", "rb"),encoding="bytes")
+    return pickle.load(open(test_data + "aviris_ng_old/input_afids_ng/gps_table_raw.pkl", "rb"),encoding="bytes")
 
 @pytest.fixture(scope="function")
 def aviris_pps_table(test_data):
     '''AVIRIS NG PPS data.'''
     # The "bytes" here is needed because we pickled using python 2.7. See
     # https://groups.google.com/g/sage-devel/c/nLG8zMSKSD0
-    return pickle.load(open(test_data + "input_afids_ng/pps_table_raw.pkl", "rb"),encoding="bytes")
+    return pickle.load(open(test_data + "aviris_ng_old/input_afids_ng/pps_table_raw.pkl", "rb"),encoding="bytes")
 
 @pytest.fixture(scope="function")
 def aviris_camera(test_data):

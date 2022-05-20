@@ -7,7 +7,7 @@ from test_support import *
 # can turn this back on to debug some kind of problem
 @slow
 def test_generate_obs(igc, isolated_dir, emit_loc):
-    g = EmitObs("test_obs.img", igc=igc, emit_loc=emit_loc)
+    g = EmitObs("test_obs.img", igc=igc, loc=emit_loc)
     g.run()
     
     

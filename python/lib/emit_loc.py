@@ -46,6 +46,11 @@ class EmitLoc(EnviFile):
         '''Return the height field.'''
         return self[2,:,:]
 
+    def ground_coordinate(self, ln, smp):
+        '''Return the Geodetic point for the given line/sample''' 
+        lon, lat, elv = self[:,ln, smp]
+        return geocal.Geodetic(lat, lon, elv)
+    
     @property
     def crosses_date_line(self):
         '''Returns true if we cross the dateline'''
