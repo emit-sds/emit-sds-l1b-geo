@@ -7,6 +7,8 @@ endif
 source @afidsdatadir@/setup_afids_data.csh
 source @geocaldir@/setup_geocal.csh
 
+setenv ELEV_ROOT @srtml2dir@
+setenv SPICEDATA @spicedatadir@
 setenv EMIT_TEST_DATA @testdatadir@
 
 if($?PYTHONPATH) then

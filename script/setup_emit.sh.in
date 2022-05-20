@@ -13,6 +13,8 @@ fi
 source @afidsdatadir@/setup_afids_data.sh
 source @geocaldir@/setup_geocal.sh
 
+export ELEV_ROOT=@srtml2dir@
+export SPICEDATA=@spicedatadir@
 export EMIT_TEST_DATA=@testdatadir@
 
 if [ -n "$PYTHONPATH" ]; then
