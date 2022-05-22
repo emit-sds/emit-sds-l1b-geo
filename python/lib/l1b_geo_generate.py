@@ -56,7 +56,9 @@ class L1bGeoGenerate:
         igc = self.igccol_corrected.image_ground_connection(i)
         scene = self.scene_list[i]
         logger.info("Processing %s", igc.title)
-        standard_metadata = StandardMetadata(igc=igc)
+        # TODO Create actual QA value here.
+        standard_metadata = StandardMetadata(igc=igc,
+                                             geolocation_accuracy_qa="Suspect")
         loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
                                    int(self.orbit_number),
                                    int(scene),
