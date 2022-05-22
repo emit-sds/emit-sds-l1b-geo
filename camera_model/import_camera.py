@@ -31,6 +31,11 @@ field_y = pd.read_excel("EMIT_Camera_Model_FieldAngles_20220402.xlsx",
 # the middle one of 172 for reading our field angles. We could look at
 # the spectral pixel dependency of this if needed, but for now we just
 # ignore this.
+#
+# Note we don't know the actual wavelength for this, we could probably figure this
+# out from but it isn't actually important. This only gets used if we are doing a
+# wavelength dependent refraction correction. We won't do this for EMIT, the effect is too small.
+# So we use the default wavelength here.
 
 field_x = field_x[172]
 field_y = field_y[172]
@@ -90,7 +95,6 @@ fa[:,1] = fa_y[:-1]
 fa[:,2] = fa_x[1:]
 fa[:,3] = fa_y[1:]
 cam.field_alignment = fa
-print(cam)
 geocal.write_shelve("camera_full_2022_04_02_glas.xml", cam)
 
 # From an email from David Thompson (5/12/2022), we'll be using

@@ -81,8 +81,8 @@ class L1bGeoGenerate:
         kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata,
-                      emit_loc = loc)
-        glt = EmitGlt(glt_fname, emit_loc=loc,
+                      loc=loc)
+        glt = EmitGlt(glt_fname, loc=loc,
                       standard_metadata=standard_metadata,
                       rotated_map=self.glt_rotated)
         kmz = None

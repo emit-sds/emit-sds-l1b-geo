@@ -4,7 +4,7 @@ import logging
 import numpy as np
 import geocal
 import re
-import math
+from math import acos, sin, cos
 
 logger = logging.getLogger('l1b_geo_process.aviris_ng_obs')
 
@@ -127,10 +127,16 @@ class AvirisNgObs(EnviFile):
                     d = (lv.direction[0] * slv.direction[0] +
                          lv.direction[1] * slv.direction[1] +
                          lv.direction[2] * slv.direction[2])
-                    self.solar_phase[ln,smp] = math.acos(d) * geocal.rad_to_deg
-                    self.slope[ln,smp] = -9999
-                    self.aspect[ln,smp] = -9999
-                    self.cosine_i[ln,smp] = -9999
+                    self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
+                    self.slope[ln,smp], self.aspect[ln,smp] = \
+                        self.igc.dem.slope_and_aspect(gp)
+                    slope_dir = \
+                        [sin(self.slope[ln,smp])*sin(self.aspect[ln,smp]),
+                         sin(self.slope[ln,smp])*cos(self.aspect[ln,smp]),
+                         cos(self.slope[ln,smp])]
+                    self.cosine_i[ln,smp] = (slope_dir[0] * slv.direction[0] +
+                                             slope_dir[1] * slv.direction[1] +
+                                             slope_dir[2] * slv.direction[2])
 
     def run(self, pool=None):
         '''Actually generate the output data.'''

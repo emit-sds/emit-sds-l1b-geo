@@ -6,7 +6,7 @@ from emit_swig import *
 import subprocess
 import logging
 
-logger = logging.getLogger('l1b_geo_process.emit_loc')
+logger = logging.getLogger('l1b_geo_process.loc')
 
 class EmitKmzAndQuicklook(object):
     '''This generate the l1b_geo KMZ file. This is almost the same work
@@ -17,7 +17,7 @@ class EmitKmzAndQuicklook(object):
     The EmitLoc should also have been generate (so either you are reading
     an existing file or you have done EmitLoc.run to generate the data).
     '''
-    def __init__(self, file_base_name, emit_loc,
+    def __init__(self, file_base_name, loc,
                  rad_fname, band_list = [1,1,1],
                  scene = 1,
                  use_jpeg = False,
@@ -25,7 +25,7 @@ class EmitKmzAndQuicklook(object):
                  generate_kmz = True,
                  generate_quicklook = True):
         self.file_base_name = file_base_name
-        self.emit_loc = emit_loc
+        self.loc = loc
         self.band_list = band_list
         self.use_jpeg = use_jpeg
         self.resolution = resolution
@@ -38,9 +38,9 @@ class EmitKmzAndQuicklook(object):
     def run(self):
         logger.info("Generating KMZ and quicklook")
         mi = geocal.cib01_mapinfo(self.resolution)
-        lat = scipy.ndimage.interpolation.zoom(self.emit_loc.latitude,
+        lat = scipy.ndimage.interpolation.zoom(self.loc.latitude,
                                                self.number_subpixel, order=2)
-        lon = scipy.ndimage.interpolation.zoom(self.emit_loc.longitude,
+        lon = scipy.ndimage.interpolation.zoom(self.loc.longitude,
                                                self.number_subpixel, order=2)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%03d.vrt" % self.scene

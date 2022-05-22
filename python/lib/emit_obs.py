@@ -4,13 +4,13 @@ import logging
 import numpy as np
 import geocal
 import re
-import math
+from math import acos, sin, cos
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
 
 class EmitObs(EnviFile):
     '''Generate or read the OBS file for EMIT.'''
-    def __init__(self, fname, emit_loc = None, igc = None,
+    def __init__(self, fname, loc = None, igc = None,
                  standard_metadata = None):
         '''Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
@@ -27,7 +27,7 @@ class EmitObs(EnviFile):
         else:
             mode = 'w'
             self.standard_metadata = standard_metadata
-            self.emit_loc = emit_loc
+            self.loc = loc
             if(self.standard_metadata is None):
                 self.standard_metadata = StandardMetadata(igc=igc)
             shape = (11, igc.number_line, igc.number_sample)
@@ -104,9 +104,7 @@ class EmitObs(EnviFile):
             seconds_in_day = tm - geocal.Time.parse_time(re.split('T', str(tm))[0] + "T00:00:00Z")
             self.utc_time[ln,:] = seconds_in_day / (60 * 60)
             for smp in range(self.igc.number_sample):
-                gp = geocal.Geodetic(self.emit_loc.latitude[ln,smp],
-                                     self.emit_loc.longitude[ln,smp],
-                                     self.emit_loc.height[ln,smp])
+                gp = self.loc.ground_coordinate(ln, smp)
                 # This is to sensor direction, opposite of what we
                 # sometimes use
                 clv = geocal.CartesianFixedLookVector(gp, pos)
@@ -128,10 +126,15 @@ class EmitObs(EnviFile):
                 d = (lv.direction[0] * slv.direction[0] +
                      lv.direction[1] * slv.direction[1] +
                      lv.direction[2] * slv.direction[2])
-                self.solar_phase[ln,smp] = math.acos(d) * geocal.rad_to_deg
-                self.slope[ln,smp] = -9999
-                self.aspect[ln,smp] = -9999
-                self.cosine_i[ln,smp] = -9999
+                self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
+                self.slope[ln,smp], self.aspect[ln,smp] = \
+                    self.igc.dem.slope_and_aspect(gp)
+                slope_dir = [sin(self.slope[ln,smp])*sin(self.aspect[ln,smp]),
+                             sin(self.slope[ln,smp])*cos(self.aspect[ln,smp]),
+                             cos(self.slope[ln,smp])]
+                self.cosine_i[ln,smp] = (slope_dir[0] * slv.direction[0] +
+                                         slope_dir[1] * slv.direction[1] +
+                                         slope_dir[2] * slv.direction[2])
         self.standard_metadata.write_metadata(self)
         
 __all__ = ["EmitObs", ]
