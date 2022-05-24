@@ -3,6 +3,7 @@ from .standard_metadata import *
 import logging
 import numpy as np
 import geocal
+import pandas as pd
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
 
@@ -76,5 +77,29 @@ class EmitLoc(EnviFile):
                 self[1,rcast.current_position, i] = gp.latitude
                 self[2,rcast.current_position, i] = gp.height_reference_surface
         self.standard_metadata.write_metadata(self)
+
+    def compare(self, f2):
+        '''Compare with another file, returning True if the same,
+        False otherwise. 
+
+        Note the compare is done with a tolerance. We allow +-1 pixel in
+        the location due to small round off differences. We report
+        the differences'''
+        print("Comparing LOC files")
+        same = self.metadata_compare(f2)
+        distance=np.array([[geocal.distance(self.ground_coordinate(i,j),
+                                   f2.ground_coordinate(i,j))
+                            for j in range(self.shape[2])]
+                           for i in range(self.shape[1])])
+        print("   Difference (meters)")
+        r = pd.DataFrame(distance.flatten()).describe()
+        print(r)
+        if(distance.max() >= 60.0):
+            same = False
+        if same:
+            print("   Files are considered the same")
+        else:
+            print("   Files are considered different")
+        return same
         
 __all__ = ["EmitLoc", ]

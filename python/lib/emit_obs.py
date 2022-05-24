@@ -5,6 +5,7 @@ import numpy as np
 import geocal
 import re
 from math import acos, sin, cos
+import pandas as pd
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
 
@@ -136,5 +137,74 @@ class EmitObs(EnviFile):
                                          slope_dir[1] * slv.direction[1] +
                                          slope_dir[2] * slv.direction[2])
         self.standard_metadata.write_metadata(self)
+
+    def compare(self, f2):
+        '''Compare with another file, returning True if the same,
+        False otherwise. 
+
+        Note the compare is done with a tolerance. We report
+        the differences'''
+        print("Comparing OBS files")
+        same = self.metadata_compare(f2)
+        print("   Path length Difference (meters)")
+        diff = np.abs(self.path_length - f2.path_length)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   View Azimuth Difference (degree)")
+        diff = np.abs(self.view_azimuth - f2.view_azimuth)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   View Zenith Difference (degree)")
+        diff = np.abs(self.view_zenith - f2.view_zenith)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Solar Azimuth Difference (degree)")
+        diff = np.abs(self.solar_azimuth - f2.solar_azimuth)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Solar Zenith Difference (degree)")
+        diff = np.abs(self.solar_zenith - f2.solar_zenith)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Solar Phase Difference")
+        diff = np.abs(self.solar_phase - f2.solar_phase)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Slope Difference (degree)")
+        diff = np.abs(self.slope - f2.slope)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Aspect Difference (degree)")
+        diff = np.abs(self.aspect - f2.aspect)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Cosine(I) Difference")
+        diff = np.abs(self.cosine_i - f2.cosine_i)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   UTC Time Difference")
+        diff = np.abs(self.utc_time - f2.utc_time)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        print("   Earth-Sun distance Difference")
+        diff = np.abs(self.earth_sun_distance - f2.earth_sun_distance)
+        print(pd.DataFrame(diff.flatten()).describe())
+        if(diff.max() > 1e-2):
+            same = False
+        if same:
+            print("   Files are considered the same")
+        else:
+            print("   Files are considered different")
+        return same
         
 __all__ = ["EmitObs", ]

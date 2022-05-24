@@ -7,6 +7,7 @@ import subprocess
 import logging
 import cv2
 import math
+import pandas as pd
 
 logger = logging.getLogger('l1b_geo_process.emit_glt')
 
@@ -157,5 +158,28 @@ class EmitGlt(EnviFile):
         fh.close()
         if(self.standard_metadata):
             self.standard_metadata.write_metadata(self)
+
+    def compare(self, f2):
+        '''Compare with another file, returning True if the same,
+        False otherwise. 
+
+        Note the compare is done with a tolerance. We allow +-1 in
+        the line/sample due to small round off differences. We report
+        the differences'''
+        print("Comparing GLT files")
+        same = self.metadata_compare(f2)
+        ldiff = np.abs(self.glt_line - f2.glt_line)
+        sdiff = np.abs(self.glt_sample - f2.glt_sample)
+        print("   Difference (pixels)")
+        r = pd.DataFrame(np.concatenate((ldiff.flatten(), sdiff.flatten()))).describe()
+        print(r)
+        if(ldiff.max() >= 2 or sdiff.max() >= 2):
+            same = False
+        if same:
+            print("   Files are considered the same")
+        else:
+            print("   Files are considered different")
+        return same
+            
         
 __all__ = ["EmitGlt",]
