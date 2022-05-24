@@ -30,6 +30,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_geo_generate.py
 emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_l1a_orbit_generate.py
 emitpkgpython_PYTHON+= @srcpythonlib@/l1_osp_dir.py
 emitpkgpython_PYTHON+= @srcpythonlib@/gaussian_stretch.py
+emitpkgpython_PYTHON+= @srcpythonlib@/sto_file.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
@@ -57,6 +58,7 @@ EXTRA_DIST+=@srcpythonlib@/aviris_ng_raw.py
 EXTRA_DIST+=@srcpythonlib@/aviris_ng_time_table_test.py
 EXTRA_DIST+=@srcpythonlib@/l1_osp_dir_test.py
 EXTRA_DIST+=@srcpythonlib@/gaussian_stretch_test.py
+EXTRA_DIST+=@srcpythonlib@/sto_file_test.py
 EXTRA_DIST+= @srcpythonlib@/__init__.py
 
 # Allow searchs for .pyx files in this directory
