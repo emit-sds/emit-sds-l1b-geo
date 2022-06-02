@@ -3,6 +3,17 @@ import pandas as pd
 import geocal
 import numpy as np
 
+# Camera we used in initial testing. Keep around just so we have a copy
+# of this for use with old test data.
+focal_length = 193.5e-3
+line_pitch = 30e-6
+sample_pitch = 30e-6
+nsamp = 1280
+spectral_channel = 324
+cam = geocal.SimpleCamera(0,0,0,focal_length, line_pitch, sample_pitch,
+                   1, nsamp)
+geocal.write_shelve("camera_initial_testdata.xml", cam)
+
 # Focal length is from an Email from Christine Bradley (2/18/2022). This
 # was measured in TVAC. We'll look at fitting this on orbit, it isn't
 # atypical for this to change slightly in orbit from gravity unloading/thermal

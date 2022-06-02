@@ -8,7 +8,7 @@ class StoFile:
     is a building piece for making a orbit file from the sto file.
     '''
     def __init__(self, fname):
-        t = pd.read_csv(fname, sep=None)
+        t = pd.read_csv(fname, sep=None, engine='python')
         # Pull out actual data
         t = t[t["#Header"] == "#Data"]
         # Time is in GPS seconds, and is made up of
@@ -36,7 +36,6 @@ class StoFile:
         pos = pos.to_numpy(dtype=np.float64)
         vel = vel.to_numpy(dtype=np.float64)
         att_q = att_q.to_numpy(dtype=np.float64)
-        print(att_q[1000])
 
         self.orbit_data = []
         for i in range(tm.shape[0]):
@@ -45,4 +44,12 @@ class StoFile:
             v = vel[i,:]
             att = geocal.Quaternion_double(*att_q[i,:])
             self.orbit_data.append(geocal.QuaternionOrbitData(t,p,v,att))
-            
+
+    @staticmethod
+    def create_orbit(flist, tmin, tmax):
+        qlist = []
+        for fname in flist:
+            qlist_file = StoFile(fname).orbit_data
+            qlist.extend([q for q in qlist_file
+                          if (q.time >= tmin and q.time <= tmax)])
+        return geocal.OrbitQuaternionList(qlist)

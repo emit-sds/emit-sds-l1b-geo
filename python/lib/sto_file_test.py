@@ -15,12 +15,9 @@ def test_create_orbit(isolated_dir):
     # sto file list is that we need.
     tmin = geocal.Time.parse_time("2021-09-30T00:53:21.241Z")
     tmax = geocal.Time.parse_time("2021-09-30T02:26:38.337Z")
-    f1 = StoFile(unit_test_data + "oco3_issbad_210930000000_210930020000_211005113331_hsc.sto")
-    f2 = StoFile(unit_test_data + "oco3_issbad_210930020000_210930040000_211005113331_hsc.sto")
-    qlist = list(f1.orbit_data)
-    qlist.extend(f2.orbit_data)
-    qlist = [q for q in qlist if (q.time >= tmin and q.time <= tmax)]
-    orb = geocal.OrbitQuaternionList(qlist)
+    f1 = unit_test_data + "oco3_issbad_210930000000_210930020000_211005113331_hsc.sto"
+    f2 = unit_test_data + "oco3_issbad_210930020000_210930040000_211005113331_hsc.sto"
+    orb = StoFile.create_orbit([f1, f2], tmin, tmax)
     print(orb)
     EmitOrbit.write_file2("test_orb.nc", orb)
 
