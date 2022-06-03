@@ -2337,8 +2337,8 @@ export EMIT_TEST_DATA=@testdatadir@/latest
 
 # end to end check
 end-to-end-check:
-	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_geo_run $(EMIT_TEST_DATA)/l1_osp_dir $(EMIT_TEST_DATA)/*o80000_l1a_att*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s002_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s002_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s003_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s003_l1b_rdn*.img
-	source $(prefix)/setup_emit.sh && gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img && gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img && gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img
+#	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_geo_run $(EMIT_TEST_DATA)/l1_osp_dir $(EMIT_TEST_DATA)/*o80000_l1a_att*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s002_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s002_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s003_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s003_l1b_rdn*.img
+	-source $(prefix)/setup_emit.sh; echo "**** Compare GLT ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img; echo "**** Compare LOC ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img; echo "**** Compare OBS ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img
 
 end-to-end-aviris-check:
 	@echo "This end to end test has outlived it usefuless. We will no"
