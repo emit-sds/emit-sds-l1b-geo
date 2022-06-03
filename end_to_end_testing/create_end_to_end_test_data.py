@@ -35,6 +35,7 @@ orb = SpiceOrbit(SpiceOrbit.ISS_ID, "iss_spice/iss_2020.bsp")
 
 # Use our calibrated camera model
 cam = read_shelve("../camera_model/camera_active_2022_04_02.xml")
+#cam = read_shelve("../camera_model/camera_initial_testdata.xml")
 
 # DEM
 dem = SrtmDem()

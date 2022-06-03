@@ -23,7 +23,7 @@ focal_length_mm = 193.3
 focal_length_time = geocal.Time.parse_time("2022-02-18T00:00:00Z")
 
 # These are in mm. CCD pitch is 30 micron, so we should see a spacing
-# in the x direction of about 0.03
+# in the field_x direction of about 0.03
 #
 # In this file, the pixel sample number (the index column) is 0 or 1 based
 # (see comment below, 0 based is current best guess).
@@ -32,6 +32,15 @@ field_x = pd.read_excel("EMIT_Camera_Model_FieldAngles_20220402.xlsx",
                         sheet_name = "field_x", index_col=0)
 field_y = pd.read_excel("EMIT_Camera_Model_FieldAngles_20220402.xlsx",
                         sheet_name = "field_y", index_col=0)
+
+# Note that the orbit data from BAD uses a different direction convention
+# then Christine's camera model. Using the language of the QuaternionCamera
+# she has LINE_IS_Y, INCREASE_IS_POSITIVE for both line and sample.
+# The BAD data uses a convention of LINE_IS_X, INCREASE_IS_POSITIVE for
+# both line and sample. So we need to swap field_x and field_y when
+# assigning to glas model
+glas_x = field_y
+glas_y = field_x
 
 # There is a pretty small keystone and smile (keystone ~10% of a pixel,
 # smile ~2% of a pixel, from Email from Christine Bradley, 2/17/2022).
@@ -48,8 +57,8 @@ field_y = pd.read_excel("EMIT_Camera_Model_FieldAngles_20220402.xlsx",
 # wavelength dependent refraction correction. We won't do this for EMIT, the effect is too small.
 # So we use the default wavelength here.
 
-field_x = field_x[172]
-field_y = field_y[172]
+glas_x = glas_x[172]
+glas_y = glas_y[172]
 
 # Data actually goes from pixel 25 to 1265. Not surprisingly there was
 # no measurements where the pixels are shielded. We fit Chebyshev polynomial
@@ -64,13 +73,13 @@ field_y = field_y[172]
 
 is_one_based = False
 if is_one_based:
-    sample = np.array(field_x.index) - 1
+    sample = np.array(glas_x.index) - 1
 else:
-    sample = np.array(field_x.index)
+    sample = np.array(glas_x.index)
     
-cp_x = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(field_x), 5,
+cp_x = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(glas_x), 5,
                                              [0,1280])
-cp_y = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(field_y), 5,
+cp_y = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(glas_y), 5,
                                              [0,1280])
 fa_x = np.empty((1280 // 4 + 1,))
 fa_y = np.empty((1280 // 4 + 1,))
@@ -83,8 +92,8 @@ else:
 for i,smp in enumerate(smplist):
     try:
         f_ind = list(sample).index(smp)
-        fa_x[i] = np.array(field_x)[f_ind]
-        fa_y[i] = np.array(field_y)[f_ind]
+        fa_x[i] = np.array(glas_x)[f_ind]
+        fa_y[i] = np.array(glas_y)[f_ind]
     except ValueError:
         fa_x[i] = cp_x(smp)
         fa_y[i] = cp_y(smp)
