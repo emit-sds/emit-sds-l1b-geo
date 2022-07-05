@@ -195,7 +195,7 @@ def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
 def emit_loc(test_data):
     '''EmitLoc that can be used with the igc for testing'''
     from emit.emit_loc import EmitLoc
-    loc = EmitLoc(test_data + "sample_loc.img")
+    loc = EmitLoc(test_data + "expected/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img")
     return loc
 
 @pytest.fixture(scope="function")

@@ -2337,7 +2337,7 @@ export EMIT_TEST_DATA=@testdatadir@/latest
 
 # end to end check
 end-to-end-check:
-#	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_geo_run $(EMIT_TEST_DATA)/l1_osp_dir $(EMIT_TEST_DATA)/*o80000_l1a_att*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s002_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s002_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s003_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s003_l1b_rdn*.img
+	source $(prefix)/setup_emit.sh && l1b_geo_process l1b_geo_run $(EMIT_TEST_DATA)/l1_osp_dir $(EMIT_TEST_DATA)/*o80000_l1a_att*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s001_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s002_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s002_l1b_rdn*.img $(EMIT_TEST_DATA)/*o80000_s003_l1a_line_time*.nc $(EMIT_TEST_DATA)/*o80000_s003_l1b_rdn*.img
 	-source $(prefix)/setup_emit.sh; echo "**** Compare GLT ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_glt_b001_v01.img; echo "**** Compare LOC ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_loc_b001_v01.img; echo "**** Compare OBS ****"; gdalcompare.py l1b_geo_run/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img $(EMIT_TEST_DATA)/expected/emit20200610t015051_o80000_s001_l1b_obs_b001_v01.img
 
 end-to-end-aviris-check:
@@ -2353,6 +2353,7 @@ end-to-end-aviris-check:
 # won't matter.
 end-to-end-aviris-ng-check:
 	source $(prefix)/setup_emit.sh && aviris_ng_l1a_orbit_process --binfac-fname=$(EMIT_TEST_DATA)/ang20220224t195402_raw.binfac aviris_ng_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir $(EMIT_TEST_DATA)/ang20220224t195402_raw $(EMIT_TEST_DATA)/ang20220224t195402_gps $(EMIT_TEST_DATA)/ang20220224t195402_pps && aviris_ng_geo_process aviris_ng_run $(EMIT_TEST_DATA)/l1_osp_aviris_ng_dir aviris_ng_run/ang20220224t195402_att.nc aviris_ng_run/ang20220224t195402_line_time.nc $(EMIT_TEST_DATA)/ang20220224t195402_rdn_v2z4_clip
+	-source $(prefix)/setup_emit.sh; echo "**** Compare GLT ****"; echo "Not generated yet" ; echo "**** Compare LOC ****"; gdalcompare.py aviris_ng_run/ang20220224t195402_loc $(EMIT_TEST_DATA)/expected/ang20220224t195402_loc; echo "**** Compare IGM ****"; gdalcompare.py aviris_ng_run/ang20220224t195402_igm $(EMIT_TEST_DATA)/expected/ang20220224t195402_igm; echo "**** Compare OBS ****"; gdalcompare.py aviris_ng_run/ang20220224t195402_obs $(EMIT_TEST_DATA)/expected/ang20220224t195402_obs
 
 # Short cut for debugging, assume we have already run
 # end-to-end-aviris-ng-check for the L1A stuff, and just need to rerun geo
