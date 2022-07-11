@@ -7948,7 +7948,7 @@ SWIGINTERN PyObject *_wrap_Resampler_resample_field__SWIG_0(PyObject *SWIGUNUSED
   }
   {
     // Treat as pointer for the purposes of the macro
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -8070,7 +8070,7 @@ SWIGINTERN PyObject *_wrap_Resampler_resample_field__SWIG_1(PyObject *SWIGUNUSED
   }
   {
     // Treat as pointer for the purposes of the macro
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -8183,7 +8183,7 @@ SWIGINTERN PyObject *_wrap_Resampler_resample_field__SWIG_2(PyObject *SWIGUNUSED
   }
   {
     // Treat as pointer for the purposes of the macro
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -8287,7 +8287,7 @@ SWIGINTERN PyObject *_wrap_Resampler_resample_field__SWIG_3(PyObject *SWIGUNUSED
   }
   {
     // Treat as pointer for the purposes of the macro
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -8382,7 +8382,7 @@ SWIGINTERN PyObject *_wrap_Resampler_resample_field__SWIG_4(PyObject *SWIGUNUSED
   }
   {
     // Treat as pointer for the purposes of the macro
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -9330,7 +9330,7 @@ SWIGINTERN PyObject *_wrap_Resampler_map_values(PyObject *SWIGUNUSEDPARM(self), 
   resultobj = SWIG_Py_Void();
   {
     PyObject *res;
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -9353,7 +9353,7 @@ SWIGINTERN PyObject *_wrap_Resampler_map_values(PyObject *SWIGUNUSEDPARM(self), 
   }
   {
     PyObject *res;
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
@@ -9376,7 +9376,7 @@ SWIGINTERN PyObject *_wrap_Resampler_map_values(PyObject *SWIGUNUSEDPARM(self), 
   }
   {
     PyObject *res;
-    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    /*@SWIG:/store/shared/nostripe/conda-shared-envs/afids-20220711/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
     // Copy out dimensions and stride from blitz array
     npy_intp dims[2], stride[2];
     for(int i = 0; i < 2; ++i) {
