@@ -109,9 +109,9 @@ else:
     try:
         f = json.load(open(args.run_config))
         os.chdir(os.path.dirname(args.run_config))
-        l1a_att = os.path.abspath(f["attitude_ephemeris_file"])
-        line_time = [os.path.abspath(t['timestamps_file']) for t in f["timestamp_radiance_pairs"]]
-        l1b_rad = [os.path.abspath(t['radiance_file']) for t in f["timestamp_radiance_pairs"]]
+        l1a_att = os.path.abspath(os.path.expandvars(f["attitude_ephemeris_file"]))
+        line_time = [os.path.abspath(os.path.expandvars(t['timestamps_file'])) for t in f["timestamp_radiance_pairs"]]
+        l1b_rad = [os.path.abspath(os.path.expandvars(t['radiance_file'])) for t in f["timestamp_radiance_pairs"]]
     finally:
         os.chdir(curdir)
 logger.info("l1_att file: %s", l1a_att)

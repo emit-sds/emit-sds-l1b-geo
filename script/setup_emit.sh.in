@@ -15,7 +15,6 @@ source @geocaldir@/setup_geocal.sh
 
 export ELEV_ROOT=@srtml2dir@
 export SPICEDATA=@spicedatadir@
-export EMIT_TEST_DATA=@testdatadir@
 
 if [ -n "$PYTHONPATH" ]; then
   export PYTHONPATH=${EMITTOP}/@pythondir@:${EMITTOP}/@platpythondir@:${PYTHONPATH}

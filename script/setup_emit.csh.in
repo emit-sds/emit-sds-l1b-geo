@@ -9,7 +9,6 @@ source @geocaldir@/setup_geocal.csh
 
 setenv ELEV_ROOT @srtml2dir@
 setenv SPICEDATA @spicedatadir@
-setenv EMIT_TEST_DATA @testdatadir@
 
 if($?PYTHONPATH) then
   setenv PYTHONPATH ${EMITTOP}/@pythondir@:${EMITTOP}/@platpythondir@:${PYTHONPATH}
