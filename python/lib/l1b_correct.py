@@ -12,10 +12,12 @@ class L1bCorrect:
     '''This takes an in initial IgcCollection, collects tie-points, does
     image image matching, and runs the SBA to generate a corrected image 
     ground connection.'''
-    def __init__(self, igccol_initial, l1_osp_dir, geo_qa):
+    def __init__(self, igccol_initial, l1_osp_dir, geo_qa,
+                 fit_camera_only = False):
         self.igccol_initial = igccol_initial
         self.l1_osp_dir = l1_osp_dir
         self.geo_qa = geo_qa
+        self.fit_camera_only = fit_camera_only
         self.l1b_tp_collect = L1bTpCollect(igccol_initial, l1_osp_dir,
                                            geo_qa)
         if(not os.path.exists("extra_python_init.py")):
@@ -55,9 +57,8 @@ class L1bCorrect:
         # fitting only. Should instead generalize this for working
         # with EMIT also
         
-        # Grab the camera object. Probably should put nearer the top,
-        # but for now we just go through the object structure
-        cam = self.igccolcorr.image_ground_connection(0).ipi.camera
+        # Grab the camera object. 
+        cam = self.igccolcorr.camera
         # Set the variables we will fit
         cam.fit_epsilon = True
         cam.fit_beta = True
@@ -93,6 +94,28 @@ class L1bCorrect:
             logger.info(f"{desc}: {v}")
         self.summarize_residual(r.x, desc= "Fitted")
 
+    # TODO Work on this error model        
+    def orb_corr(self, orb):
+        '''Determine our orbit correction model
+        Not sure about the full error model. Right now we'll
+        do a 1 position correction, and 1 attitude breakpoint for
+        each image. Special handling if we skipped a scene. This
+        is really pretty adhoc, we should probably play with this
+        a bit with real data'''
+        orb = geocal.OrbitOffsetCorrection(orb)
+        tapprox_scene = 12.0
+        tlast = None
+        for tmin, tmax in self.time_range_tp:
+            if(tlast is None):
+                orb.insert_position_time_point(tmin)
+            if(tlast is None or tmin - tlast > tapprox_scene):
+                orb.insert_attitude_time_point(tmin)
+            orb.insert_attitude_time_point(tmax)
+            tlast = tmax
+        if(tlast is not None):
+            orb.insert_position_time_point(tlast)
+        return orb
+
     def igccol_corrected(self, pool=None):
         if(self.l1_osp_dir.skip_sba):
             logger.info("Skipping SBA correction, using uncorrected ephemeris and attitude")
@@ -102,10 +125,21 @@ class L1bCorrect:
         geocal.write_shelve("tpcol.xml", self.tpcol)
         geocal.write_shelve("igccol_initial.xml", self.igccol_initial)
         self.igccolcorr = geocal.read_shelve("igccol_initial.xml")
+        if(not self.fit_camera_only):
+            self.igccolcorr.orbit = self.orb_corr(self.igccolcorr.orbit)
+                
+        # Note we could have parameters for the time table (e.g., a
+        # timing offset). But for now we'll leave this off and only
+        # include the camera and orbit
+        self.igccolcorr.add_object(self.igccolcorr.camera)
+        self.igccolcorr.add_object(self.igccolcorr.orbit)
         # Can also save this whole object, if you want to be able to
         # play with fitting data.
         pickle.dump(self, open("l1b_correct.pkl", "wb"))
-        self.fit_camera()
+        if(self.fit_camera_only):
+            self.fit_camera()
+        else:
+            pass
         return self.igccolcorr
 
 __all__ = ["L1bCorrect",]        

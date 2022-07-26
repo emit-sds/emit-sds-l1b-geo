@@ -34,6 +34,30 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         # Put in raster image
         super().__init__(ipi, dem, img)
 
+# We assume here that the same orbit and camera is used for each of the
+# ImageGroundConnection in EmitIgcCollection. This is mostly just a
+# convenience, if we end up needing to relax this it shouldn't be a big deal
+# and we'd just need to work through the code to figure out where we have
+# assumed this.
+#
+# Note the time table is not the same for each ImageGroundConnection, this
+# varies for each one.
+def _orbit(self):
+    '''Return orbit for a EmitIgcCollection'''
+    return self.image_ground_connection(0).ipi.orbit
+
+def _set_orbit(self, orb):
+    for i in range(self.number_image):
+        self.image_ground_connection(i).ipi.orbit = orb
+
+def _camera(self):
+    '''Return camera for a EmitIgcCollection'''
+    return self.image_ground_connection(0).ipi.camera
+
+def _set_camera(self, cam):
+    for i in range(self.number_image):
+        self.image_ground_connection(i).ipi.camera = cam
+
 def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
             l1_osp_dir):
     '''Create a EmitIgcCollection. This takes an orbit file name,
@@ -67,5 +91,8 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     return igccol
 
 EmitIgcCollection.create = classmethod(_create)
-
+EmitIgcCollection.orbit = property(_orbit, _set_orbit,
+                                   doc="The orbit used by EmitIgcCollection")
+EmitIgcCollection.camera = property(_camera, _set_camera,
+                                   doc="The camera used by EmitIgcCollection")
 __all__ = ["EmitIgc", ]    
