@@ -1,4 +1,5 @@
 from .l1b_tp_collect import L1bTpCollect
+from .misc import process_run
 import geocal
 import logging
 import os
@@ -6,6 +7,7 @@ import pickle
 import pandas as pd
 import scipy.optimize
 import numpy as np
+import subprocess
 logger = logging.getLogger('l1b_geo_process.l1b_correct')
 
 class L1bCorrect:
@@ -94,6 +96,26 @@ class L1bCorrect:
             logger.info(f"{desc}: {v}")
         self.summarize_residual(r.x, desc= "Fitted")
 
+    def run_sba(self):
+        '''Run the SBA for correcting our data'''
+        if(len(self.tpcol) == 0):
+            logger.info("No tie-points, so skipping SBA correction")
+            return
+        try:
+            logger.info("Starting SBA")
+            process_run(["sba", "--verbose", "--hold-gcp-fixed",
+                         "--gcp-sigma=50", "igccolcorr_initial.xml",
+                         "tpcol.xml",  "igccol_sba.xml", "tpcol_sba.xml"],
+                        out_fh=open("sba.log","w"))
+            logger.info("SBA Completed")
+            self.igccolcorr = geocal.read_shelve("igccol_sba.xml")
+            self.correction_done = True
+        except Exception as e:
+            # TODO Put this logic in place
+            #if(not l1b_geo_config.continue_on_sba_fail):
+            #    raise
+            raise
+
     # TODO Work on this error model        
     def orb_corr(self, orb):
         '''Determine our orbit correction model
@@ -133,13 +155,14 @@ class L1bCorrect:
         # include the camera and orbit
         self.igccolcorr.add_object(self.igccolcorr.camera)
         self.igccolcorr.add_object(self.igccolcorr.orbit)
+        geocal.write_shelve("igccolcorr_initial.xml", self.igccolcorr)
         # Can also save this whole object, if you want to be able to
         # play with fitting data.
         pickle.dump(self, open("l1b_correct.pkl", "wb"))
         if(self.fit_camera_only):
             self.fit_camera()
         else:
-            pass
+            self.run_sba()
         return self.igccolcorr
 
 __all__ = ["L1bCorrect",]        

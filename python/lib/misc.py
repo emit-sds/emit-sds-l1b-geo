@@ -4,6 +4,7 @@ import os
 import re
 import math
 import logging
+import subprocess
 
 logger = logging.getLogger('l1b_geo_process.emit_dem')
 
@@ -95,8 +96,36 @@ def file_name_to_gps_week(fname, filebase="ang"):
     gps_week = math.floor(tm.gps / (7 * 24 * 60 * 60))
     return int(gps_week)
 
+def process_run(exec_cmd, out_fh = None, quiet = False):
+    '''This is like subprocess.run, but allowing a unix like 'tee' where
+    we write the output to a log file and/or stdout.
+
+    The command (which should be a standard array) is run, and the output
+    is always returned. In addition, the output is written to the given
+    out_fh is supplied, and to stdout if "quiet" is not True.
+    '''
+    process = subprocess.Popen(exec_cmd, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT)
+    stdout = b''
+    while(True):
+        output = process.stdout.readline()
+        if output == b'' and process.poll() is not None:
+            break
+        if output:
+            stdout = stdout + output
+            if(not quiet):
+                logger.info(output.strip().decode('utf-8'))
+            if(out_fh):
+                print(output.strip().decode('utf-8'), file=out_fh)
+                out_fh.flush()
+    if(process.poll() != 0):
+        raise subprocess.CalledProcessError(process.poll(), exec_cmd,
+                                            output=stdout)
+    return stdout
+
+
 __all__ = ["band_to_landsat_band", "file_name_to_gps_week",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
-           "emit_file_name", "orb_and_scene_from_file_name"]
+           "emit_file_name", "orb_and_scene_from_file_name", "process_run"]
            
 
