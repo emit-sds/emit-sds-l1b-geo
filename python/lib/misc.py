@@ -79,10 +79,10 @@ def emit_file_name(file_type, start_time, onum, snum, bnum, vnum, ext):
 def orb_and_scene_from_file_name(fname):
     '''Get the orbit and scene from a file name, using the emit naming
     convention.'''
-    m = re.search(r'_o(\d+)_s(\d+)_', os.path.basename(fname))
+    m = re.search(r'emit(\d+t\d+)_o(\d+)_s(\d+)_', os.path.basename(fname))
     if(not m):
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
-    return (m.group(1), m.group(2))
+    return (m.group(2), m.group(3), m.group(1))
 
 def file_name_to_gps_week(fname, filebase="ang"):
     '''Extract the start time from the file name, using the standard

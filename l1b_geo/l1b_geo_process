@@ -4,6 +4,7 @@
 import geocal
 import emit
 import logging
+import traceback
 import os
 import sys
 import json

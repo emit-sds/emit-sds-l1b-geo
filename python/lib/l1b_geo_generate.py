@@ -6,7 +6,7 @@ from .emit_glt import EmitGlt
 from .geo_qa import GeoQa
 from .l1b_correct import L1bCorrect
 from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
-from .misc import orb_and_scene_from_file_name, emit_file_name
+from .misc import emit_file_name
 from .standard_metadata import StandardMetadata
 from emit_swig import EmitIgcCollection
 import geocal
@@ -55,6 +55,7 @@ class L1bGeoGenerate:
     def run_scene(self, i):
         igc = self.igccol_corrected.image_ground_connection(i)
         scene = self.scene_list[i]
+        scene_index = self.scene_index_list[i]
         logger.info("Processing %s", igc.title)
         # TODO Create actual QA value here.
         standard_metadata = StandardMetadata(igc=igc,
@@ -78,7 +79,10 @@ class L1bGeoGenerate:
                                    int(self.product_version),
                                    ".img")
         # KMZ and quicklook name based on l1b_rad_fname.
-        rad_fname = igc.image.file_names[0]
+        try:
+            rad_fname = igc.image.file_names[0]
+        except:
+            rad_fname = igc.image.raw_data.file_names[0]
         kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
         kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
@@ -91,7 +95,7 @@ class L1bGeoGenerate:
         if(self.generate_kmz or
            self.generate_quicklook):
             kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rad_fname,
-                   scene = int(scene),
+                   scene_index = scene_index,
                    band_list = self.map_band_list,
                    use_jpeg = self.kmz_use_jpeg,
                    resolution = self.map_resolution,
@@ -128,6 +132,7 @@ class L1bGeoGenerate:
         # For convenience, grab data for l1b_geo_config, just so we don't
         # have lots of long strings
         self.scene_list = self.igccol_initial.scene_list
+        self.scene_index_list = self.igccol_initial.scene_index_list
         self.generate_kmz = self.l1_osp_dir.generate_kmz
         self.generate_quicklook = self.l1_osp_dir.generate_quicklook
         self.map_band_list = self.l1_osp_dir.map_band_list

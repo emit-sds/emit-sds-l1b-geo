@@ -68,6 +68,8 @@ class L1OspDir:
       ["number_process", 1, "The number of processors to use in processing"],
       ["do_final_projection", False, "Do a final projection of the scenes, useful for doing diagnostics"],
       ["skip_sba", False, "Skip the SBA step, and just use the reported camera, ephemeris, attitude values without correction"],
+      ["use_scene_index", False, "Use the scene number for indexing scene based files. Otherwise we use the start time in the file name as the index"],
+      ["rad_match_scale", 1000, "Scaling to use on radiance data to produce image used for image matching"],
       ["generate_kmz", False, "Generate KMZ output"],
       ["generate_quicklook", False, "Generate quicklook output"],
       ["map_band_list", None, "List of bands to use for producing KMZ and quicklook"],

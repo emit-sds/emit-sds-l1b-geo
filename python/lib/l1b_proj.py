@@ -38,7 +38,14 @@ class L1bProj(object):
             logger.info("Don't have reference data for scene %03d, skipping", i+1)
             return None
         subprocess.run(["igc_raycast_project", f"--map-info={mi_fname}",
-                        igc_fname, proj_fname], check=True)
+                        igc_fname, proj_fname + ".tmp"], check=True)
+        subprocess.run(f"gdal_calc.py --quiet -A {proj_fname}.tmp --outfile={proj_fname}.tif --type=Float32 --calc=\"A*(A>0)\" --NoDataValue=0", shell=True,
+                       check=True)
+        subprocess.run(["gdal_translate", "-of", "VICAR", "-q",
+                        "-ot", "Int16",
+                        proj_fname+".tif",
+                        proj_fname], check=True)
+        subprocess.run(["rm", proj_fname + ".tmp", proj_fname + ".tif"])
         return (proj_fname, ref_fname)
 
     def proj(self, pool=None):

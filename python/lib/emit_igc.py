@@ -73,20 +73,30 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     orb = EmitOrbit(orbit_fname)
     cam = l1_osp_dir.camera()
     dem = l1_osp_dir.dem
-    scene_to_igc = {}
+    index_to_igc = {}
+    index_to_scene = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
-        orbit_number, scene = orb_and_scene_from_file_name(rdn_fname)
+        orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
-        img = geocal.GdalRasterImage(rdn_fname, l1b_band)
+        img = geocal.ScaleImage(geocal.GdalRasterImage(rdn_fname, l1b_band),
+                                l1_osp_dir.rad_match_scale)
         igc = geocal.IpiImageGroundConnection(ipi, dem, img)
-        scene_to_igc[scene] = igc
-        igc.title = f"Scene {scene}"
+        if(l1_osp_dir.use_scene_index):
+            index_to_igc[scene] = igc
+            index_to_scene[scene] = scene
+            igc.title = f"Scene {scene}"
+        else:
+            index_to_igc[stime] = igc
+            index_to_scene[stime] = scene
+            igc.title = f"{stime}"
     igccol = EmitIgcCollection()
     igccol.orbit_number = orbit_number
-    igccol.scene_list = sorted(scene_to_igc.keys())
-    for scene in igccol.scene_list:
-        igccol.add_igc(scene_to_igc[scene])
+    index_list = sorted(index_to_igc.keys())
+    igccol.scene_list = [index_to_scene[i] for i in index_list]
+    igccol.scene_index_list = index_list
+    for i in index_list:
+        igccol.add_igc(index_to_igc[i])
     igccol.uncorrected_orbit = orb
     return igccol
 
