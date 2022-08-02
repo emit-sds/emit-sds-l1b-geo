@@ -22,6 +22,7 @@ class L1OspDir:
     file.'''
     def __init__(self, l1_osp_dir):
         self.l1_osp_dir = l1_osp_dir
+        logger.info("l1_osp_dir: %s", self.l1_osp_dir)
         self.load_config()
 
     def setup_spice(self): 
@@ -143,6 +144,7 @@ class L1OspDir:
         
             
     def camera(self):
+        logger.info("Camera file: %s", self.l1_osp_dir + "/camera.xml")
         cam = geocal.read_shelve(self.l1_osp_dir + "/camera.xml")
         # We store the euler angles and focal length separately, so we can
         # more easily update this. Get the updated values from the

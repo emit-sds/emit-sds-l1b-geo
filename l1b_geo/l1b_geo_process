@@ -65,9 +65,6 @@ Options:
 
 args = geocal.docopt_simple(usage, version=version)
 
-# Read in additional configuration parameters
-l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
-
 # Set up logging. 
 os.makedirs(args.prod_dir, exist_ok=True)
 log_fname = args.prod_dir + "/l1b_geo.log"
@@ -98,6 +95,9 @@ else:
     if(h):
         h.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
+
+# Read in additional configuration parameters
+l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
 
 # Run actual process
 if(args.l1a_att):
