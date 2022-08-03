@@ -18,31 +18,6 @@ def ppt_save(ppt_file):
     plt.savefig(img, dpi=300)
     pic = slide.shapes.add_picture(img, Inches(0), Inches(0), height=Inches(7.5))
     
-def create_glas_cam(camortho):
-    '''Create a GLAS model, taking in the camortho format from the 
-    binary files'''
-    # The focal length is nominally 27.5 for the AVIRIS-NG camera, and the
-    # line and sample pitch 27e-3 mm (for both)
-    gcam = GlasGfmCamera(1,camortho.shape[0])
-    gcam.focal_length = 27.5
-    fa = np.empty((camortho.shape[0],4))
-    for smp in range(camortho.shape[0] - 1):
-        fa[smp,0] = camortho[smp,0] / (camortho[smp,2] / gcam.focal_length)
-        fa[smp,1] = camortho[smp,1] / (camortho[smp,2] / gcam.focal_length)
-        fa[smp,2] = camortho[smp+1,0] / (camortho[smp+1,2] / gcam.focal_length)
-        fa[smp,3] = camortho[smp+1,1] / (camortho[smp+1,2] / gcam.focal_length)
-    # Extrapolated for the last entry in the field angle table    
-    smp = camortho.shape[0]-1
-    fa[smp,0] = camortho[smp,0] / (camortho[smp,2] / gcam.focal_length)
-    fa[smp,1] = camortho[smp,1] / (camortho[smp,2] / gcam.focal_length)
-    fa[smp,2] = fa[smp,0] + (fa[smp-1,2]-fa[smp-1,0])
-    fa[smp,3] = fa[smp,1] + (fa[smp-1,3]-fa[smp-1,1])
-
-    gcam.sample_number_first = 0
-    gcam.delta_sample_pair = 1
-    gcam.field_alignment = fa
-    return gcam
-
 def check_cam(gcam, camortho):
     '''Do a simple comparison between the GLAS camera model and the original
     camortho data.'''
@@ -77,7 +52,10 @@ for f in ("avng_2014_camera_cal3_2014_06_20_14_26_06",
           "avng_er2_2017_camera_cal3_2017_03_23_15_19_17"):
     # This is the ScLookVector for each sample.
     camortho = np.fromfile(f, dtype='<d').reshape([-1,3])
-    gcam = create_glas_cam(camortho)
+    sclv_list = [ScLookVector(camortho[smp,0], camortho[smp,1], camortho[smp,2])
+                 for smp in range(camortho.shape[0])]
+    gcam = GlasGfmCamera.create_glas_from_sc_look_vector(sclv_list,
+                                                         focal_length=27.5)
     write_shelve(f"{f}_glas.xml", gcam)
     check_cam(gcam, camortho)
     plot_data(gcam, f"{f} Field Alignment")
