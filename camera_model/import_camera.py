@@ -2,6 +2,7 @@
 import pandas as pd
 import geocal
 import numpy as np
+import scipy
 
 # Camera we used in initial testing. Keep around just so we have a copy
 # of this for use with old test data.
@@ -22,8 +23,7 @@ geocal.write_shelve("camera_initial_testdata.xml", cam)
 focal_length_mm = 193.3
 focal_length_time = geocal.Time.parse_time("2022-02-18T00:00:00Z")
 
-# These are in mm. CCD pitch is 30 micron, so we should see a spacing
-# in the field_x direction of about 0.03
+# These are in degrees
 #
 # In this file, the pixel sample number (the index column) is 0 or 1 based
 # (see comment below, 0 based is current best guess).
@@ -81,40 +81,28 @@ cp_x = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(glas_x), 5,
                                              [0,1280])
 cp_y = np.polynomial.chebyshev.Chebyshev.fit(sample, np.array(glas_y), 5,
                                              [0,1280])
-fa_x = np.empty((1280 // 4 + 1,))
-fa_y = np.empty((1280 // 4 + 1,))
+# We go ahead an fill in all the rest of the data using interpolation
+interp_x = scipy.interpolate.interp1d(sample, np.array(glas_x),
+                                      kind="cubic", bounds_error=True)
+interp_y = scipy.interpolate.interp1d(sample, np.array(glas_y),
+                                      kind="cubic", bounds_error=True)
 
-if is_one_based:
-    smplist = list(range(0,1284,4))
-else:
-    smplist = list(range(1,1285,4))
-    
-for i,smp in enumerate(smplist):
+fa_x = np.empty((1280 + 1,))
+fa_y = np.empty((1280 + 1,))
+
+for i,smp in enumerate(range(0,1280)):
     try:
-        f_ind = list(sample).index(smp)
-        fa_x[i] = np.array(glas_x)[f_ind]
-        fa_y[i] = np.array(glas_y)[f_ind]
+        fa_x[i] = interp_x(smp)
+        fa_y[i] = interp_y(smp)
     except ValueError:
         fa_x[i] = cp_x(smp)
         fa_y[i] = cp_y(smp)
 
 cam = geocal.GlasGfmCamera(1,1280)
-if is_one_based:
-    cam.sample_number_first = 0
-else:
-    # We want as close to the raw data as possible. The spreadsheet
-    # has numbers like 25 with every 4th pixel. So to fit the data,
-    # we need to start with 1
-    cam.sample_number_first = 1
-cam.delta_sample_pair = 4
-cam.focal_length = focal_length_mm
-cam.focal_length_time = focal_length_time
-fa = np.empty((1280//4,4))
-fa[:,0] = fa_x[:-1]
-fa[:,1] = fa_y[:-1]
-fa[:,2] = fa_x[1:]
-fa[:,3] = fa_y[1:]
-cam.field_alignment = fa
+
+cam = geocal.GlasGfmCamera.create_glas_from_field_angle(fa_x, fa_y,
+              focal_length = focal_length_mm*1e-3,
+              focal_length_time = focal_length_time)
 geocal.write_shelve("camera_full_2022_04_02_glas.xml", cam)
 
 # From an email from David Thompson (5/12/2022), we'll be using
@@ -123,6 +111,32 @@ geocal.write_shelve("camera_full_2022_04_02_glas.xml", cam)
 # real data, but for now use the values from David Thompson
 cam2 = geocal.SubCamera(cam, 0, 24, 1, 1265+1-24)
 geocal.write_shelve("camera_active_2022_04_02.xml", cam2)
+
+# Do some basic checks on the camera
+fa_diff = 0
+for smp in glas_x.index:
+    fa_x, fa_y = cam.sc_look_vector(geocal.FrameCoordinate(0,smp),0).field_angle()
+    fa_diff = max(abs(glas_x[smp] - fa_x), abs(glas_y[smp] - fa_y), fa_diff)
+    if False:
+        print(smp, abs(glas_x[smp] - fa_x), abs(glas_y[smp] - fa_y))
+print(f"Max fa_diff: {fa_diff}")
+print(f"Max fa_diff scaled to pixel: {(fa_diff * geocal.deg_to_rad) / 155e-6}")
+
+# Check the spacing in microradians, and compare to value for Christine's
+# powerpoint
+print("Cross Track IFOV (should be close to 155 micro-radians)",
+      (cam.sc_look_vector(geocal.FrameCoordinate(0,630),0).field_angle()[1]-
+       cam.sc_look_vector(geocal.FrameCoordinate(0,629),0).field_angle()[1]) *
+      geocal.deg_to_rad*1e6)
+
+# Check sample pitch, should be close to 30 micron
+print("Sample pitch (should be close to 30 micron)",
+      (cam.frame_coordinate_to_xy(geocal.FrameCoordinate(0,630),0)[1]-cam.frame_coordinate_to_xy(geocal.FrameCoordinate(0,629),0)[1]) * 1e6)
+
+# Check that curve goes the right way in the camera
+print("X diff for 100 pixel in microns (should be positive)",
+      (cam.frame_coordinate_to_xy(geocal.FrameCoordinate(0,25),0)[0]-
+       cam.frame_coordinate_to_xy(geocal.FrameCoordinate(0,25+100),0)[0])*1e6)
 
 
 
