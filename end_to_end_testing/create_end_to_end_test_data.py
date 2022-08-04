@@ -120,8 +120,8 @@ for scene in range(nscene):
         EmitOrbit.write_file(fname, orb, tm,
                              tt.min_time + nscene * nline * tspace + 100)
     if CREATE_TT:
-        fname = f"{start_fname}_l1a_line_time_{end_fname}.nc"
-        EmitTimeTable.write_file(fname, tt)
+        fname = f"{start_fname}_l1a_line_time_{end_fname}.txt"
+        EmitTimeTable.write_file_txt(fname, tt)
     
     
     
