@@ -90,13 +90,16 @@ interp_y = scipy.interpolate.interp1d(sample, np.array(glas_y),
 fa_x = np.empty((1280 + 1,))
 fa_y = np.empty((1280 + 1,))
 
-for i,smp in enumerate(range(0,1280)):
+for i,smp in enumerate(range(0,1280+1)):
     try:
         fa_x[i] = interp_x(smp)
         fa_y[i] = interp_y(smp)
     except ValueError:
         fa_x[i] = cp_x(smp)
         fa_y[i] = cp_y(smp)
+
+print(fa_x[-1])
+print(fa_y[-1])
 
 cam = geocal.GlasGfmCamera(1,1280)
 
