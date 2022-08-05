@@ -75,6 +75,8 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     dem = l1_osp_dir.dem
     index_to_igc = {}
     index_to_scene = {}
+    index_to_scene_time = {}
+    index_to_rdn_fname = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         tt = EmitTimeTable(tt_fname)
@@ -85,16 +87,22 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
         if(l1_osp_dir.use_scene_index):
             index_to_igc[scene] = igc
             index_to_scene[scene] = scene
+            index_to_scene_time[scene] = stime
+            index_to_rdn_fname[scene] = rdn_fname
             igc.title = f"Scene {scene}"
         else:
             index_to_igc[stime] = igc
             index_to_scene[stime] = scene
+            index_to_scene_time[stime] = stime
+            index_to_rdn_fname[stime] = rdn_fname
             igc.title = f"{stime}"
     igccol = EmitIgcCollection()
     igccol.orbit_number = orbit_number
     index_list = sorted(index_to_igc.keys())
     igccol.scene_list = [index_to_scene[i] for i in index_list]
+    igccol.scene_time_list = [index_to_scene_time[i] for i in index_list]
     igccol.scene_index_list = index_list
+    igccol.rdn_fname_list = [index_to_rdn_fname[i] for i in index_list]
     for i in index_list:
         igccol.add_igc(index_to_igc[i])
     igccol.uncorrected_orbit = orb

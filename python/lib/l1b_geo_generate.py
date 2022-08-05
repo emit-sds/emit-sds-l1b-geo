@@ -55,36 +55,37 @@ class L1bGeoGenerate:
     def run_scene(self, i):
         igc = self.igccol_corrected.image_ground_connection(i)
         scene = self.scene_list[i]
+        scene_time = self.scene_time_list[i]
+        rdn_fname = self.rdn_fname_list[i]
         scene_index = self.scene_index_list[i]
         logger.info("Processing %s", igc.title)
         # TODO Create actual QA value here.
         standard_metadata = StandardMetadata(igc=igc,
                                              geolocation_accuracy_qa="Suspect")
-        loc_fname = emit_file_name("l1b_loc", igc.ipi.time_table.min_time,
+        loc_fname = emit_file_name("l1b_loc", scene_time,
                                    int(self.orbit_number),
                                    int(scene),
                                    int(self.build_version),
                                    int(self.product_version),
                                    ".img")
-        obs_fname = emit_file_name("l1b_obs", igc.ipi.time_table.min_time,
+        obs_fname = emit_file_name("l1b_obs", scene_time,
                                    int(self.orbit_number),
                                    int(scene),
                                    int(self.build_version),
                                    int(self.product_version),
                                    ".img")
-        glt_fname = emit_file_name("l1b_glt", igc.ipi.time_table.min_time,
+        glt_fname = emit_file_name("l1b_glt", scene_time,
                                    int(self.orbit_number),
                                    int(scene),
                                    int(self.build_version),
                                    int(self.product_version),
                                    ".img")
-        # KMZ and quicklook name based on l1b_rad_fname.
-        try:
-            rad_fname = igc.image.file_names[0]
-        except:
-            rad_fname = igc.image.raw_data.file_names[0]
-        kmz_base_fname, _ = os.path.splitext(os.path.basename(rad_fname))
-        kmz_base_fname = re.sub(r'_rdn_', '_rdnrgb_', kmz_base_fname)
+        kmz_base_fname = emit_file_name("l1b_rdnrgb", scene_time,
+                                   int(self.orbit_number),
+                                   int(scene),
+                                   int(self.build_version),
+                                   int(self.product_version),
+                                   "")
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata,
                       loc=loc)
@@ -94,7 +95,7 @@ class L1bGeoGenerate:
         kmz = None
         if(self.generate_kmz or
            self.generate_quicklook):
-            kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rad_fname,
+            kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rdn_fname,
                    scene_index = scene_index,
                    band_list = self.map_band_list,
                    use_jpeg = self.kmz_use_jpeg,
@@ -107,7 +108,6 @@ class L1bGeoGenerate:
         glt.run()
         if(kmz):
             kmz.run()
-        # obs file
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
@@ -132,6 +132,8 @@ class L1bGeoGenerate:
         # For convenience, grab data for l1b_geo_config, just so we don't
         # have lots of long strings
         self.scene_list = self.igccol_initial.scene_list
+        self.scene_time_list = self.igccol_initial.scene_time_list
+        self.rdn_fname_list = self.igccol_initial.rdn_fname_list
         self.scene_index_list = self.igccol_initial.scene_index_list
         self.generate_kmz = self.l1_osp_dir.generate_kmz
         self.generate_quicklook = self.l1_osp_dir.generate_quicklook
