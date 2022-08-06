@@ -85,7 +85,7 @@ def orbit_fname(test_data):
 @pytest.fixture(scope="function")
 def time_table_fname(test_data):
     '''Test time table'''
-    return test_data + "emit20200610t015051_o80000_s001_l1a_line_time_b001_v01.nc"
+    return test_data + "emit20200610t015051_o80000_s001_l1a_line_time_b001_v01.txt"
 
 @pytest.fixture(scope="function")
 def l1b_rdn_fname(test_data):
@@ -184,10 +184,11 @@ def aviris_igc_full(aviris_camera, aviris_orbit_fname, aviris_time_table_fname,
 
 
 @pytest.fixture(scope="function")
-def igc(orbit_fname, time_table_fname, l1b_rdn_fname):
+def igc(orbit_fname, time_table_fname, l1b_rdn_fname, l1_osp_dir):
     '''ImageGroundConnection that we can use for testing'''
     from emit.emit_igc import EmitIgc
-    res = EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname)
+    res = EmitIgc(orbit_fname, time_table_fname, l1b_rdn_fname,
+                  l1_osp_dir=l1_osp_dir)
     res.title = "Scene 1"
     return res
 

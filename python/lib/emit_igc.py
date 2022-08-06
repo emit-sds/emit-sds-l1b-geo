@@ -20,11 +20,12 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         L1B radiance file to use.'''
 
         orb = EmitOrbit(orbit_fname)
-        cam = EmitCamera()
         if(l1_osp_dir):
             dem = l1_osp_dir.dem
+            cam = l1_osp_dir.camera()
         else:
             dem = geocal.SrtmDem()
+            cam = EmitCamera()
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
