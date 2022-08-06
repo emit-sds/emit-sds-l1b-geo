@@ -45,8 +45,9 @@ def test_generate_obs(igc, isolated_dir, emit_loc):
     tt = igc.ipi.time_table
     ttsub = geocal.MeasuredTimeTable([tt.time_list(i) for i in range(10)])
     igc.ipi.time_table = ttsub
-    g = EmitObs("test_obs.img", igc=igc, loc=emit_loc)
-    g.run()
+    t = EmitObs("test_obs.img", igc=igc, loc=emit_loc)
+    t.run()
+    g = EmitObs("test_obs.img")
     ln = 5
     for smp in range(0, igc.number_sample, 100):
         ic = geocal.ImageCoordinate(ln, smp)

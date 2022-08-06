@@ -24,8 +24,18 @@ def test_create_loc(igc, test_data):
 # can turn this back on to debug some kind of problem
 @slow
 def test_generate_loc(igc, isolated_dir):
-    g = EmitLoc("test_loc.img", igc=igc)
-    g.run()
+    # Subset the igc, just so this goes quicker
+    tt = igc.ipi.time_table
+    ttsub = geocal.MeasuredTimeTable([tt.time_list(i) for i in range(10)])
+    igc.ipi.time_table = ttsub
+    t = EmitLoc("test_loc.img", igc=igc)
+    t.run()
+    g = EmitLoc("test_loc.img")
+    for ln in range(igc.number_line):
+        for smp in range(0, igc.number_sample, 100):
+            ic = geocal.ImageCoordinate(ln, smp)
+            pt = igc.ground_coordinate(ic)
+            assert(geocal.distance(pt, g.ground_coordinate(ln, smp)) < 0.1)
     
 def test_cross_date_line(test_data):
     loc = EmitLoc(test_data + "sample_loc.img")
