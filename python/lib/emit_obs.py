@@ -109,7 +109,7 @@ class EmitObs(EnviFile):
                 # This is to sensor direction, opposite of what we
                 # sometimes use
                 clv = geocal.CartesianFixedLookVector(gp, pos)
-                lv = geocal.LnLookVector(clv, pos)
+                lv = geocal.LnLookVector(clv, gp)
                 slv = geocal.LnLookVector.solar_look_vector(tm, gp)
                 self.path_length[ln, smp] = geocal.distance(gp, pos)
                 # Convention is different for LookVector, subtract 180
