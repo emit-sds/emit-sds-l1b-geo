@@ -44,9 +44,9 @@ class EmitGlt(EnviFile):
         pt.extend(geocal.Geodetic(lat[-1,i], lon[-1, i]) for
                   i in range(self.loc.shape[2]))
         pt.extend(geocal.Geodetic(lat[i,0], lon[i,0]) for
-                  i in range(self.loc.shape[2]))
+                  i in range(self.loc.shape[1]))
         pt.extend(geocal.Geodetic(lat[i,-1], lon[i,-1]) for
-                  i in range(self.loc.shape[2]))
+                  i in range(self.loc.shape[1]))
         mi = mi.cover(pt)
         return mi
 
