@@ -18,8 +18,11 @@ def test_generate_glt(isolated_dir, emit_loc, igc):
                                         float(g.glt_sample[ln,smp]))
             gc = f.ground_coordinate(geocal.ImageCoordinate(ln,smp), igc.dem)
             ic2 = igc.image_coordinate(gc)
-            print(ic)
-            print(ic2)
+            # TODO
+            # We are currently using the smallest int in our resampling.
+            # Should change to nearest neighbor at some point instead,
+            # We can then perhaps compare to with 0.5. Right now we can
+            # have a difference of 1 pixel of so.
             assert ic.line == approx(ic2.line, abs=1.0)
             assert ic.sample == approx(ic2.sample, abs=1.0)
             

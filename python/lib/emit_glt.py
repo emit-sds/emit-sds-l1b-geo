@@ -141,11 +141,13 @@ class EmitGlt(EnviFile):
                          description="Emit L1B geographic lookup table file",
                          band_description = ["GLT Sample Lookup", "GLT Line Lookup"])
         # TODO We are using the smallest line/sample here. We should change
-        # this to instead use the nearest
+        # this to instead use the nearest neighbor
         ln_d = np.broadcast_to(np.arange(0,self.loc.shape[1])[:,np.newaxis],
                                self.loc.latitude.shape)
         smp_d = np.broadcast_to(np.arange(0,self.loc.shape[2])[np.newaxis,:],
-                               self.loc.latitude.shape)
+                                self.loc.latitude.shape)
+        ln_d = np.ascontiguousarray(ln_d)
+        smp_d = np.ascontiguousarray(smp_d)
         ln = geocal.MemoryRasterImage(ln_d.shape[0], ln_d.shape[1])
         ln.write(0,0,ln_d.astype(np.int))
         smp = geocal.MemoryRasterImage(smp_d.shape[0], smp_d.shape[1])
