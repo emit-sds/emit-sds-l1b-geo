@@ -30,6 +30,10 @@ def gaussian_stretch(data):
     
     We assume that all negative values are fill, and map them to 0. Data is
     returned as integer data.'''
+    # Special handling for all 0 data, stretch fails so just return
+    # the original data
+    if(data.max() == 0):
+        return data
     gs = GaussianStretch(data)
     gs.vicar_run()
     return gs.out
