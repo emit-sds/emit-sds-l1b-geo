@@ -20,10 +20,12 @@ class EmitKmzAndQuicklook(object):
     def __init__(self, file_base_name, loc,
                  rad_fname, band_list = [1,1,1],
                  scene_index = 1,
+                 igc_index = 0,
                  use_jpeg = False,
                  resolution = 60, number_subpixel = 3,
                  generate_kmz = True,
-                 generate_quicklook = True):
+                 l1_osp_dir = None,
+                 generate_quicklook = True, generate_erdas = False):
         self.file_base_name = file_base_name
         self.loc = loc
         self.band_list = band_list
@@ -33,7 +35,10 @@ class EmitKmzAndQuicklook(object):
         self.rad_fname = rad_fname
         self.generate_quicklook = generate_quicklook
         self.generate_kmz = generate_kmz
+        self.generate_erdas = generate_erdas
         self.scene_index = scene_index
+        self.igc_index = igc_index
+        self.l1_osp_dir = l1_osp_dir
 
     def run(self):
         logger.info("Generating KMZ and quicklook")
@@ -56,6 +61,15 @@ class EmitKmzAndQuicklook(object):
             d = None
             cmd_merge.append(fname)
         subprocess.run(cmd_merge)
+        if(self.generate_erdas):
+            ref_fname = "ref_final_%03d.img" % (self.igc_index+1)
+            self.l1_osp_dir.write_ortho_base_subset(ref_fname, res.map_info)
+            subprocess.run(["gdal_to_erdas", vrt_fname,
+                            "proj_erdas_%03d.img" % (self.igc_index+1)],
+                           check=True)
+            subprocess.run(["gdal_to_erdas", ref_fname,
+                            "ref_erdas_%03d.img" % (self.igc_index+1)],
+                           check=True)
         cmd = ["gdal_translate", "-q", "-of", "KMLSUPEROVERLAY",
                vrt_fname,
                self.file_base_name + ".kmz"]

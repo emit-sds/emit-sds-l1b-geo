@@ -14,7 +14,7 @@ class GaussianStretch(VicarInterface):
         t = None
         d = mmap_file("in.img", mode="r+")
         d[:] = np.where(self.data > 0,
-                        self.data * 32768.0 / min(self.data.max(), 1.0),
+                        self.data * 32768.0 / max(self.data.max(), 1e-8),
                         0).astype(np.int16)
         self.run_out = ""
 

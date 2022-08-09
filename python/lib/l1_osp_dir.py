@@ -71,6 +71,7 @@ class L1OspDir:
       ["use_scene_index", False, "Use the scene number for indexing scene based files. Otherwise we use the start time in the file name as the index"],
       ["rad_match_scale", 1000, "Scaling to use on radiance data to produce image used for image matching"],
       ["generate_kmz", False, "Generate KMZ output"],
+      ["generate_erdas", False, "Generate ERDAS output"],
       ["generate_quicklook", False, "Generate quicklook output"],
       ["map_band_list", None, "List of bands to use for producing KMZ and quicklook"],
       ["kmz_use_jpeg", False, "Use JPEG instead of PNG for KMZ file"],

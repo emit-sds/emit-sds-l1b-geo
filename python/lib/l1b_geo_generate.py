@@ -94,15 +94,19 @@ class L1bGeoGenerate:
                       rotated_map=self.glt_rotated)
         kmz = None
         if(self.generate_kmz or
-           self.generate_quicklook):
+           self.generate_quicklook or
+           self.generate_erdas):
             kmz = EmitKmzAndQuicklook(kmz_base_fname, loc, rdn_fname,
+                   igc_index = i,
                    scene_index = scene_index,
                    band_list = self.map_band_list,
                    use_jpeg = self.kmz_use_jpeg,
                    resolution = self.map_resolution,
                    number_subpixel = self.map_number_subpixel,
                    generate_kmz = self.generate_kmz,
-                   generate_quicklook = self.generate_quicklook)
+                   generate_erdas = self.generate_erdas,
+                   generate_quicklook = self.generate_quicklook,
+                   l1_osp_dir = self.l1_osp_dir)
         loc.run()
         obs.run()
         glt.run()
@@ -136,6 +140,7 @@ class L1bGeoGenerate:
         self.rdn_fname_list = self.igccol_initial.rdn_fname_list
         self.scene_index_list = self.igccol_initial.scene_index_list
         self.generate_kmz = self.l1_osp_dir.generate_kmz
+        self.generate_erdas = self.l1_osp_dir.generate_erdas
         self.generate_quicklook = self.l1_osp_dir.generate_quicklook
         self.map_band_list = self.l1_osp_dir.map_band_list
         self.kmz_use_jpeg = self.l1_osp_dir.kmz_use_jpeg
