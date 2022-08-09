@@ -5,6 +5,7 @@ import numpy as np
 from emit_swig import *
 import subprocess
 import logging
+import pickle
 
 logger = logging.getLogger('l1b_geo_process.loc')
 
@@ -52,7 +53,11 @@ class EmitKmzAndQuicklook(object):
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
         for b in self.band_list:
             ras = geocal.GdalRasterImage(self.rad_fname, b)
-            data = res.resample_field(ras)
+            data = res.resample_field(ras).copy()
+            # Set bad values to 0
+            data[np.not_equal(np.isfinite(data), True)] = 0
+            # Set fill values to 0
+            data[data < -100] = 0
             data_scaled = gaussian_stretch(data)
             fname = "map_b%d_%s_scaled.img" % (b, self.scene_index)
             d = geocal.mmap_file(fname, res.map_info, nodata=0.0,

@@ -15,6 +15,8 @@ import os
 import shutil
 import logging
 import re
+import subprocess
+import traceback
 from multiprocessing import Pool
 
 logger = logging.getLogger('l1b_geo_process.l1b_geo_generate')
@@ -111,7 +113,14 @@ class L1bGeoGenerate:
         obs.run()
         glt.run()
         if(kmz):
-            kmz.run()
+            try:
+                kmz.run()
+            except (RuntimeError, subprocess.SubprocessError) as e:
+                logger.warn("KMZ failed for %s. Skipping generation of KMZ and quicklook" % (i+1))
+                logger.exception(e)
+                logger.exception("Traceback:")
+                logger.exception(traceback.format_exc())
+                logger.warn("Continuing with processing")
 
     def run(self):
         logger.info("Starting L1bGeoGenerate")
