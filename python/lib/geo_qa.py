@@ -79,13 +79,18 @@ class GeoQa:
         nimg = len(rdn_fname)
         tpcol = []
         for i in range(nimg):
-            tpdata = fh["Tiepoint/Image Index %03d/Tiepoints" % (i+1)][:,:]
-            for j in range(tpdata.shape[0]):
-                tp = geocal.TiePoint(nimg)
-                tp.is_gcp = True
-                tp.ground_location = geocal.Ecr(*tpdata[j,2:6])
-                tp.image_coordinate(i, geocal.ImageCoordinate(*tpdata[j,0:2]))
-                tpcol.append(tp)
+            try:
+                tpdata = fh["Tiepoint/Image Index %03d/Tiepoints" % (i+1)][:,:]
+                for j in range(tpdata.shape[0]):
+                    tp = geocal.TiePoint(nimg)
+                    tp.is_gcp = True
+                    tp.ground_location = geocal.Ecr(*tpdata[j,2:6])
+                    tp.image_coordinate(i, geocal.ImageCoordinate(*tpdata[j,0:2]))
+                    tpcol.append(tp)
+            except KeyError:
+                # Ok if not found in QA file, just means that image
+                # didn't have any tiepoints.
+                pass
         return geocal.TiePointCollection(tpcol)
     
     @classmethod
