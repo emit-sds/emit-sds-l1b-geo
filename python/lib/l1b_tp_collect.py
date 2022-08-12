@@ -147,7 +147,7 @@ class L1bTpCollect:
             for i2 in range(len(self.tpcollect)):
                 lf = self.log_file[i] + "_%d" %i2
                 if(os.path.exists(lf)):
-                    self.geo_qa.add_tp_log(self.igccol.title(i) + "_%d" % i2, lf)
+                    self.geo_qa.add_tp_log("Image Index %d %d" % (i+1,i2), lf)
         j = 0
         for i in range(self.igccol.number_image):
             if(proj_res[i]):

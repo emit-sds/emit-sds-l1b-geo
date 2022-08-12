@@ -51,6 +51,7 @@ class EmitKmzAndQuicklook(object):
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%s.vrt" % self.scene_index
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
+        print("Resampling: ", res.map_info)
         for b in self.band_list:
             ras = geocal.GdalRasterImage(self.rad_fname, b)
             data = res.resample_field(ras).copy()
@@ -69,12 +70,15 @@ class EmitKmzAndQuicklook(object):
         if(self.generate_erdas):
             ref_fname = "ref_final_%03d.img" % (self.igc_index+1)
             self.l1_osp_dir.write_ortho_base_subset(ref_fname, res.map_info)
+            # Allow to fail. The pyramid building sometimes fails, and in
+            # any case this is just diagnostic check so we don't want to
+            # trigger an error just because erdas fails
             subprocess.run(["gdal_to_erdas", vrt_fname,
                             "proj_erdas_%03d.img" % (self.igc_index+1)],
-                           check=True)
+                           check=False)
             subprocess.run(["gdal_to_erdas", ref_fname,
                             "ref_erdas_%03d.img" % (self.igc_index+1)],
-                           check=True)
+                           check=False)
         cmd = ["gdal_translate", "-q", "-of", "KMLSUPEROVERLAY",
                vrt_fname,
                self.file_base_name + ".kmz"]

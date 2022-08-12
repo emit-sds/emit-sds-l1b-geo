@@ -110,6 +110,7 @@ class L1bCorrect:
             logger.info("SBA Completed")
             self.igccolcorr = geocal.read_shelve("igccol_sba.xml")
             self.correction_done = True
+            self.geo_qa.add_final_accuracy(self.igccolcorr, self.tpcol)
         except Exception as e:
             # TODO Put this logic in place
             #if(not l1b_geo_config.continue_on_sba_fail):

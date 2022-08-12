@@ -29,7 +29,7 @@ class L1bGeoGenerate:
                  l1b_rad_fname_list):
         self.l1_osp_dir = l1_osp_dir
         self.l1a_att_fname = l1a_att_fname
-        self.tt_and_rdn_fname = zip(line_time_fname_list, l1b_rad_fname_list)
+        self.tt_and_rdn_fname = list(zip(line_time_fname_list, l1b_rad_fname_list))
         self.igccol_initial = EmitIgcCollection.create(self.l1a_att_fname,
                                   self.tt_and_rdn_fname,
                                   self.l1_osp_dir.match_rad_band,
@@ -44,7 +44,8 @@ class L1bGeoGenerate:
                                    int(self.build_version),
                                    int(self.product_version),
                                    ".nc")
-        self.geo_qa = GeoQa(qa_fname, "l1b_geo.log")
+        self.geo_qa = GeoQa(qa_fname, "l1b_geo.log", self.l1a_att_fname,
+                            self.tt_and_rdn_fname, self.l1_osp_dir)
 
     @property
     def uncorrected_orbit(self):
@@ -62,8 +63,14 @@ class L1bGeoGenerate:
         scene_index = self.scene_index_list[i]
         logger.info("Processing %s", igc.title)
         # TODO Create actual QA value here.
+        if(self.geo_qa and self.geo_qa.qa_flag):
+            qa_value = self.geo_qa.qa_flag[i]
+        else:
+            # If we don't have qa_flag, then there was problem in
+            # correcting the data. So the qa_value is poor
+            qa_value = "Poor"
         standard_metadata = StandardMetadata(igc=igc,
-                                             geolocation_accuracy_qa="Suspect")
+                                             geolocation_accuracy_qa=qa_value)
         loc_fname = emit_file_name("l1b_loc", scene_time,
                                    int(self.orbit_number),
                                    int(scene),
@@ -123,7 +130,15 @@ class L1bGeoGenerate:
                 logger.warn("Continuing with processing")
 
     def run(self):
-        logger.info("Starting L1bGeoGenerate")
+        try:
+            logger.info("Starting L1bGeoGenerate")
+            self._run()
+        finally:
+            self.geo_qa.close()
+
+    def _run(self):
+        '''Internal run function. Just pulled out so we can wrap the
+        call with a try/finally block w/o being deeply nested'''
         if(self.l1_osp_dir.number_process > 1):
             logger.info("Using %d processors", self.l1_osp_dir.number_process)
             pool = Pool(self.l1_osp_dir.number_process)
@@ -162,8 +177,5 @@ class L1bGeoGenerate:
         else:
             res = pool.map(self.run_scene,
                            list(range(self.igccol_corrected.number_image)))
-        if(self.geo_qa is not None):
-            # TODO Any flushing of log file needed?
-            self.geo_qa.close()
                 
 __all__ = ["L1bGeoGenerate",]

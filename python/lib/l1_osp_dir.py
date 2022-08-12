@@ -173,13 +173,16 @@ class L1OspDir:
         spec.loader.exec_module(self.l1b_geo_config)
         self.setup_spice()
 
+    def geocal_accuracy_qa(self, t1, t2, number_tp):
+        return self.l1b_geo_config.geocal_accuracy_qa(t1, t2, number_tp)
+
     def __getstate__(self):
         return {'l1_osp_dir' : self.l1_osp_dir}
 
     def __setstate__(self, state):
         self.l1_osp_dir = state['l1_osp_dir']
         self.load_config()
-
+    
 # Handle all our config variables, by creating properties to manage
 # them
 for vname, default, desc in L1OspDir.CONFIG_VARIABLES:
