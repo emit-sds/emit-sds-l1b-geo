@@ -71,9 +71,11 @@ class AvirisNgGlt(EnviFile):
         else:
             mi = self.map_info_not_rotated()
         lat = scipy.ndimage.interpolation.zoom(self.loc.latitude,
-                                               self.number_subpixel, order=2)
+                                               self.number_subpixel, order=2,
+                                               mode='nearest')
         lon = scipy.ndimage.interpolation.zoom(self.loc.longitude,
-                                               self.number_subpixel, order=2)
+                                               self.number_subpixel, order=2,
+                                               mode='nearest')
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
         super().__init__(self.fname, map_info = res.map_info,
                          shape=(2,res.map_info.number_y_pixel,

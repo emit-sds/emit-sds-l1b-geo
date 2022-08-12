@@ -2,6 +2,8 @@ from .geo_qa import *
 from test_support import *
 import geocal
 import os
+
+@skip
 def test_geo_qa(isolated_dir, l1_osp_dir, test_data):
     # Since this runs at the end of processing, it isn't too easy to
     # test this isolation. This test uses data from our end to
