@@ -85,6 +85,16 @@ def orb_and_scene_from_file_name(fname):
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
     return (m.group(2), m.group(3), m.group(1))
 
+def extended_orb_from_file_name(fname):
+    '''Winston uses a longer orbit number that includes the year in it.
+    Extract this out from file fname'''
+    m = re.search(r'emit(\d+t\d+)_o(\d+)_', os.path.basename(fname))
+    if(not m):
+        raise RuntimeError(f"Don't recognize the format of file name {fname}")
+    onum = m.group(2)
+    stime = m.group(1)
+    return stime[2:4] + onum
+
 def file_name_to_gps_week(fname, filebase="ang"):
     '''Extract the start time from the file name, using the standard
     AVIRIS-NG file format (e.g, ang20170328t202059_gps), and use that 
@@ -127,6 +137,7 @@ def process_run(exec_cmd, out_fh = None, quiet = False):
 
 __all__ = ["band_to_landsat_band", "file_name_to_gps_week",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
+           "extended_orb_from_file_name",
            "emit_file_name", "orb_and_scene_from_file_name", "process_run"]
            
 

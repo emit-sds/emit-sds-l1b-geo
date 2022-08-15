@@ -60,7 +60,7 @@ def _set_camera(self, cam):
         self.image_ground_connection(i).ipi.camera = cam
 
 def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
-            l1_osp_dir):
+            l1_osp_dir, include_img = True):
     '''Create a EmitIgcCollection. This takes an orbit file name,
     a list of time table and radiance file name pairs, and the band to
     set. We get the scene number from the radiance file name, and set EmitIgc
@@ -82,8 +82,11 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
-        img = geocal.ScaleImage(geocal.GdalRasterImage(rdn_fname, l1b_band),
-                                l1_osp_dir.rad_match_scale)
+        if(include_img):
+            img = geocal.ScaleImage(geocal.GdalRasterImage(rdn_fname, l1b_band),
+                                    l1_osp_dir.rad_match_scale)
+        else:
+            img = None
         igc = geocal.IpiImageGroundConnection(ipi, dem, img)
         if(l1_osp_dir.use_scene_index):
             index_to_igc[scene] = igc

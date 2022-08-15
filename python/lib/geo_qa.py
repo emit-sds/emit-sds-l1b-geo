@@ -4,6 +4,7 @@ from emit_swig import EmitIgcCollection
 import h5netcdf
 import h5py
 import numpy as np
+import pandas as pd
 import geocal
 import logging
 from packaging import version
@@ -47,7 +48,39 @@ class GeoQa:
         fout.close()
 
     @classmethod
-    def igccol_initial(cls, qa_fname):
+    def dataframe(cls, qa_fname):
+        '''Return a pandas DataFrame with the contents of the QA file'''
+        fh = cls.fh_qa_fname(qa_fname)
+        t = pd.DataFrame([t.decode('utf-8') for t in
+                          fh["Tiepoint/Scene Times"][:]],
+                         columns=["Scene Times",])
+        t2 = pd.DataFrame(fh["Tiepoint/Tiepoint Count"][:],
+                          columns=["Initial Tiepoint", "Blunders",
+                                   "Number Tiepoint",
+                                   "Number Image Match Tries"])
+        d = fh["Accuracy Estimate/Accuracy Before Correction"][:]
+        d[d < -9990] = np.NaN
+        t3 = pd.DataFrame(d, columns=["Initial Accuracy",])
+        d = fh["Accuracy Estimate/Final Accuracy"][:]
+        d[d < -9990] = np.NaN
+        t4 = pd.DataFrame(d, columns=["Accuracy",])
+        d = fh["Accuracy Estimate/Delta time correction before scene"][:]
+        # Think we want -9999 to go through here, but we can change that if
+        # needed
+        t5 = pd.DataFrame(d, columns=["Delta t before scene",])
+        d = fh["Accuracy Estimate/Delta time correction after scene"][:]
+        t6 = pd.DataFrame(d, columns=["Delta t after scene",])
+        qa_val = { 0: "Best", 1: "Good", 2: "Suspect", 3: "Poor",
+                   -9999 : "Unknown"}
+        t7 = pd.DataFrame([qa_val[v] for v in
+                           fh["Accuracy Estimate/Geolocation accuracy QA flag"][:]],
+                          columns=["QA Flag",])
+        df = pd.concat([t,t2,t3,t4,t5,t6,t7],axis=1)
+        fh.close()
+        return df
+
+    @classmethod
+    def igccol_initial(cls, qa_fname, include_img = True):
         '''Read the given QA file, and create a EmitIgcCollection that goes
         with the input file list. 
 
@@ -66,7 +99,26 @@ class GeoQa:
                                      rdn_fname[i].decode('utf8')))
         return EmitIgcCollection.create(l1a_att_fname, tt_and_rdn_fname,
                                         l1_osp_dir.match_rad_band,
-                                        l1_osp_dir)
+                                        l1_osp_dir, include_img=include_img)
+
+    @classmethod
+    def tpcol_single(cls, qa_fname, img_index):
+        fh = cls.fh_qa_fname(qa_fname)
+        tpcol = []
+        try:
+            tpdata = fh["Tiepoint/Image Index %03d/Tiepoints" % (img_index+1)][:,:]
+            for j in range(tpdata.shape[0]):
+                tp = geocal.TiePoint(nimg)
+                tp.is_gcp = True
+                tp.ground_location = geocal.Ecr(*tpdata[j,2:6])
+                tp.image_coordinate(i, geocal.ImageCoordinate(*tpdata[j,0:2]))
+                tpcol.append(tp)
+        except KeyError:
+            # Ok if not found in QA file, just means that image
+            # didn't have any tiepoints.
+            pass
+        return geocal.TiePointCollection(tpcol)
+        
 
     @classmethod
     def tpcol(cls, qa_fname):
@@ -94,10 +146,10 @@ class GeoQa:
         return geocal.TiePointCollection(tpcol)
     
     @classmethod
-    def igccol_corrected(cls, qa_fname):
+    def igccol_corrected(cls, qa_fname, include_img=True):
         '''Read the given QA file and create a EmitIgcCollection and add all
         the corrections we did from the SBA.'''
-        igccol = cls.igccol_initial(qa_fname)
+        igccol = cls.igccol_initial(qa_fname, include_img=include_img)
         orb_corr = geocal.OrbitOffsetCorrection(igccol.orbit)
         fh = cls.fh_qa_fname(qa_fname)
         att_tm = fh["Orbit Correction/Attitude Time Point"][:]
@@ -299,9 +351,4 @@ Fourth column is the number to image matching tries we did.'''
 9999: Unknown value'''
         f.close()
         
-        
-        
-        
-    
-
 __all__ = ["GeoQa",]    
