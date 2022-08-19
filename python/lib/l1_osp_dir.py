@@ -155,15 +155,21 @@ class L1OspDir:
         
         # We have used both GlasGfm and CameraParaxial as a camera. They
         # have the camera angles expressed differently
+        if(isinstance(cam, geocal.SubCamera)):
+            camfull = cam.full_camera
+        else:
+            camfull = cam
         if(self.instrument_to_sc_euler):
-            if(hasattr(cam, "euler")):
-                cam.euler = self.instrument_to_sc_euler
+            if(hasattr(camfull, "euler")):
+                camfull.euler = self.instrument_to_sc_euler
             else:
-                cam.angoff = [self.instrument_to_sc_euler[2],
-                              self.instrument_to_sc_euler[1],
-                              self.instrument_to_sc_euler[0]]
+                camfull.angoff = [self.instrument_to_sc_euler[2],
+                                  self.instrument_to_sc_euler[1],
+                                  self.instrument_to_sc_euler[0]]
         if(self.camera_focal_length):
-            cam.focal_length = self.camera_focal_length
+            camfull.focal_length = self.camera_focal_length
+        logger.info("Camera euler angles %s", geocal.quat_to_euler(camfull.frame_to_sc))
+        logger.info("Camera focal length %s", camfull.focal_length)
         return cam
 
     def load_config(self):

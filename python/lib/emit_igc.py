@@ -2,7 +2,7 @@ from .emit_orbit_extension import EmitOrbit
 from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
 from .misc import orb_and_scene_from_file_name
-from emit_swig import EmitIgcCollection
+from emit_swig import EmitIgcCollection, EmitL1bImage
 import logging
 import geocal
 import os
@@ -14,7 +14,8 @@ class EmitIgc(geocal.IpiImageGroundConnection):
     a generic GeoCal IpiImageGroundConnection. We can extend
     this to a full C++ class if there is any need.'''
     def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
-                 l1b_band = 1, l1_osp_dir = None):
+                 l1b_band = 1, l1_osp_dir = None,
+                 rad_match_scale = 1.0):
         '''Create a EmitIgc. We can either include the raster image data
         or not. If desired, supplied l1b_rdn_fname and the band of the
         L1B radiance file to use.'''
@@ -29,7 +30,7 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
-            img = geocal.GdalRasterImage(l1b_rdn_fname, l1b_band)
+            img = EmitL1bImage(l1b_rdn_fname, l1b_band, rad_match_scale)
         else:
             img = None
         # Put in raster image
@@ -83,8 +84,7 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
         tt = EmitTimeTable(tt_fname)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(include_img):
-            img = geocal.ScaleImage(geocal.GdalRasterImage(rdn_fname, l1b_band),
-                                    l1_osp_dir.rad_match_scale)
+            img = EmitL1bImage(rdn_fname, l1b_band, l1_osp_dir.rad_match_scale)
         else:
             img = None
         igc = geocal.IpiImageGroundConnection(ipi, dem, img)
