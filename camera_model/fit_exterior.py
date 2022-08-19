@@ -8,8 +8,8 @@ import scipy
 import pandas as pd
 import glob
 
-#qa_list = glob.glob("*")
-qa_list = ["/home/smyth/LocalFast/Emit/orbit_22204/output/emit20220810t051018_o22204_l1b_geoqa_b001_v01.nc", "/home/smyth/LocalFast/Emit/orbit_21501/output/emit20220803t104303_o21501_l1b_geoqa_b001_v01.nc"]
+qa_list = sorted(glob.glob("/home/smyth/Scratch/l1b-geo-rerun/run*/*qa*.nc"))
+#qa_list = ["/home/smyth/LocalFast/Emit/orbit_22204/output/emit20220810t051018_o22204_l1b_geoqa_b001_v01.nc", "/home/smyth/LocalFast/Emit/orbit_21501/output/emit20220803t104303_o21501_l1b_geoqa_b001_v01.nc"]
 cam = None
 igctpcol_list = []
 for fname in qa_list:
@@ -63,7 +63,9 @@ summarize_residual(x0, "Initial")
 r = scipy.optimize.least_squares(collinearity_residual, x0, loss = "huber")
 print(r)
 summarize_residual(r.x, "Fitted")
-
+write_shelve("cam_fitted.xml", cam)
+print(quat_to_euler(cam.full_camera.frame_to_sc))
+print(cam.full_camera.focal_length)
 print("orbit, initial accuracy, updated accuracy")
 for fname in qa_list:
     df = GeoQa.dataframe(fname)
