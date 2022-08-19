@@ -57,7 +57,7 @@ class EmitKmzAndQuicklook(object):
            res.map_info.number_x_pixel > 10000):
             raise RuntimeError(f"Funny map, ending process. File name: {self.file_base_name} Map info: {res.map_info}")
         for b in self.band_list:
-            ras = geocal.GdalRasterImage(self.rad_fname, b)
+            ras = EmitL1bImage(self.rad_fname, b, 1.0)
             data = res.resample_field(ras).copy()
             # Set bad values to 0
             data[np.not_equal(np.isfinite(data), True)] = 0
