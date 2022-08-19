@@ -19,6 +19,8 @@ namespace Emit {
   void set_band_metadata(const boost::shared_ptr<GeoCal::GdalRasterImage>& Img,
 			 const std::string& M, const std::string& Val,
 			 const std::string& Domain = "ENVI");
+  boost::shared_ptr<GeoCal::GdalRasterImage>
+  open_file_force_envi(const std::string& Fname, int Band);
 }
 
 

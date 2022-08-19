@@ -9,12 +9,12 @@ if _swig_python_version_info >= (2, 7, 0):
     def swig_import_helper():
         import importlib
         pkg = __name__.rpartition('.')[0]
-        mname = '.'.join((pkg, '_gdal_support')).lstrip('.')
+        mname = '.'.join((pkg, '_emit_l1b_image')).lstrip('.')
         try:
             return importlib.import_module(mname)
         except ImportError:
-            return importlib.import_module('_gdal_support')
-    _gdal_support = swig_import_helper()
+            return importlib.import_module('_emit_l1b_image')
+    _emit_l1b_image = swig_import_helper()
     del swig_import_helper
 elif _swig_python_version_info >= (2, 6, 0):
     def swig_import_helper():
@@ -22,20 +22,20 @@ elif _swig_python_version_info >= (2, 6, 0):
         import imp
         fp = None
         try:
-            fp, pathname, description = imp.find_module('_gdal_support', [dirname(__file__)])
+            fp, pathname, description = imp.find_module('_emit_l1b_image', [dirname(__file__)])
         except ImportError:
-            import _gdal_support
-            return _gdal_support
+            import _emit_l1b_image
+            return _emit_l1b_image
         try:
-            _mod = imp.load_module('_gdal_support', fp, pathname, description)
+            _mod = imp.load_module('_emit_l1b_image', fp, pathname, description)
         finally:
             if fp is not None:
                 fp.close()
         return _mod
-    _gdal_support = swig_import_helper()
+    _emit_l1b_image = swig_import_helper()
     del swig_import_helper
 else:
-    import _gdal_support
+    import _emit_l1b_image
 del _swig_python_version_info
 
 try:
@@ -111,62 +111,62 @@ class SwigPyIterator(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _gdal_support.delete_SwigPyIterator
+    __swig_destroy__ = _emit_l1b_image.delete_SwigPyIterator
     __del__ = lambda self: None
 
     def value(self):
-        return _gdal_support.SwigPyIterator_value(self)
+        return _emit_l1b_image.SwigPyIterator_value(self)
 
     def incr(self, n=1):
-        return _gdal_support.SwigPyIterator_incr(self, n)
+        return _emit_l1b_image.SwigPyIterator_incr(self, n)
 
     def decr(self, n=1):
-        return _gdal_support.SwigPyIterator_decr(self, n)
+        return _emit_l1b_image.SwigPyIterator_decr(self, n)
 
     def distance(self, x):
-        return _gdal_support.SwigPyIterator_distance(self, x)
+        return _emit_l1b_image.SwigPyIterator_distance(self, x)
 
     def equal(self, x):
-        return _gdal_support.SwigPyIterator_equal(self, x)
+        return _emit_l1b_image.SwigPyIterator_equal(self, x)
 
     def copy(self):
-        return _gdal_support.SwigPyIterator_copy(self)
+        return _emit_l1b_image.SwigPyIterator_copy(self)
 
     def next(self):
-        return _gdal_support.SwigPyIterator_next(self)
+        return _emit_l1b_image.SwigPyIterator_next(self)
 
     def __next__(self):
-        return _gdal_support.SwigPyIterator___next__(self)
+        return _emit_l1b_image.SwigPyIterator___next__(self)
 
     def previous(self):
-        return _gdal_support.SwigPyIterator_previous(self)
+        return _emit_l1b_image.SwigPyIterator_previous(self)
 
     def advance(self, n):
-        return _gdal_support.SwigPyIterator_advance(self, n)
+        return _emit_l1b_image.SwigPyIterator_advance(self, n)
 
     def __eq__(self, x):
-        return _gdal_support.SwigPyIterator___eq__(self, x)
+        return _emit_l1b_image.SwigPyIterator___eq__(self, x)
 
     def __ne__(self, x):
-        return _gdal_support.SwigPyIterator___ne__(self, x)
+        return _emit_l1b_image.SwigPyIterator___ne__(self, x)
 
     def __iadd__(self, n):
-        return _gdal_support.SwigPyIterator___iadd__(self, n)
+        return _emit_l1b_image.SwigPyIterator___iadd__(self, n)
 
     def __isub__(self, n):
-        return _gdal_support.SwigPyIterator___isub__(self, n)
+        return _emit_l1b_image.SwigPyIterator___isub__(self, n)
 
     def __add__(self, n):
-        return _gdal_support.SwigPyIterator___add__(self, n)
+        return _emit_l1b_image.SwigPyIterator___add__(self, n)
 
     def __sub__(self, *args):
-        return _gdal_support.SwigPyIterator___sub__(self, *args)
+        return _emit_l1b_image.SwigPyIterator___sub__(self, *args)
     def __iter__(self):
         return self
-SwigPyIterator_swigregister = _gdal_support.SwigPyIterator_swigregister
+SwigPyIterator_swigregister = _emit_l1b_image.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-SHARED_PTR_DISOWN = _gdal_support.SHARED_PTR_DISOWN
+SHARED_PTR_DISOWN = _emit_l1b_image.SHARED_PTR_DISOWN
 
 import os
 
@@ -211,70 +211,61 @@ def _new_from_set(cls, version, *args):
     inst.set(*args)
     return inst
 
-import geocal_swig.raster_image_tiled_file
+import geocal_swig.scale_image
+import geocal_swig.calc_raster
 import geocal_swig.raster_image_variable
 import geocal_swig.raster_image
 import geocal_swig.generic_object
 import geocal_swig.with_parameter
 import geocal_swig.geocal_exception
-
-def set_file_description(Img, Desc):
+import geocal_swig.calc_raster_multi_band
+class EmitL1bImage(geocal_swig.scale_image.ScaleImage):
     """
 
-    void Emit::set_file_description(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
-    std::string &Desc)
-    GeoCal doesn't happen to have support for writing a file description.
-
-    This should probably migrate into geocal at some point, but for now
-    just provide our own function in Emit for this. 
-    """
-    return _gdal_support.set_file_description(Img, Desc)
-
-def set_band_description(Img, Desc):
-    """
-
-    void Emit::set_band_description(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
-    std::string &Desc)
-    GeoCal doesn't happen to have support for writing a band description.
-
-    This should probably migrate into geocal at some point, but for now
-    just provide our own function in Emit for this. 
-    """
-    return _gdal_support.set_band_description(Img, Desc)
-
-def set_band_metadata(*args):
-    """
-
-    void Emit::set_band_metadata(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
-    std::string &M, const std::string &Val, const std::string
-    &Domain="ENVI")
-    GeoCal doesn't happen to have support for writing a band (as opposed
-    to file) metadata.
-
-    This should probably migrate into geocal at some point, but for now
-    just provide our own function in Emit for this.
-
-    NOTE: It turns out that gdal (as of 2.4) doesn't support band metadata
-    directly in the ENVI header. This is different than description, which
-    it does support. We can easily work around this by treating thinks
-    like wavelength as a file level item, and just directly create the "{
-    wavelength 1, wavelength 2, ...}" string in ENVI. GDAL does put this
-    in the auxilary .xml file, but we don't want to depend on that. 
-    """
-    return _gdal_support.set_band_metadata(*args)
-
-def open_file_force_envi(Fname, Band):
-    """
-
-    boost::shared_ptr< GeoCal::GdalRasterImage > Emit::open_file_force_envi(const std::string &Fname, int Band)
     We ran into an obscure bug in GDAL 3.2.1 where a specific file
     couldn't be opened because GDAL never identified it as ENVI
     (seehttps://github.jpl.nasa.gov/emit-sds/emit-sds-issue-
     tracking/issues/110 for details).
 
-    This function opens a file and forces the ENVI driver to be used. 
+    This class opens a file and forces the ENVI driver to be used. We also
+    scale the image, which is needed for doing image matching
+
+    C++ includes: emit_l1b_image.h 
     """
-    return _gdal_support.open_file_force_envi(Fname, Band)
+
+    __swig_setmethods__ = {}
+    for _s in [geocal_swig.scale_image.ScaleImage]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EmitL1bImage, name, value)
+    __swig_getmethods__ = {}
+    for _s in [geocal_swig.scale_image.ScaleImage]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, EmitL1bImage, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, Fname, Band, Scale_factor):
+        """
+
+        Emit::EmitL1bImage::EmitL1bImage(const std::string &Fname, int Band, double Scale_factor)
+
+        """
+        this = _emit_l1b_image.new_EmitL1bImage(Fname, Band, Scale_factor)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __reduce__(self):
+      return _new_from_serialization, (geocal_swig.serialize_write_binary(self),)
+
+    __swig_destroy__ = _emit_l1b_image.delete_EmitL1bImage
+    __del__ = lambda self: None
+EmitL1bImage_swigregister = _emit_l1b_image.EmitL1bImage_swigregister
+EmitL1bImage_swigregister(EmitL1bImage)
+
+
+__all__ = ["EmitL1bImage"]
+
 # This file is compatible with both classic and new-style classes.
 
 
