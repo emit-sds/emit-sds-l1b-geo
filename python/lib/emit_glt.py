@@ -13,7 +13,18 @@ logger = logging.getLogger('l1b_geo_process.emit_glt')
 
 class EmitGlt(EnviFile):
     '''This generate the l1b_geo GLT file. 
-    
+
+    Note the GLT is a bit of a odd historical dataset that has some
+    ENVI routine to work with it. It is:
+
+    1. Integer rather than a float that you would normally use for resampling.
+    2. 1 based rather than the 0 based you might expect
+    3. Has a fill value of 0
+
+    We don't actually do anything with the GLT, instead use the LOC for
+    resampling (which is a better thing to do). So we just match what the
+    historical data used.
+
     Note that we don't actually create the data until you run "run" function.
     The EmitLoc should also have been generate (so either you are reading
     an existing file or you have done EmitLoc.run to generate the data).
@@ -159,6 +170,12 @@ class EmitGlt(EnviFile):
         smp.write(0,0,smp_d.astype(np.int))
         self.glt_line[:,:] = res.resample_field(ln, 1.0, False, -999.0, True)
         self.glt_sample[:,:] = res.resample_field(smp, 1.0, False, -999.0, True)
+        # Correct for the odd 1 based definition of GLT, and change fill
+        # value to 0
+        self.glt_line[:,:] += 1
+        self.glt_sample[:,:] += 1
+        self.glt_line[self.glt_line < 0] = 0
+        self.glt_sample[self.glt_sample < 0] = 0
         self.flush()
         fh = geocal.GdalRasterImage(self.file_name, 1, 4, True)
         fh["ENVI", "GRing"] = self.gring()
