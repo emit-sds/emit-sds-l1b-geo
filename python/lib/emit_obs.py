@@ -130,9 +130,11 @@ class EmitObs(EnviFile):
                 self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
                 self.slope[ln,smp], self.aspect[ln,smp] = \
                     self.igc.dem.slope_and_aspect(gp)
-                slope_dir = [sin(self.slope[ln,smp])*sin(self.aspect[ln,smp]),
-                             sin(self.slope[ln,smp])*cos(self.aspect[ln,smp]),
-                             cos(self.slope[ln,smp])]
+                slope_dir = [sin(self.slope[ln,smp] * geocal.deg_to_rad)*
+                             sin(self.aspect[ln,smp] * geocal.deg_to_rad),
+                             sin(self.slope[ln,smp] * geocal.deg_to_rad)*
+                             cos(self.aspect[ln,smp] * geocal.deg_to_rad),
+                             cos(self.slope[ln,smp] * geocal.deg_to_rad)]
                 self.cosine_i[ln,smp] = (slope_dir[0] * slv.direction[0] +
                                          slope_dir[1] * slv.direction[1] +
                                          slope_dir[2] * slv.direction[2])
