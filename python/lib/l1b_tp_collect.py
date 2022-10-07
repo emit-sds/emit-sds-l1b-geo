@@ -138,7 +138,7 @@ class L1bTpCollect:
         it = [i for i in range(self.igccol.number_image)
               if proj_res[i] is not None]
         if(pool is None):
-            tpcollist = map(self.tp, it)
+            tpcollist = list(map(self.tp, it))
         else:
             tpcollist = pool.map(self.tp, it)
         res = geocal.TiePointCollection()
