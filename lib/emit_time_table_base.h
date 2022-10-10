@@ -16,13 +16,31 @@ public:
 /// Constructor.
 //-------------------------------------------------------------------------
   EmitTimeTableBase(const std::vector<GeoCal::Time>& Time_list,
+		    int Number_sample, bool Reverse_image,
 		    int Min_line = 0)
-    : GeoCal::MeasuredTimeTable(Time_list, Min_line)
+    : GeoCal::MeasuredTimeTable(Time_list, Min_line),
+      nsamp(Number_sample), rimage(Reverse_image)
   {
   }
 
+  virtual GeoCal::ImageCoordinate
+  image_coordinate(GeoCal::Time T,
+		   const GeoCal::FrameCoordinate& F) const;
+  virtual GeoCal::ImageCoordinateWithDerivative 
+  image_coordinate_with_derivative(const GeoCal::TimeWithDerivative& T, 
+	   const GeoCal::FrameCoordinateWithDerivative& F) const;
+  virtual void time(const GeoCal::ImageCoordinate& Ic, GeoCal::Time& T,
+		    GeoCal::FrameCoordinate& F) const;
+  virtual void time_with_derivative
+  (const GeoCal::ImageCoordinateWithDerivative& Ic, 
+   GeoCal::TimeWithDerivative& T, 
+   GeoCal::FrameCoordinateWithDerivative& F) const;
+  int number_sample() const { return nsamp;}
+  bool reverse_image() const { return rimage; }
   virtual void print(std::ostream& Os) const;
 private:
+  int nsamp;
+  bool rimage;
   EmitTimeTableBase() {}
   friend class boost::serialization::access;
   template<class Archive>

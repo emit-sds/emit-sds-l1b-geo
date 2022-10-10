@@ -6245,6 +6245,20 @@ SWIG_AsVal_int (PyObject * obj, int *val)
 }
 
 
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
+
 
 /* ---------------------------------------------------
  * C++ director class methods
@@ -11969,14 +11983,22 @@ SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase__SWIG_0(PyObject *SWIGUNUSEDPAR
   PyObject *resultobj = 0;
   std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *arg1 = 0 ;
   int arg2 ;
+  bool arg3 ;
+  int arg4 ;
   int res1 = SWIG_OLDOBJ ;
   int val2 ;
   int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   Emit::EmitTimeTableBase *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_EmitTimeTableBase",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_EmitTimeTableBase",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   {
     std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *ptr = (std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *)0;
     res1 = swig::asptr(obj0, &ptr);
@@ -11993,9 +12015,19 @@ SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_EmitTimeTableBase" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_EmitTimeTableBase" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_EmitTimeTableBase" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
   {
     try {
-      result = (Emit::EmitTimeTableBase *)new Emit::EmitTimeTableBase((std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &)*arg1,arg2);
+      result = (Emit::EmitTimeTableBase *)new Emit::EmitTimeTableBase((std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &)*arg1,arg2,arg3,arg4);
     } catch (Swig::DirectorException &e) {
       SWIG_fail; 
     } catch (const std::exception& e) {
@@ -12017,11 +12049,19 @@ fail:
 SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *arg1 = 0 ;
+  int arg2 ;
+  bool arg3 ;
   int res1 = SWIG_OLDOBJ ;
+  int val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   Emit::EmitTimeTableBase *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:new_EmitTimeTableBase",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_EmitTimeTableBase",&obj0,&obj1,&obj2)) SWIG_fail;
   {
     std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *ptr = (std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > *)0;
     res1 = swig::asptr(obj0, &ptr);
@@ -12033,9 +12073,19 @@ SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase__SWIG_1(PyObject *SWIGUNUSEDPAR
     }
     arg1 = ptr;
   }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_EmitTimeTableBase" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_EmitTimeTableBase" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
   {
     try {
-      result = (Emit::EmitTimeTableBase *)new Emit::EmitTimeTableBase((std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &)*arg1);
+      result = (Emit::EmitTimeTableBase *)new Emit::EmitTimeTableBase((std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &)*arg1,arg2,arg3);
     } catch (Swig::DirectorException &e) {
       SWIG_fail; 
     } catch (const std::exception& e) {
@@ -12056,25 +12106,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[3] = {
+  PyObject *argv[5] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  if (argc == 1) {
-    int _v;
-    int res = swig::asptr(argv[0], (std::vector< GeoCal::Time,std::allocator< GeoCal::Time > >**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_EmitTimeTableBase__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
+  if (argc == 3) {
     int _v;
     int res = swig::asptr(argv[0], (std::vector< GeoCal::Time,std::allocator< GeoCal::Time > >**)(0));
     _v = SWIG_CheckState(res);
@@ -12084,7 +12126,39 @@ SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase(PyObject *self, PyObject *args)
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_EmitTimeTableBase__SWIG_0(self, args);
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_EmitTimeTableBase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< GeoCal::Time,std::allocator< GeoCal::Time > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_EmitTimeTableBase__SWIG_0(self, args);
+          }
+        }
       }
     }
   }
@@ -12092,9 +12166,93 @@ SWIGINTERN PyObject *_wrap_new_EmitTimeTableBase(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_EmitTimeTableBase'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Emit::EmitTimeTableBase::EmitTimeTableBase(std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &,int)\n"
-    "    Emit::EmitTimeTableBase::EmitTimeTableBase(std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &)\n");
+    "    Emit::EmitTimeTableBase::EmitTimeTableBase(std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &,int,bool,int)\n"
+    "    Emit::EmitTimeTableBase::EmitTimeTableBase(std::vector< GeoCal::Time,std::allocator< GeoCal::Time > > const &,int,bool)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_EmitTimeTableBase__v_number_sample(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::EmitTimeTableBase *arg1 = (Emit::EmitTimeTableBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::EmitTimeTableBase const > tempshared1 ;
+  boost::shared_ptr< Emit::EmitTimeTableBase const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:EmitTimeTableBase__v_number_sample",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__EmitTimeTableBase_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EmitTimeTableBase__v_number_sample" "', argument " "1"" of type '" "Emit::EmitTimeTableBase const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      arg1 = const_cast< Emit::EmitTimeTableBase * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      arg1 = const_cast< Emit::EmitTimeTableBase * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (int)((Emit::EmitTimeTableBase const *)arg1)->number_sample();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_EmitTimeTableBase__v_reverse_image(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::EmitTimeTableBase *arg1 = (Emit::EmitTimeTableBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::EmitTimeTableBase const > tempshared1 ;
+  boost::shared_ptr< Emit::EmitTimeTableBase const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:EmitTimeTableBase__v_reverse_image",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__EmitTimeTableBase_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EmitTimeTableBase__v_reverse_image" "', argument " "1"" of type '" "Emit::EmitTimeTableBase const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      arg1 = const_cast< Emit::EmitTimeTableBase * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::EmitTimeTableBase > * >(argp1);
+      arg1 = const_cast< Emit::EmitTimeTableBase * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (bool)((Emit::EmitTimeTableBase const *)arg1)->reverse_image();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -12236,8 +12394,19 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector_Time2_swigregister", Vector_Time2_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_EmitTimeTableBase", _wrap_new_EmitTimeTableBase, METH_VARARGS, (char *)"\n"
 		"\n"
-		"Emit::EmitTimeTableBase::EmitTimeTableBase(const std::vector< GeoCal::Time > &Time_list, int Min_line=0)\n"
+		"Emit::EmitTimeTableBase::EmitTimeTableBase(const std::vector< GeoCal::Time > &Time_list, int Number_sample, bool\n"
+		"Reverse_image, int Min_line=0)\n"
 		"Constructor. \n"
+		""},
+	 { (char *)"EmitTimeTableBase__v_number_sample", _wrap_EmitTimeTableBase__v_number_sample, METH_VARARGS, (char *)"\n"
+		"\n"
+		"int Emit::EmitTimeTableBase::number_sample() const\n"
+		"\n"
+		""},
+	 { (char *)"EmitTimeTableBase__v_reverse_image", _wrap_EmitTimeTableBase__v_reverse_image, METH_VARARGS, (char *)"\n"
+		"\n"
+		"bool Emit::EmitTimeTableBase::reverse_image() const\n"
+		"\n"
 		""},
 	 { (char *)"delete_EmitTimeTableBase", _wrap_delete_EmitTimeTableBase, METH_VARARGS, NULL},
 	 { (char *)"EmitTimeTableBase_swigregister", EmitTimeTableBase_swigregister, METH_VARARGS, NULL},

@@ -16,7 +16,10 @@ namespace Emit {
 class EmitTimeTableBase : public GeoCal::MeasuredTimeTable {
 public:
   EmitTimeTableBase(const std::vector<GeoCal::Time>& Time_list,
+		    int Number_sample, bool Reverse_image,
 		    int Min_line = 0);
+  %python_attribute(number_sample, int);
+  %python_attribute(reverse_image, bool);
   %pickle_serialization();
 };
 }

@@ -4,6 +4,9 @@ import geocal
 
 def test_emit_time_table(time_table_fname):
     tt = EmitTimeTable(time_table_fname)
+    geocal.write_shelve("tt.xml", tt)
+    tt = EmitTimeTable(time_table_fname, reverse_image=True)
+    geocal.write_shelve("ttreverse.xml", tt)
     #print(tt)
     # Trivial test, we are just making sure we can access the orbit
     assert tt.max_time - tt.min_time > 10.0

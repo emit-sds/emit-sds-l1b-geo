@@ -467,17 +467,46 @@ class EmitTimeTableBase(geocal_swig.time_table.MeasuredTimeTable):
     __getattr__ = lambda self, name: _swig_getattr(self, EmitTimeTableBase, name)
     __repr__ = _swig_repr
 
-    def __init__(self, Time_list, Min_line=0):
+    def __init__(self, Time_list, Number_sample, Reverse_image, Min_line=0):
         """
 
-        Emit::EmitTimeTableBase::EmitTimeTableBase(const std::vector< GeoCal::Time > &Time_list, int Min_line=0)
+        Emit::EmitTimeTableBase::EmitTimeTableBase(const std::vector< GeoCal::Time > &Time_list, int Number_sample, bool
+        Reverse_image, int Min_line=0)
         Constructor. 
         """
-        this = _emit_time_table_base.new_EmitTimeTableBase(Time_list, Min_line)
+        this = _emit_time_table_base.new_EmitTimeTableBase(Time_list, Number_sample, Reverse_image, Min_line)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def _v_number_sample(self):
+        """
+
+        int Emit::EmitTimeTableBase::number_sample() const
+
+        """
+        return _emit_time_table_base.EmitTimeTableBase__v_number_sample(self)
+
+
+    @property
+    def number_sample(self):
+        return self._v_number_sample()
+
+
+    def _v_reverse_image(self):
+        """
+
+        bool Emit::EmitTimeTableBase::reverse_image() const
+
+        """
+        return _emit_time_table_base.EmitTimeTableBase__v_reverse_image(self)
+
+
+    @property
+    def reverse_image(self):
+        return self._v_reverse_image()
+
 
     def __reduce__(self):
       return _new_from_serialization, (geocal_swig.serialize_write_binary(self),)

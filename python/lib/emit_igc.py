@@ -27,7 +27,8 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         else:
             dem = geocal.SrtmDem()
             cam = EmitCamera()
-        tt = EmitTimeTable(tt_fname)
+        tt = EmitTimeTable(tt_fname, number_sample = cam.number_sample(0),
+                           reverse_image = False)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(l1b_rdn_fname is not None):
             img = EmitL1bImage(l1b_rdn_fname, l1b_band, rad_match_scale)
@@ -81,7 +82,8 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     index_to_rdn_fname = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
-        tt = EmitTimeTable(tt_fname)
+        tt = EmitTimeTable(tt_fname, number_sample=cam.number_sample(0),
+                           reverse_image=False)
         ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
         if(include_img):
             img = EmitL1bImage(rdn_fname, l1b_band, l1_osp_dir.rad_match_scale)
