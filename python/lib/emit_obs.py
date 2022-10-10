@@ -94,7 +94,6 @@ class EmitObs(EnviFile):
     def run(self):
         '''Actually generate the output data.'''
         logger.info("Generating OBS data for %s", self.igc.title)
-        return
         # TODO This is fairly slow, we should probably move most of this
         # to C++ level for performance
         for ln in range(self.igc.number_line):

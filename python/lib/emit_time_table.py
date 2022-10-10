@@ -1,14 +1,13 @@
 import geocal
+from emit_swig import EmitTimeTableBase
 import h5netcdf
 import pandas as pd
 from packaging import version
 import numpy as np
 import os
 
-class EmitTimeTable(geocal.MeasuredTimeTable):
-    '''This is the EMIT time table. Right now this is just a wrapper
-    around a generic GeoCal MeasuredTimeTable. We can extend this to a
-    full C++ class if there is any need.
+class EmitTimeTable(EmitTimeTableBase):
+    '''This is the EMIT time table. 
     '''
     def __init__(self, tt_fname, trim_pad=None):
         '''Read the time table. Our AVIRIS test data has a small amount

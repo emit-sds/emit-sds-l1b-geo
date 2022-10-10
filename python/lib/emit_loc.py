@@ -74,10 +74,8 @@ class EmitLoc(EnviFile):
             rcast = geocal.IgcRayCaster(self.igc,0,-1,1,30)
         rcast.number_sub_line = 1
         rcast.number_sub_sample = 1
-        logger.info("Entering loop")
         while(not rcast.last_position):
             gpos = rcast.next_position()
-            logger.info("Entering loop 2")
             for i in range(gpos.shape[1]):
                 gp = geocal.Geodetic(geocal.Ecr(gpos[0,i,0,0,0,0],
                                                 gpos[0,i,0,0,0,1],

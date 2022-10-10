@@ -198,6 +198,7 @@ am__objects_1 = @swigsrc@/_swig_wrap_la-emit_swig_array_wrap.lo \
 	@swigsrc@/_swig_wrap_la-gdal_support_wrap.lo \
 	@swigsrc@/_swig_wrap_la-resampler_wrap.lo \
 	@swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo \
+	@swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo \
 	@swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo \
 	@swigsrc@/_swig_wrap_la-emit_l1b_image_wrap.lo \
 	@swigsrc@/_swig_wrap_la-camera_paraxial_wrap.lo \
@@ -218,6 +219,7 @@ libemit_la_LIBADD =
 am_libemit_la_OBJECTS = @srclib@/libemit_la-gdal_support.lo \
 	@srclib@/libemit_la-resampler.lo \
 	@srclib@/libemit_la-emit_orbit.lo \
+	@srclib@/libemit_la-emit_time_table_base.lo \
 	@srclib@/libemit_la-emit_igc_collection.lo \
 	@srclib@/libemit_la-emit_l1b_image.lo \
 	@srclib@/libemit_la-camera_paraxial.lo \
@@ -264,6 +266,7 @@ am__depfiles_remade =  \
 	@srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo \
 	@srclib@/$(DEPDIR)/libemit_la-emit_l1b_image.Plo \
 	@srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo \
+	@srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Plo \
 	@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo \
 	@srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo \
 	@srclib@/$(DEPDIR)/libemit_la-resampler.Plo \
@@ -272,6 +275,7 @@ am__depfiles_remade =  \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_l1b_image_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo \
+	@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo \
 	@swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo \
@@ -306,7 +310,7 @@ am__can_run_installinfo = \
   esac
 am__py_compile = PYTHON=$(PYTHON) $(SHELL) $(py_compile)
 am__pep3147_tweak = \
-  sed -e 's|\.py$$||' -e 's|[^/]*$$|&.*.pyc\n&.*.pyo|'
+  sed -e 's|\.py$$||' -e 's|[^/]*$$|__pycache__/&.*.py|'
 py_compile = $(top_srcdir)/config/py-compile
 DATA = $(installemit_DATA) $(pkgconfig_DATA)
 HEADERS = $(emitinc_HEADERS) $(emitswiginc_HEADERS) $(include_HEADERS)
@@ -830,22 +834,24 @@ DIST_HOOK = dist-clean-up-python
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 emitincdir = @includedir@/emit
 libemit_la_SOURCES = @srclib@/gdal_support.cc @srclib@/resampler.cc \
-	@srclib@/emit_orbit.cc @srclib@/emit_igc_collection.cc \
-	@srclib@/emit_l1b_image.cc @srclib@/camera_paraxial.cc \
+	@srclib@/emit_orbit.cc @srclib@/emit_time_table_base.cc \
+	@srclib@/emit_igc_collection.cc @srclib@/emit_l1b_image.cc \
+	@srclib@/camera_paraxial.cc \
 	@srclib@/polynomial_paraxial_transform.cc
 
 #=================================================================
 # List of source files
 emitinc_HEADERS = @srclib@/emit_serialize_support.h \
 	@srclib@/gdal_support.h @srclib@/resampler.h \
-	@srclib@/emit_orbit.h @srclib@/emit_igc_collection.h \
-	@srclib@/emit_l1b_image.h @srclib@/camera_paraxial.h \
+	@srclib@/emit_orbit.h @srclib@/emit_time_table_base.h \
+	@srclib@/emit_igc_collection.h @srclib@/emit_l1b_image.h \
+	@srclib@/camera_paraxial.h \
 	@srclib@/polynomial_paraxial_transform.h
 emitswiginc_HEADERS = @srclib@/emit_swig_array.i \
 	@srclib@/emit_common.i @srclib@/gdal_support.i \
 	@srclib@/resampler.i @srclib@/emit_orbit.i \
-	@srclib@/emit_igc_collection.i @srclib@/emit_l1b_image.i \
-	@srclib@/camera_paraxial.i \
+	@srclib@/emit_time_table_base.i @srclib@/emit_igc_collection.i \
+	@srclib@/emit_l1b_image.i @srclib@/camera_paraxial.i \
 	@srclib@/polynomial_paraxial_transform.i
 emit_test_all_SOURCES = @srclib@/test_all.cc \
 	@srclib@/global_fixture.cc @srclib@/global_fixture_default.cc \
@@ -855,6 +861,7 @@ emit_test_all_SOURCES = @srclib@/test_all.cc \
 SWIG_SRC = @swigsrc@/emit_swig_array_wrap.cc \
 	@swigsrc@/gdal_support_wrap.cc @swigsrc@/resampler_wrap.cc \
 	@swigsrc@/emit_orbit_wrap.cc \
+	@swigsrc@/emit_time_table_base_wrap.cc \
 	@swigsrc@/emit_igc_collection_wrap.cc \
 	@swigsrc@/emit_l1b_image_wrap.cc \
 	@swigsrc@/camera_paraxial_wrap.cc \
@@ -1126,6 +1133,8 @@ clean-pkgpythonswigLTLIBRARIES:
 	@swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo: @swigsrc@/$(am__dirstamp) \
 	@swigsrc@/$(DEPDIR)/$(am__dirstamp)
+@swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo:  \
+	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo:  \
 	@swigsrc@/$(am__dirstamp) @swigsrc@/$(DEPDIR)/$(am__dirstamp)
 @swigsrc@/_swig_wrap_la-emit_l1b_image_wrap.lo:  \
@@ -1150,6 +1159,8 @@ _swig_wrap.la: $(_swig_wrap_la_OBJECTS) $(_swig_wrap_la_DEPENDENCIES) $(EXTRA__s
 @srclib@/libemit_la-resampler.lo: @srclib@/$(am__dirstamp) \
 	@srclib@/$(DEPDIR)/$(am__dirstamp)
 @srclib@/libemit_la-emit_orbit.lo: @srclib@/$(am__dirstamp) \
+	@srclib@/$(DEPDIR)/$(am__dirstamp)
+@srclib@/libemit_la-emit_time_table_base.lo: @srclib@/$(am__dirstamp) \
 	@srclib@/$(DEPDIR)/$(am__dirstamp)
 @srclib@/libemit_la-emit_igc_collection.lo: @srclib@/$(am__dirstamp) \
 	@srclib@/$(DEPDIR)/$(am__dirstamp)
@@ -1301,6 +1312,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_l1b_image.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@srclib@/$(DEPDIR)/libemit_la-resampler.Plo@am__quote@ # am--include-marker
@@ -1309,6 +1321,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_l1b_image_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo@am__quote@ # am--include-marker
@@ -1372,6 +1385,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-emit_orbit_wrap.lo `test -f '@swigsrc@/emit_orbit_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_orbit_wrap.cc
 
+@swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo: @swigsrc@/emit_time_table_base_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo `test -f '@swigsrc@/emit_time_table_base_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_time_table_base_wrap.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@swigsrc@/emit_time_table_base_wrap.cc' object='@swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -c -o @swigsrc@/_swig_wrap_la-emit_time_table_base_wrap.lo `test -f '@swigsrc@/emit_time_table_base_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_time_table_base_wrap.cc
+
 @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo: @swigsrc@/emit_igc_collection_wrap.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(_swig_wrap_la_CPPFLAGS) $(CPPFLAGS) $(_swig_wrap_la_CXXFLAGS) $(CXXFLAGS) -MT @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo -MD -MP -MF @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Tpo -c -o @swigsrc@/_swig_wrap_la-emit_igc_collection_wrap.lo `test -f '@swigsrc@/emit_igc_collection_wrap.cc' || echo '$(srcdir)/'`@swigsrc@/emit_igc_collection_wrap.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Tpo @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_igc_collection_wrap.Plo
@@ -1427,6 +1447,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_orbit.cc' object='@srclib@/libemit_la-emit_orbit.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-emit_orbit.lo `test -f '@srclib@/emit_orbit.cc' || echo '$(srcdir)/'`@srclib@/emit_orbit.cc
+
+@srclib@/libemit_la-emit_time_table_base.lo: @srclib@/emit_time_table_base.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-emit_time_table_base.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Tpo -c -o @srclib@/libemit_la-emit_time_table_base.lo `test -f '@srclib@/emit_time_table_base.cc' || echo '$(srcdir)/'`@srclib@/emit_time_table_base.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) @srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Tpo @srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='@srclib@/emit_time_table_base.cc' object='@srclib@/libemit_la-emit_time_table_base.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o @srclib@/libemit_la-emit_time_table_base.lo `test -f '@srclib@/emit_time_table_base.cc' || echo '$(srcdir)/'`@srclib@/emit_time_table_base.cc
 
 @srclib@/libemit_la-emit_igc_collection.lo: @srclib@/emit_igc_collection.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libemit_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT @srclib@/libemit_la-emit_igc_collection.lo -MD -MP -MF @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Tpo -c -o @srclib@/libemit_la-emit_igc_collection.lo `test -f '@srclib@/emit_igc_collection.cc' || echo '$(srcdir)/'`@srclib@/emit_igc_collection.cc
@@ -1569,15 +1596,20 @@ uninstall-emitpkgpythonPYTHON:
 	dir='$(DESTDIR)$(emitpkgpythondir)'; \
 	pyc_files=`echo "$$py_files" | sed 's|$$|c|'`; \
 	pyo_files=`echo "$$py_files" | sed 's|$$|o|'`; \
+	py_files_pep3147=`echo "$$py_files" | $(am__pep3147_tweak)`; \
+	echo "$$py_files_pep3147";\
+	pyc_files_pep3147=`echo "$$py_files_pep3147" | sed 's|$$|c|'`; \
+	pyo_files_pep3147=`echo "$$py_files_pep3147" | sed 's|$$|o|'`; \
 	st=0; \
-	for files in "$$py_files" "$$pyc_files" "$$pyo_files"; do \
+	for files in \
+	  "$$py_files" \
+	  "$$pyc_files" \
+	  "$$pyo_files" \
+	  "$$pyc_files_pep3147" \
+	  "$$pyo_files_pep3147" \
+	; do \
 	  $(am__uninstall_files_from_dir) || st=$$?; \
 	done; \
-	dir='$(DESTDIR)$(emitpkgpythondir)/__pycache__'; \
-	echo "$$py_files" | $(am__pep3147_tweak) | $(am__base_list) | \
-	  while read files; do \
-	    $(am__uninstall_files_from_dir) || st=$$?; \
-	  done || exit $$?; \
 	exit $$st
 install-pkgpythonswigPYTHON: $(pkgpythonswig_PYTHON)
 	@$(NORMAL_INSTALL)
@@ -1612,15 +1644,20 @@ uninstall-pkgpythonswigPYTHON:
 	dir='$(DESTDIR)$(pkgpythonswigdir)'; \
 	pyc_files=`echo "$$py_files" | sed 's|$$|c|'`; \
 	pyo_files=`echo "$$py_files" | sed 's|$$|o|'`; \
+	py_files_pep3147=`echo "$$py_files" | $(am__pep3147_tweak)`; \
+	echo "$$py_files_pep3147";\
+	pyc_files_pep3147=`echo "$$py_files_pep3147" | sed 's|$$|c|'`; \
+	pyo_files_pep3147=`echo "$$py_files_pep3147" | sed 's|$$|o|'`; \
 	st=0; \
-	for files in "$$py_files" "$$pyc_files" "$$pyo_files"; do \
+	for files in \
+	  "$$py_files" \
+	  "$$pyc_files" \
+	  "$$pyo_files" \
+	  "$$pyc_files_pep3147" \
+	  "$$pyo_files_pep3147" \
+	; do \
 	  $(am__uninstall_files_from_dir) || st=$$?; \
 	done; \
-	dir='$(DESTDIR)$(pkgpythonswigdir)/__pycache__'; \
-	echo "$$py_files" | $(am__pep3147_tweak) | $(am__base_list) | \
-	  while read files; do \
-	    $(am__uninstall_files_from_dir) || st=$$?; \
-	  done || exit $$?; \
 	exit $$st
 install-installemitDATA: $(installemit_DATA)
 	@$(NORMAL_INSTALL)
@@ -2186,6 +2223,7 @@ distclean: distclean-am
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_l1b_image.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-resampler.Plo
@@ -2194,6 +2232,7 @@ distclean: distclean-am
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_l1b_image_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo
@@ -2261,6 +2300,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_igc_collection.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_l1b_image.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_orbit.Plo
+	-rm -f @srclib@/$(DEPDIR)/libemit_la-emit_time_table_base.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-gdal_support.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-polynomial_paraxial_transform.Plo
 	-rm -f @srclib@/$(DEPDIR)/libemit_la-resampler.Plo
@@ -2269,6 +2309,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_l1b_image_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_orbit_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_swig_array_wrap.Plo
+	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-emit_time_table_base_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-gdal_support_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-polynomial_paraxial_transform_wrap.Plo
 	-rm -f @swigsrc@/$(DEPDIR)/_swig_wrap_la-resampler_wrap.Plo
