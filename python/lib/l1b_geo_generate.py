@@ -97,7 +97,7 @@ class L1bGeoGenerate:
                                    "")
         loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
         obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata,
-                      loc=loc)
+                      loc=loc, l1_osp_dir=self.l1_osp_dir)
         glt = EmitGlt(glt_fname, loc=loc,
                       standard_metadata=standard_metadata,
                       rotated_map=self.glt_rotated)

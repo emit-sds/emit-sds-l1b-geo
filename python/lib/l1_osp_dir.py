@@ -137,6 +137,21 @@ class L1OspDir:
         mibase = self.ortho_base.map_info.scale(ortho_scale, ortho_scale)
         return igc.cover(mibase)
 
+    def dem_subset(self, dem_fname, igc, desired_resolution=60.0):
+        '''For the slope and aspect calculation in EmitObs, we want to
+        work with a DEM closer to the pixel size. We write out a file
+        at the desired resolution (averaging the underlying DEM data)
+        and return a GdalDem for reading the data.'''
+        dem_scale = round(desired_resolution /
+                          self.dem.map_info.resolution_meter)
+        mibase = self.dem.map_info.scale(dem_scale, dem_scale)
+        mi = igc.cover(mibase)
+        demd = geocal.SrtmDemData(self.dem.directory_base)
+        demd.create_subset_file(dem_fname, "VICAR",
+                                Desired_map_info = mi,
+                                Translate_arg = "-ot Int16")
+        return geocal.GdalDem(dem_fname, self.dem.datum)
+
     def write_ortho_base_subset(self, ref_fname, map_info):
         '''Create a VICAR file with the given name, containing the
         reference image we should match against.'''
