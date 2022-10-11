@@ -3,7 +3,7 @@ from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
 from .envi_file import EnviFile
 from .misc import orb_and_scene_from_file_name
-from emit_swig import EmitIgcCollection, EmitL1bImage
+from emit_swig import EmitIgcCollection, EmitL1bImage, ReverseCamera
 import logging
 import geocal
 import os
@@ -31,14 +31,23 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         reverse_image = False
         if(l1b_rdn_fname is not None):
             img = EmitL1bImage(l1b_rdn_fname, l1b_band, rad_match_scale)
-            f = EnviFile(l1b_rdn_fname)
+            f = EnviFile(l1b_rdn_fname, mode="r")
             if("flip_horizontal" in f.metadata):
                 reverse_image = bool(f.metadata["flip_horizontal"])
         else:
             img = None
+        if(reverse_image):
+            logger.info("Reversing image data")
+        # reverse_image for time table isn't correctly supported by
+        # IgcRayCaster in GeoCal. We should fix that, but in the short
+        # term use our ReverseCamera instead
         tt = EmitTimeTable(tt_fname, number_sample = cam.number_sample(0),
-                           reverse_image = reverse_image)
-        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
+                           reverse_image = False)
+        if(reverse_image):
+            ipicam = ReverseCamera(cam)
+        else:
+            ipicam = cam
+        ipi = geocal.Ipi(orb, ipicam, 0, tt.min_time, tt.max_time, tt)
         # Put in raster image
         super().__init__(ipi, dem, img)
 
@@ -87,13 +96,28 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     index_to_rdn_fname = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
-        tt = EmitTimeTable(tt_fname, number_sample=cam.number_sample(0),
-                           reverse_image=False)
-        ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
+        reverse_image = False
         if(include_img):
             img = EmitL1bImage(rdn_fname, l1b_band, l1_osp_dir.rad_match_scale)
+            f = EnviFile(rdn_fname, mode="r")
+            if("flip_horizontal" in f.metadata):
+                reverse_image = bool(f.metadata["flip_horizontal"])
         else:
             img = None
+        if(reverse_image):
+            logger.info("Reversing image data for %s", stime)
+        else:
+            logger.info("Not reversing image data for %s", stime)
+        # reverse_image for time table isn't correctly supported by
+        # IgcRayCaster in GeoCal. We should fix that, but in the short
+        # term use our ReverseCamera instead
+        tt = EmitTimeTable(tt_fname, number_sample=cam.number_sample(0),
+                           reverse_image=False)
+        if(reverse_image):
+            ipicam = ReverseCamera(cam)
+        else:
+            ipicam = cam
+        ipi = geocal.Ipi(orb, ipicam, 0, tt.min_time, tt.max_time, tt)
         igc = geocal.IpiImageGroundConnection(ipi, dem, img)
         if(l1_osp_dir.use_scene_index):
             index_to_igc[scene] = igc
