@@ -11,7 +11,7 @@ logger = logging.getLogger('l1b_geo_process.emit_loc')
 
 class EmitObs(EnviFile):
     '''Generate or read the OBS file for EMIT.'''
-    def __init__(self, fname, l1_osp_dir = None, loc = None, igc = None,
+    def __init__(self, fname, loc = None, igc = None,
                  standard_metadata = None):
         '''Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
@@ -22,7 +22,6 @@ class EmitObs(EnviFile):
         Note that the shape is (3, number_line, number_sample)
         '''
         self.igc = igc
-        self.l1_osp_dir = l1_osp_dir
         if(self.igc is None):
             mode = 'r'
             shape = None
@@ -97,8 +96,6 @@ class EmitObs(EnviFile):
         logger.info("Generating OBS data for %s", self.igc.title)
         # TODO This is fairly slow, we should probably move most of this
         # to C++ level for performance
-        dem60 = self.l1_osp_dir.dem_subset(self.igc.title + "_dem60m.img",
-                                           self.igc)
         for ln in range(self.igc.number_line):
             if(ln % 100 == 0):
                 logger.info("Doing line %d" % ln)
@@ -132,7 +129,7 @@ class EmitObs(EnviFile):
                      lv.direction[2] * slv.direction[2])
                 self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
                 self.slope[ln,smp], self.aspect[ln,smp] = \
-                    dem60.slope_and_aspect(gp)
+                    self.igc.dem.slope_and_aspect(gp)
                 slope_dir = [sin(self.slope[ln,smp] * geocal.deg_to_rad)*
                              sin(self.aspect[ln,smp] * geocal.deg_to_rad),
                              sin(self.slope[ln,smp] * geocal.deg_to_rad)*
