@@ -4,6 +4,7 @@ import logging
 import numpy as np
 import geocal
 import pandas as pd
+from packaging.version import parse as parse_version
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
 
@@ -64,7 +65,13 @@ class EmitLoc(EnviFile):
         # scene size is fairly small (1280 lines) so that it probably isn't
         # worth worry about this, at least initially. We can probably handle
         # the parallelization at the scene level if performance is an issue.
-        rcast = geocal.IgcRayCaster(self.igc,0,-1,1,30)
+        # We added a number_framelet in 1.28. For now check for an older
+        # version, eventually this will go away and we'll just assume we have
+        # the newer version
+        if parse_version(geocal.__version__) > parse_version('1.27'):
+            rcast = geocal.IgcRayCaster(self.igc,1,0,-1,1,30)
+        else:
+            rcast = geocal.IgcRayCaster(self.igc,0,-1,1,30)
         rcast.number_sub_line = 1
         rcast.number_sub_sample = 1
         while(not rcast.last_position):

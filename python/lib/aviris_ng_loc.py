@@ -6,6 +6,7 @@ import geocal
 import cv2
 import math
 import geocal
+from packaging.version import parse as parse_version
 
 logger = logging.getLogger('l1b_geo_process.avirs_ng_loc')
 
@@ -159,7 +160,13 @@ class AvirisNgLoc(EnviFile):
         logger.info("Generating LOC data for %s (%d, %d)", self.igc.title,
                     i, i+nline)
         with self.multiprocess_data():
-            rcast = geocal.IgcRayCaster(self.igc,i,nline,1,4)
+            # We added a number_framelet in 1.28. For now check for an older
+            # version, eventually this will go away and we'll just assume
+            # we have the newer version
+            if parse_version(geocal.__version__) > parse_version('1.27'):
+                rcast = geocal.IgcRayCaster(self.igc,1,i,nline,1,4)
+            else:
+                rcast = geocal.IgcRayCaster(self.igc,i,nline,1,4)
             rcast.number_sub_line = 1
             rcast.number_sub_sample = 1
             while(not rcast.last_position):

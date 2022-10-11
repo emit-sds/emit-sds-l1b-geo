@@ -1,16 +1,16 @@
 import geocal
+from emit_swig import EmitTimeTableBase
 import h5netcdf
 import pandas as pd
 from packaging import version
 import numpy as np
 import os
 
-class EmitTimeTable(geocal.MeasuredTimeTable):
-    '''This is the EMIT time table. Right now this is just a wrapper
-    around a generic GeoCal MeasuredTimeTable. We can extend this to a
-    full C++ class if there is any need.
+class EmitTimeTable(EmitTimeTableBase):
+    '''This is the EMIT time table. 
     '''
-    def __init__(self, tt_fname, trim_pad=None):
+    def __init__(self, tt_fname, number_sample=1242, reverse_image=False,
+                 trim_pad=None):
         '''Read the time table. Our AVIRIS test data has a small amount
         amount of garbage at the start and end, so you can optionally
         add a trim_pad amount to chop off at the start and end of the 
@@ -26,7 +26,8 @@ class EmitTimeTable(geocal.MeasuredTimeTable):
                 tm = f["line_time_j2000"][trim_pad:-trim_pad]
             else:
                 tm = f["line_time_j2000"][:]
-            super().__init__([geocal.Time.time_j2000(t) for t in tm])
+            super().__init__([geocal.Time.time_j2000(t) for t in tm],
+                             number_sample, reverse_image)
         else:
             t = pd.read_csv(tt_fname, header=None, sep=' ')
             # First column is line number. Should just be sequential lines
@@ -38,7 +39,8 @@ class EmitTimeTable(geocal.MeasuredTimeTable):
                 tm = t[1][trim_pad:-trim_pad]
             else:
                 tm = t[1][:]
-            super().__init__([geocal.Time.time_gps(t*1e-9) for t in tm])
+            super().__init__([geocal.Time.time_gps(t*1e-9) for t in tm],
+                             number_sample, reverse_image)
 
     @classmethod
     def write_file_txt(cls, tt_fname, tt):

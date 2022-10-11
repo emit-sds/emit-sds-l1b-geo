@@ -54,7 +54,7 @@ def test_generate_obs(igc, isolated_dir, emit_loc):
         p_zen, p_azm = p_view_angle(igc, ic)
         p_szen, p_saz = p_solar(igc, ic)
         assert g.view_zenith[ln,smp] == approx(p_zen,abs=0.1)
-        assert g.view_azimuth[ln,smp] == approx(p_azm,abs=3.0)
+        assert g.view_azimuth[ln,smp] == approx(p_azm,abs=5.0)
         assert g.solar_zenith[ln,smp] == approx(p_szen,abs=0.01)
         assert g.solar_azimuth[ln,smp] == approx(p_saz,abs=0.01)
         # Don't have an independent test of solar phase, cosine_i or
