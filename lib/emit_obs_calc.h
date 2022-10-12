@@ -23,6 +23,7 @@ public:
   blitz::Array<double, 2> earth_sun_distance() const;
   blitz::Array<double, 2> seconds_in_day() const;
   blitz::Array<double, 2> path_length() const;
+  blitz::Array<double, 2> solar_phase() const;
 private:
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gc;
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,1> pos;

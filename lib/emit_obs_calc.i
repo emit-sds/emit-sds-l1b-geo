@@ -25,6 +25,7 @@ public:
   blitz::Array<double, 2> earth_sun_distance() const;
   blitz::Array<double, 2> seconds_in_day() const;
   blitz::Array<double, 2> path_length() const;
+  blitz::Array<double, 2> solar_phase() const;
 };
 }
 

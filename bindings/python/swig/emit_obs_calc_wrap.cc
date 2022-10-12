@@ -7253,6 +7253,69 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_EmitObsCalc_solar_phase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::EmitObsCalc *arg1 = (Emit::EmitObsCalc *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::EmitObsCalc const > tempshared1 ;
+  boost::shared_ptr< Emit::EmitObsCalc const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< blitz::Array< double,2 > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:EmitObsCalc_solar_phase",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__EmitObsCalc_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EmitObsCalc_solar_phase" "', argument " "1"" of type '" "Emit::EmitObsCalc const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      arg1 = const_cast< Emit::EmitObsCalc * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      arg1 = const_cast< Emit::EmitObsCalc * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((Emit::EmitObsCalc const *)arg1)->solar_phase();
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  {
+    // Treat as pointer for the purposes of the macro
+    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    // Copy out dimensions and stride from blitz array
+    npy_intp dims[2], stride[2];
+    for(int i = 0; i < 2; ++i) {
+      dims[i] = (&result)->extent(i);
+      // Note numpy stride is in terms of bytes, while blitz in in terms
+      // of type T.
+      stride[i] = (&result)->stride(i) * sizeof(double);
+    }
+    
+    // Create new numpy object using Numpy C API
+    resultobj = PyArray_New(&PyArray_Type, 2, dims, type_to_npy<double >(), 
+      stride, (&result)->data(), 0, 0, 0);
+    blitz::Array<double, 2>* t = new blitz::Array<double, 2>(*(&result));
+    // Stash pointer to original blitz array as detailed above
+    PyArray_SetBaseObject((PyArrayObject*) resultobj, 
+      SWIG_NewPointerObj(SWIG_as_voidptr(t), 
+        SWIGTYPE_p_blitz__ArrayT_double_2_t, 					   SWIG_POINTER_NEW | SWIG_POINTER_OWN ));
+    /*@SWIG@*/;
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_EmitObsCalc(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Emit::EmitObsCalc *arg1 = (Emit::EmitObsCalc *) 0 ;
@@ -7367,6 +7430,11 @@ static PyMethodDef SwigMethods[] = {
 		"\n"
 		"blitz::Array< double, 2 > EmitObsCalc::path_length() const\n"
 		"Calculate path length. This is in meters. \n"
+		""},
+	 { (char *)"EmitObsCalc_solar_phase", _wrap_EmitObsCalc_solar_phase, METH_VARARGS, (char *)"\n"
+		"\n"
+		"blitz::Array< double, 2 > EmitObsCalc::solar_phase() const\n"
+		"Calculate solar phase angle. \n"
 		""},
 	 { (char *)"delete_EmitObsCalc", _wrap_delete_EmitObsCalc, METH_VARARGS, NULL},
 	 { (char *)"EmitObsCalc_swigregister", EmitObsCalc_swigregister, METH_VARARGS, NULL},

@@ -104,24 +104,17 @@ class EmitObs(EnviFile):
         self.solar_azimuth[:],self.solar_zenith[:] = ocalc.solar_angle();
         self.path_length[:] = ocalc.path_length()
         self.earth_sun_distance[:] = ocalc.earth_sun_distance()
-        seconds_in_day = ocalc.seconds_in_day()
-        self.utc_time[:] = seconds_in_day / (60 * 60)
+        self.utc_time[:] = ocalc.seconds_in_day() / (60 * 60)
+        self.solar_phase[:] = ocalc.solar_phase()
         for ln in range(self.igc.number_line):
             if(ln % 100 == 0):
                 logger.info("Doing line %d" % ln)
-            pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln,0))
             tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
             for smp in range(self.igc.number_sample):
                 gp = self.loc.ground_coordinate(ln, smp)
                 # This is to sensor direction, opposite of what we
                 # sometimes use
-                clv = geocal.CartesianFixedLookVector(gp, pos)
-                lv = geocal.LnLookVector(clv, gp)
                 slv = geocal.LnLookVector.solar_look_vector(tm, gp)
-                d = (lv.direction[0] * slv.direction[0] +
-                     lv.direction[1] * slv.direction[1] +
-                     lv.direction[2] * slv.direction[2])
-                self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
                 self.slope[ln,smp], self.aspect[ln,smp] = \
                     self.igc.dem.slope_and_aspect(gp)
                 slope_dir = [sin(self.slope[ln,smp] * geocal.deg_to_rad)*

@@ -309,6 +309,15 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
         return _emit_obs_calc.EmitObsCalc_path_length(self)
 
+
+    def solar_phase(self):
+        """
+
+        blitz::Array< double, 2 > EmitObsCalc::solar_phase() const
+        Calculate solar phase angle. 
+        """
+        return _emit_obs_calc.EmitObsCalc_solar_phase(self)
+
     __swig_destroy__ = _emit_obs_calc.delete_EmitObsCalc
     __del__ = lambda self: None
 EmitObsCalc_swigregister = _emit_obs_calc.EmitObsCalc_swigregister

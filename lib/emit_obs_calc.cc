@@ -1,6 +1,7 @@
 #include "emit_obs_calc.h"
 #include "geocal/ecr.h"
 #include "geocal/constant.h"
+#include "geocal/geocal_matrix.h"
 
 using namespace Emit;
 using namespace GeoCal;
@@ -122,4 +123,18 @@ blitz::Array<double, 2> EmitObsCalc::seconds_in_day() const
     sinday(i,ra) = tm(i) - Time::parse_time(t);
   }
   return sinday;
+}
+
+//-------------------------------------------------------------------------
+/// Calculate solar phase angle
+//-------------------------------------------------------------------------
+
+blitz::Array<double, 2> EmitObsCalc::solar_phase() const
+{
+  blitz::Array<double, 2> sphase(gc.shape());
+  for(int i = 0; i < sphase.rows(); ++i)
+    for(int j = 0; j < sphase.cols(); ++j)
+      sphase(i,j) = acos(dot(lv(i,j).direction(), slv(i,j).direction())) *
+	Constant::rad_to_deg;
+  return sphase;
 }
