@@ -17,6 +17,9 @@ EmitObsCalc::EmitObsCalc
     lv(Igc.number_line(), Igc.number_sample()),
     slv(Igc.number_line(), Igc.number_sample())
 {
+  dem = boost::dynamic_pointer_cast<DemMapInfo>(Igc.dem_ptr());
+  if(!dem)
+    throw Exception("Only support DemMapInfo");
   for(int i = 0; i < Igc.number_line(); ++i) {
     tm(i) = Time(Igc.pixel_time(ImageCoordinate(i,0)));
     pos(i) = Igc.cf_look_vector_pos(ImageCoordinate(i,0));
@@ -137,4 +140,29 @@ blitz::Array<double, 2> EmitObsCalc::solar_phase() const
       sphase(i,j) = acos(dot(lv(i,j).direction(), slv(i,j).direction())) *
 	Constant::rad_to_deg;
   return sphase;
+}
+
+//-------------------------------------------------------------------------
+/// Calculate slope, aspect and cosine_i angles. 
+//-------------------------------------------------------------------------
+
+void EmitObsCalc::slope_angle
+(blitz::Array<double, 2>& Slope,
+ blitz::Array<double, 2>& Aspect,
+ blitz::Array<double, 2>& Cosine_i) const
+{
+  Slope.resize(gc.shape());
+  Aspect.resize(gc.shape());
+  Cosine_i.resize(gc.shape());
+  for(int i = 0; i < Slope.rows(); ++i)
+    for(int j = 0; j < Slope.cols(); ++j) {
+      dem->slope_and_aspect(*gc(i,j), Slope(i,j), Aspect(i,j));
+      boost::array<double, 3> slope_dir;
+      slope_dir[0] = sin(Slope(i,j) * Constant::deg_to_rad) *
+	sin(Aspect(i,j) * Constant::deg_to_rad);
+      slope_dir[1] = sin(Slope(i,j) * Constant::deg_to_rad) *
+	cos(Aspect(i,j) * Constant::deg_to_rad);
+      slope_dir[2] = cos(Slope(i,j) * Constant::deg_to_rad);
+      Cosine_i(i,j) = dot(slope_dir, slv(i,j).direction());
+    }
 }

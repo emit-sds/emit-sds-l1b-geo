@@ -280,6 +280,16 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         return _emit_obs_calc.EmitObsCalc_solar_angle(self)
 
 
+    def slope_angle(self):
+        """
+
+        void EmitObsCalc::slope_angle(blitz::Array< double, 2 > &Slope, blitz::Array< double, 2 > &Aspect,
+        blitz::Array< double, 2 > &Cosine_i) const
+        Calculate slope, aspect and cosine_i angles. 
+        """
+        return _emit_obs_calc.EmitObsCalc_slope_angle(self)
+
+
     def earth_sun_distance(self):
         """
 

@@ -95,9 +95,6 @@ class EmitObs(EnviFile):
     def run(self):
         '''Actually generate the output data.'''
         logger.info("Generating OBS data for %s", self.igc.title)
-        # TODO This is fairly slow, we should probably move most of this
-        # to C++ level for performance
-        logger.info("Starting to load data")
         ocalc = EmitObsCalc(self.igc, self.loc.latitude, self.loc.longitude,
                             self.loc.height)
         self.view_azimuth[:],self.view_zenith[:] = ocalc.view_angle();
@@ -106,25 +103,7 @@ class EmitObs(EnviFile):
         self.earth_sun_distance[:] = ocalc.earth_sun_distance()
         self.utc_time[:] = ocalc.seconds_in_day() / (60 * 60)
         self.solar_phase[:] = ocalc.solar_phase()
-        for ln in range(self.igc.number_line):
-            if(ln % 100 == 0):
-                logger.info("Doing line %d" % ln)
-            tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
-            for smp in range(self.igc.number_sample):
-                gp = self.loc.ground_coordinate(ln, smp)
-                # This is to sensor direction, opposite of what we
-                # sometimes use
-                slv = geocal.LnLookVector.solar_look_vector(tm, gp)
-                self.slope[ln,smp], self.aspect[ln,smp] = \
-                    self.igc.dem.slope_and_aspect(gp)
-                slope_dir = [sin(self.slope[ln,smp] * geocal.deg_to_rad)*
-                             sin(self.aspect[ln,smp] * geocal.deg_to_rad),
-                             sin(self.slope[ln,smp] * geocal.deg_to_rad)*
-                             cos(self.aspect[ln,smp] * geocal.deg_to_rad),
-                             cos(self.slope[ln,smp] * geocal.deg_to_rad)]
-                self.cosine_i[ln,smp] = (slope_dir[0] * slv.direction[0] +
-                                         slope_dir[1] * slv.direction[1] +
-                                         slope_dir[2] * slv.direction[2])
+        self.slope[:], self.aspect[:], self.cosine_i[:] = ocalc.slope_angle();
         self.standard_metadata.write_metadata(self)
         
 

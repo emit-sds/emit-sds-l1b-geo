@@ -7064,6 +7064,131 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_EmitObsCalc_slope_angle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Emit::EmitObsCalc *arg1 = (Emit::EmitObsCalc *) 0 ;
+  blitz::Array< double,2 > *arg2 = 0 ;
+  blitz::Array< double,2 > *arg3 = 0 ;
+  blitz::Array< double,2 > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::shared_ptr< Emit::EmitObsCalc const > tempshared1 ;
+  boost::shared_ptr< Emit::EmitObsCalc const > *smartarg1 = 0 ;
+  blitz::Array< double,2 > temp2 ;
+  blitz::Array< double,2 > temp3 ;
+  blitz::Array< double,2 > temp4 ;
+  PyObject * obj0 = 0 ;
+  
+  {
+    arg2 = &temp2;
+  }
+  {
+    arg3 = &temp3;
+  }
+  {
+    arg4 = &temp4;
+  }
+  if (!PyArg_ParseTuple(args,(char *)"O:EmitObsCalc_slope_angle",&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_boost__shared_ptrT_Emit__EmitObsCalc_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "EmitObsCalc_slope_angle" "', argument " "1"" of type '" "Emit::EmitObsCalc const *""'");
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      delete reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      arg1 = const_cast< Emit::EmitObsCalc * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< boost::shared_ptr< const Emit::EmitObsCalc > * >(argp1);
+      arg1 = const_cast< Emit::EmitObsCalc * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      ((Emit::EmitObsCalc const *)arg1)->slope_angle(*arg2,*arg3,*arg4);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    PyObject *res;
+    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    // Copy out dimensions and stride from blitz array
+    npy_intp dims[2], stride[2];
+    for(int i = 0; i < 2; ++i) {
+      dims[i] = arg2->extent(i);
+      // Note numpy stride is in terms of bytes, while blitz in in terms
+      // of type T.
+      stride[i] = arg2->stride(i) * sizeof(double);
+    }
+    
+    // Create new numpy object using Numpy C API
+    res = PyArray_New(&PyArray_Type, 2, dims, type_to_npy<double >(), 
+      stride, arg2->data(), 0, 0, 0);
+    blitz::Array<double, 2>* t = new blitz::Array<double, 2>(*arg2);
+    // Stash pointer to original blitz array as detailed above
+    PyArray_SetBaseObject((PyArrayObject*) res, 
+      SWIG_NewPointerObj(SWIG_as_voidptr(t), 
+        SWIGTYPE_p_blitz__ArrayT_double_2_t, 					   SWIG_POINTER_NEW | SWIG_POINTER_OWN ));
+    /*@SWIG@*/;
+    resultobj = SWIG_Python_AppendOutput(resultobj, res);
+  }
+  {
+    PyObject *res;
+    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    // Copy out dimensions and stride from blitz array
+    npy_intp dims[2], stride[2];
+    for(int i = 0; i < 2; ++i) {
+      dims[i] = arg3->extent(i);
+      // Note numpy stride is in terms of bytes, while blitz in in terms
+      // of type T.
+      stride[i] = arg3->stride(i) * sizeof(double);
+    }
+    
+    // Create new numpy object using Numpy C API
+    res = PyArray_New(&PyArray_Type, 2, dims, type_to_npy<double >(), 
+      stride, arg3->data(), 0, 0, 0);
+    blitz::Array<double, 2>* t = new blitz::Array<double, 2>(*arg3);
+    // Stash pointer to original blitz array as detailed above
+    PyArray_SetBaseObject((PyArrayObject*) res, 
+      SWIG_NewPointerObj(SWIG_as_voidptr(t), 
+        SWIGTYPE_p_blitz__ArrayT_double_2_t, 					   SWIG_POINTER_NEW | SWIG_POINTER_OWN ));
+    /*@SWIG@*/;
+    resultobj = SWIG_Python_AppendOutput(resultobj, res);
+  }
+  {
+    PyObject *res;
+    /*@SWIG:/home/smyth/conda-local-envs/geocal-development/share/geocal/swig/swig_array.i,188,%blitz_to_numpy@*/
+    // Copy out dimensions and stride from blitz array
+    npy_intp dims[2], stride[2];
+    for(int i = 0; i < 2; ++i) {
+      dims[i] = arg4->extent(i);
+      // Note numpy stride is in terms of bytes, while blitz in in terms
+      // of type T.
+      stride[i] = arg4->stride(i) * sizeof(double);
+    }
+    
+    // Create new numpy object using Numpy C API
+    res = PyArray_New(&PyArray_Type, 2, dims, type_to_npy<double >(), 
+      stride, arg4->data(), 0, 0, 0);
+    blitz::Array<double, 2>* t = new blitz::Array<double, 2>(*arg4);
+    // Stash pointer to original blitz array as detailed above
+    PyArray_SetBaseObject((PyArrayObject*) res, 
+      SWIG_NewPointerObj(SWIG_as_voidptr(t), 
+        SWIGTYPE_p_blitz__ArrayT_double_2_t, 					   SWIG_POINTER_NEW | SWIG_POINTER_OWN ));
+    /*@SWIG@*/;
+    resultobj = SWIG_Python_AppendOutput(resultobj, res);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_EmitObsCalc_earth_sun_distance(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Emit::EmitObsCalc *arg1 = (Emit::EmitObsCalc *) 0 ;
@@ -7412,6 +7537,12 @@ static PyMethodDef SwigMethods[] = {
 		"results. This is from the local north coordinates. Zenith is relative\n"
 		"to the local tangent plane. Azimuth is relative to local north. Both\n"
 		"are given in degrees. Azimuth is 0 to 360 degrees. \n"
+		""},
+	 { (char *)"EmitObsCalc_slope_angle", _wrap_EmitObsCalc_slope_angle, METH_VARARGS, (char *)"\n"
+		"\n"
+		"void EmitObsCalc::slope_angle(blitz::Array< double, 2 > &Slope, blitz::Array< double, 2 > &Aspect,\n"
+		"blitz::Array< double, 2 > &Cosine_i) const\n"
+		"Calculate slope, aspect and cosine_i angles. \n"
 		""},
 	 { (char *)"EmitObsCalc_earth_sun_distance", _wrap_EmitObsCalc_earth_sun_distance, METH_VARARGS, (char *)"\n"
 		"\n"
