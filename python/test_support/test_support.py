@@ -50,7 +50,7 @@ def test_data():
         tdata = os.environ["EMIT_TEST_DATA"] + "/latest/"
     else:
         # Location on eco-scf
-        tdata = "/beegfs/store/emit-test-data/latest/"
+        tdata = "/beegfs/store/shared/emit-test-data/latest/"
         if(not os.path.exists(tdata)):
             # Location on rifle
             tdata="/ldata/smyth/emit-test-data/latest/"

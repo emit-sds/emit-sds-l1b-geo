@@ -249,6 +249,66 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
+
+    def view_angle(self):
+        """
+
+        void EmitObsCalc::view_angle(blitz::Array< double, 2 > &View_azimuth, blitz::Array< double, 2 >
+        &View_zenith) const
+        Calculate view angles.
+
+        This has been compared to pyorbital, and gives close to the same
+        results. This is from the local north coordinates. Zenith is relative
+        to the local tangent plane. Azimuth is relative to local north. Both
+        are given in degrees. Azimuth is 0 to 360 degrees. 
+        """
+        return _emit_obs_calc.EmitObsCalc_view_angle(self)
+
+
+    def solar_angle(self):
+        """
+
+        void EmitObsCalc::solar_angle(blitz::Array< double, 2 > &Solar_azimuth, blitz::Array< double, 2 >
+        &Solar_zenith) const
+        Calculate solar view angles.
+
+        This has been compared to pyorbital, and gives close to the same
+        results. This is from the local north coordinates. Zenith is relative
+        to the local tangent plane. Azimuth is relative to local north. Both
+        are given in degrees. Azimuth is 0 to 360 degrees. 
+        """
+        return _emit_obs_calc.EmitObsCalc_solar_angle(self)
+
+
+    def earth_sun_distance(self):
+        """
+
+        blitz::Array< double, 2 > EmitObsCalc::earth_sun_distance() const
+        Calculate earth sun distance. 
+        """
+        return _emit_obs_calc.EmitObsCalc_earth_sun_distance(self)
+
+
+    def seconds_in_day(self):
+        """
+
+        blitz::Array< double, 2 > EmitObsCalc::seconds_in_day() const
+        Calculate seconds in the day for the time the data was acquired.
+
+        Kind of an odd thing to calculate, but the utc_time is one of the
+        fields in the OBS file. 
+        """
+        return _emit_obs_calc.EmitObsCalc_seconds_in_day(self)
+
+
+    def path_length(self):
+        """
+
+        blitz::Array< double, 2 > EmitObsCalc::path_length() const
+        Calculate path length. This is in meters. 
+        """
+        return _emit_obs_calc.EmitObsCalc_path_length(self)
+
     __swig_destroy__ = _emit_obs_calc.delete_EmitObsCalc
     __del__ = lambda self: None
 EmitObsCalc_swigregister = _emit_obs_calc.EmitObsCalc_swigregister

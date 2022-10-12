@@ -18,6 +18,13 @@ public:
 	      const blitz::Array<double, 2>& Latitude,
 	      const blitz::Array<double, 2>& Longitude,
 	      const blitz::Array<double, 2>& Height);
+  void view_angle(blitz::Array<double, 2>& OUTPUT,
+		  blitz::Array<double, 2>& OUTPUT) const;
+  void solar_angle(blitz::Array<double, 2>& OUTPUT,
+		   blitz::Array<double, 2>& OUTPUT) const;
+  blitz::Array<double, 2> earth_sun_distance() const;
+  blitz::Array<double, 2> seconds_in_day() const;
+  blitz::Array<double, 2> path_length() const;
 };
 }
 

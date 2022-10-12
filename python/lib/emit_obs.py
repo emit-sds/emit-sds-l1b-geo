@@ -1,5 +1,6 @@
 from .envi_file import *
 from .standard_metadata import *
+from emit_swig import EmitObsCalc
 import logging
 import numpy as np
 import geocal
@@ -96,14 +97,20 @@ class EmitObs(EnviFile):
         logger.info("Generating OBS data for %s", self.igc.title)
         # TODO This is fairly slow, we should probably move most of this
         # to C++ level for performance
+        logger.info("Starting to load data")
+        ocalc = EmitObsCalc(self.igc, self.loc.latitude, self.loc.longitude,
+                            self.loc.height)
+        self.view_azimuth[:],self.view_zenith[:] = ocalc.view_angle();
+        self.solar_azimuth[:],self.solar_zenith[:] = ocalc.solar_angle();
+        self.path_length[:] = ocalc.path_length()
+        self.earth_sun_distance[:] = ocalc.earth_sun_distance()
+        seconds_in_day = ocalc.seconds_in_day()
+        self.utc_time[:] = seconds_in_day / (60 * 60)
         for ln in range(self.igc.number_line):
             if(ln % 100 == 0):
                 logger.info("Doing line %d" % ln)
             pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln,0))
             tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
-            self.earth_sun_distance[ln,:] = geocal.Ecr.solar_distance(tm)
-            seconds_in_day = tm - geocal.Time.parse_time(re.split('T', str(tm))[0] + "T00:00:00Z")
-            self.utc_time[ln,:] = seconds_in_day / (60 * 60)
             for smp in range(self.igc.number_sample):
                 gp = self.loc.ground_coordinate(ln, smp)
                 # This is to sensor direction, opposite of what we
@@ -111,19 +118,6 @@ class EmitObs(EnviFile):
                 clv = geocal.CartesianFixedLookVector(gp, pos)
                 lv = geocal.LnLookVector(clv, gp)
                 slv = geocal.LnLookVector.solar_look_vector(tm, gp)
-                self.path_length[ln, smp] = geocal.distance(gp, pos)
-                # Convention is different for LookVector, subtract 180
-                # to get AVIRIS convention
-                t = lv.view_azimuth - 180
-                if(t < 0):
-                    t += 360
-                self.view_azimuth[ln,smp] = t
-                self.view_zenith[ln,smp] = lv.view_zenith
-                t = slv.view_azimuth - 180
-                if(t < 0):
-                    t += 360
-                self.solar_azimuth[ln,smp] = t
-                self.solar_zenith[ln,smp] = slv.view_zenith
                 d = (lv.direction[0] * slv.direction[0] +
                      lv.direction[1] * slv.direction[1] +
                      lv.direction[2] * slv.direction[2])
@@ -139,6 +133,7 @@ class EmitObs(EnviFile):
                                          slope_dir[1] * slv.direction[1] +
                                          slope_dir[2] * slv.direction[2])
         self.standard_metadata.write_metadata(self)
+        
 
     def compare(self, f2):
         '''Compare with another file, returning True if the same,

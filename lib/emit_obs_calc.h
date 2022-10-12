@@ -16,10 +16,18 @@ public:
 	      const blitz::Array<double, 2>& Latitude,
 	      const blitz::Array<double, 2>& Longitude,
 	      const blitz::Array<double, 2>& Height);
+  void view_angle(blitz::Array<double, 2>& View_azimuth,
+		  blitz::Array<double, 2>& View_zenith) const;
+  void solar_angle(blitz::Array<double, 2>& Solar_azimuth,
+		   blitz::Array<double, 2>& Solar_zenith) const;
+  blitz::Array<double, 2> earth_sun_distance() const;
+  blitz::Array<double, 2> seconds_in_day() const;
+  blitz::Array<double, 2> path_length() const;
 private:
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gc;
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,1> pos;
-  blitz::Array<boost::shared_ptr<GeoCal::Time>,1> tm;
+  blitz::Array<GeoCal::Time,1> tm;
+  blitz::Array<GeoCal::LnLookVector,2> lv, slv;
   // Don't bother with serialization
 };
 }
