@@ -10,7 +10,9 @@ EmitObsCalc::EmitObsCalc
 (const ImageGroundConnection& Igc,
  const blitz::Array<double, 2>& Latitude,
  const blitz::Array<double, 2>& Longitude,
- const blitz::Array<double, 2>& Height)
+ const blitz::Array<double, 2>& Height,
+ const blitz::Array<double, 2>& Latitude_subpixel,
+ const blitz::Array<double, 2>& Longitude_subpixel)
   : gc(Igc.number_line(), Igc.number_sample()),
     pos(Igc.number_line()),
     tm(Igc.number_line()),
@@ -29,6 +31,14 @@ EmitObsCalc::EmitObsCalc
       CartesianFixedLookVector clv(*gc(i,j), *pos(i));
       lv(i,j) = LnLookVector(clv, *gc(i,j));
       slv(i,j) = LnLookVector::solar_look_vector(tm(i), *gc(i,j));
+    }
+  }
+  int scale = Latitude_subpixel.rows() / Latitude.rows();
+  gcsubpixel.resize(Igc.number_line()*scale, Igc.number_sample()*scale);
+  for(int i = 0; i < gcsubpixel.rows(); ++i) {
+    for(int j = 0; j < gcsubpixel.cols(); ++j) {
+      gcsubpixel(i,j) = boost::make_shared<Geodetic>(Latitude_subpixel(i,j),
+						     Longitude_subpixel(i,j));
     }
   }
 }

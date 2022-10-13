@@ -4,6 +4,7 @@ import logging
 import numpy as np
 import geocal
 import pandas as pd
+import scipy
 from packaging.version import parse as parse_version
 
 logger = logging.getLogger('l1b_geo_process.emit_loc')
@@ -47,6 +48,28 @@ class EmitLoc(EnviFile):
     def height(self):
         '''Return the height field.'''
         return self[2,:,:]
+
+    def scaled_lat_lon_grid(self,scale):
+        '''Scale the latitude longitude grid for doing subsampling. This
+        divides each pixel in scale x scale, and returns the lat/lon for
+        each point in the scaled grid (e.g., for 2, we return (-0.25,-0.25)
+        through (0.25,0.25)'''
+        lat = self.latitude[:]
+        lon = self.longitude[:]
+        # TODO Put in handling for crossing dateline
+        if(self.crosses_date_line):
+            raise RuntimeError("Don't yet work when we cross the dateline")
+        latf = scipy.interpolate.RectBivariateSpline(np.arange(lat.shape[0]),
+         np.arange(lat.shape[1]), lat, bbox=[-0.5,lat.shape[0]-0.5,-
+                                             0.5,lat.shape[1]-0.5], kx=2,ky=2)
+        lonf = scipy.interpolate.RectBivariateSpline(np.arange(lon.shape[0]),
+         np.arange(lon.shape[1]), lon, bbox=[-0.5,lon.shape[0]-0.5,-
+                                             0.5,lon.shape[1]-0.5], kx=2,ky=2)
+        xi = np.arange(-0.5 + (1.0 / scale) / 2, lat.shape[0]-0.5, 1.0/scale)
+        yi = np.arange(-0.5 + (1.0 / scale) / 2, lat.shape[1]-0.5, 1.0/scale)
+        latscale = latf(xi,yi,grid=True)
+        lonscale = lonf(xi,yi,grid=True)
+        return latscale,lonscale
 
     def ground_coordinate(self, ln, smp):
         '''Return the Geodetic point for the given line/sample''' 

@@ -15,7 +15,9 @@ public:
   EmitObsCalc(const GeoCal::ImageGroundConnection& Igc,
 	      const blitz::Array<double, 2>& Latitude,
 	      const blitz::Array<double, 2>& Longitude,
-	      const blitz::Array<double, 2>& Height);
+	      const blitz::Array<double, 2>& Height,
+	      const blitz::Array<double, 2>& Latitude_subpixel,
+	      const blitz::Array<double, 2>& Longitude_subpixel);
   void view_angle(blitz::Array<double, 2>& View_azimuth,
 		  blitz::Array<double, 2>& View_zenith) const;
   void solar_angle(blitz::Array<double, 2>& Solar_azimuth,
@@ -29,6 +31,7 @@ public:
   blitz::Array<double, 2> solar_phase() const;
 private:
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gc;
+  blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gcsubpixel;
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,1> pos;
   blitz::Array<GeoCal::Time,1> tm;
   blitz::Array<GeoCal::LnLookVector,2> lv, slv;

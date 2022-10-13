@@ -6759,6 +6759,8 @@ SWIGINTERN PyObject *_wrap_new_EmitObsCalc(PyObject *SWIGUNUSEDPARM(self), PyObj
   blitz::Array< double,2 > *arg2 = 0 ;
   blitz::Array< double,2 > *arg3 = 0 ;
   blitz::Array< double,2 > *arg4 = 0 ;
+  blitz::Array< double,2 > *arg5 = 0 ;
+  blitz::Array< double,2 > *arg6 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   boost::shared_ptr< GeoCal::ImageGroundConnection const > tempshared1 ;
@@ -6768,13 +6770,19 @@ SWIGINTERN PyObject *_wrap_new_EmitObsCalc(PyObject *SWIGUNUSEDPARM(self), PyObj
   PythonObject numpy3 ;
   blitz::Array< double,2 > a4 ;
   PythonObject numpy4 ;
+  blitz::Array< double,2 > a5 ;
+  PythonObject numpy5 ;
+  blitz::Array< double,2 > a6 ;
+  PythonObject numpy6 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   Emit::EmitObsCalc *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_EmitObsCalc",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_EmitObsCalc",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   {
     int newmem = 0;
     // Added mms
@@ -6852,8 +6860,42 @@ SWIGINTERN PyObject *_wrap_new_EmitObsCalc(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   {
+    int res = SWIG_ConvertPtr(obj4, (void**)(&arg5), SWIGTYPE_p_blitz__ArrayT_double_2_t, 
+      0 );
+    if(!SWIG_IsOK(res)) {
+      numpy5.obj = to_numpy<double >(obj4);
+      if(!numpy5.obj) {
+        SWIG_Error(SWIG_TypeError, "in method 'new_EmitObsCalc', expecting type  Array<double,2>");
+        return NULL;
+      }
+      if(PyArray_NDIM((PyArrayObject*)numpy5.obj) !=2) {
+        SWIG_Error(SWIG_TypeError, "in method 'new_EmitObsCalc', expecting type  Array<double,2>");
+        return NULL;
+      }
+      a5.reference(to_blitz_array<double, 2>(numpy5));
+      arg5 = &a5;
+    }
+  }
+  {
+    int res = SWIG_ConvertPtr(obj5, (void**)(&arg6), SWIGTYPE_p_blitz__ArrayT_double_2_t, 
+      0 );
+    if(!SWIG_IsOK(res)) {
+      numpy6.obj = to_numpy<double >(obj5);
+      if(!numpy6.obj) {
+        SWIG_Error(SWIG_TypeError, "in method 'new_EmitObsCalc', expecting type  Array<double,2>");
+        return NULL;
+      }
+      if(PyArray_NDIM((PyArrayObject*)numpy6.obj) !=2) {
+        SWIG_Error(SWIG_TypeError, "in method 'new_EmitObsCalc', expecting type  Array<double,2>");
+        return NULL;
+      }
+      a6.reference(to_blitz_array<double, 2>(numpy6));
+      arg6 = &a6;
+    }
+  }
+  {
     try {
-      result = (Emit::EmitObsCalc *)new Emit::EmitObsCalc((GeoCal::ImageGroundConnection const &)*arg1,(blitz::Array< double,2 > const &)*arg2,(blitz::Array< double,2 > const &)*arg3,(blitz::Array< double,2 > const &)*arg4);
+      result = (Emit::EmitObsCalc *)new Emit::EmitObsCalc((GeoCal::ImageGroundConnection const &)*arg1,(blitz::Array< double,2 > const &)*arg2,(blitz::Array< double,2 > const &)*arg3,(blitz::Array< double,2 > const &)*arg4,(blitz::Array< double,2 > const &)*arg5,(blitz::Array< double,2 > const &)*arg6);
     } catch (Swig::DirectorException &e) {
       SWIG_fail; 
     } catch (const std::exception& e) {
@@ -7513,7 +7555,9 @@ static PyMethodDef SwigMethods[] = {
 		"\n"
 		"EmitObsCalc::EmitObsCalc(const GeoCal::ImageGroundConnection &Igc, const blitz::Array< double,\n"
 		"2 > &Latitude, const blitz::Array< double, 2 > &Longitude, const\n"
-		"blitz::Array< double, 2 > &Height)\n"
+		"blitz::Array< double, 2 > &Height, const blitz::Array< double, 2 >\n"
+		"&Latitude_subpixel, const blitz::Array< double, 2 >\n"
+		"&Longitude_subpixel)\n"
 		"\n"
 		""},
 	 { (char *)"EmitObsCalc_view_angle", _wrap_EmitObsCalc_view_angle, METH_VARARGS, (char *)"\n"

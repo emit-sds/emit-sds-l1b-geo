@@ -95,8 +95,9 @@ class EmitObs(EnviFile):
     def run(self):
         '''Actually generate the output data.'''
         logger.info("Generating OBS data for %s", self.igc.title)
+        latsubpixel, lonsubpixel = self.loc.scaled_lat_lon_grid(2)
         ocalc = EmitObsCalc(self.igc, self.loc.latitude, self.loc.longitude,
-                            self.loc.height)
+                            self.loc.height, latsubpixel, lonsubpixel)
         self.view_azimuth[:],self.view_zenith[:] = ocalc.view_angle();
         self.solar_azimuth[:],self.solar_zenith[:] = ocalc.solar_angle();
         self.path_length[:] = ocalc.path_length()

@@ -236,15 +236,17 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
     __getattr__ = lambda self, name: _swig_getattr(self, EmitObsCalc, name)
     __repr__ = _swig_repr
 
-    def __init__(self, Igc, Latitude, Longitude, Height):
+    def __init__(self, Igc, Latitude, Longitude, Height, Latitude_subpixel, Longitude_subpixel):
         """
 
         EmitObsCalc::EmitObsCalc(const GeoCal::ImageGroundConnection &Igc, const blitz::Array< double,
         2 > &Latitude, const blitz::Array< double, 2 > &Longitude, const
-        blitz::Array< double, 2 > &Height)
+        blitz::Array< double, 2 > &Height, const blitz::Array< double, 2 >
+        &Latitude_subpixel, const blitz::Array< double, 2 >
+        &Longitude_subpixel)
 
         """
-        this = _emit_obs_calc.new_EmitObsCalc(Igc, Latitude, Longitude, Height)
+        this = _emit_obs_calc.new_EmitObsCalc(Igc, Latitude, Longitude, Height, Latitude_subpixel, Longitude_subpixel)
         try:
             self.this.append(this)
         except __builtin__.Exception:

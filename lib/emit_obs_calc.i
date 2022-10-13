@@ -17,7 +17,9 @@ public:
   EmitObsCalc(const GeoCal::ImageGroundConnection& Igc,
 	      const blitz::Array<double, 2>& Latitude,
 	      const blitz::Array<double, 2>& Longitude,
-	      const blitz::Array<double, 2>& Height);
+	      const blitz::Array<double, 2>& Height,
+	      const blitz::Array<double, 2>& Latitude_subpixel,
+	      const blitz::Array<double, 2>& Longitude_subpixel);
   void view_angle(blitz::Array<double, 2>& OUTPUT,
 		  blitz::Array<double, 2>& OUTPUT) const;
   void solar_angle(blitz::Array<double, 2>& OUTPUT,
