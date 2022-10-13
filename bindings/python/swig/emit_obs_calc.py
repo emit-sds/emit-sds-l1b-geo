@@ -292,6 +292,16 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         return _emit_obs_calc.EmitObsCalc_slope_angle(self)
 
 
+    def average_slope_aspect(self, i, j):
+        """
+
+        void EmitObsCalc::average_slope_aspect(int i, int j, double &slope, double &aspect) const
+        Calculate slope/aspect for all the subpixel covering pixel i,j, and
+        average the values. 
+        """
+        return _emit_obs_calc.EmitObsCalc_average_slope_aspect(self, i, j)
+
+
     def earth_sun_distance(self):
         """
 
@@ -329,6 +339,20 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         Calculate solar phase angle. 
         """
         return _emit_obs_calc.EmitObsCalc_solar_phase(self)
+
+
+    def _v_subpixel_scale(self):
+        """
+
+        int Emit::EmitObsCalc::subpixel_scale() const
+
+        """
+        return _emit_obs_calc.EmitObsCalc__v_subpixel_scale(self)
+
+
+    @property
+    def subpixel_scale(self):
+        return self._v_subpixel_scale()
 
     __swig_destroy__ = _emit_obs_calc.delete_EmitObsCalc
     __del__ = lambda self: None

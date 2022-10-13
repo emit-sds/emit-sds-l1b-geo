@@ -166,7 +166,7 @@ void EmitObsCalc::slope_angle
   Cosine_i.resize(gc.shape());
   for(int i = 0; i < Slope.rows(); ++i)
     for(int j = 0; j < Slope.cols(); ++j) {
-      dem->slope_and_aspect(*gc(i,j), Slope(i,j), Aspect(i,j));
+      average_slope_aspect(i,j, Slope(i,j), Aspect(i,j));
       boost::array<double, 3> slope_dir;
       slope_dir[0] = sin(Slope(i,j) * Constant::deg_to_rad) *
 	sin(Aspect(i,j) * Constant::deg_to_rad);
@@ -175,4 +175,29 @@ void EmitObsCalc::slope_angle
       slope_dir[2] = cos(Slope(i,j) * Constant::deg_to_rad);
       Cosine_i(i,j) = dot(slope_dir, slv(i,j).direction());
     }
+}
+
+//-------------------------------------------------------------------------
+/// Calculate slope/aspect for all the subpixel covering pixel i,j,
+/// and average the values.
+//-------------------------------------------------------------------------
+
+void EmitObsCalc::average_slope_aspect(int i, int j,
+				       double& slope, double& aspect) const
+{
+  blitz::Array<double, 2> slope_subpixel(subpixel_scale(), subpixel_scale());
+  blitz::Array<double, 2> aspect_subpixel(slope_subpixel.shape());
+  for(int i2 = 0; i2 < slope_subpixel.rows(); ++i2)
+    for(int j2 = 0; j2 < slope_subpixel.cols(); ++j2)
+      dem->slope_and_aspect(*gcsubpixel(i * subpixel_scale() + i2,
+					j*subpixel_scale() + j2),
+			    slope_subpixel(i2, j2), aspect_subpixel(i2,j2));
+  // Handle sign change in aspect
+  if(blitz::max(aspect_subpixel) - blitz::min(aspect_subpixel) > 100)
+    aspect_subpixel = blitz::where(aspect_subpixel < 100, aspect_subpixel+360,
+				   aspect_subpixel);
+  slope = blitz::mean(slope_subpixel);
+  aspect = blitz::mean(aspect_subpixel);
+  if(aspect > 360)
+    aspect -= 360;
 }

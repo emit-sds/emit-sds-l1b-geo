@@ -29,6 +29,8 @@ public:
   blitz::Array<double, 2> seconds_in_day() const;
   blitz::Array<double, 2> path_length() const;
   blitz::Array<double, 2> solar_phase() const;
+  int subpixel_scale() const { return gcsubpixel.rows() / gc.rows(); }
+  void average_slope_aspect(int i, int j, double& slope, double& aspect) const;
 private:
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gc;
   blitz::Array<boost::shared_ptr<GeoCal::GroundCoordinate>,2> gcsubpixel;
