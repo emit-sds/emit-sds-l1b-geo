@@ -110,10 +110,7 @@ elif(not args.exactly_match_map_info):
 if(args.rotate):
     mi = loc.map_info_rotated(mi)
 
-lat = scipy.ndimage.interpolation.zoom(loc.latitude,
-                                       args.number_subpixel, order=2)
-lon = scipy.ndimage.interpolation.zoom(loc.longitude,
-                                       args.number_subpixel, order=2)
+lat, lon = loc.scaled_lat_lon_grid(args.number_subpixel)
 res = emit.Resampler(lat, lon, mi, args.number_subpixel,
                      args.exactly_match_map_info)
 if(res.map_info.number_x_pixel > 100000 or

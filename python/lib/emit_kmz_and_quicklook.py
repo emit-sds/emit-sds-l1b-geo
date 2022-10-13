@@ -44,12 +44,7 @@ class EmitKmzAndQuicklook(object):
     def run(self):
         logger.info("Generating KMZ and quicklook")
         mi = geocal.cib01_mapinfo(self.resolution)
-        lat = scipy.ndimage.interpolation.zoom(self.loc.latitude,
-                                               self.number_subpixel, order=2,
-                                               mode='nearest')
-        lon = scipy.ndimage.interpolation.zoom(self.loc.longitude,
-                                               self.number_subpixel, order=2,
-                                               mode='nearest')
+        lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%s.vrt" % self.scene_index
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
