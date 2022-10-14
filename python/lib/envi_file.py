@@ -1,6 +1,7 @@
 import geocal
 import numpy as np
 from emit_swig import set_file_description, set_band_description
+from contextlib import contextmanager
 
 class EnviFile:
     '''This is a little wrapper to make a ENVI file, and treat it like
@@ -52,9 +53,16 @@ class EnviFile:
             # assumes C order
             self._d = np.memmap(fname, shape=(shape[1],shape[0],shape[2]),
                                 dtype = dtype, mode="r+").transpose(1,0,2)
+            interleave = "bil"
+            self.metadata = {"interleave" : interleave}
         else:
             t = geocal.GdalMultiBand(fname)
-            gtype = t.raster_image(0).raster_data_type
+            self.metadata = {}
+            r = t.raster_image(0)
+            for k in r.metadata_list("ENVI"):
+                self.metadata[k] = r["ENVI", k]
+            interleave = r["ENVI", "interleave"]
+            gtype = r.raster_data_type
             if(gtype == geocal.GdalRasterImage.Float64):
                 dtype = np.float64
             elif(gtype == geocal.GdalRasterImage.Float32):
@@ -79,11 +87,38 @@ class EnviFile:
             
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
-            self._d = np.memmap(fname,
-                                shape=(t.raster_image(0).number_line,
-                                       t.number_band,
-                                       t.raster_image(0).number_sample),
-                                dtype = dtype, mode=mode).transpose(1,0,2)
+            if(interleave == "bil"):
+                self._d = np.memmap(fname,
+                                    shape=(r.number_line,
+                                           t.number_band,
+                                           r.number_sample),
+                                    dtype = dtype, mode=mode).transpose(1,0,2)
+            elif(interleave == "bip"):
+                self._d = np.memmap(fname,
+                                    shape=(r.number_line,
+                                           r.number_sample,
+                                           t.number_band),
+                                    dtype = dtype, mode=mode).transpose(2,0,1)
+            else:
+                raise RuntimeError(f"Don't recognize interleave type '#{interleave}'")
+                
+
+    @contextmanager
+    def multiprocess_data(self):
+        '''When we are using multiprocessing, we need to reopen the
+        memmap. This just has to do with how the memmap is shared with
+        other processes. We handle this as a context block, shuffling
+        stuff around so you can just use the data as normal.'''
+        doriginal = self._d
+        self._d = np.memmap(self.file_name, shape=(self.shape[1], self.shape[0],
+                                                   self.shape[2]),
+                            dtype=self.data.dtype,
+                            mode="r+").transpose(1,0,2)
+        try:
+            yield self._d
+        finally:
+            self._d.flush()
+            self._d = doriginal
 
     @property
     def data(self):
@@ -107,7 +142,33 @@ class EnviFile:
 
     def flush(self):
         self.data.flush()
-    
+
+    def compare(self, f2):
+        '''Compare with another file, returning True if the same 
+        False otherwise'''
+        return self.metadata_compare(f2)
+
+    def metadata_compare(self, f2,
+                         exclude_list=["emit_data_product_creation_time"]):
+        '''Compare two files metadata, reporting any differences. Return
+        True if the same, False otherwise'''
+        same = True
+        dset = set(self.metadata.keys()) ^ set(f2.metadata.keys())
+        for k in dset:
+            if(k in self.metadata.keys()):
+                print(f"   File 1 has metadata '{k}', but File 2 does not")
+            else:
+                print(f"   File 2 has metadata '{k}', but File 1 does not")
+            same = False
+        for k in ((set(self.metadata.keys() & set(f2.metadata.keys()))) -
+                  set(exclude_list)):
+            if(self.metadata[k] != f2.metadata[k]):
+                print(f"   Metdata '{k}' is different")
+                print(f"      File 1: {self.metadata[k]}")
+                print(f"      File 2: {f2.metadata[k]}")
+                same = False
+        return same
+
     # Possible we'll want to add other functions to add and read other
     # metadata in the ENVI file
         

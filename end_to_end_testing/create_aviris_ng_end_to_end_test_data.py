@@ -19,6 +19,8 @@ CREATE_CAMERA_STEP2 = False
 CREATE_CAMERA_STEP3 = False
 CREATE_SCENE = True
 
+raise RuntimeError("This sample data is no longer used. Instead we have a test case that uses real AVIRIS-NG data from the SHIFT campaign")
+
 emit_test_data = "/home/smyth/Local/emit-test-data/latest"
 input_test_data = f"{emit_test_data}/input_afids_ng"
 

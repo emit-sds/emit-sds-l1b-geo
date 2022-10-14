@@ -1,7 +1,6 @@
 from .aviris_orbit import *
 from .aviris_time_table import AvirisTimeTable
 from .aviris_igm import AvirisIgm
-from .misc import create_dem
 import geocal
 from test_support import *
 import scipy.optimize
@@ -31,7 +30,7 @@ def test_aviris_igc(isolated_dir):
     focal_length = 193.5e-3
     cam = geocal.SimpleCamera(0,0,0,focal_length, line_pitch, sample_pitch,
                               1, nsamp)
-    dem = create_dem(None)
+    dem = geocal.SrtmDem()
     ipi = geocal.Ipi(orb, cam, 0, tt.min_time, tt.max_time, tt)
     igc = geocal.IpiImageGroundConnection(ipi, dem, None)
     igm = AvirisIgm(aviris_test_data + "f180522t01p00r07rdn_e_ort_igm")

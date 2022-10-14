@@ -6052,6 +6052,22 @@ SWIG_AsPtr_std_string (PyObject * obj, std::string **val)
 }
 
 
+SWIGINTERN int
+SWIG_AsVal_int (PyObject * obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< int >(v);
+    }
+  }  
+  return res;
+}
+
+
 
 /* ---------------------------------------------------
  * C++ director class methods
@@ -7290,6 +7306,54 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_open_file_force_envi(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int arg2 ;
+  int res1 = SWIG_OLDOBJ ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  boost::shared_ptr< GeoCal::GdalRasterImage > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:open_file_force_envi",&obj0,&obj1)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "open_file_force_envi" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "open_file_force_envi" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "open_file_force_envi" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try {
+      result = Emit::open_file_force_envi((std::string const &)*arg1,arg2);
+    } catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  {
+    resultobj = GeoCal::swig_to_python(result);
+  }
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, NULL},
@@ -7345,6 +7409,16 @@ static PyMethodDef SwigMethods[] = {
 		"like wavelength as a file level item, and just directly create the \"{\n"
 		"wavelength 1, wavelength 2, ...}\" string in ENVI. GDAL does put this\n"
 		"in the auxilary .xml file, but we don't want to depend on that. \n"
+		""},
+	 { (char *)"open_file_force_envi", _wrap_open_file_force_envi, METH_VARARGS, (char *)"\n"
+		"\n"
+		"boost::shared_ptr< GeoCal::GdalRasterImage > Emit::open_file_force_envi(const std::string &Fname, int Band)\n"
+		"We ran into an obscure bug in GDAL 3.2.1 where a specific file\n"
+		"couldn't be opened because GDAL never identified it as ENVI\n"
+		"(seehttps://github.jpl.nasa.gov/emit-sds/emit-sds-issue-\n"
+		"tracking/issues/110 for details).\n"
+		"\n"
+		"This function opens a file and forces the ENVI driver to be used. \n"
 		""},
 	 { NULL, NULL, 0, NULL }
 };

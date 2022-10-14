@@ -2,27 +2,11 @@
 import geocal
 import os
 import re
+import math
 import logging
+import subprocess
 
 logger = logging.getLogger('l1b_geo_process.emit_dem')
-
-def create_dem(l1b_geo_config = None):
-    '''Create the SRTM DEM based on the configuration. Don't exactly know
-    how this will work once we are integrated in with SDS, but for now
-    just use the placeholder function and grab the information from the
-    environment.'''
-    if(l1b_geo_config is None):
-        # Default data if we don't have a config file
-        datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
-        srtm_dir = os.environ["ELEV_ROOT"]
-    else:
-        # Otherwise, get from config file
-        datum = l1b_geo_config.datum
-        srtm_dir = l1b_geo_config.srtm_dir
-    logger.info("Datum: %s", datum)
-    logger.info("SRTM Dir: %s", srtm_dir)
-    dem = geocal.SrtmDem(srtm_dir,False, geocal.DatumGeoid96(datum))
-    return dem
 
 def band_to_landsat_band(lband):
     '''Map number to the enumeration in C++'''
@@ -79,13 +63,14 @@ def aster_radiance_scale_factor():
     return [1.688, 1.415, 0.862, 0.2174, 0.0696, 0.0625, 0.0597, 0.0417, 0.0318,
             6.882e-3, 6.780e-3, 6.590e-3, 5.693e-3, 5.225e-3]
 
-def emit_file_name(file_type, start_time, onum, snum, bnum, vnum, ext):
+def emit_file_name(file_type, dstring, onum, snum, bnum, vnum, ext):
     '''Create the emit file name for the given file_type, start_time,
     orbit number, scene number, build number, version number, and file
     extension. Note that scene number can be "None" for orbit based file
     names'''
-    dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
-                                       re.split(r'\.', str(start_time))[0]))
+    if(isinstance(dstring, geocal.Time)):
+        dstring = re.sub(r'T', 't', re.sub(r'[-:]', '',
+                                           re.split(r'\.', str(dstring))[0]))
     if(snum is None):
         return "emit%s_o%05d_%s_b%03d_v%02d%s" % (dstring, onum,
                      file_type, bnum, vnum, ext)
@@ -95,15 +80,64 @@ def emit_file_name(file_type, start_time, onum, snum, bnum, vnum, ext):
 def orb_and_scene_from_file_name(fname):
     '''Get the orbit and scene from a file name, using the emit naming
     convention.'''
-    m = re.search(r'_o(\d+)_s(\d+)_', os.path.basename(fname))
+    m = re.search(r'emit(\d+t\d+)_o(\d+)_s(\d+)_', os.path.basename(fname))
     if(not m):
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
-    return (m.group(1), m.group(2))
-    
-    
+    return (m.group(2), m.group(3), m.group(1))
 
-__all__ = ["create_dem", "band_to_landsat_band",
+def extended_orb_from_file_name(fname):
+    '''Winston uses a longer orbit number that includes the year in it.
+    Extract this out from file fname'''
+    m = re.search(r'emit(\d+t\d+)_o(\d+)_', os.path.basename(fname))
+    if(not m):
+        raise RuntimeError(f"Don't recognize the format of file name {fname}")
+    onum = m.group(2)
+    stime = m.group(1)
+    return stime[2:4] + onum
+
+def file_name_to_gps_week(fname, filebase="ang"):
+    '''Extract the start time from the file name, using the standard
+    AVIRIS-NG file format (e.g, ang20170328t202059_gps), and use that 
+    time to determine the gps week we are in.'''
+    m = re.search(filebase + r'(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})_',
+                  os.path.basename(fname))
+    if not m:
+        raise RuntimeError(f"Don't recognize the file naming convention for {fname}")
+    tm = geocal.Time.parse_time(f"{m[1]}-{m[2]}-{m[3]}T{m[4]}:{m[5]}:{m[6]}Z")
+    gps_week = math.floor(tm.gps / (7 * 24 * 60 * 60))
+    return int(gps_week)
+
+def process_run(exec_cmd, out_fh = None, quiet = False):
+    '''This is like subprocess.run, but allowing a unix like 'tee' where
+    we write the output to a log file and/or stdout.
+
+    The command (which should be a standard array) is run, and the output
+    is always returned. In addition, the output is written to the given
+    out_fh is supplied, and to stdout if "quiet" is not True.
+    '''
+    process = subprocess.Popen(exec_cmd, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT)
+    stdout = b''
+    while(True):
+        output = process.stdout.readline()
+        if output == b'' and process.poll() is not None:
+            break
+        if output:
+            stdout = stdout + output
+            if(not quiet):
+                logger.info(output.strip().decode('utf-8'))
+            if(out_fh):
+                print(output.strip().decode('utf-8'), file=out_fh)
+                out_fh.flush()
+    if(process.poll() != 0):
+        raise subprocess.CalledProcessError(process.poll(), exec_cmd,
+                                            output=stdout)
+    return stdout
+
+
+__all__ = ["band_to_landsat_band", "file_name_to_gps_week",
            "aster_mosaic_dir", "aster_radiance_scale_factor",
-           "emit_file_name", "orb_and_scene_from_file_name"]
+           "extended_orb_from_file_name",
+           "emit_file_name", "orb_and_scene_from_file_name", "process_run"]
            
 

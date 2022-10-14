@@ -66,7 +66,7 @@ Resampler::Resampler
 //-------------------------------------------------------------------------
 /// Alternative constructor where we get the lat/lon from something
 /// other than a file. The data should already be interpolated (e.g.,
-/// in python do scipy.ndimage.interpolation.zoom(t,Num_sub_pixel,order=2)
+/// in python use scaled_lat_lon_grid)
 //-------------------------------------------------------------------------
 
 Resampler::Resampler

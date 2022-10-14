@@ -15,5 +15,7 @@ void PolynomialParaxialTransform<D1, D2>::serialize
 }
 
 EMIT_IMPLEMENT(PolynomialParaxialTransform_3d_3d);
+EMIT_IMPLEMENT(PolynomialParaxialTransform_5d_3d);
+EMIT_IMPLEMENT(PolynomialParaxialTransform_3d_5d);
 EMIT_IMPLEMENT(PolynomialParaxialTransform_5d_5d);
 

@@ -1,7 +1,30 @@
 #include "gdal_support.h"
+#include <boost/make_shared.hpp>
 
 using namespace Emit;
 
+
+//-------------------------------------------------------------------------
+/// We ran into an obscure bug in GDAL 3.2.1 where a specific file
+/// couldn't be opened because GDAL never identified it as ENVI (see
+/// https://github.jpl.nasa.gov/emit-sds/emit-sds-issue-tracking/issues/110
+/// for details).
+///
+/// This function opens a file and forces the ENVI driver to be used.
+//-------------------------------------------------------------------------
+
+boost::shared_ptr<GeoCal::GdalRasterImage>
+Emit::open_file_force_envi(const std::string& Fname, int Band)
+{
+  GeoCal::GdalRegister::gdal_register();
+  std::vector<std::string> d_string;
+  std::vector<char*> d;
+  d_string.push_back("ENVI");
+  d.push_back(const_cast<char*>(d_string.back().c_str()));
+  d.push_back(0);
+  boost::shared_ptr<GDALDataset> data_set((GDALDataset *) GDALOpenEx(Fname.c_str(), GA_ReadOnly,&(*d.begin()),0,0));
+  return boost::make_shared<GeoCal::GdalRasterImage>(data_set, Band);
+}
 
 //-------------------------------------------------------------------------
 /// GeoCal doesn't happen to have support for writing a file

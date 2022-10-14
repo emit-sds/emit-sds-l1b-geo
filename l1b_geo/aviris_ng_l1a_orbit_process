@@ -1,0 +1,125 @@
+#! /usr/bin/env python
+#
+# This runs the L1A Orbit process.
+import geocal
+import emit
+import logging
+import os
+import sys
+import re
+
+version = "1.0.0"
+usage='''Usage:
+  aviris_ng_l1a_orbit_process [options] <prod_dir> <l1_osp_dir> <raw_file> [<gps_file>] [<pps_file>]
+  aviris_ng_l1a_orbit_process -h | --help
+  aviris_ng_l1a_orbit_process -v | --version
+
+This runs the aviris_ng_l1a_orbit process. 
+
+This takes the production directory, which we also use as a scratch area.
+
+This takes the L1 operational support directory (e.g. 
+/beegfs/store/shared/emit-test-data/latest/l1_osp_aviris_ng_geo_dir), and 
+the raw file. We also need the gps and pps files. You can explicitly supply
+these, or alternatively leave them off of the command line and we will assume
+that these filename are just the raw file name with "_raw" replaced with 
+"_gps" and "_pps".
+
+A log file will be written to the output directory - aviris_ng_l1_orbit.log. By
+default this is also written to the screen, but you can turn this off
+using the --log-file-only option.
+
+Options:
+  -h --help         
+       Print this message
+
+  --binfac-fname=f
+       Use the given line average from the binfac file, rather than calculating
+       this. Useful for backwards compatibility with pyortho.
+
+  --debug
+       Turn debugging information on
+       
+  --log-file-only=f
+       Write logs only to the log file, not also to the screen.
+
+  --no-color
+       Don't colorize output. Only applies to the screen, we never put
+       color into log files.
+
+  --quiet
+       Don't print any messages, just return an overall status code.
+
+  --verbose
+       Give more verbose messages. Synonym for debug.
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+
+# Read in additional configuration parameters
+l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
+
+# Set up logging. 
+os.makedirs(args.prod_dir, exist_ok=True)
+log_fname = args.prod_dir + "/aviris_ng_l1a_orbit.log"
+logger = logging.getLogger('l1b_geo_process')
+fh = None
+fh = logging.FileHandler(log_fname)
+fh.setFormatter(emit.L1bGeoLogFormatter(add_color = False))
+fh.setLevel(logging.INFO)
+logger.addHandler(fh)
+lformat = emit.L1bGeoLogFormatter(add_color = not args.no_color)
+if(not args.log_file_only):    
+    h = logging.StreamHandler()
+    h.setFormatter(lformat)
+    logger.addHandler(h)
+if(args.debug):
+    if(h):
+        h.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
+elif(args.verbose):
+    if(h):
+        h.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
+elif(args.quiet):
+    if(h):
+        h.setLevel(1000)
+    logger.setLevel(1000)
+else:    
+    if(h):
+        h.setLevel(logging.INFO)
+    logger.setLevel(logging.INFO)
+
+try:
+    logger.info("Starting %s version %s processing",
+                l1_osp_dir.l1a_pge_name,
+                l1_osp_dir.pge_version)
+    raw_fname = os.path.abspath(args.raw_file)
+    if(args.gps_file):
+        gps_fname = os.path.abspath(args.gps_file)
+    else:
+        gps_fname = re.sub(r'_raw$', '_gps', raw_fname)
+    if(args.pps_file):
+        pps_fname = os.path.abspath(args.pps_file)
+    else:
+        pps_fname = re.sub(r'_raw$', '_pps', raw_fname)
+    curdir = os.getcwd()
+    try:
+        os.chdir(args.prod_dir)
+        g = emit.AvirisNgL1aOrbitGenerate(raw_fname, gps_fname, pps_fname,
+                                          l1_osp_dir,
+                                          raw_binfac_fname=args.binfac_fname)
+        g.run()
+    finally:
+        os.chdir(curdir)
+    logger.info("Done with aviris_ng_l1a_orbit processing")
+except Exception as e:
+    logger.exception(e)
+    logger.exception("Traceback:")
+    logger.exception(traceback.format_exc())
+    logger.fatal("aviris_ng_l1a_orbit processing failed")
+    sys.exit(1)
+

@@ -11,10 +11,10 @@ import re
 
 # While developing we run this multiple times. Skip things we already
 # have
-CREATE_IGC_SIM = False
+CREATE_IGC_SIM = True
 CREATE_ENVI = True
-CREATE_ORBIT = False
-CREATE_TT = False
+CREATE_ORBIT = True
+CREATE_TT = True
 
 # We only bother simulating one band for this test. We can't realistically
 # generate science data from the few ASTER bands available, so we only
@@ -33,17 +33,12 @@ sfactor = aster_radiance_scale_factor()[aster_band-1]
 # needed.
 orb = SpiceOrbit(SpiceOrbit.ISS_ID, "iss_spice/iss_2020.bsp")
 
-# Simple pinhole camera, we'll replace with the calibrated camera
-focal_length = 193.5e-3
-line_pitch = 30e-6
-sample_pitch = 30e-6
-nsamp = 1280
-spectral_channel = 324
-cam = SimpleCamera(0,0,0,focal_length, line_pitch, sample_pitch,
-                   1, nsamp)
+# Use our calibrated camera model
+cam = read_shelve("../camera_model/camera_active_2022_04_02.xml")
+#cam = read_shelve("../camera_model/camera_initial_testdata.xml")
 
 # DEM
-dem = create_dem(None)
+dem = SrtmDem()
 
 # Time was determined by looking as iss_orbit_determine.py along with
 # http://www.isstracker.com/historical to view the
@@ -125,8 +120,8 @@ for scene in range(nscene):
         EmitOrbit.write_file(fname, orb, tm,
                              tt.min_time + nscene * nline * tspace + 100)
     if CREATE_TT:
-        fname = f"{start_fname}_l1a_line_time_{end_fname}.nc"
-        EmitTimeTable.write_file(fname, tt)
+        fname = f"{start_fname}_l1a_line_time_{end_fname}.txt"
+        EmitTimeTable.write_file_txt(fname, tt)
     
     
     

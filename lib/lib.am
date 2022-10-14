@@ -17,7 +17,7 @@ libemit_la_LDFLAGS = $(GEOCAL_LIBS)
 check_PROGRAMS = emit_test_all
 emit_test_all_SOURCES += @srclib@/test_all.cc
 emit_test_all_LDADD = libemit.la 
-emit_test_all_LDFLAGS = -no-install 
+emit_test_all_LDFLAGS = -no-install $(GEOCAL_LIBS)
 emit_test_all_CPPFLAGS = $(AM_CPPFLAGS) $(GEOCAL_CFLAGS)
 TESTS+= @srclib@/test_all.sh
 EXTRA_DIST+= @srclib@/test_all.sh
@@ -31,8 +31,16 @@ emitinc_HEADERS+= @srclib@/resampler.h
 libemit_la_SOURCES+= @srclib@/resampler.cc
 emitinc_HEADERS+= @srclib@/emit_orbit.h
 libemit_la_SOURCES+= @srclib@/emit_orbit.cc
+emitinc_HEADERS+= @srclib@/emit_time_table_base.h
+libemit_la_SOURCES+= @srclib@/emit_time_table_base.cc
+emitinc_HEADERS+= @srclib@/reverse_camera.h
+libemit_la_SOURCES+= @srclib@/reverse_camera.cc
+emitinc_HEADERS+= @srclib@/emit_obs_calc.h
+libemit_la_SOURCES+= @srclib@/emit_obs_calc.cc
 emitinc_HEADERS+= @srclib@/emit_igc_collection.h
 libemit_la_SOURCES+= @srclib@/emit_igc_collection.cc
+emitinc_HEADERS+= @srclib@/emit_l1b_image.h
+libemit_la_SOURCES+= @srclib@/emit_l1b_image.cc
 emitinc_HEADERS+= @srclib@/camera_paraxial.h
 libemit_la_SOURCES+= @srclib@/camera_paraxial.cc
 emitinc_HEADERS+= @srclib@/polynomial_paraxial_transform.h
@@ -48,8 +56,16 @@ SWIG_SRC += @swigsrc@/resampler_wrap.cc
 emitswiginc_HEADERS+= @srclib@/resampler.i
 SWIG_SRC += @swigsrc@/emit_orbit_wrap.cc
 emitswiginc_HEADERS+= @srclib@/emit_orbit.i
+SWIG_SRC += @swigsrc@/emit_time_table_base_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_time_table_base.i
+SWIG_SRC += @swigsrc@/reverse_camera_wrap.cc
+emitswiginc_HEADERS+= @srclib@/reverse_camera.i
+SWIG_SRC += @swigsrc@/emit_obs_calc_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_obs_calc.i
 SWIG_SRC += @swigsrc@/emit_igc_collection_wrap.cc
 emitswiginc_HEADERS+= @srclib@/emit_igc_collection.i
+SWIG_SRC += @swigsrc@/emit_l1b_image_wrap.cc
+emitswiginc_HEADERS+= @srclib@/emit_l1b_image.i
 SWIG_SRC += @swigsrc@/camera_paraxial_wrap.cc
 emitswiginc_HEADERS+= @srclib@/camera_paraxial.i
 SWIG_SRC += @swigsrc@/polynomial_paraxial_transform_wrap.cc
@@ -77,7 +93,7 @@ AM_CPPFLAGS+= -I$(srcdir)/@srclib@
 # to do during development.
 
 emit-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) emit-am
+	$(MAKE) $(AM_MAKEFLAGS) emit-check-am
 
 emit-check-am: emit_test_all
 	@echo "====================================================="

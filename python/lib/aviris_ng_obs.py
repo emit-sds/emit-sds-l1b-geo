@@ -1,90 +1,151 @@
-import struct
+from .envi_file import *
+from .standard_metadata import *
+import logging
+import numpy as np
 import geocal
-from .misc import create_dem
+import re
+from math import acos, sin, cos
 
-class AvirisNgObs:
-    '''This reads the AVIRIS NG obs data.
+logger = logging.getLogger('l1b_geo_process.aviris_ng_obs')
 
-    Note that the time is relative to day. We could parse this from the
-    file name, but since we don't have a lot of data this doesn't seem
-    to be worth it. Instead, we just take the time in.
+class AvirisNgObs(EnviFile):
+    '''This reads the AVIRIS NG obs data.'''
+    def __init__(self, fname, loc = None, igc = None,
+                 standard_metadata = None, number_line_process=1000,
+                 l1_osp_dir = None):
+        '''Open a file. As a convention if the IGC is supplied we just
+        assume we are creating a file. Otherwise, we read an existing one.
 
-    Time_day would be something like 
+        Note that we don't actually create the data until you run the 
+        "run" function, so it will initially just be unintialized data.
 
-    Time.parse_time("2017-03-23T00:00:00Z")
-
-    I'm *pretty* sure the height is relative to WGS-84 rather than the
-    datum. Error is small, and since this is pretend test data perhaps
-    it doesn't matter so much
-    '''
-    def __init__(self, fname, time_day):
-        # We use a GdalMultiBand here just for convenience. It just
-        # figures out the shape etc. for us from the hdr file
-        self.data = geocal.GdalMultiBand(fname).read_all_double()
-        self._time = [time_day + 60 * 60 * v for v in self.data[9,:,0]]
-                    
+        Note that the shape is (3, number_line, number_sample)
+        '''
+        self.igc = igc
+        self.loc = loc
+        self.l1_osp_dir = l1_osp_dir
+        self.number_line_process = number_line_process
+        if(self.igc is None):
+            mode = 'r'
+            shape = None
+        else:
+            mode = 'w'
+            self.standard_metadata = standard_metadata
+            if(self.standard_metadata is None):
+                self.standard_metadata = StandardMetadata(igc=self.igc)
+            shape = (11, self.igc.number_line, self.igc.number_sample)
+        super().__init__(fname, shape=shape, dtype=np.float64, mode=mode,
+                         description = "ANG AIG VSWIR RT-Ortho OBS",
+                         band_description = ["Path length (m)", "To-sensor azimuth (0 to 360 degrees CW from N)", "To-sensor zenith (0 to 90 degrees from zenith)", "To-sun azimuth (0 to 360 degrees CW from N)", "To-sun zenith (0 to 90 degrees from zenith)", "Solar phase", "Slope", "Aspect", "Cosine(i)", "UTC Time", "Earth-sun distance (AU]"])
 
     @property
     def path_length(self):
-        '''Path length (m)'''
-        return self.data[0,:,:]
+        '''Return the path length field'''
+        return self[0,:,:]
 
     @property
     def view_azimuth(self):
-        '''To-sensor azimuth (0 to 360 degrees cw from N)'''
-        return self.data[1,:,:]
+        '''Return the view azimuth field'''
+        return self[1,:,:]
 
     @property
     def view_zenith(self):
-        '''To-sensor zenith (0 to 90 degrees from zenith)'''
-        return self.data[2,:,:]
+        '''Return the view zenith field'''
+        return self[2,:,:]
 
     @property
     def solar_azimuth(self):
-        '''To-sun azimuth (0 to 360 degrees cw from N)'''
-        return self.data[3,:,:]
+        '''Return the solar azimuth field'''
+        return self[3,:,:]
 
     @property
     def solar_zenith(self):
-        '''To-sun zenith (0 to 90 degrees from zenith)'''
-        return self.data[4,:,:]
+        '''Return the solar zenith field'''
+        return self[4,:,:]
 
     @property
     def solar_phase(self):
-        '''Solar Phase'''
-        return self.data[5,:,:]
+        '''Return the solar phase field'''
+        return self[5,:,:]
 
     @property
     def slope(self):
-        '''Solar Phase'''
-        return self.data[6,:,:]
-    
+        '''Return the slope field'''
+        return self[6,:,:]
+
     @property
     def aspect(self):
-        '''Solar Phase'''
-        return self.data[7,:,:]
-
+        '''Return the aspect field'''
+        return self[7,:,:]
+    
     @property
     def cosine_i(self):
-        '''Cosine(i)'''
-        return self.data[8,:,:]
-
-    @property
-    def time(self):
-        '''Time of each line'''
-        return self._time
+        '''Return the cosine(i) field'''
+        return self[8,:,:]
 
     @property
     def utc_time(self):
         '''Return the UTC Time field'''
-        return self.data[9,:,:]
+        return self[9,:,:]
 
     @property
     def earth_sun_distance(self):
-        '''Earth-sun distance (AU)'''
-        return self.data[10,:,:]
+        '''Return the earth-sun distance field'''
+        return self[10,:,:]
     
-    
-    
+    def run_scene(self, i):
+        nline = min(self.number_line_process, self.igc.number_line-i)
+        logger.info("Generating OBS data for %s (%d, %d)", self.igc.title,
+                    i, i+nline)
+        with self.multiprocess_data():
+            for ln in range(i, i+nline):
+                pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln,0))
+                tm = self.igc.pixel_time(geocal.ImageCoordinate(ln,0))
+                self.earth_sun_distance[ln,:] = geocal.Ecr.solar_distance(tm)
+                seconds_in_day = tm - geocal.Time.parse_time(re.split('T', str(tm))[0] + "T00:00:00Z")
+                self.utc_time[ln,:] = seconds_in_day / (60 * 60)
+                for smp in range(self.igc.number_sample):
+                    gp = self.loc.ground_coordinate(ln, smp)
+                    # This is to sensor direction, opposite of what we
+                    # sometimes use
+                    clv = geocal.CartesianFixedLookVector(gp, pos)
+                    lv = geocal.LnLookVector(clv, gp)
+                    slv = geocal.LnLookVector.solar_look_vector(tm, gp)
+                    self.path_length[ln, smp] = geocal.distance(gp, pos)
+                    # Convention is different for LookVector, subtract 180
+                    # to get AVIRIS convention
+                    t = lv.view_azimuth - 180
+                    if(t < 0):
+                        t += 360
+                    self.view_azimuth[ln,smp] = t
+                    self.view_zenith[ln,smp] = lv.view_zenith
+                    t = slv.view_azimuth - 180
+                    if(t < 0):
+                        t += 360
+                    self.solar_azimuth[ln,smp] = t
+                    self.solar_zenith[ln,smp] = slv.view_zenith
+                    d = (lv.direction[0] * slv.direction[0] +
+                         lv.direction[1] * slv.direction[1] +
+                         lv.direction[2] * slv.direction[2])
+                    self.solar_phase[ln,smp] = acos(d) * geocal.rad_to_deg
+                    self.slope[ln,smp], self.aspect[ln,smp] = \
+                        self.igc.dem.slope_and_aspect(gp)
+                    slope_dir = \
+                        [sin(self.slope[ln,smp])*sin(self.aspect[ln,smp]),
+                         sin(self.slope[ln,smp])*cos(self.aspect[ln,smp]),
+                         cos(self.slope[ln,smp])]
+                    self.cosine_i[ln,smp] = (slope_dir[0] * slv.direction[0] +
+                                             slope_dir[1] * slv.direction[1] +
+                                             slope_dir[2] * slv.direction[2])
+
+    def run(self, pool=None):
+        '''Actually generate the output data.'''
+        logger.info("Generating OBS data for %s", self.igc.title)
+        ilist = list(range(0, self.igc.number_line, self.number_line_process))
+        if(pool is None):
+            res = list(map(self.run_scene, ilist))
+        else:
+            res = pool.map(self.run_scene, ilist)
+        self.standard_metadata.write_metadata(self)
         
 __all__ = ["AvirisNgObs",]    

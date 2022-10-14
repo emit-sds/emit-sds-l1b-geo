@@ -14,8 +14,9 @@ class GaussianStretch(VicarInterface):
         t = None
         d = mmap_file("in.img", mode="r+")
         d[:] = np.where(self.data > 0,
-                        self.data * 32768.0 / self.data.max(),
+                        self.data * 32768.0 / max(self.data.max(), 1e-8),
                         0).astype(np.int16)
+        self.run_out = ""
 
     def post_run(self):
         self.out = VicarRasterImage("out.img").read_all()
@@ -29,6 +30,10 @@ def gaussian_stretch(data):
     
     We assume that all negative values are fill, and map them to 0. Data is
     returned as integer data.'''
+    # Special handling for all 0 data, stretch fails so just return
+    # the original data
+    if(data.max() == 0):
+        return data
     gs = GaussianStretch(data)
     gs.vicar_run()
     return gs.out

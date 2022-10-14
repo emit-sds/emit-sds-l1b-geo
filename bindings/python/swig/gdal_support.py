@@ -262,6 +262,19 @@ def set_band_metadata(*args):
     in the auxilary .xml file, but we don't want to depend on that. 
     """
     return _gdal_support.set_band_metadata(*args)
+
+def open_file_force_envi(Fname, Band):
+    """
+
+    boost::shared_ptr< GeoCal::GdalRasterImage > Emit::open_file_force_envi(const std::string &Fname, int Band)
+    We ran into an obscure bug in GDAL 3.2.1 where a specific file
+    couldn't be opened because GDAL never identified it as ENVI
+    (seehttps://github.jpl.nasa.gov/emit-sds/emit-sds-issue-
+    tracking/issues/110 for details).
+
+    This function opens a file and forces the ENVI driver to be used. 
+    """
+    return _gdal_support.open_file_force_envi(Fname, Band)
 # This file is compatible with both classic and new-style classes.
 
 

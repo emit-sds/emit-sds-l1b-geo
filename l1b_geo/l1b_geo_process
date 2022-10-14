@@ -4,6 +4,7 @@
 import geocal
 import emit
 import logging
+import traceback
 import os
 import sys
 import json
@@ -65,10 +66,6 @@ Options:
 
 args = geocal.docopt_simple(usage, version=version)
 
-# Read in additional configuration parameters
-sys.path.append(args.l1_osp_dir)
-import l1b_geo_config
-
 # Set up logging. 
 os.makedirs(args.prod_dir, exist_ok=True)
 log_fname = args.prod_dir + "/l1b_geo.log"
@@ -100,6 +97,9 @@ else:
         h.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
 
+# Read in additional configuration parameters
+l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
+
 # Run actual process
 if(args.l1a_att):
     l1a_att = os.path.abspath(args.l1a_att)
@@ -110,29 +110,31 @@ else:
     try:
         f = json.load(open(args.run_config))
         os.chdir(os.path.dirname(args.run_config))
-        l1a_att = os.path.abspath(f["attitude_ephemeris_file"])
-        line_time = [os.path.abspath(t['timestamps_file']) for t in f["timestamp_radiance_pairs"]]
-        l1b_rad = [os.path.abspath(t['radiance_file']) for t in f["timestamp_radiance_pairs"]]
+        l1a_att = os.path.abspath(os.path.expandvars(f["attitude_ephemeris_file"]))
+        line_time = [os.path.abspath(os.path.expandvars(t['timestamps_file'])) for t in f["timestamp_radiance_pairs"]]
+        l1b_rad = [os.path.abspath(os.path.expandvars(t['radiance_file'])) for t in f["timestamp_radiance_pairs"]]
     finally:
         os.chdir(curdir)
 logger.info("l1_att file: %s", l1a_att)
 logger.info("line_time files %s", line_time)
 logger.info("l1b_rad files %s", l1b_rad)
 try:
-    logger.info("Starting %s version %s processing", l1b_geo_config.pge_name,
-                l1b_geo_config.pge_version)
+    logger.info("Starting %s version %s processing",
+                l1_osp_dir.pge_name,
+                l1_osp_dir.pge_version)
     curdir = os.getcwd()
     try:
         os.chdir(args.prod_dir)
-        t = emit.L1bGeoGenerate(l1b_geo_config, l1a_att, line_time,
+        t = emit.L1bGeoGenerate(l1_osp_dir, l1a_att, line_time,
                                 l1b_rad)
         t.run()
     finally:
         os.chdir(curdir)
     logger.info("Done with l1b_geo processing")
 except Exception as e:
-    raise
-    logger.exception(e, stack_info=True)
+    logger.exception(e)
+    logger.exception("Traceback:")
+    logger.exception(traceback.format_exc())
     logger.fatal("L1b_geo processing failed")
     sys.exit(1)
 

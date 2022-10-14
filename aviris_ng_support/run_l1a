@@ -1,0 +1,27 @@
+#! /usr/bin/env python
+#
+# Set up slurm jobs to run l1a for all the raw data we find
+
+import glob
+import os
+import subprocess
+
+# Use list that Phil supplies
+runlist = "/beegfs/scratch/brodrick/shift/line_lists/all_lines.txt"
+basedir = os.getcwd()
+fh = open("l1a_job_list.txt", "w")
+l1_osp_dir = f"{basedir}/l1_osp"
+job_count = 0
+with open(runlist) as rh:
+    for bname in rh:
+        bname = bname.rstrip()
+        prod_dir = f"{basedir}/{bname}_output"
+        raw_file = f"/beegfs/store/ang/y22/raw/{bname}_raw"
+        # Skip files that have already been created
+        if(not os.path.exists(prod_dir)):
+            print(f"/home/smyth/emit-build/install/aviris_ng_l1a_orbit_pge --binfac-fname={raw_file}.binfac {prod_dir} {l1_osp_dir} {raw_file}", file=fh)
+            job_count = job_count + 1
+fh.close()
+subprocess.run(["mkdir", "-p", "logs"])
+print(f"sbatch -n 1 -c 1 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh l1a_job_list.txt")
+subprocess.run(f"sbatch -n 1 -c 1 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh l1a_job_list.txt", shell=True)

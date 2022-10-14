@@ -1,0 +1,31 @@
+#! /usr/bin/env python
+#
+# Set up slurm jobs to run geo for all the data we find
+
+import glob
+import os
+import subprocess
+
+basedir = os.getcwd()
+fh = open("geo_job_list.txt", "w")
+l1_osp_dir = f"{basedir}/l1_osp"
+job_count = 0
+for f in glob.glob("ang*_output"):
+    bname = os.path.basename(f).split("_")[0]
+    prod_dir = f"{basedir}/{bname}_output"
+    orb_file = f"{prod_dir}/{bname}_att.nc"
+    line_time_file = f"{prod_dir}/{bname}_line_time.nc"
+    loc_file = f"{prod_dir}/{bname}_loc"
+    proj_file = f"{prod_dir}/{bname}_proj"
+    rad_file = f"/beegfs/store/ang/y22/rdn/{bname}_rdn_v2z4_clip"
+    # Skip files that have already been created
+    if(not os.path.exists(loc_file)):
+        subprocess.run(f"ln -s {rad_file}* {prod_dir} > /dev/null 2>&1", shell=True)
+        print(f"source /home/smyth/emit-build/install/setup_emit.sh && aviris_ng_geo_process {prod_dir} {l1_osp_dir} {orb_file} {line_time_file} {rad_file} && l1b_project --erdas {loc_file} {rad_file} {proj_file}", file=fh)
+        job_count = job_count + 1
+fh.close()
+subprocess.run(["mkdir", "-p", "logs"])
+# 3GB is probably total overkill, but for now we don't need to be overly
+# efficient. Just ask "for a lot" of memory. We can tune this down once
+# we figure this out.
+subprocess.run(f"sbatch -n 1 -c 10 --mem=3000 -o 'logs/o%a.log' -e 'logs/e%a.log' -a1-{job_count} ./job_array.sh geo_job_list.txt", shell=True)

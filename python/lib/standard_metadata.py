@@ -8,6 +8,7 @@ class StandardMetadata:
     '''This handles the standard metadata that we include in our ENVI
     files.'''
     def __init__(self, igc = None, start_time = None, end_time = None,
+                 geolocation_accuracy_qa = None,
                  pge_name = "emit-sds-l1b/l1b_geo",
                  pge_version = "1.0.0",
                  pge_input_file = { },
@@ -15,6 +16,8 @@ class StandardMetadata:
                  documentation_version = "Initial Version",
                  product_version = 1,
                  creation_time = None):
+        '''geolocation_accuracy_qa should be one of "Best", "Good",
+        "Suspect" or "No Match"'''
         if(start_time is None):
             start_time = igc.ipi.time_table.min_time
         if(end_time is None):
@@ -27,6 +30,7 @@ class StandardMetadata:
         self.pge_name = pge_name
         self.pge_version = pge_version
         self.pge_input_file = pge_input_file
+        self.geolocation_accuracy_qa = geolocation_accuracy_qa
         self.build_version = build_version
         self.documentation_version = documentation_version
         self.product_version = product_version
@@ -52,6 +56,8 @@ class StandardMetadata:
         fh["ENVI", "emit documentation version"] = self.documentation_version
         fh["ENVI", "emit data product creation time"] = self.creation_time
         fh["ENVI", "emit data product version"] = "v%02d" % self.product_version
+        if(self.geolocation_accuracy_qa is not None):
+            fh["ENVI", "emit geolocation accuracy QA"] = self.geolocation_accuracy_qa
         self.extra_metadata(fh)
         fh.close()
         # Remove the auxilary file GDAL creates, we don't want this around

@@ -26,6 +26,8 @@ Good orbit time looks like 2020-06-10T01:51:31.753198Z
 AVIRIS-NG Based Data
 --------------------
 
+This data is no longer used. We include the original information for reference.
+
 This data is based off a real AVIRIS-NG, a specific data set 
 20170328t202059.
 

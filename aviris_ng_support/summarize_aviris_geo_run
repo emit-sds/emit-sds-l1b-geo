@@ -1,0 +1,122 @@
+#! /usr/bin/env python
+#
+# This generates a summary of a run
+import geocal
+import emit
+import os
+import sys
+import glob
+import pandas as pd
+import numpy as np
+from aviris_ng_util import create_igc
+
+version = "1.0.0"
+usage='''Usage:
+  summarize_aviris_geo_run [options] <run_dir>
+  summarize_aviris_geo_run -h | --help
+  summarize_aviris_geo_run -v | --version
+
+This summarizes a single aviris_ng_geo_process run. We'll likely change this a 
+bit over time, and ideally move some of this into a QA file. But for now
+we have the separate as we work out exactly what we want here.
+
+Note there is a summarize_aviris_geo which creates an over all summary, using
+this program to summarize each individual run it finds and them combining into
+one summary file.
+
+Options:
+  -h --help         
+       Print this message
+
+  -v --version      
+       Print program version
+'''
+
+args = geocal.docopt_simple(usage, version=version)
+
+dir = args.run_dir
+# Strip off trailing "/" if it is supplied
+if(os.path.basename(dir) == ''):
+    dir = os.path.dirname(dir)
+bname = os.path.basename(dir).split("_")[0]
+locname = f"{dir}/{bname}_loc"
+data = {"Run finished" : True, "Pixel Resolution" : None,
+        "Euler Epsilon": None, "Euler Beta" : None,
+        "Euler Delta" : None, "Focal Length" : None,
+        "Number tiepoint" : None,
+        "Number line image" : None,
+        "Number scene" : None,
+        "Number scene with match" : None,
+        "Number scene with sentinel" : None,
+        "95% tiepoint distance" : None,
+        "95% distance pyortho sample 0" : None,
+        "95% distance pyortho sample 10" : None,
+        "95% distance pyortho sample 300" : None,
+        "95% distance pyortho sample 587" : None,
+        "95% distance pyortho sample 597" : None,
+        }
+rset = []
+l1_osp_dir = emit.L1OspDir("l1_osp")
+try:
+    igc = create_igc(dir, pyortho_loc=True)
+    max_line = min(igc.image.number_line, igc.ipi.time_table.max_line)
+    nline_per_scene = l1_osp_dir.number_line_per_scene
+    for i in range(0,
+                   max_line // nline_per_scene * nline_per_scene,
+                   nline_per_scene):
+        if(i + 2 * nline_per_scene < max_line):
+            rset.append(range(i,i+nline_per_scene))
+        else:
+            # Special handling for last scene, we add in the extra
+            # lines so we don't have a small runt at the end
+            rset.append(range(i,max_line))
+except:
+    # Ignore problems creating IGC, we just skip data that depends on this
+    igc = None
+fh = open(f"{dir}/summary.txt", "w") 
+if(not os.path.exists(locname)):
+    print("Run FAILED. See aviris_ng_geo.log for details", file=fh)
+    data["Run finished"] = False
+else:
+    print("Run produced output files", file=fh)
+if(igc):
+    data["Pixel Resolution"] = igc.resolution_meter()
+    p = igc.ipi.camera.parameter_subset
+    data["Euler Epsilon"] = p[0]
+    data["Euler Beta"] = p[1]
+    data["Euler Delta"] = p[2]
+    data["Focal Length"] = p[3]
+    data["Number scene"] = len(glob.glob(f"{dir}/igc_initial_*.xml"))
+    data["Number line image"] = igc.image.number_line
+    data["Number scene with sentinel"] = len(glob.glob(f"{dir}/ref_initial_*.img"))
+    if(igc.loc):
+        igccol = geocal.IgcArray([igc,])
+        if(os.path.exists(f"{dir}/tpcol.xml")):
+            tpcol = geocal.read_shelve(f"{dir}/tpcol.xml")
+            data["Number tiepoint"] = len(tpcol)
+            if(len(tpcol) > 0):
+                ntp_per_scene = [len([1 for tp in tpcol if tp.image_coordinate(i) is not None]) for i in range(tpcol[0].number_image)]
+                igccol = geocal.IgcArray([geocal.read_shelve(dir + "/igc_final_%03d.xml" % (i+1)) for i in range(tpcol[0].number_image)])
+                data["Number scene with match"] = np.count_nonzero(ntp_per_scene)
+                t = np.concatenate([tpcol.data_frame(igccol,i)["ground_2d_distance"] for i in range(igccol.number_image)])
+                d = np.nanpercentile(t,95)
+                data["95% tiepoint distance"] = d
+            else:
+                data["Number scene with match"] = 0
+        else:
+            data["Number tiepoint"] = 0
+            data["Number scene with match"] = 0
+    if(igc.loc and igc.pyortho_loc and
+       igc.loc.shape == igc.pyortho_loc.shape):
+        for s in (0,10,300,587,597):
+            d = np.percentile(emit.AvirisNgLoc.distance_compare2(igc.loc,
+                                   igc.pyortho_loc,s),95)
+            data[f"95% distance pyortho sample {s}"] = d
+
+df = pd.DataFrame(data, index=[bname,])
+df.to_pickle(f"{dir}/summary.pkl")
+for lbl in df.keys():
+    print(f"{lbl}: {df[lbl][0]}", file=fh)
+
+
+    
