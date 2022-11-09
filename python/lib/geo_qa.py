@@ -318,8 +318,9 @@ number of tiepoints (so if < threshold we set this to 0).
 
 Fourth column is the number to image matching tries we did.'''
         ac_group = f["Accuracy Estimate"]
-        ac_group.create_variable("Scenes", ("i",), data=self.scene_name,
-                                dtype=h5py.special_dtype(vlen=bytes))
+        if(self.scene_name is not None):
+            ac_group.create_variable("Scenes", ("i",), data=self.scene_name,
+                                     dtype=h5py.special_dtype(vlen=bytes))
         if(self.tp_stat is not None):
             dset = ac_group.create_variable("Accuracy Before Correction",
                                             ("i",),
