@@ -36,7 +36,7 @@ class AvirisNgObs(EnviFile):
             shape = (11, self.igc.number_line, self.igc.number_sample)
         super().__init__(fname, shape=shape, dtype=np.float64, mode=mode,
                          description = "ANG AIG VSWIR RT-Ortho OBS",
-                         band_description = ["Path length (m)", "To-sensor azimuth (0 to 360 degrees CW from N)", "To-sensor zenith (0 to 90 degrees from zenith)", "To-sun azimuth (0 to 360 degrees CW from N)", "To-sun zenith (0 to 90 degrees from zenith)", "Solar phase", "Slope", "Aspect", "Cosine(i)", "UTC Time", "Earth-sun distance (AU]"])
+                         band_description = ["Path length (m)", "To-sensor azimuth (0 to 360 degrees CW from N)", "To-sensor zenith (0 to 90 degrees from zenith)", "To-sun azimuth (0 to 360 degrees CW from N)", "To-sun zenith (0 to 90 degrees from zenith)", "Solar phase", "Slope", "Aspect", "Cosine(i)", "UTC Time", "Earth-sun distance (AU)"])
 
     @property
     def path_length(self):
