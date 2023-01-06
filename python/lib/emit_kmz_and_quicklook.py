@@ -48,24 +48,43 @@ class EmitKmzAndQuicklook(object):
         res = Resampler(lat, lon, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%s.vrt" % self.scene_index
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
+        # Create second unprojected version. Both upstread and downstream
+        # PGEs have unprojected data, so we want to generate one that matches
+        # this.
+        vrt_fname2 = "unproj_scaled_%s.vrt" % self.scene_index
+        cmd_merge2 = ["gdalbuildvrt", "-q", "-separate", vrt_fname2]
         if(res.map_info.number_y_pixel > 10000 or
            res.map_info.number_x_pixel > 10000):
             raise RuntimeError(f"Funny map, ending process. File name: {self.file_base_name} Map info: {res.map_info}")
         for b in self.band_list:
             ras = EmitL1bImage(self.rad_fname, b, 1.0)
             data = res.resample_field(ras).copy()
+            data2 = ras.read_all_double().copy()
             # Set bad values to 0
             data[np.not_equal(np.isfinite(data), True)] = 0
+            data2[np.not_equal(np.isfinite(data2), True)] = 0
             # Set fill values to 0
             data[data < -100] = 0
+            data2[data2 < -100] = 0
             data_scaled = gaussian_stretch(data)
+            data2_scaled = gaussian_stretch(data2)
             fname = "map_b%d_%s_scaled.img" % (b, self.scene_index)
+            fname2 = "unproj_b%d_%s_scaled.img" % (b, self.scene_index)
             d = geocal.mmap_file(fname, res.map_info, nodata=0.0,
                                  dtype=np.uint8)
+            t = geocal.VicarRasterImage(fname2, "BYTE", data2_scaled.shape[0],
+                                        data2_scaled.shape[1])
+            t["NODATA"] = 0.0
+            t = None
+            d2 = geocal.mmap_file(fname2, mode="r+")
             d[:] = data_scaled
+            d2[:] = data2_scaled
             d = None
+            d2 = None
             cmd_merge.append(fname)
+            cmd_merge2.append(fname2)
         subprocess.run(cmd_merge)
+        subprocess.run(cmd_merge2)
         if(self.generate_erdas):
             ref_fname = "ref_final_%03d.img" % (self.igc_index+1)
             self.l1_osp_dir.write_ortho_base_subset(ref_fname, res.map_info)
@@ -86,9 +105,12 @@ class EmitKmzAndQuicklook(object):
         if(self.generate_kmz):
             subprocess.run(cmd, check=True)
         cmd = ["gdal_translate", "-q", "-of", "PNG", "-a_nodata", "none",
-               vrt_fname, self.file_base_name + ".png"]
+               vrt_fname, self.file_base_name + "_proj.png"]
+        cmd2 = ["gdal_translate", "-q", "-of", "PNG", "-a_nodata", "none",
+               vrt_fname2, self.file_base_name + ".png"]
         if(self.generate_quicklook):
             subprocess.run(cmd, check=True)
+            subprocess.run(cmd2, check=True)
         # Remove the .aux.xml file GDAL generates
         try:
             os.unlink(self.file_base_name + ".kmz" + ".aux.xml")
@@ -96,6 +118,10 @@ class EmitKmzAndQuicklook(object):
             pass
         try:
             os.unlink(self.file_base_name + ".png" + ".aux.xml")
+        except FileNotFoundError:
+            pass
+        try:
+            os.unlink(self.file_base_name + "_proj.png" + ".aux.xml")
         except FileNotFoundError:
             pass
         
