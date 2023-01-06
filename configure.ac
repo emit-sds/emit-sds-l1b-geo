@@ -1,12 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(emit, 1.6.0)
+AC_INIT(emit, 1.6.7)
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_MACRO_DIR([config/m4_local])
 AC_CONFIG_FILES([script/setup_emit.csh script/setup_emit.sh])
 AC_CONFIG_FILES([lib/global_fixture_default.cc])
-AC_CONFIG_FILES([emit_version.py])
 
 EMIT_COMMON
 

@@ -31,6 +31,7 @@ emitpkgpython_PYTHON+= @srcpythonlib@/aviris_ng_l1a_orbit_generate.py
 emitpkgpython_PYTHON+= @srcpythonlib@/l1_osp_dir.py
 emitpkgpython_PYTHON+= @srcpythonlib@/gaussian_stretch.py
 emitpkgpython_PYTHON+= @srcpythonlib@/sto_file.py
+emitpkgpython_PYTHON+= @srcpythonlib@/version.py
 
 EXTRA_DIST+=@srcpythonlib@/envi_file_test.py
 EXTRA_DIST+=@srcpythonlib@/emit_igc_test.py
