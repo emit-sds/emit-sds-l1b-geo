@@ -23,6 +23,14 @@ Emit::open_file_force_envi(const std::string& Fname, int Band)
   d.push_back(const_cast<char*>(d_string.back().c_str()));
   d.push_back(0);
   boost::shared_ptr<GDALDataset> data_set((GDALDataset *) GDALOpenEx(Fname.c_str(), GA_ReadOnly,&(*d.begin()),0,0));
+  if(!data_set)
+    throw GeoCal::Exception("Trouble reading the file " + Fname);
+  if(Band < 1 || Band > data_set->GetRasterCount()) {
+    GeoCal::Exception e("Band out of range\n");
+    e << " Band: " << Band << "\n"
+      << " Should be in range 1 to " << data_set->GetRasterCount() << "\n";
+    throw e;
+  }
   return boost::make_shared<GeoCal::GdalRasterImage>(data_set, Band);
 }
 
