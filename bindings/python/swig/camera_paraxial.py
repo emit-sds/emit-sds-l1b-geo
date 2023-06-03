@@ -240,10 +240,9 @@ class ParaxialTransform(geocal_swig.generic_object.GenericObject):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::ParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const =0
-
+        virtual void Emit::ParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const =0
+        Emit::ParaxialTransform::paraxial_to_real
         """
         return _camera_paraxial.ParaxialTransform_paraxial_to_real(self, *args)
 
@@ -251,11 +250,9 @@ class ParaxialTransform(geocal_swig.generic_object.GenericObject):
     def real_to_paraxial(self, *args):
         """
 
-        virtual void Emit::ParaxialTransform::real_to_paraxial(const GeoCal::AutoDerivative< double > &Real_x, const
-        GeoCal::AutoDerivative< double > &Real_y, GeoCal::AutoDerivative<
-        double > &Paraxial_x, GeoCal::AutoDerivative< double > &Paraxial_y)
+        virtual void Emit::ParaxialTransform::real_to_paraxial(double Real_x, double Real_y, double &Paraxial_x, double &Paraxial_y)
         const =0
-
+        Emit::ParaxialTransform::real_to_paraxial
         """
         return _camera_paraxial.ParaxialTransform_real_to_paraxial(self, *args)
 
@@ -293,7 +290,7 @@ class IdentityParaxialTransform(ParaxialTransform):
         """
 
         Emit::IdentityParaxialTransform::IdentityParaxialTransform()
-
+        Emit::IdentityParaxialTransform::IdentityParaxialTransform
         """
         this = _camera_paraxial.new_IdentityParaxialTransform()
         try:
@@ -304,10 +301,9 @@ class IdentityParaxialTransform(ParaxialTransform):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::IdentityParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        virtual void Emit::IdentityParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::IdentityParaxialTransform::paraxial_to_real
         """
         return _camera_paraxial.IdentityParaxialTransform_paraxial_to_real(self, *args)
 
@@ -361,7 +357,7 @@ class CaptureParaxialTransform(ParaxialTransform):
         """
 
         Emit::CaptureParaxialTransform::CaptureParaxialTransform()
-
+        Emit::CaptureParaxialTransform::CaptureParaxialTransform
         """
         this = _camera_paraxial.new_CaptureParaxialTransform()
         try:
@@ -372,10 +368,9 @@ class CaptureParaxialTransform(ParaxialTransform):
     def paraxial_to_real(self, *args):
         """
 
-        virtual void Emit::CaptureParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        virtual void Emit::CaptureParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::CaptureParaxialTransform::paraxial_to_real
         """
         return _camera_paraxial.CaptureParaxialTransform_paraxial_to_real(self, *args)
 
@@ -384,7 +379,7 @@ class CaptureParaxialTransform(ParaxialTransform):
         """
 
         void Emit::CaptureParaxialTransform::clear()
-
+        Emit::CaptureParaxialTransform::clear
         """
         return _camera_paraxial.CaptureParaxialTransform_clear(self)
 
@@ -392,8 +387,8 @@ class CaptureParaxialTransform(ParaxialTransform):
     def _v_predict_x(self):
         """
 
-        const std::vector<double>& Emit::CaptureParaxialTransform::predict_x() const
-
+        const std::vector< double > & Emit::CaptureParaxialTransform::predict_x() const
+        Emit::CaptureParaxialTransform::predict_x
         """
         return _camera_paraxial.CaptureParaxialTransform__v_predict_x(self)
 
@@ -406,8 +401,8 @@ class CaptureParaxialTransform(ParaxialTransform):
     def _v_predict_y(self):
         """
 
-        const std::vector<double>& Emit::CaptureParaxialTransform::predict_y() const
-
+        const std::vector< double > & Emit::CaptureParaxialTransform::predict_y() const
+        Emit::CaptureParaxialTransform::predict_y
         """
         return _camera_paraxial.CaptureParaxialTransform__v_predict_y(self)
 
@@ -420,8 +415,8 @@ class CaptureParaxialTransform(ParaxialTransform):
     def _v_real_x(self):
         """
 
-        const std::vector<double>& Emit::CaptureParaxialTransform::real_x() const
-
+        const std::vector< double > & Emit::CaptureParaxialTransform::real_x() const
+        Emit::CaptureParaxialTransform::real_x
         """
         return _camera_paraxial.CaptureParaxialTransform__v_real_x(self)
 
@@ -434,8 +429,8 @@ class CaptureParaxialTransform(ParaxialTransform):
     def _v_real_y(self):
         """
 
-        const std::vector<double>& Emit::CaptureParaxialTransform::real_y() const
-
+        const std::vector< double > & Emit::CaptureParaxialTransform::real_y() const
+        Emit::CaptureParaxialTransform::real_y
         """
         return _camera_paraxial.CaptureParaxialTransform__v_real_y(self)
 
@@ -490,7 +485,7 @@ class CameraParaxial(geocal_swig.quaternion_camera.QuaternionCamera):
         Line_direction=GeoCal::QuaternionCamera::INCREASE_IS_POSITIVE,
         FrameDirection
         Sample_direction=GeoCal::QuaternionCamera::INCREASE_IS_POSITIVE)
-
+        Emit::CameraParaxial::CameraParaxial
         """
         this = _camera_paraxial.new_CameraParaxial(*args)
         try:
@@ -502,7 +497,7 @@ class CameraParaxial(geocal_swig.quaternion_camera.QuaternionCamera):
         """
 
         void Emit::CameraParaxial::paraxial_transform(const boost::shared_ptr< ParaxialTransform > &v)
-
+        Emit::CameraParaxial::paraxial_transform
         """
         return _camera_paraxial.CameraParaxial__v_paraxial_transform(self, *args)
 

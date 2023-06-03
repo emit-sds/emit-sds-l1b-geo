@@ -9684,85 +9684,80 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SwigPyIterator_swigregister", SwigPyIterator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ParaxialTransform_paraxial_to_real", _wrap_ParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::ParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
-		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
-		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const =0\n"
-		"\n"
+		"virtual void Emit::ParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
+		"const =0\n"
+		"Emit::ParaxialTransform::paraxial_to_real\n"
 		""},
 	 { (char *)"ParaxialTransform_real_to_paraxial", _wrap_ParaxialTransform_real_to_paraxial, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::ParaxialTransform::real_to_paraxial(const GeoCal::AutoDerivative< double > &Real_x, const\n"
-		"GeoCal::AutoDerivative< double > &Real_y, GeoCal::AutoDerivative<\n"
-		"double > &Paraxial_x, GeoCal::AutoDerivative< double > &Paraxial_y)\n"
+		"virtual void Emit::ParaxialTransform::real_to_paraxial(double Real_x, double Real_y, double &Paraxial_x, double &Paraxial_y)\n"
 		"const =0\n"
-		"\n"
+		"Emit::ParaxialTransform::real_to_paraxial\n"
 		""},
 	 { (char *)"ParaxialTransform___str__", _wrap_ParaxialTransform___str__, METH_VARARGS, NULL},
 	 { (char *)"delete_ParaxialTransform", _wrap_delete_ParaxialTransform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::ParaxialTransform::~ParaxialTransform()\n"
-		"\n"
+		"Emit::ParaxialTransform::~ParaxialTransform\n"
 		""},
 	 { (char *)"ParaxialTransform_swigregister", ParaxialTransform_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_IdentityParaxialTransform", _wrap_new_IdentityParaxialTransform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"Emit::IdentityParaxialTransform::IdentityParaxialTransform()\n"
-		"\n"
+		"Emit::IdentityParaxialTransform::IdentityParaxialTransform\n"
 		""},
 	 { (char *)"IdentityParaxialTransform_paraxial_to_real", _wrap_IdentityParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::IdentityParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
-		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
-		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const\n"
-		"\n"
+		"virtual void Emit::IdentityParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
+		"const\n"
+		"Emit::IdentityParaxialTransform::paraxial_to_real\n"
 		""},
 	 { (char *)"delete_IdentityParaxialTransform", _wrap_delete_IdentityParaxialTransform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::IdentityParaxialTransform::~IdentityParaxialTransform()\n"
-		"\n"
+		"Emit::IdentityParaxialTransform::~IdentityParaxialTransform\n"
 		""},
 	 { (char *)"IdentityParaxialTransform_swigregister", IdentityParaxialTransform_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_CaptureParaxialTransform", _wrap_new_CaptureParaxialTransform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"Emit::CaptureParaxialTransform::CaptureParaxialTransform()\n"
-		"\n"
+		"Emit::CaptureParaxialTransform::CaptureParaxialTransform\n"
 		""},
 	 { (char *)"CaptureParaxialTransform_paraxial_to_real", _wrap_CaptureParaxialTransform_paraxial_to_real, METH_VARARGS, (char *)"\n"
 		"\n"
-		"virtual void Emit::CaptureParaxialTransform::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const\n"
-		"GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<\n"
-		"double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const\n"
-		"\n"
+		"virtual void Emit::CaptureParaxialTransform::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)\n"
+		"const\n"
+		"Emit::CaptureParaxialTransform::paraxial_to_real\n"
 		""},
 	 { (char *)"CaptureParaxialTransform_clear", _wrap_CaptureParaxialTransform_clear, METH_VARARGS, (char *)"\n"
 		"\n"
 		"void Emit::CaptureParaxialTransform::clear()\n"
-		"\n"
+		"Emit::CaptureParaxialTransform::clear\n"
 		""},
 	 { (char *)"CaptureParaxialTransform__v_predict_x", _wrap_CaptureParaxialTransform__v_predict_x, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const std::vector<double>& Emit::CaptureParaxialTransform::predict_x() const\n"
-		"\n"
+		"const std::vector< double > & Emit::CaptureParaxialTransform::predict_x() const\n"
+		"Emit::CaptureParaxialTransform::predict_x\n"
 		""},
 	 { (char *)"CaptureParaxialTransform__v_predict_y", _wrap_CaptureParaxialTransform__v_predict_y, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const std::vector<double>& Emit::CaptureParaxialTransform::predict_y() const\n"
-		"\n"
+		"const std::vector< double > & Emit::CaptureParaxialTransform::predict_y() const\n"
+		"Emit::CaptureParaxialTransform::predict_y\n"
 		""},
 	 { (char *)"CaptureParaxialTransform__v_real_x", _wrap_CaptureParaxialTransform__v_real_x, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const std::vector<double>& Emit::CaptureParaxialTransform::real_x() const\n"
-		"\n"
+		"const std::vector< double > & Emit::CaptureParaxialTransform::real_x() const\n"
+		"Emit::CaptureParaxialTransform::real_x\n"
 		""},
 	 { (char *)"CaptureParaxialTransform__v_real_y", _wrap_CaptureParaxialTransform__v_real_y, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const std::vector<double>& Emit::CaptureParaxialTransform::real_y() const\n"
-		"\n"
+		"const std::vector< double > & Emit::CaptureParaxialTransform::real_y() const\n"
+		"Emit::CaptureParaxialTransform::real_y\n"
 		""},
 	 { (char *)"delete_CaptureParaxialTransform", _wrap_delete_CaptureParaxialTransform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::CaptureParaxialTransform::~CaptureParaxialTransform()\n"
-		"\n"
+		"Emit::CaptureParaxialTransform::~CaptureParaxialTransform\n"
 		""},
 	 { (char *)"CaptureParaxialTransform_swigregister", CaptureParaxialTransform_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_CameraParaxial", _wrap_new_CameraParaxial, METH_VARARGS, (char *)"\n"
@@ -9775,17 +9770,17 @@ static PyMethodDef SwigMethods[] = {
 		"Line_direction=GeoCal::QuaternionCamera::INCREASE_IS_POSITIVE,\n"
 		"FrameDirection\n"
 		"Sample_direction=GeoCal::QuaternionCamera::INCREASE_IS_POSITIVE)\n"
-		"\n"
+		"Emit::CameraParaxial::CameraParaxial\n"
 		""},
 	 { (char *)"CameraParaxial__v_paraxial_transform", _wrap_CameraParaxial__v_paraxial_transform, METH_VARARGS, (char *)"\n"
 		"\n"
 		"void Emit::CameraParaxial::paraxial_transform(const boost::shared_ptr< ParaxialTransform > &v)\n"
-		"\n"
+		"Emit::CameraParaxial::paraxial_transform\n"
 		""},
 	 { (char *)"delete_CameraParaxial", _wrap_delete_CameraParaxial, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::CameraParaxial::~CameraParaxial()\n"
-		"\n"
+		"Emit::CameraParaxial::~CameraParaxial\n"
 		""},
 	 { (char *)"CameraParaxial_swigregister", CameraParaxial_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

@@ -9605,8 +9605,8 @@ static PyMethodDef SwigMethods[] = {
 		"Resampler::Resampler(const boost::shared_ptr< GeoCal::RasterImage > &Latitude, const\n"
 		"boost::shared_ptr< GeoCal::RasterImage > &Longitude, const\n"
 		"GeoCal::MapInfo &Mi, int Num_sub_pixel=2, bool Exactly_match_mi=false)\n"
+		"Emit::Resampler::Resampler\n"
 		"Constructor.\n"
-		"\n"
 		"This takes the latitude and longitude fields as RasterImage (we could\n"
 		"have taken the L1B_GEO file name, but taking RasterImage seems a\n"
 		"little more general). We take the MapInfo that we will resample to\n"
@@ -9631,9 +9631,9 @@ static PyMethodDef SwigMethods[] = {
 		"GeoCal::RasterImage > &Data, double Scale_data=1.0, const std::string\n"
 		"&File_type=\"REAL\", bool Negative_to_zero=false, double\n"
 		"Fill_value=0.0) const\n"
+		"Emit::Resampler::resample_field\n"
 		"Resample the given data, and write out to a VICAR file with the given\n"
 		"name.\n"
-		"\n"
 		"You can optionally scale the output data, and specify the file output\n"
 		"type to write. This is useful if you want to view float data in xvd,\n"
 		"which works much better with scaled int.\n"
@@ -9645,26 +9645,26 @@ static PyMethodDef SwigMethods[] = {
 		"\n"
 		"void Resampler::map_values(const GeoCal::Dem &d, blitz::Array< double, 2 > &Lat, blitz::Array<\n"
 		"double, 2 > &Lon, blitz::Array< double, 2 > &Height) const\n"
+		"Emit::Resampler::map_values\n"
 		"Various fields from the map_info.\n"
-		"\n"
 		"This is just all in a function because this is much faster to do in\n"
 		"C++ vs. looping in python. \n"
 		""},
 	 { (char *)"Resampler__v_map_info", _wrap_Resampler__v_map_info, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const GeoCal::MapInfo& Emit::Resampler::map_info() const\n"
-		"\n"
+		"const GeoCal::MapInfo & Emit::Resampler::map_info() const\n"
+		"Emit::Resampler::map_info\n"
 		""},
 	 { (char *)"Resampler__v_number_sub_pixel", _wrap_Resampler__v_number_sub_pixel, METH_VARARGS, (char *)"\n"
 		"\n"
 		"int Emit::Resampler::number_sub_pixel() const\n"
-		"\n"
+		"Emit::Resampler::number_sub_pixel\n"
 		""},
 	 { (char *)"Resampler___str__", _wrap_Resampler___str__, METH_VARARGS, NULL},
 	 { (char *)"delete_Resampler", _wrap_delete_Resampler, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::Resampler::~Resampler()\n"
-		"\n"
+		"Emit::Resampler::~Resampler\n"
 		""},
 	 { (char *)"Resampler_swigregister", Resampler_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

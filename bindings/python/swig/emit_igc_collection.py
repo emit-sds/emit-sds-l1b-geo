@@ -241,7 +241,7 @@ class EmitIgcCollection(geocal_swig.igc_array.IgcArray):
         """
 
         Emit::EmitIgcCollection::EmitIgcCollection()
-
+        Emit::EmitIgcCollection::EmitIgcCollection
         """
         this = _emit_igc_collection.new_EmitIgcCollection()
         try:
@@ -253,7 +253,7 @@ class EmitIgcCollection(geocal_swig.igc_array.IgcArray):
         """
 
         virtual void Emit::EmitIgcCollection::add_igc(const boost::shared_ptr< GeoCal::IpiImageGroundConnection > &Igc)
-
+        Emit::EmitIgcCollection::add_igc
         """
         return _emit_igc_collection.EmitIgcCollection_add_igc(self, Igc)
 
@@ -264,9 +264,9 @@ class EmitIgcCollection(geocal_swig.igc_array.IgcArray):
         void EmitIgcCollection::nearest_attitude_time_point(const boost::shared_ptr< GeoCal::Time > &T, boost::shared_ptr<
         GeoCal::Time > &Tbefore, boost::shared_ptr< GeoCal::Time > &Tafter)
         const
+        Emit::EmitIgcCollection::nearest_attitude_time_point
         Return the nearest attitude correction time point, so Tbefore <= T <=
         Tafter.
-
         Note that Tbefore or Tafter will be returned as Time::max_valid_time()
         if there isn't a before/after time. 
         """

@@ -247,7 +247,7 @@ class EmitL1bImage(geocal_swig.scale_image.ScaleImage):
         """
 
         Emit::EmitL1bImage::EmitL1bImage(const std::string &Fname, int Band, double Scale_factor)
-
+        Emit::EmitL1bImage::EmitL1bImage
         """
         this = _emit_l1b_image.new_EmitL1bImage(Fname, Band, Scale_factor)
         try:

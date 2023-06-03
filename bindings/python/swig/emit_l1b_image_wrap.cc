@@ -7067,12 +7067,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_EmitL1bImage", _wrap_new_EmitL1bImage, METH_VARARGS, (char *)"\n"
 		"\n"
 		"Emit::EmitL1bImage::EmitL1bImage(const std::string &Fname, int Band, double Scale_factor)\n"
-		"\n"
+		"Emit::EmitL1bImage::EmitL1bImage\n"
 		""},
 	 { (char *)"delete_EmitL1bImage", _wrap_delete_EmitL1bImage, METH_VARARGS, (char *)"\n"
 		"\n"
 		"Emit::EmitL1bImage::~EmitL1bImage()\n"
-		"\n"
+		"Emit::EmitL1bImage::~EmitL1bImage\n"
 		""},
 	 { (char *)"EmitL1bImage_swigregister", EmitL1bImage_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

@@ -242,7 +242,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         Emit::ReverseCamera::ReverseCamera(const boost::shared_ptr< GeoCal::Camera > &Cam)
-
+        Emit::ReverseCamera::ReverseCamera
         """
         this = _reverse_camera.new_ReverseCamera(Cam)
         try:
@@ -254,7 +254,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual int Emit::ReverseCamera::number_line(int Band) const
-
+        Emit::ReverseCamera::number_line
         """
         return _reverse_camera.ReverseCamera_number_line(self, Band)
 
@@ -263,7 +263,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual int Emit::ReverseCamera::number_sample(int Band) const
-
+        Emit::ReverseCamera::number_sample
         """
         return _reverse_camera.ReverseCamera_number_sample(self, Band)
 
@@ -272,7 +272,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual GeoCal::FrameCoordinate Emit::ReverseCamera::frame_coordinate(const GeoCal::ScLookVector &Sl, int Band) const
-
+        Emit::ReverseCamera::frame_coordinate
         """
         return _reverse_camera.ReverseCamera_frame_coordinate(self, Sl, Band)
 
@@ -281,7 +281,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual GeoCal::FrameCoordinateWithDerivative Emit::ReverseCamera::frame_coordinate_with_derivative(const GeoCal::ScLookVectorWithDerivative &Sl, int Band) const
-
+        Emit::ReverseCamera::frame_coordinate_with_derivative
         """
         return _reverse_camera.ReverseCamera_frame_coordinate_with_derivative(self, Sl, Band)
 
@@ -290,7 +290,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual GeoCal::ScLookVector Emit::ReverseCamera::sc_look_vector(const GeoCal::FrameCoordinate &F, int Band) const
-
+        Emit::ReverseCamera::sc_look_vector
         """
         return _reverse_camera.ReverseCamera_sc_look_vector(self, F, Band)
 
@@ -299,7 +299,7 @@ class ReverseCamera(geocal_swig.camera.Camera):
         """
 
         virtual GeoCal::ScLookVectorWithDerivative Emit::ReverseCamera::sc_look_vector_with_derivative(const GeoCal::FrameCoordinateWithDerivative &F, int Band) const
-
+        Emit::ReverseCamera::sc_look_vector_with_derivative
         """
         return _reverse_camera.ReverseCamera_sc_look_vector_with_derivative(self, F, Band)
 
@@ -307,8 +307,8 @@ class ReverseCamera(geocal_swig.camera.Camera):
     def _v_original_camera(self):
         """
 
-        const boost::shared_ptr<GeoCal::Camera>& Emit::ReverseCamera::original_camera() const
-
+        const boost::shared_ptr< GeoCal::Camera > & Emit::ReverseCamera::original_camera() const
+        Emit::ReverseCamera::original_camera
         """
         return _reverse_camera.ReverseCamera__v_original_camera(self)
 

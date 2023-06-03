@@ -91,6 +91,7 @@ complain_if_afids:
           exit 1; \
         fi
 
-BUILT_SOURCES += complain_if_afids
+# No longer needed, but leave in place to document this change
+#BUILT_SOURCES += complain_if_afids
 
 

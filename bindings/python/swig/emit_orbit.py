@@ -247,7 +247,9 @@ class EmitOrbit(geocal_swig.hdf_orbit.HdfOrbit_Eci_TimeJ2000):
         """
 
         Emit::EmitOrbit::EmitOrbit(const std::string &Fname, const blitz::Array< double, 1 > &Pos_off)
-        Constructor, has an offset in position like OrbitScCoorOffset. 
+        Emit::EmitOrbit::EmitOrbit
+        Constructor, has an offset in position like OrbitScCoorOffset.
+
         """
         this = _emit_orbit.new_EmitOrbit(*args)
         try:
@@ -259,8 +261,10 @@ class EmitOrbit(geocal_swig.hdf_orbit.HdfOrbit_Eci_TimeJ2000):
         """
 
         bool EmitOrbit::spacecraft_x_mostly_in_velocity_direction(GeoCal::Time T) const
+        Emit::EmitOrbit::spacecraft_x_mostly_in_velocity_direction
         Indicate if spacecraft orientation is mostly in the forward direction,
-        or has the 180 degree yaw used sometimes in maneuvers. 
+        or has the 180 degree yaw used sometimes in maneuvers.
+
         """
         return _emit_orbit.EmitOrbit_spacecraft_x_mostly_in_velocity_direction(self, T)
 

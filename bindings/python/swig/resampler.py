@@ -253,8 +253,8 @@ class Resampler(geocal_swig.generic_object.GenericObject):
         Resampler::Resampler(const boost::shared_ptr< GeoCal::RasterImage > &Latitude, const
         boost::shared_ptr< GeoCal::RasterImage > &Longitude, const
         GeoCal::MapInfo &Mi, int Num_sub_pixel=2, bool Exactly_match_mi=false)
+        Emit::Resampler::Resampler
         Constructor.
-
         This takes the latitude and longitude fields as RasterImage (we could
         have taken the L1B_GEO file name, but taking RasterImage seems a
         little more general). We take the MapInfo that we will resample to
@@ -286,9 +286,9 @@ class Resampler(geocal_swig.generic_object.GenericObject):
         GeoCal::RasterImage > &Data, double Scale_data=1.0, const std::string
         &File_type="REAL", bool Negative_to_zero=false, double
         Fill_value=0.0) const
+        Emit::Resampler::resample_field
         Resample the given data, and write out to a VICAR file with the given
         name.
-
         You can optionally scale the output data, and specify the file output
         type to write. This is useful if you want to view float data in xvd,
         which works much better with scaled int.
@@ -304,8 +304,8 @@ class Resampler(geocal_swig.generic_object.GenericObject):
 
         void Resampler::map_values(const GeoCal::Dem &d, blitz::Array< double, 2 > &Lat, blitz::Array<
         double, 2 > &Lon, blitz::Array< double, 2 > &Height) const
+        Emit::Resampler::map_values
         Various fields from the map_info.
-
         This is just all in a function because this is much faster to do in
         C++ vs. looping in python. 
         """
@@ -315,8 +315,8 @@ class Resampler(geocal_swig.generic_object.GenericObject):
     def _v_map_info(self):
         """
 
-        const GeoCal::MapInfo& Emit::Resampler::map_info() const
-
+        const GeoCal::MapInfo & Emit::Resampler::map_info() const
+        Emit::Resampler::map_info
         """
         return _resampler.Resampler__v_map_info(self)
 
@@ -330,7 +330,7 @@ class Resampler(geocal_swig.generic_object.GenericObject):
         """
 
         int Emit::Resampler::number_sub_pixel() const
-
+        Emit::Resampler::number_sub_pixel
         """
         return _resampler.Resampler__v_number_sub_pixel(self)
 

@@ -244,7 +244,7 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         blitz::Array< double, 2 > &Height, const blitz::Array< double, 2 >
         &Latitude_subpixel, const blitz::Array< double, 2 >
         &Longitude_subpixel)
-
+        Emit::EmitObsCalc::EmitObsCalc
         """
         this = _emit_obs_calc.new_EmitObsCalc(Igc, Latitude, Longitude, Height, Latitude_subpixel, Longitude_subpixel)
         try:
@@ -257,8 +257,8 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
 
         void EmitObsCalc::view_angle(blitz::Array< double, 2 > &View_azimuth, blitz::Array< double, 2 >
         &View_zenith) const
+        Emit::EmitObsCalc::view_angle
         Calculate view angles.
-
         This has been compared to pyorbital, and gives close to the same
         results. This is from the local north coordinates. Zenith is relative
         to the local tangent plane. Azimuth is relative to local north. Both
@@ -272,8 +272,8 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
 
         void EmitObsCalc::solar_angle(blitz::Array< double, 2 > &Solar_azimuth, blitz::Array< double, 2 >
         &Solar_zenith) const
+        Emit::EmitObsCalc::solar_angle
         Calculate solar view angles.
-
         This has been compared to pyorbital, and gives close to the same
         results. This is from the local north coordinates. Zenith is relative
         to the local tangent plane. Azimuth is relative to local north. Both
@@ -287,7 +287,9 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
 
         void EmitObsCalc::slope_angle(blitz::Array< double, 2 > &Slope, blitz::Array< double, 2 > &Aspect,
         blitz::Array< double, 2 > &Cosine_i) const
-        Calculate slope, aspect and cosine_i angles. 
+        Emit::EmitObsCalc::slope_angle
+        Calculate slope, aspect and cosine_i angles.
+
         """
         return _emit_obs_calc.EmitObsCalc_slope_angle(self)
 
@@ -296,8 +298,10 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         void EmitObsCalc::average_slope_aspect(int i, int j, double &slope, double &aspect) const
+        Emit::EmitObsCalc::average_slope_aspect
         Calculate slope/aspect for all the subpixel covering pixel i,j, and
-        average the values. 
+        average the values.
+
         """
         return _emit_obs_calc.EmitObsCalc_average_slope_aspect(self, i, j)
 
@@ -306,7 +310,9 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         blitz::Array< double, 2 > EmitObsCalc::earth_sun_distance() const
-        Calculate earth sun distance. 
+        Emit::EmitObsCalc::earth_sun_distance
+        Calculate earth sun distance.
+
         """
         return _emit_obs_calc.EmitObsCalc_earth_sun_distance(self)
 
@@ -315,8 +321,8 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         blitz::Array< double, 2 > EmitObsCalc::seconds_in_day() const
+        Emit::EmitObsCalc::seconds_in_day
         Calculate seconds in the day for the time the data was acquired.
-
         Kind of an odd thing to calculate, but the utc_time is one of the
         fields in the OBS file. 
         """
@@ -327,7 +333,9 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         blitz::Array< double, 2 > EmitObsCalc::path_length() const
-        Calculate path length. This is in meters. 
+        Emit::EmitObsCalc::path_length
+        Calculate path length. This is in meters.
+
         """
         return _emit_obs_calc.EmitObsCalc_path_length(self)
 
@@ -336,7 +344,9 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         blitz::Array< double, 2 > EmitObsCalc::solar_phase() const
-        Calculate solar phase angle. 
+        Emit::EmitObsCalc::solar_phase
+        Calculate solar phase angle.
+
         """
         return _emit_obs_calc.EmitObsCalc_solar_phase(self)
 
@@ -345,7 +355,7 @@ class EmitObsCalc(geocal_swig.generic_object.GenericObject):
         """
 
         int Emit::EmitObsCalc::subpixel_scale() const
-
+        Emit::EmitObsCalc::subpixel_scale
         """
         return _emit_obs_calc.EmitObsCalc__v_subpixel_scale(self)
 
