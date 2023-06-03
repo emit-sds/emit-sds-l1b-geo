@@ -242,8 +242,10 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         Emit::PolynomialParaxialTransform< D1, D2 >::PolynomialParaxialTransform()
+        Emit::PolynomialParaxialTransform::PolynomialParaxialTransform
         We populate the transform separately, so just have a default
-        constructor. 
+        constructor.
+
         """
         this = _polynomial_paraxial_transform.new_PolynomialParaxialTransform_3d_3d()
         try:
@@ -254,10 +256,9 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def paraxial_to_real(self, *args):
         """
 
-        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::PolynomialParaxialTransform::paraxial_to_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d_paraxial_to_real(self, *args)
 
@@ -265,7 +266,9 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_par_to_real(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real() const
+        Emit::PolynomialParaxialTransform::par_to_real
+        Polynomial from paraxial to real.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_par_to_real(self)
@@ -279,7 +282,9 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_real_to_par(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par() const
+        Emit::PolynomialParaxialTransform::real_to_par
+        Polynomial from real to paraxial.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_real_to_par(self)
@@ -294,7 +299,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_min_x_real(self, *args)
 
@@ -312,7 +317,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_max_x_real(self, *args)
 
@@ -330,7 +335,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_min_y_real(self, *args)
 
@@ -348,7 +353,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_max_y_real(self, *args)
 
@@ -366,7 +371,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_min_x_pred(self, *args)
 
@@ -384,7 +389,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_max_x_pred(self, *args)
 
@@ -402,7 +407,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_min_y_pred(self, *args)
 
@@ -420,7 +425,7 @@ class PolynomialParaxialTransform_3d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_3d__v_max_y_pred(self, *args)
 
@@ -467,8 +472,10 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         Emit::PolynomialParaxialTransform< D1, D2 >::PolynomialParaxialTransform()
+        Emit::PolynomialParaxialTransform::PolynomialParaxialTransform
         We populate the transform separately, so just have a default
-        constructor. 
+        constructor.
+
         """
         this = _polynomial_paraxial_transform.new_PolynomialParaxialTransform_3d_5d()
         try:
@@ -479,10 +486,9 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def paraxial_to_real(self, *args):
         """
 
-        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::PolynomialParaxialTransform::paraxial_to_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d_paraxial_to_real(self, *args)
 
@@ -490,7 +496,9 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_par_to_real(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real() const
+        Emit::PolynomialParaxialTransform::par_to_real
+        Polynomial from paraxial to real.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_par_to_real(self)
@@ -504,7 +512,9 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_real_to_par(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par() const
+        Emit::PolynomialParaxialTransform::real_to_par
+        Polynomial from real to paraxial.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_real_to_par(self)
@@ -519,7 +529,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_min_x_real(self, *args)
 
@@ -537,7 +547,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_max_x_real(self, *args)
 
@@ -555,7 +565,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_min_y_real(self, *args)
 
@@ -573,7 +583,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_max_y_real(self, *args)
 
@@ -591,7 +601,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_min_x_pred(self, *args)
 
@@ -609,7 +619,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_max_x_pred(self, *args)
 
@@ -627,7 +637,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_min_y_pred(self, *args)
 
@@ -645,7 +655,7 @@ class PolynomialParaxialTransform_3d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_3d_5d__v_max_y_pred(self, *args)
 
@@ -692,8 +702,10 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         Emit::PolynomialParaxialTransform< D1, D2 >::PolynomialParaxialTransform()
+        Emit::PolynomialParaxialTransform::PolynomialParaxialTransform
         We populate the transform separately, so just have a default
-        constructor. 
+        constructor.
+
         """
         this = _polynomial_paraxial_transform.new_PolynomialParaxialTransform_5d_3d()
         try:
@@ -704,10 +716,9 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def paraxial_to_real(self, *args):
         """
 
-        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::PolynomialParaxialTransform::paraxial_to_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d_paraxial_to_real(self, *args)
 
@@ -715,7 +726,9 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_par_to_real(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real() const
+        Emit::PolynomialParaxialTransform::par_to_real
+        Polynomial from paraxial to real.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_par_to_real(self)
@@ -729,7 +742,9 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_real_to_par(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par() const
+        Emit::PolynomialParaxialTransform::real_to_par
+        Polynomial from real to paraxial.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_real_to_par(self)
@@ -744,7 +759,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_min_x_real(self, *args)
 
@@ -762,7 +777,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_max_x_real(self, *args)
 
@@ -780,7 +795,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_min_y_real(self, *args)
 
@@ -798,7 +813,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_max_y_real(self, *args)
 
@@ -816,7 +831,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_min_x_pred(self, *args)
 
@@ -834,7 +849,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_max_x_pred(self, *args)
 
@@ -852,7 +867,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_min_y_pred(self, *args)
 
@@ -870,7 +885,7 @@ class PolynomialParaxialTransform_5d_3d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_3d__v_max_y_pred(self, *args)
 
@@ -917,8 +932,10 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         Emit::PolynomialParaxialTransform< D1, D2 >::PolynomialParaxialTransform()
+        Emit::PolynomialParaxialTransform::PolynomialParaxialTransform
         We populate the transform separately, so just have a default
-        constructor. 
+        constructor.
+
         """
         this = _polynomial_paraxial_transform.new_PolynomialParaxialTransform_5d_5d()
         try:
@@ -929,10 +946,9 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def paraxial_to_real(self, *args):
         """
 
-        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(const GeoCal::AutoDerivative< double > &Paraxial_x, const
-        GeoCal::AutoDerivative< double > &Paraxial_y, GeoCal::AutoDerivative<
-        double > &Real_x, GeoCal::AutoDerivative< double > &Real_y) const
-
+        void Emit::PolynomialParaxialTransform< D1, D2 >::paraxial_to_real(double Paraxial_x, double Paraxial_y, double &Real_x, double &Real_y)
+        const
+        Emit::PolynomialParaxialTransform::paraxial_to_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d_paraxial_to_real(self, *args)
 
@@ -940,7 +956,9 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_par_to_real(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::par_to_real() const
+        Emit::PolynomialParaxialTransform::par_to_real
+        Polynomial from paraxial to real.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_par_to_real(self)
@@ -954,7 +972,9 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
     def _v_real_to_par(self):
         """
 
-        blitz::Array<double, 2>& Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par()
+        const blitz::Array< double, 2 > & Emit::PolynomialParaxialTransform< D1, D2 >::real_to_par() const
+        Emit::PolynomialParaxialTransform::real_to_par
+        Polynomial from real to paraxial.
 
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_real_to_par(self)
@@ -969,7 +989,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_min_x_real(self, *args)
 
@@ -987,7 +1007,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_max_x_real(self, *args)
 
@@ -1005,7 +1025,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_min_y_real(self, *args)
 
@@ -1023,7 +1043,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_real(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_real
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_max_y_real(self, *args)
 
@@ -1041,7 +1061,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_min_x_pred(self, *args)
 
@@ -1059,7 +1079,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_x_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_x_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_max_x_pred(self, *args)
 
@@ -1077,7 +1097,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::min_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::min_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_min_y_pred(self, *args)
 
@@ -1095,7 +1115,7 @@ class PolynomialParaxialTransform_5d_5d(emit_swig.camera_paraxial.ParaxialTransf
         """
 
         void Emit::PolynomialParaxialTransform< D1, D2 >::max_y_pred(double V)
-
+        Emit::PolynomialParaxialTransform::max_y_pred
         """
         return _polynomial_paraxial_transform.PolynomialParaxialTransform_5d_5d__v_max_y_pred(self, *args)
 

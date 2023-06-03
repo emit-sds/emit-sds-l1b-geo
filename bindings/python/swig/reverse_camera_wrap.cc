@@ -7311,47 +7311,49 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ReverseCamera", _wrap_new_ReverseCamera, METH_VARARGS, (char *)"\n"
 		"\n"
 		"Emit::ReverseCamera::ReverseCamera(const boost::shared_ptr< GeoCal::Camera > &Cam)\n"
-		"\n"
+		"Emit::ReverseCamera::ReverseCamera\n"
 		""},
 	 { (char *)"ReverseCamera_number_line", _wrap_ReverseCamera_number_line, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual int Emit::ReverseCamera::number_line(int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::number_line\n"
 		""},
 	 { (char *)"ReverseCamera_number_sample", _wrap_ReverseCamera_number_sample, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual int Emit::ReverseCamera::number_sample(int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::number_sample\n"
 		""},
 	 { (char *)"ReverseCamera_frame_coordinate", _wrap_ReverseCamera_frame_coordinate, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual GeoCal::FrameCoordinate Emit::ReverseCamera::frame_coordinate(const GeoCal::ScLookVector &Sl, int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::frame_coordinate\n"
 		""},
 	 { (char *)"ReverseCamera_frame_coordinate_with_derivative", _wrap_ReverseCamera_frame_coordinate_with_derivative, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual GeoCal::FrameCoordinateWithDerivative Emit::ReverseCamera::frame_coordinate_with_derivative(const GeoCal::ScLookVectorWithDerivative &Sl, int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::frame_coordinate_with_derivative\n"
 		""},
 	 { (char *)"ReverseCamera_sc_look_vector", _wrap_ReverseCamera_sc_look_vector, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual GeoCal::ScLookVector Emit::ReverseCamera::sc_look_vector(const GeoCal::FrameCoordinate &F, int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::sc_look_vector\n"
 		""},
 	 { (char *)"ReverseCamera_sc_look_vector_with_derivative", _wrap_ReverseCamera_sc_look_vector_with_derivative, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual GeoCal::ScLookVectorWithDerivative Emit::ReverseCamera::sc_look_vector_with_derivative(const GeoCal::FrameCoordinateWithDerivative &F, int Band) const\n"
-		"\n"
+		"Emit::ReverseCamera::sc_look_vector_with_derivative\n"
 		""},
 	 { (char *)"ReverseCamera__v_original_camera", _wrap_ReverseCamera__v_original_camera, METH_VARARGS, (char *)"\n"
 		"\n"
-		"const boost::shared_ptr<GeoCal::Camera>& Emit::ReverseCamera::original_camera() const\n"
-		"\n"
+		"const boost::shared_ptr< GeoCal::Camera > & Emit::ReverseCamera::original_camera() const\n"
+		"Emit::ReverseCamera::original_camera\n"
 		""},
 	 { (char *)"delete_ReverseCamera", _wrap_delete_ReverseCamera, METH_VARARGS, (char *)"\n"
 		"\n"
 		"virtual Emit::ReverseCamera::~ReverseCamera()\n"
-		"Destructor. \n"
+		"Emit::ReverseCamera::~ReverseCamera\n"
+		"Destructor.\n"
+		"\n"
 		""},
 	 { (char *)"ReverseCamera_swigregister", ReverseCamera_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

@@ -472,7 +472,9 @@ class EmitTimeTableBase(geocal_swig.time_table.MeasuredTimeTable):
 
         Emit::EmitTimeTableBase::EmitTimeTableBase(const std::vector< GeoCal::Time > &Time_list, int Number_sample, bool
         Reverse_image, int Min_line=0)
-        Constructor. 
+        Emit::EmitTimeTableBase::EmitTimeTableBase
+        Constructor.
+
         """
         this = _emit_time_table_base.new_EmitTimeTableBase(Time_list, Number_sample, Reverse_image, Min_line)
         try:
@@ -484,7 +486,7 @@ class EmitTimeTableBase(geocal_swig.time_table.MeasuredTimeTable):
         """
 
         int Emit::EmitTimeTableBase::number_sample() const
-
+        Emit::EmitTimeTableBase::number_sample
         """
         return _emit_time_table_base.EmitTimeTableBase__v_number_sample(self)
 
@@ -498,7 +500,7 @@ class EmitTimeTableBase(geocal_swig.time_table.MeasuredTimeTable):
         """
 
         bool Emit::EmitTimeTableBase::reverse_image() const
-
+        Emit::EmitTimeTableBase::reverse_image
         """
         return _emit_time_table_base.EmitTimeTableBase__v_reverse_image(self)
 

@@ -223,8 +223,8 @@ def set_file_description(Img, Desc):
 
     void Emit::set_file_description(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
     std::string &Desc)
+    Emit::set_file_description
     GeoCal doesn't happen to have support for writing a file description.
-
     This should probably migrate into geocal at some point, but for now
     just provide our own function in Emit for this. 
     """
@@ -235,8 +235,8 @@ def set_band_description(Img, Desc):
 
     void Emit::set_band_description(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
     std::string &Desc)
+    Emit::set_band_description
     GeoCal doesn't happen to have support for writing a band description.
-
     This should probably migrate into geocal at some point, but for now
     just provide our own function in Emit for this. 
     """
@@ -248,9 +248,9 @@ def set_band_metadata(*args):
     void Emit::set_band_metadata(const boost::shared_ptr< GeoCal::GdalRasterImage > &Img, const
     std::string &M, const std::string &Val, const std::string
     &Domain="ENVI")
+    Emit::set_band_metadata
     GeoCal doesn't happen to have support for writing a band (as opposed
     to file) metadata.
-
     This should probably migrate into geocal at some point, but for now
     just provide our own function in Emit for this.
 
@@ -267,11 +267,10 @@ def open_file_force_envi(Fname, Band):
     """
 
     boost::shared_ptr< GeoCal::GdalRasterImage > Emit::open_file_force_envi(const std::string &Fname, int Band)
+    Emit::open_file_force_envi
     We ran into an obscure bug in GDAL 3.2.1 where a specific file
-    couldn't be opened because GDAL never identified it as ENVI
-    (seehttps://github.jpl.nasa.gov/emit-sds/emit-sds-issue-
+    couldn't be opened because GDAL never identified it as ENVI (seehttps://github.jpl.nasa.gov/emit-sds/emit-sds-issue-
     tracking/issues/110 for details).
-
     This function opens a file and forces the ENVI driver to be used. 
     """
     return _gdal_support.open_file_force_envi(Fname, Band)
