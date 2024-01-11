@@ -6,5 +6,6 @@ dist_installemit_SCRIPTS += @l1b_geo_src@/aviris_ng_l1a_orbit_pge
 dist_bin_SCRIPTS += @l1b_geo_src@/aviris_ng_l1a_orbit_process
 dist_bin_SCRIPTS += @l1b_geo_src@/l1b_project
 dist_bin_SCRIPTS += @l1b_geo_src@/copy_data_local
+dist_bin_SCRIPTS += @l1b_geo_src@/emit_util
 
 

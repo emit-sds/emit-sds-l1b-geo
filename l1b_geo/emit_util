@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+# Various short utility programs, collected together so I don't need to search for these
+import click
+import logging
+import glob
+import subprocess
+import emit
+import pandas as pd
+
+logger = logging.getLogger('emit_util')
+# Setup logging
+class ColorLogFormatter(logging.Formatter):
+    '''Set logging format, optionally with color'''
+    def __init__(self, add_color = True):
+        self.add_color = add_color
+
+    def color_text(self, text, levelno):
+        # ANSI colors
+        HEADER = '\033[95m'
+        OKBLUE = '\033[94m'
+        OKGREEN = '\033[92m'
+        WARNING = '\033[93m'
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+        BOLD = '\033[1m'
+        UNDERLINE = '\033[4m'
+        if(not self.add_color):
+            return text
+        if(levelno == logging.DEBUG):
+            return OKBLUE + text + ENDC
+        elif(levelno == logging.INFO):
+            return OKGREEN + text + ENDC
+        elif(levelno == logging.WARNING):
+            return WARNING + text + ENDC
+        elif(levelno == logging.ERROR):
+            return FAIL + text + ENDC
+        elif(levelno == logging.CRITICAL):
+            return FAIL + text + ENDC
+        return text
+    def format(self, record):
+        return (self.color_text(record.levelname + " " +
+                                self.formatTime(record) +
+                                ": ", record.levelno) + record.getMessage())
+
+loglevel = logging.INFO
+h = logging.StreamHandler()
+h.setLevel(loglevel)
+h.setFormatter(ColorLogFormatter(add_color=True))
+logger.addHandler(h)
+logger.setLevel(loglevel)
+
+def orb_to_fname(qa_list):
+    '''Make list of QA files to a dict indexed by the extended orbit number (which
+    has the 2 digit year embedded in it.'''
+    res = {}
+    with open(qa_list, "r") as fh:
+        for fname in fh.readlines():
+            try:
+                orbnum = emit.extended_orb_from_file_name(fname)
+                if(orbnum in res):
+                    print("=======================")
+                    print(res[int(m.group(2))])
+                    print(fname)
+                res[orbnum] = fname.rstrip()
+            except:
+                # Don't worry about file names we can't parse
+                pass
+    return res
+
+def qa_to_pandas(orb_to_qfile):
+    '''Create a pandas structure with all the data from the give set of QA files'''
+    dfall = []
+    for orb, fname in orb_to_qfile.items():
+        logger.info(f"Processing {orb}")
+        df = emit.GeoQa.dataframe(fname)
+        df.insert(0, "Scene", range(1,len(df)+1))
+        df.insert(0, "Orbit", [int(orb),]*len(df))
+        dfall.append(df)
+    df = pd.concat(dfall, ignore_index=True)
+    return df
+    
+@click.group()
+def cli():
+    '''This is various utility routines for emit.
+    '''
+    pass
+
+@cli.command()
+@click.argument("qlist", type=str)
+def qa_file_list(qlist):
+    '''Find all the GEO QA files on the system. We have this as a separate step
+    because it takes a while to run, and it is nice to just summarizes this once
+    in while.'''
+    subprocess.run(f"find /beegfs/store/emit/ops/data/orbits/*/*/l1b -name *geoqa*.nc | tee {qlist}", shell=True)
+    
+@cli.command()
+@click.argument("qlist", type=str)
+@click.argument("pandas_pickle", type=str)
+def qa_pandas(qlist, pandas_pickle):
+    '''Take a list of QA files (so like generate by qa-file-list) and create
+    a pandas structure that contains all the data. Save this as a pickle file.'''
+    orb_qfname = orb_to_fname(qlist)
+    df = qa_to_pandas(orb_qfname)
+    df.to_pickle(pandas_pickle)
+    
+
+if __name__ == '__main__':
+    cli()
+    
