@@ -6,6 +6,8 @@ import glob
 import subprocess
 import emit
 import pandas as pd
+import pandasql as pds
+import numpy as np
 
 logger = logging.getLogger('emit_util')
 # Setup logging
@@ -102,6 +104,46 @@ def qa_pandas(qlist, pandas_pickle):
     orb_qfname = orb_to_fname(qlist)
     df = qa_to_pandas(orb_qfname)
     df.to_pickle(pandas_pickle)
+    
+@cli.command()
+@click.argument("pandas_pickle", type=str)
+def summarize_qa(pandas_pickle):
+    '''Summarize QA data.
+    Note we'll likely want to work on this, these are a few things I have now'''
+    df = pd.read_pickle(pandas_pickle)
+    # "Poor" values mistakenly marked as "Unknown", this is a bug in the current
+    # emit code
+    df = df.replace({'QA Flag' : 'Unknown'}, {'QA Flag' : 'Poor'})
+    t = pds.PandaSQL(persist=True)
+    df_good = t("select * from df where Accuracy > -1")
+    norbit_no_corr = np.array(t("select count(distinct(Orbit)) from df where df.Orbit not in (select Orbit from df_good)"))[0,0]
+    ntotal_orb = np.array(t("select count(distinct(Orbit)) from df"))[0,0]
+    nscene_no_corr = np.array(t("select count(Scene) from df where df.Orbit not in (select Orbit from df_good)"))[0,0]
+    ntotal_scene = np.array(t("select count(Scene) from df"))[0,0]
+    print(f"Number orbits with no correction {norbit_no_corr} out of {ntotal_orb}, {100.0 * norbit_no_corr / ntotal_orb}%")
+    print(f"Number scenes with no correction {nscene_no_corr} out of {ntotal_scene}, {100.0 * nscene_no_corr / ntotal_scene}%")
+    print("Number scenes per orbit, all data:")
+    print(t("select Orbit, count(Scene) as cscene from df group by Orbit")["cscene"].describe([.25, .5, .75,0.9,0.95]))
+    print("Number scenes per orbit, orbits with no correction:")
+    print(t("select Orbit, count(Scene) as cscene from df where df.Orbit not in (select Orbit from df_good) group by df.Orbit")["cscene"].describe([.25, .5, .75,0.9,0.95]))
+    print("QA flags:")
+    print(t('select "QA Flag", count(Scene), count(Scene) * 100.0 / SUM(count(Scene)) OVER() as Percentage from df group by "QA Flag"'))
+    print("Initial Accuracy (m):")
+    print(df_good["Initial Accuracy"].describe([.25, .5, .75,0.9,0.95]))
+    print("Final Accuracy (m):")
+    print(df_good["Accuracy"].describe([.25, .5, .75,0.9,0.95]))
+
+@cli.command()
+@click.argument("pandas_pickle", type=str)
+@click.argument("excel_fname", type=str)
+def qa_to_excel(pandas_pickle, excel_fname):
+    df = pd.read_pickle(pandas_pickle)
+    # "Poor" values mistakenly marked as "Unknown", this is a bug in the current
+    # emit code
+    df = df.replace({'QA Flag' : 'Unknown'}, {'QA Flag' : 'Poor'})
+    df.to_excel(excel_fname)
+    
+    
     
 
 if __name__ == '__main__':
