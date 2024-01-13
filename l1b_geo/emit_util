@@ -8,6 +8,7 @@ import emit
 import pandas as pd
 import pandasql as pds
 import numpy as np
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger('emit_util')
 # Setup logging
@@ -107,7 +108,8 @@ def qa_pandas(qlist, pandas_pickle):
     
 @cli.command()
 @click.argument("pandas_pickle", type=str)
-def summarize_qa(pandas_pickle):
+@click.argument("output_dir", type=str)
+def summarize_qa(pandas_pickle,output_dir):
     '''Summarize QA data.
     Note we'll likely want to work on this, these are a few things I have now'''
     df = pd.read_pickle(pandas_pickle)
@@ -132,7 +134,40 @@ def summarize_qa(pandas_pickle):
     print(df_good["Initial Accuracy"].describe([.25, .5, .75,0.9,0.95]))
     print("Final Accuracy (m):")
     print(df_good["Accuracy"].describe([.25, .5, .75,0.9,0.95]))
+    subprocess.run(f"mkdir -p {output_dir}", shell=True)
+    df2 = t("select Orbit, count(Scene) as cscene from df group by Orbit")
+    pd.DataFrame.hist(df2, column="cscene")
+    plt.xlabel("Number Scenes")
+    plt.title("Number of Scenes, all orbits")
+    plt.savefig(f"{output_dir}/cscene.svg")
+    df2 = t("select Orbit, count(Scene) as cscene from df where df.Orbit not in (select Orbit from df_good) group by df.Orbit")
+    pd.DataFrame.hist(df2, column="cscene")
+    plt.xlabel("Number Scenes")
+    plt.title("Number of Scenes, orbit with no matches")
+    plt.savefig(f"{output_dir}/cscene_nomatch.svg")
+    df_good.plot(x="Orbit", y="Initial Accuracy", kind="scatter")
+    plt.xlabel("Orbit Number")
+    plt.ylabel("Geolocation Accuracy (m)")
+    plt.ylim(0,1000)
+    plt.title("Initial Uncorrected Geolocation Accuracy (m, 'Best' scenes)")
+    plt.savefig(f"{output_dir}/initial_accuracy.svg")
+    pd.DataFrame.hist(df_good, column="Initial Accuracy", range=(0,1000))
+    plt.xlabel("Initial Accuracy (m)")
+    plt.title("Initial Uncorrected Geolocation Accuracy (m, 'Best' scenes)")
+    plt.savefig(f"{output_dir}/initial_accuracy_hist.svg")
 
+    df_good.plot(x="Orbit", y="Accuracy", kind="scatter")
+    plt.xlabel("Orbit Number")
+    plt.ylabel("Geolocation Accuracy (m)")
+    plt.ylim(0,100)
+    plt.title("Final Corrected Geolocation Accuracy (m, 'Best' scenes)")
+    plt.savefig(f"{output_dir}/final_accuracy.svg")
+    pd.DataFrame.hist(df_good, column="Accuracy", range=(0,100))
+    plt.xlabel("Final Accuracy (m)")
+    plt.title("Final Corrected Geolocation Accuracy (m, 'Best' scenes)")
+    plt.savefig(f"{output_dir}/final_accuracy_hist.svg")
+    
+    
 @cli.command()
 @click.argument("pandas_pickle", type=str)
 @click.argument("excel_fname", type=str)
