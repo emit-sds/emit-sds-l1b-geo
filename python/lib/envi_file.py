@@ -46,7 +46,10 @@ class EnviFile:
             set_file_description(t, description)
             t.close()
             for i, desc in enumerate(band_description):
-                t = geocal.GdalRasterImage(fname, i+1, 4, True)
+                # Force ENVI, every once in a while GDAL gets confused and
+                # tries to open as another file type (probably magic number
+                # matches a driver higher in the list)
+                t = geocal.GdalRasterImage(fname, i+1, "ENVI", "", "", 4, True)
                 set_band_description(t, desc)
                 t.close()
             # We shuffle the shape around to get band interleave, memmap
@@ -56,7 +59,10 @@ class EnviFile:
             interleave = "bil"
             self.metadata = {"interleave" : interleave}
         else:
-            t = geocal.GdalMultiBand(fname)
+            # Force ENVI, every once in a while GDAL gets confused and
+            # tries to open as another file type (probably magic number
+            # matches a driver higher in the list)
+            t = geocal.GdalMultiBand(fname, 4, "ENVI")
             self.metadata = {}
             r = t.raster_image(0)
             for k in r.metadata_list("ENVI"):
