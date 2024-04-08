@@ -2,8 +2,8 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(emit, 1.6.15)
 AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_MACRO_DIRS([config/m4])
-AC_CONFIG_MACRO_DIRS([config/m4_local])
+AC_CONFIG_MACRO_DIR([config/m4])
+AC_CONFIG_MACRO_DIR([config/m4_local])
 AC_CONFIG_FILES([script/setup_emit.csh script/setup_emit.sh])
 AC_CONFIG_FILES([lib/global_fixture_default.cc])
 
@@ -63,10 +63,7 @@ AC_ARG_WITH([swig],
            [SWIG=/fake_so_fail],
            [])
 
-AC_PROG_SWIG(3.0.7)
-# Note we don't support SWIG 4 yet. Nothing super hard, just need to get
-# geocal and afids updated. But for now, just stick to the older swig version
-#AC_PROG_SWIG(4.0.2)
+AC_PROG_SWIG()
 SWIG_ENABLE_CXX
 SWIG_PYTHON
 

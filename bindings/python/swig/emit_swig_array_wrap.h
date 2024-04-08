@@ -6,8 +6,8 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-#ifndef SWIG_emit_igc_collection_WRAP_H_
-#define SWIG_emit_igc_collection_WRAP_H_
+#ifndef SWIG_emit_swig_array_WRAP_H_
+#define SWIG_emit_swig_array_WRAP_H_
 
 #include <map>
 #include <string>
