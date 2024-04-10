@@ -110,7 +110,7 @@ class L1OspDir:
         srtm_dir = self.srtm_dir
         if(not datum):
             datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
-        if(self.srtm_dir):
+        if(not srtm_dir):
             srtm_dir = os.environ["ELEV_ROOT"]
         logger.info("Datum: %s", datum)
         logger.info("SRTM Dir: %s", srtm_dir)
