@@ -22,7 +22,7 @@ else
   export PYTHONPATH=${EMITTOP}/@pythondir@:${EMITTOP}/@platpythondir@
 fi
 if [ -n "$PATH" ]; then
-  export PATH=${EMITTOP}/bin:@pythonpath@:${PATH}
+  export PATH=${EMITTOP}/bin:${PATH}
 else
-  export PATH=${EMITTOP}/bin:@pythonpath@
+  export PATH=${EMITTOP}/bin
 fi

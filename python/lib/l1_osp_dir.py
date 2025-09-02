@@ -142,8 +142,9 @@ class L1OspDir:
         reference image we should match against.'''
         self.ortho_base.create_subset_file(ref_fname,
                                            "VICAR",
-                                           Desired_map_info = map_info,
-                                           Translate_arg = "-ot Int16")
+                                           [],
+                                           map_info,
+                                           "-ot Int16")
         
             
     def camera(self):

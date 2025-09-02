@@ -1,0 +1,29 @@
+name: base
+channels:
+  - conda-forge
+  - ../../afids-conda-package/afids-conda-channel
+dependencies:
+  # Not sure if this is right or not, compare to fixed version to make
+  # sure everything is there
+  # Package to install
+  - geocal
+  - afids-development-tools
+  - afids
+  - loguru
+  - loguru-config
+  - pytest-loguru
+  - gdb
+  - mypy
+  - pandas-stubs
+  # Need to freeze blitz version to one we build. Should handle this in
+  # our conda packages, but for now work around this
+  - libblitz=1.0.1=h3fd9d12_0
+variables:
+  AFIDS_DATA: /ldata/smyth/emit-env/data
+  LANDSAT_ROOT: need_to_set
+  ELEV_ROOT: need_to_set
+  CIB1_ROOT: need_to_set
+  CIB5_ROOT: need_to_set
+  AFIDS_VDEV_DATA: /ldata/smyth/emit-env/data/vdev
+  SPICEDATA: /ldata/smyth/emit-env/data/cspice
+prefix: /ldata/smyth/emit-env

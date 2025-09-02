@@ -1,0 +1,3 @@
+Makefile.local
+micromamba
+emit_environment_installed.yml
