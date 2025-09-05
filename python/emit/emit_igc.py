@@ -8,48 +8,58 @@ import logging
 import geocal
 import os
 
-logger = logging.getLogger('l1b_geo_process.emit_igc')
+logger = logging.getLogger("l1b_geo_process.emit_igc")
+
 
 class EmitIgc(geocal.IpiImageGroundConnection):
-    '''EMIT ImageGroundConnection. Right now this is just a wrapper around 
+    """EMIT ImageGroundConnection. Right now this is just a wrapper around
     a generic GeoCal IpiImageGroundConnection. We can extend
-    this to a full C++ class if there is any need.'''
-    def __init__(self, orbit_fname, tt_fname, l1b_rdn_fname = None,
-                 l1b_band = 1, l1_osp_dir = None,
-                 rad_match_scale = 1.0):
-        '''Create a EmitIgc. We can either include the raster image data
+    this to a full C++ class if there is any need."""
+
+    def __init__(
+        self,
+        orbit_fname,
+        tt_fname,
+        l1b_rdn_fname=None,
+        l1b_band=1,
+        l1_osp_dir=None,
+        rad_match_scale=1.0,
+    ):
+        """Create a EmitIgc. We can either include the raster image data
         or not. If desired, supplied l1b_rdn_fname and the band of the
-        L1B radiance file to use.'''
+        L1B radiance file to use."""
 
         orb = EmitOrbit(orbit_fname)
-        if(l1_osp_dir):
+        if l1_osp_dir:
             dem = l1_osp_dir.dem
             cam = l1_osp_dir.camera()
         else:
             dem = geocal.SrtmDem()
             cam = EmitCamera()
         reverse_image = False
-        if(l1b_rdn_fname is not None):
+        if l1b_rdn_fname is not None:
             img = EmitL1bImage(l1b_rdn_fname, l1b_band, rad_match_scale)
             f = EnviFile(l1b_rdn_fname, mode="r")
-            if("flip_horizontal" in f.metadata):
+            if "flip_horizontal" in f.metadata:
                 reverse_image = bool(f.metadata["flip_horizontal"])
         else:
             img = None
-        if(reverse_image):
+        if reverse_image:
             logger.info("Reversing image data")
         # reverse_image for time table isn't correctly supported by
         # IgcRayCaster in GeoCal. We should fix that, but in the short
         # term use our ReverseCamera instead
-        tt = EmitTimeTable(tt_fname, number_sample = cam.number_sample(0),
-                           reverse_image = False)
-        if(reverse_image):
+        tt = EmitTimeTable(
+            tt_fname, number_sample=cam.number_sample(0), reverse_image=False
+        )
+        if reverse_image:
             ipicam = ReverseCamera(cam)
         else:
             ipicam = cam
         ipi = geocal.Ipi(orb, ipicam, 0, tt.min_time, tt.max_time, tt)
         # Put in raster image
         super().__init__(ipi, dem, img)
+
 
 # We assume here that the same orbit and camera is used for each of the
 # ImageGroundConnection in EmitIgcCollection. This is mostly just a
@@ -60,31 +70,34 @@ class EmitIgc(geocal.IpiImageGroundConnection):
 # Note the time table is not the same for each ImageGroundConnection, this
 # varies for each one.
 def _orbit(self):
-    '''Return orbit for a EmitIgcCollection'''
+    """Return orbit for a EmitIgcCollection"""
     return self.image_ground_connection(0).ipi.orbit
+
 
 def _set_orbit(self, orb):
     for i in range(self.number_image):
         self.image_ground_connection(i).ipi.orbit = orb
 
+
 def _camera(self):
-    '''Return camera for a EmitIgcCollection'''
+    """Return camera for a EmitIgcCollection"""
     return self.image_ground_connection(0).ipi.camera
+
 
 def _set_camera(self, cam):
     for i in range(self.number_image):
         self.image_ground_connection(i).ipi.camera = cam
 
-def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
-            l1_osp_dir, include_img = True):
-    '''Create a EmitIgcCollection. This takes an orbit file name,
+
+def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band, l1_osp_dir, include_img=True):
+    """Create a EmitIgcCollection. This takes an orbit file name,
     a list of time table and radiance file name pairs, and the band to
     set. We get the scene number from the radiance file name, and set EmitIgc
     title based on it. If the files happen to be out of order, we sort
     the data. We also attach the list of scenes as "scene_list", the orbit
-    number as "orbit_number" and the uncorrected orbit 
-    as "uncorrected_orbit".'''
-    if(l1_osp_dir):
+    number as "orbit_number" and the uncorrected orbit
+    as "uncorrected_orbit"."""
+    if l1_osp_dir:
         l1_osp_dir.setup_spice()
     logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
     orb = EmitOrbit(orbit_fname)
@@ -97,29 +110,30 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     for tt_fname, rdn_fname in tt_and_rdn_fname:
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         reverse_image = False
-        if(include_img):
+        if include_img:
             img = EmitL1bImage(rdn_fname, l1b_band, l1_osp_dir.rad_match_scale)
             f = EnviFile(rdn_fname, mode="r")
-            if("flip_horizontal" in f.metadata):
+            if "flip_horizontal" in f.metadata:
                 reverse_image = bool(f.metadata["flip_horizontal"])
         else:
             img = None
-        if(reverse_image):
+        if reverse_image:
             logger.info("Reversing image data for %s", stime)
         else:
             logger.info("Not reversing image data for %s", stime)
         # reverse_image for time table isn't correctly supported by
         # IgcRayCaster in GeoCal. We should fix that, but in the short
         # term use our ReverseCamera instead
-        tt = EmitTimeTable(tt_fname, number_sample=cam.number_sample(0),
-                           reverse_image=False)
-        if(reverse_image):
+        tt = EmitTimeTable(
+            tt_fname, number_sample=cam.number_sample(0), reverse_image=False
+        )
+        if reverse_image:
             ipicam = ReverseCamera(cam)
         else:
             ipicam = cam
         ipi = geocal.Ipi(orb, ipicam, 0, tt.min_time, tt.max_time, tt)
         igc = geocal.IpiImageGroundConnection(ipi, dem, img)
-        if(l1_osp_dir.use_scene_index):
+        if l1_osp_dir.use_scene_index:
             index_to_igc[scene] = igc
             index_to_scene[scene] = scene
             index_to_scene_time[scene] = stime
@@ -143,9 +157,14 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band,
     igccol.uncorrected_orbit = orb
     return igccol
 
+
 EmitIgcCollection.create = classmethod(_create)
-EmitIgcCollection.orbit = property(_orbit, _set_orbit,
-                                   doc="The orbit used by EmitIgcCollection")
-EmitIgcCollection.camera = property(_camera, _set_camera,
-                                   doc="The camera used by EmitIgcCollection")
-__all__ = ["EmitIgc", ]    
+EmitIgcCollection.orbit = property(
+    _orbit, _set_orbit, doc="The orbit used by EmitIgcCollection"
+)
+EmitIgcCollection.camera = property(
+    _camera, _set_camera, doc="The camera used by EmitIgcCollection"
+)
+__all__ = [
+    "EmitIgc",
+]

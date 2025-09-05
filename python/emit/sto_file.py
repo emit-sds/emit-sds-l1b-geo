@@ -2,13 +2,15 @@ import geocal
 import pandas as pd
 import numpy as np
 
+
 class StoFile:
-    '''This class reads a BAD sto file, and presents the data as
+    """This class reads a BAD sto file, and presents the data as
     a list of geocal.QuaternionOrbitData. This is a bit low level, it
     is a building piece for making a orbit file from the sto file.
-    '''
+    """
+
     def __init__(self, fname):
-        t = pd.read_csv(fname, sep=None, engine='python')
+        t = pd.read_csv(fname, sep=None, engine="python")
         # Pull out actual data
         t = t[t["#Header"] == "#Data"]
         # Time is in GPS seconds, and is made up of
@@ -27,8 +29,7 @@ class StoFile:
         tm = t[["LADP06MD2378W", "LADP06MD2380W"]]
         pos = t[["LADP06MD2395H", "LADP06MD2396H", "LADP06MD2397H"]]
         vel = t[["LADP06MD2399R", "LADP06MD2400R", "LADP06MD2401R"]]
-        att_q = t[["LADP06MD2382U", "LADP06MD2383U", "LADP06MD2384U",
-                   "LADP06MD2385U"]]
+        att_q = t[["LADP06MD2382U", "LADP06MD2383U", "LADP06MD2384U", "LADP06MD2385U"]]
 
         # Convert to numpy arrays, which are easier to work with to
         # pull everything together
@@ -39,17 +40,16 @@ class StoFile:
 
         self.orbit_data = []
         for i in range(tm.shape[0]):
-            t = geocal.Time.time_gps(tm[i,0] + tm[i,1])
-            p = geocal.Eci(*pos[i,:])
-            v = vel[i,:]
-            att = geocal.Quaternion_double(*att_q[i,:])
-            self.orbit_data.append(geocal.QuaternionOrbitData(t,p,v,att))
+            t = geocal.Time.time_gps(tm[i, 0] + tm[i, 1])
+            p = geocal.Eci(*pos[i, :])
+            v = vel[i, :]
+            att = geocal.Quaternion_double(*att_q[i, :])
+            self.orbit_data.append(geocal.QuaternionOrbitData(t, p, v, att))
 
     @staticmethod
     def create_orbit(flist, tmin, tmax):
         qlist = []
         for fname in flist:
             qlist_file = StoFile(fname).orbit_data
-            qlist.extend([q for q in qlist_file
-                          if (q.time >= tmin and q.time <= tmax)])
+            qlist.extend([q for q in qlist_file if (q.time >= tmin and q.time <= tmax)])
         return geocal.OrbitQuaternionList(qlist)
