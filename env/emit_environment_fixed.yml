@@ -146,6 +146,7 @@ dependencies:
   - gxx_linux-64=15.1.0=h1a088d8_11
   - h11=0.16.0=pyhd8ed1ab_0
   - h2=4.3.0=pyhcf101f3_0
+  - h5netcdf=1.6.4=pyhd8ed1ab_0
   - h5py=3.13.0=nompi_py311hb639ac4_100
   - harfbuzz=11.2.1=h3beb420_0
   - hdf4=4.2.15=h2a13503_7

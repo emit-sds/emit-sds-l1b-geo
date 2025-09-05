@@ -9,6 +9,7 @@ dependencies:
   - geocal
   - afids-development-tools
   - afids
+  - h5netcdf
   - loguru
   - loguru-config
   - pytest-loguru

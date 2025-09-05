@@ -14,8 +14,8 @@
 m4_ifndef([AC_CONFIG_MACRO_DIRS], [m4_defun([_AM_CONFIG_MACRO_DIRS], [])m4_defun([AC_CONFIG_MACRO_DIRS], [_AM_CONFIG_MACRO_DIRS($@)])])
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.69],,
-[m4_warning([this file was generated for autoconf 2.69.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.72],,
+[m4_warning([this file was generated for autoconf 2.72.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically 'autoreconf'.])])
@@ -1423,6 +1423,7 @@ m4_include([config/m4/ac_python_pytest.m4])
 m4_include([config/m4/ac_python_sphinx.m4])
 m4_include([config/m4/afids_python.m4])
 m4_include([config/m4/ax_cxx_compile_stdcxx.m4])
+m4_include([config/m4/ax_pthread.m4])
 m4_include([config/m4/libtool.m4])
 m4_include([config/m4/loc_msg.m4])
 m4_include([config/m4/ltoptions.m4])

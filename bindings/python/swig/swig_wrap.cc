@@ -2,7 +2,6 @@
 #include "geocal/python_lib_init.h"
 
 extern "C" {
-#include "ecostress_config.h"
   INIT_TYPE INIT_FUNC(_emit_swig_array)(void);
   INIT_TYPE INIT_FUNC(_gdal_support)(void);
   INIT_TYPE INIT_FUNC(_resampler)(void);
