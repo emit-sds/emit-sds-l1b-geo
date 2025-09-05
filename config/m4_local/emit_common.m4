@@ -3,7 +3,7 @@
 
 AC_DEFUN([EMIT_COMMON],[
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])
- AC_REQUIRE([AC_PROG_CC])
+AC_REQUIRE([AC_PROG_CC])
 # For some bizarre reason, this doesn't fail if there isn't a C++ compiler.
 # This seems to be a bug, which had some discussion on the forums a while back
 # (see http://lists.gnu.org/archive/html/bug-autoconf/2010-05/msg00001.html),
@@ -41,7 +41,7 @@ ALL RIGHTS RESERVED. U.S. Government Sponsorship acknowledged.])
 # http://noisebleed.blogetery.com/2010/02/27/tar-file-name-is-too-long-max-99/#howtofixit
 AM_INIT_AUTOMAKE([1.9 tar-pax])
 AM_MAINTAINER_MODE
-AC_PROG_LIBTOOL
+LT_INIT
 # Don't need these yet
 AC_PROG_CXX
 # AC_PROG_LN_S
@@ -71,7 +71,6 @@ AX_CXX_COMPILE_STDCXX([17], [ext], [mandatory])
 AX_PTHREAD()
 CXXFLAGS="$CXXFLAGS $PTHREAD_CFLAGS"
 
-
 #=================================================================
 # Test if we are using GCC compiler. Some flags get set in the 
 # Makefile that should only be set for GCC.
@@ -81,6 +80,7 @@ AM_CONDITIONAL([HAVE_GCC], [test "$GCC" = yes])
 
 #=================================================================
 # Add prefix, THIRDPARTY, and /opt/afids_support for pkgconfig file
+#=================================================================
 
 PKG_PROG_PKG_CONFIG
 

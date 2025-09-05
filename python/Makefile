@@ -3,11 +3,11 @@
 
 # We generally want to install in editable mode, so make default
 install:
-	pip install --prefix=$(ECOSTRESSTOP) -e .
+	pip install --prefix=$(EMITTOP) -e .
 
 # Without editable mode
 install2:
-	pip install --prefix=$(ECOSTRESSTOP) .
+	pip install --prefix=$(EMITTOP) .
 
 # ------------------------------------------------------------------
 # See notes in README_developer.md about the
@@ -28,17 +28,17 @@ install2:
 # ------------------------------------------------------------------
 
 lint:
-	ruff check ecostress test
+	ruff check emit test
 
 # Add some extra rules
 lint-strict:
-	ruff check --extend-select N ecostress test
+	ruff check --extend-select N emit test
 
 lint-fix:
-	ruff check --fix ecostress test
+	ruff check --fix emit test
 
 format:
-	ruff format ecostress test
+	ruff format emit test
 
 # Note that PYTHONPATH is required, at least as of pip 24.3.1. The py.typed file needed to
 # tell mypy that our modules have types doesn't get translated through using
@@ -48,11 +48,11 @@ format:
 # version. This is only for type checking, all our other tests/check use the pip installed
 # version.
 mypy-simplier:
-	PYTHONPATH=$(PWD) mypy ecostress
+	PYTHONPATH=$(PWD) mypy emit
 
 # This adds options to check for missing typing info. We usually want this
 mypy:
-	PYTHONPATH=$(PWD) mypy --disallow-untyped-defs ecostress
+	PYTHONPATH=$(PWD) mypy --disallow-untyped-defs emit
 
 check:
 	pytest -n 10 test

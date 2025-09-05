@@ -4,7 +4,6 @@
 dist_installemit_SCRIPTS = 
 SWIG_FLAG =
 installemit_SCRIPTS = 
-DIST_HOOK =
 
 # Dist check need to know where to find geocal
 DISTCHECK_CONFIGURE_FLAGS = PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)

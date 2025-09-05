@@ -1,21 +1,12 @@
-emitpkgpython_PYTHON = @srcpython@/init/__init__.py
+# TODO Have a editable version of this
 
-# Number of jobs to run at once. Default is to automatically determine this,
-# but you can specify a different number.
-PYTEST_NJOB=10
+python-install:
+	pip install --prefix=@prefix@ $(srcdir)/@srcpython@
 
-PYTEST_EXTRAFLAGS=
-PYTEST_FLAGS= -q -n $(PYTEST_NJOB) --basetemp=./pytest_tmp -rxXs
-#if CODE_COVERAGE_ENABLED
-#PYTEST_FLAGS+= --cov-report term
-#PYTEST_FLAGS+= --cov-report html:$(PACKAGE)-coverage-python
-#PYTEST_FLAGS+= --cov=$(PACKAGE)
-#endif
+INSTALL_EXEC_HOOK+= python-install
 
-# Shortcut for just running py.test.
-python-check: script/setup_emit.sh
-	source $< && \
-        $(PYTEST) $(PYTEST_FLAGS) $(PYTEST_EXTRAFLAGS) $(srcdir)/@srcpython@
+python-check:
+	source $(prefix)/setup_ecostress.sh && pytest -n 10 $(srcdir)/@srcpython@/test
 
 INSTALLCHECK_HOOK+= python-check
 
@@ -26,9 +17,6 @@ dist-clean-up-python:
 	rm -rf `find $(distdir) -name '__pycache__'`
 	rm -f `find $(distdir) -name '*.pyc'`
 
-include python/lib/lib.am
-include python/bin/bin.am
-include python/test_support/test_support.am
 
 
 
