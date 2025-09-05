@@ -62,7 +62,7 @@ class EnviFile:
             # Force ENVI, every once in a while GDAL gets confused and
             # tries to open as another file type (probably magic number
             # matches a driver higher in the list)
-            t = geocal.GdalMultiBand(fname, 4, "ENVI")
+            t = geocal.GdalMultiBand(str(fname), 4, "ENVI")
             self.metadata = {}
             r = t.raster_image(0)
             for k in r.metadata_list("ENVI"):

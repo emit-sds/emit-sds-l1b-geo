@@ -26,7 +26,10 @@ class EmitTimeTable(EmitTimeTableBase):
                 tm = f["line_time_j2000"][trim_pad:-trim_pad]
             else:
                 tm = f["line_time_j2000"][:]
-            super().__init__([geocal.Time.time_j2000(t) for t in tm],
+            tm2 = geocal.Vector_Time()
+            for t in tm:
+                tm2.append(geocal.Time.time_j2000(t))
+            super().__init__(tm2,
                              number_sample, reverse_image)
         else:
             t = pd.read_csv(tt_fname, header=None, sep=' ')
@@ -39,8 +42,10 @@ class EmitTimeTable(EmitTimeTableBase):
                 tm = t[1][trim_pad:-trim_pad]
             else:
                 tm = t[1][:]
-            super().__init__([geocal.Time.time_gps(t*1e-9) for t in tm],
-                             number_sample, reverse_image)
+            tm2 = geocal.Vector_Time()
+            for t in tm:
+                tm2.append(geocal.Time.time_gps(t*1e-9))
+            super().__init__(tm2, number_sample, reverse_image)
 
     @classmethod
     def write_file_txt(cls, tt_fname, tt):

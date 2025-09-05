@@ -1,14 +1,9 @@
-from .aviris_ng_glt import *
-from .aviris_ng_loc import *
-from .aviris_ng_igm import *
-import math
-import geocal
-from test_support import *
-from multiprocessing import Pool
+from emit import AvirisNgLoc, AvirisNgIgm, AvirisNgGlt
+import pytest
 
-@slow    
+@pytest.mark.long_test
 def test_generate_avris_glt(aviris_igc_full, isolated_dir, test_data):
-    loc = AvirisNgLoc(test_data + "aviris_ng_full_loc")
+    loc = AvirisNgLoc(test_data / "aviris_ng_old" / "aviris_ng_full_loc")
     igm = AvirisNgIgm("test_igm", igc=aviris_igc_full,
                       loc = loc)
     glt = AvirisNgGlt("test_glt", igc=aviris_igc_full,

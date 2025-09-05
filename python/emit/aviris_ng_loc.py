@@ -6,6 +6,7 @@ import geocal
 import cv2
 import math
 import geocal
+import scipy
 from packaging.version import parse as parse_version
 
 logger = logging.getLogger('l1b_geo_process.avirs_ng_loc')

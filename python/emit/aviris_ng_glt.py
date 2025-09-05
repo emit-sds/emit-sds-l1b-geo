@@ -95,9 +95,9 @@ class AvirisNgGlt(EnviFile):
         ln_d = np.ascontiguousarray(ln_d)
         smp_d = np.ascontiguousarray(smp_d)
         ln = geocal.MemoryRasterImage(ln_d.shape[0], ln_d.shape[1])
-        ln.write(0,0,ln_d.astype(np.int))
+        ln.write(0,0,ln_d.astype(int))
         smp = geocal.MemoryRasterImage(smp_d.shape[0], smp_d.shape[1])
-        smp.write(0,0,smp_d.astype(np.int))
+        smp.write(0,0,smp_d.astype(int))
         self.glt_line[:,:] = res.resample_field(ln, 1.0, False, -999.0, True)
         self.glt_sample[:,:] = res.resample_field(smp, 1.0, False, -999.0, True)
         # Correct for the odd 1 based definition of GLT, and change fill
