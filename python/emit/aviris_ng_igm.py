@@ -1,12 +1,10 @@
 from .envi_file import EnviFile
 from .standard_metadata import StandardMetadata
-import logging
+from loguru import logger
 import numpy as np
 import re
 import math
 import geocal
-
-logger = logging.getLogger("l1b_geo_process.avirs_ng_igm")
 
 
 class AvirisNgIgm(EnviFile):
@@ -28,7 +26,7 @@ class AvirisNgIgm(EnviFile):
         if self.igc is None:
             mode = "r"
             shape = None
-            fh = geocal.GdalRasterImage(fname)
+            fh = geocal.GdalRasterImage(str(fname))
             m = re.search(r"UTM zone (\d+) (North|South)", fh["ENVI", "description"])
             if not m:
                 raise RuntimeError(f"Don't recognize UTM zone in {fname}")
@@ -82,7 +80,7 @@ class AvirisNgIgm(EnviFile):
 
     def run_scene(self, i):
         nline = min(self.number_line_process, self.igc.number_line - i)
-        logger.info("Generating IGM data for %s (%d, %d)", self.igc.title, i, i + nline)
+        logger.info(f"Generating IGM data for {self.igc.title} ({i}, {i + nline})")
         with self.multiprocess_data():
             for ln in range(i, i + nline):
                 for smp in range(self.shape[2]):
@@ -95,7 +93,7 @@ class AvirisNgIgm(EnviFile):
 
     def run(self, pool=None):
         """Actually generate the output data."""
-        logger.info("Generating IGM data for %s", self.igc.title)
+        logger.info(f"Generating IGM data for {self.igc.title}")
         ilist = list(range(0, self.igc.number_line, self.number_line_process))
         if pool is None:
             _ = list(map(self.run_scene, ilist))

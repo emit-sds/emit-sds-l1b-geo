@@ -1,13 +1,11 @@
 from .misc import file_name_to_gps_week
-import logging
+from loguru import logger
 import numpy as np
 import geocal
 import os
 import struct
 import scipy.interpolate
-
-logger = logging.getLogger("l1b_geo_process.avirs_ng_raw")
-
+from pathlib import Path
 
 class AvirisNgRaw:
     """This is used to read the metadata from the raw AVIRIS-NG files.
@@ -40,14 +38,14 @@ class AvirisNgRaw:
         """This reads the given fname to get the clock and obc values.
         The data files tend to be big, we read it with the given chunking
         size."""
-        self.file_name = fname
-        f = geocal.GdalRasterImage(self.file_name)
-        logger.info("Reading the raw file %s", self.file_name)
+        self.file_name = Path(fname)
+        f = geocal.GdalRasterImage(str(self.file_name))
+        logger.info(f"Reading the raw file {self.file_name}")
         self.clock = np.zeros((f.number_line,), dtype=np.int64)
         self.obc = np.zeros_like(self.clock, dtype=np.uint16)
         for i in range(0, self.clock.shape[0], chunk_size):
             r = range(i, min(i + chunk_size, self.clock.shape[0]))
-            logger.debug("Reading line %d of %d", i, self.clock.shape[0])
+            logger.debug(f"Reading line {i} of {self.clock.shape[0]}")
             d = f.read(r.start, 0, len(r), 2)
             self.clock[r] = d[:, 0].astype(np.int64) << 16 | d[:, 1]
             d = f.read(r.start, 321, len(r), 1)
@@ -89,8 +87,8 @@ class AvirisCMigitsFile:
 
     def __init__(self, fname):
         """Open the given file for reading."""
-        self.file_name = fname
-        self.file_size = os.path.getsize(self.file_name)
+        self.file_name = Path(fname)
+        self.file_size = os.path.getsize(str(self.file_name))
         self.fh = open(self.file_name, "rb")
 
     def can_read(self, nbytes):
@@ -138,7 +136,7 @@ class AvirisNgGpsTable:
     """Class used to read the raw "_gps" file."""
 
     def __init__(self, fname, smooth=False):
-        self.file_name = fname
+        self.file_name = Path(fname)
         gpstime = []
         # This is [lat, lon, alt, vnorth, veast, vup, pitch, roll, heading]
         data = []
@@ -198,11 +196,11 @@ class AvirisNgPpsTable:
 
     def __init__(self, fname, msg_words=13, gps_week=None, smooth=False):
         """Read the given file."""
-        self.file_name = fname
+        self.file_name = Path(fname)
         self.gps_week = gps_week
         if not self.gps_week:
-            self.gps_week = file_name_to_gps_week(fname)
-        f = AvirisCMigitsFile(fname)
+            self.gps_week = file_name_to_gps_week(self.file_name)
+        f = AvirisCMigitsFile(self.file_name)
         gpstime = []
         cnt = []
         clock = []

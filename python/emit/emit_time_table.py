@@ -30,7 +30,7 @@ class EmitTimeTable(EmitTimeTableBase):
                 tm = f["line_time_j2000"][:]
             tm2 = geocal.Vector_Time()
             for t in tm:
-                tm2.append(geocal.Time.time_j2000(t))
+                tm2.push_back(geocal.Time.time_j2000(t))
             super().__init__(tm2, number_sample, reverse_image)
         else:
             t = pd.read_csv(tt_fname, header=None, sep=" ")
@@ -47,7 +47,7 @@ class EmitTimeTable(EmitTimeTableBase):
                 tm = t[1][:]
             tm2 = geocal.Vector_Time()
             for t in tm:
-                tm2.append(geocal.Time.time_gps(t * 1e-9))
+                tm2.push_back(geocal.Time.time_gps(t * 1e-9))
             super().__init__(tm2, number_sample, reverse_image)
 
     @classmethod

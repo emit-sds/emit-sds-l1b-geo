@@ -8,12 +8,10 @@ from .geo_qa import GeoQa
 from .l1b_correct import L1bCorrect
 from .l1b_proj import L1bProj
 import geocal
-import logging
+from loguru import logger
 import re
 import os
 from multiprocessing import Pool
-
-logger = logging.getLogger("l1b_geo_process.aviris_ng_geo_generate")
 
 
 class AvirisNgGeoGenerate:
@@ -101,7 +99,7 @@ class AvirisNgGeoGenerate:
             line_averaging=self.tt.line_average
         )
         if self.l1_osp_dir.number_process > 1:
-            logger.info("Using %d processors", self.l1_osp_dir.number_process)
+            logger.info(f"Using {self.l1_osp_dir.number_process} processors")
             pool = Pool(self.l1_osp_dir.number_process)
         else:
             logger.info("Using 1 processor")

@@ -1,13 +1,11 @@
 from .envi_file import EnviFile
 from .standard_metadata import StandardMetadata
-import logging
+from loguru import logger
 import numpy as np
 import geocal
 import pandas as pd
 import scipy
 from packaging.version import parse as parse_version
-
-logger = logging.getLogger("l1b_geo_process.emit_loc")
 
 
 class EmitLoc(EnviFile):
@@ -104,7 +102,7 @@ class EmitLoc(EnviFile):
 
     def run(self):
         """Actually generate the output data."""
-        logger.info("Generating LOC data for %s", self.igc.title)
+        logger.info(f"Generating LOC data for {self.igc.title}")
         # We could run this in parallel if needed. However our
         # scene size is fairly small (1280 lines) so that it probably isn't
         # worth worry about this, at least initially. We can probably handle

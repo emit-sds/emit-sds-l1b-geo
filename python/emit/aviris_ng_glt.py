@@ -2,9 +2,7 @@ import geocal
 import numpy as np
 from emit_swig import Resampler
 from .envi_file import EnviFile
-import logging
-
-logger = logging.getLogger("l1b_geo_process.aviris_ng_glt")
+from loguru import logger
 
 
 class AvirisNgGlt(EnviFile):

@@ -113,7 +113,7 @@ def emit_file_name(file_type, dstring, onum, snum, bnum, vnum, ext):
 def orb_and_scene_from_file_name(fname):
     """Get the orbit and scene from a file name, using the emit naming
     convention."""
-    m = re.search(r"emit(\d+t\d+)_o(\d+)_s(\d+)_", os.path.basename(fname))
+    m = re.search(r"emit(\d+t\d+)_o(\d+)_s(\d+)_", os.path.basename(str(fname)))
     if not m:
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
     return (m.group(2), m.group(3), m.group(1))
@@ -122,7 +122,7 @@ def orb_and_scene_from_file_name(fname):
 def extended_orb_from_file_name(fname):
     """Winston uses a longer orbit number that includes the year in it.
     Extract this out from file fname"""
-    m = re.search(r"emit(\d+t\d+)_o(\d+)_", os.path.basename(fname))
+    m = re.search(r"emit(\d+t\d+)_o(\d+)_", os.path.basename(str(fname)))
     if not m:
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
     onum = m.group(2)
@@ -136,7 +136,7 @@ def file_name_to_gps_week(fname, filebase="ang"):
     time to determine the gps week we are in."""
     m = re.search(
         filebase + r"(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})_",
-        os.path.basename(fname),
+        os.path.basename(str(fname)),
     )
     if not m:
         raise RuntimeError(f"Don't recognize the file naming convention for {fname}")

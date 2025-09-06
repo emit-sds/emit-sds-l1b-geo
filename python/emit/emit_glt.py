@@ -2,12 +2,11 @@ import geocal
 import numpy as np
 from emit_swig import Resampler
 from .envi_file import EnviFile
-import logging
 import cv2
 import math
 import pandas as pd
-
-logger = logging.getLogger("l1b_geo_process.emit_glt")
+from loguru import logger
+from pathlib import Path
 
 
 class EmitGlt(EnviFile):
@@ -38,7 +37,7 @@ class EmitGlt(EnviFile):
         number_subpixel=3,
         rotated_map=False,
     ):
-        self.fname = fname
+        self.fname = Path(fname)
         self.loc = loc
         self.resolution = resolution
         self.standard_metadata = standard_metadata
@@ -125,7 +124,7 @@ class EmitGlt(EnviFile):
         rect = cv2.minAreaRect(pt)
         t = cv2.boxPoints(rect)
         a = -math.atan2(t[0, 0] - t[-1, 0], t[0, 1] - t[-1, 1])
-        logger.info("Rotated minimum area rectangle is angle %f", a * geocal.rad_to_deg)
+        logger.info(f"Rotated minimum area rectangle is angle {a * geocal.rad_to_deg}")
         rot = np.array([[math.cos(a), -math.sin(a)], [math.sin(a), math.cos(a)]])
         p = mi.transform
         pm = np.array([[p[1], p[2]], [p[4], p[5]]])
@@ -184,9 +183,9 @@ class EmitGlt(EnviFile):
         ln_d = np.ascontiguousarray(ln_d)
         smp_d = np.ascontiguousarray(smp_d)
         ln = geocal.MemoryRasterImage(ln_d.shape[0], ln_d.shape[1])
-        ln.write(0, 0, ln_d.astype(np.int))
+        ln.write(0, 0, ln_d.astype(int))
         smp = geocal.MemoryRasterImage(smp_d.shape[0], smp_d.shape[1])
-        smp.write(0, 0, smp_d.astype(np.int))
+        smp.write(0, 0, smp_d.astype(int))
         self.glt_line[:, :] = res.resample_field(ln, 1.0, False, -999.0, True)
         self.glt_sample[:, :] = res.resample_field(smp, 1.0, False, -999.0, True)
         # Correct for the odd 1 based definition of GLT, and change fill
@@ -196,7 +195,7 @@ class EmitGlt(EnviFile):
         self.glt_line[self.glt_line < 0] = 0
         self.glt_sample[self.glt_sample < 0] = 0
         self.flush()
-        fh = geocal.GdalRasterImage(self.file_name, 1, 4, True)
+        fh = geocal.GdalRasterImage(str(self.file_name), 1, 4, True)
         fh["ENVI", "GRing"] = self.gring()
         fh.close()
         if self.standard_metadata:

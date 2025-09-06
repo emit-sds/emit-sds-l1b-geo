@@ -1,13 +1,10 @@
 from .envi_file import EnviFile
 from .standard_metadata import StandardMetadata
-import logging
+from loguru import logger
 import numpy as np
 import geocal
 import re
 from math import acos, sin, cos
-
-logger = logging.getLogger("l1b_geo_process.aviris_ng_obs")
-
 
 class AvirisNgObs(EnviFile):
     """This reads the AVIRIS NG obs data."""
@@ -120,7 +117,7 @@ class AvirisNgObs(EnviFile):
 
     def run_scene(self, i):
         nline = min(self.number_line_process, self.igc.number_line - i)
-        logger.info("Generating OBS data for %s (%d, %d)", self.igc.title, i, i + nline)
+        logger.info(f"Generating OBS data for {self.igc.title} ({i}, {i+nline})")
         with self.multiprocess_data():
             for ln in range(i, i + nline):
                 pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln, 0))
@@ -172,7 +169,7 @@ class AvirisNgObs(EnviFile):
 
     def run(self, pool=None):
         """Actually generate the output data."""
-        logger.info("Generating OBS data for %s", self.igc.title)
+        logger.info(f"Generating OBS data for {self.igc.title}")
         ilist = list(range(0, self.igc.number_line, self.number_line_process))
         if pool is None:
             _ = list(map(self.run_scene, ilist))

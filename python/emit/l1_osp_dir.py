@@ -3,9 +3,8 @@ import geocal
 from functools import partial, cached_property
 from .misc import band_to_landsat_band
 import os
-import logging
-
-logger = logging.getLogger("l1b_geo_process.l1_osp_dir")
+from loguru import logger
+from pathlib import Path
 
 
 # Temp, this should probably get moved into geocal. But for now place here
@@ -23,8 +22,8 @@ class L1OspDir:
     file."""
 
     def __init__(self, l1_osp_dir):
-        self.l1_osp_dir = l1_osp_dir
-        logger.info("l1_osp_dir: %s", self.l1_osp_dir)
+        self.l1_osp_dir = Path(l1_osp_dir)
+        logger.info(f"l1_osp_dir: {self.l1_osp_dir}")
         self.load_config()
 
     def setup_spice(self):
@@ -36,7 +35,7 @@ class L1OspDir:
             )
         os.environ["SPICEDATA"] = v
         geocal.SpiceHelper.spice_setup("geocal.ker", True)
-        logger.info("SPICEDATA: %s", self.spice_data_dir)
+        logger.info(f"SPICEDATA: {self.spice_data_dir}")
 
     # We use to just forward any variable in the l1b_geo_config module
     # to this class as an attribute. However this became a bit of a
@@ -143,7 +142,7 @@ class L1OspDir:
         """The DEM to use."""
         # Allow the config file to override this
         if hasattr(self.l1b_geo_config, "dem"):
-            logger.info("DEM: %s", self.l1b_geo_config.dem)
+            logger.info(f"DEM: {self.l1b_geo_config.dem}")
             return self.l1b_geo_config.dem
         # Default is SrtmDem
         datum = self.datum
@@ -152,8 +151,8 @@ class L1OspDir:
             datum = os.environ["AFIDS_VDEV_DATA"] + "/EGM96_20_x100.HLF"
         if not srtm_dir:
             srtm_dir = os.environ["ELEV_ROOT"]
-        logger.info("Datum: %s", datum)
-        logger.info("SRTM Dir: %s", srtm_dir)
+        logger.info(f"Datum: {datum}")
+        logger.info(f"SRTM Dir: {srtm_dir}")
         return geocal.SrtmDem(srtm_dir, False, geocal.DatumGeoid96(datum))
 
     @cached_property
@@ -161,11 +160,11 @@ class L1OspDir:
         """The ortho base file to use."""
         # Allow the config file to override this
         if hasattr(self.l1b_geo_config, "ortho_base"):
-            logger.info("Orthobase: %s", self.l1b_geo_config.ortho_base)
+            logger.info(f"Orthobase: {self.l1b_geo_config.ortho_base}")
             return self.l1b_geo_config.ortho_base
         # Otherwise, use the default Landsat7Global object
-        logger.info("OrthoBase dir: %s", self.ortho_base_dir)
-        logger.info("Landsat band: %d", self.landsat_band)
+        logger.info(f"OrthoBase dir: {self.ortho_base_dir}")
+        logger.info(f"Landsat band: {self.landsat_band}")
         return geocal.Landsat7Global(
             self.ortho_base_dir, band_to_landsat_band(self.landsat_band)
         )
@@ -187,8 +186,8 @@ class L1OspDir:
         )
 
     def camera(self):
-        logger.info("Camera file: %s", self.l1_osp_dir + "/camera.xml")
-        cam = geocal.read_shelve(self.l1_osp_dir + "/camera.xml")
+        logger.info(f"Camera file: {self.l1_osp_dir / 'camera.xml'}")
+        cam = geocal.read_shelve(str(self.l1_osp_dir / "camera.xml"))
         # We store the euler angles and focal length separately, so we can
         # more easily update this. Get the updated values from the
         # config file.
@@ -210,13 +209,13 @@ class L1OspDir:
                 ]
         if self.camera_focal_length:
             camfull.focal_length = self.camera_focal_length
-        logger.info("Camera euler angles %s", geocal.quat_to_euler(camfull.frame_to_sc))
-        logger.info("Camera focal length %s", camfull.focal_length)
+        logger.info(f"Camera euler angles {geocal.quat_to_euler(camfull.frame_to_sc)}")
+        logger.info(f"Camera focal length {camfull.focal_length}")
         return cam
 
     def load_config(self):
         spec = importlib.util.spec_from_file_location(
-            "l1b_geo_config", self.l1_osp_dir + "/l1b_geo_config.py"
+            "l1b_geo_config", self.l1_osp_dir / "l1b_geo_config.py"
         )
         self.l1b_geo_config = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.l1b_geo_config)

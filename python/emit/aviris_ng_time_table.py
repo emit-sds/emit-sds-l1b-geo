@@ -44,7 +44,10 @@ class AvirisNgTimeTable(geocal.MeasuredTimeTable):
             else:
                 tline = self.pps_table.clock_to_time(raw.clock_science(img_sl=img_sl))
 
-        super().__init__(tline)
+        tlinev = geocal.Vector_Time()
+        for tl in tline:
+            tlinev.push_back(tl)
+        super().__init__(tlinev)
 
     def write(self, tt_fname):
         """Write the data to a netCDF file"""

@@ -4,11 +4,9 @@ from .emit_camera import EmitCamera
 from .envi_file import EnviFile
 from .misc import orb_and_scene_from_file_name
 from emit_swig import EmitIgcCollection, EmitL1bImage, ReverseCamera
-import logging
+from loguru import logger
 import geocal
 import os
-
-logger = logging.getLogger("l1b_geo_process.emit_igc")
 
 
 class EmitIgc(geocal.IpiImageGroundConnection):
@@ -29,7 +27,7 @@ class EmitIgc(geocal.IpiImageGroundConnection):
         or not. If desired, supplied l1b_rdn_fname and the band of the
         L1B radiance file to use."""
 
-        orb = EmitOrbit(orbit_fname)
+        orb = EmitOrbit(str(orbit_fname))
         if l1_osp_dir:
             dem = l1_osp_dir.dem
             cam = l1_osp_dir.camera()
@@ -38,7 +36,7 @@ class EmitIgc(geocal.IpiImageGroundConnection):
             cam = EmitCamera()
         reverse_image = False
         if l1b_rdn_fname is not None:
-            img = EmitL1bImage(l1b_rdn_fname, l1b_band, rad_match_scale)
+            img = EmitL1bImage(str(l1b_rdn_fname), l1b_band, rad_match_scale)
             f = EnviFile(l1b_rdn_fname, mode="r")
             if "flip_horizontal" in f.metadata:
                 reverse_image = bool(f.metadata["flip_horizontal"])
@@ -99,8 +97,8 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band, l1_osp_dir, include_im
     as "uncorrected_orbit"."""
     if l1_osp_dir:
         l1_osp_dir.setup_spice()
-    logger.info("SPICE data dir: %s", os.environ["SPICEDATA"])
-    orb = EmitOrbit(orbit_fname)
+    logger.info(f"SPICE data dir: {os.environ['SPICEDATA']}")
+    orb = EmitOrbit(str(orbit_fname))
     cam = l1_osp_dir.camera()
     dem = l1_osp_dir.dem
     index_to_igc = {}
@@ -111,16 +109,16 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band, l1_osp_dir, include_im
         orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         reverse_image = False
         if include_img:
-            img = EmitL1bImage(rdn_fname, l1b_band, l1_osp_dir.rad_match_scale)
+            img = EmitL1bImage(str(rdn_fname), l1b_band, l1_osp_dir.rad_match_scale)
             f = EnviFile(rdn_fname, mode="r")
             if "flip_horizontal" in f.metadata:
                 reverse_image = bool(f.metadata["flip_horizontal"])
         else:
             img = None
         if reverse_image:
-            logger.info("Reversing image data for %s", stime)
+            logger.info(f"Reversing image data for {stime}")
         else:
-            logger.info("Not reversing image data for %s", stime)
+            logger.info(f"Not reversing image data for {stime}")
         # reverse_image for time table isn't correctly supported by
         # IgcRayCaster in GeoCal. We should fix that, but in the short
         # term use our ReverseCamera instead

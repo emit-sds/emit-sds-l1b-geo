@@ -1,14 +1,12 @@
 from .envi_file import EnviFile
 from .standard_metadata import StandardMetadata
-import logging
+from loguru import logger
 import numpy as np
 import geocal
 import cv2
 import math
 import scipy
 from packaging.version import parse as parse_version
-
-logger = logging.getLogger("l1b_geo_process.avirs_ng_loc")
 
 
 class AvirisNgLoc(EnviFile):
@@ -136,7 +134,7 @@ class AvirisNgLoc(EnviFile):
         rect = cv2.minAreaRect(pt)
         t = cv2.boxPoints(rect)
         a = -math.atan2(t[0, 0] - t[-1, 0], t[0, 1] - t[-1, 1])
-        logger.info("Rotated minimum area rectangle is angle %f", a * geocal.rad_to_deg)
+        logger.info(f"Rotated minimum area rectangle is angle {a * geocal.rad_to_deg}")
         rot = np.array([[math.cos(a), -math.sin(a)], [math.sin(a), math.cos(a)]])
         p = mi.transform
         pm = np.array([[p[1], p[2]], [p[4], p[5]]])
@@ -217,7 +215,7 @@ class AvirisNgLoc(EnviFile):
 
     def run_scene(self, i):
         nline = min(self.number_line_process, self.igc.number_line - i)
-        logger.info("Generating LOC data for %s (%d, %d)", self.igc.title, i, i + nline)
+        logger.info(f"Generating LOC data for {self.igc.title} ({i}, {i + nline}")
         with self.multiprocess_data():
             # We added a number_framelet in 1.28. For now check for an older
             # version, eventually this will go away and we'll just assume
@@ -245,7 +243,7 @@ class AvirisNgLoc(EnviFile):
 
     def run(self, pool=None):
         """Actually generate the output data."""
-        logger.info("Generating LOC data for %s", self.igc.title)
+        logger.info(f"Generating LOC data for {self.igc.title}")
         ilist = list(range(0, self.igc.number_line, self.number_line_process))
         if pool is None:
             _ = list(map(self.run_scene, ilist))

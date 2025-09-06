@@ -2,12 +2,10 @@ from .aviris_ng_orbit import AvirisNgOrbit
 from .aviris_ng_raw import AvirisNgRaw
 from .aviris_ng_time_table import AvirisNgTimeTable
 import geocal
-import logging
+from loguru import logger
 import re
 import numpy as np
 import os
-
-logger = logging.getLogger("l1b_geo_process.aviris_ng_l1a_orbit_generate")
 
 
 class AvirisNgL1aOrbitGenerate:
@@ -24,10 +22,10 @@ class AvirisNgL1aOrbitGenerate:
         self.l1_osp_dir = l1_osp_dir
         self.l1_osp_dir.setup_spice()
         self.basename = re.sub(r"_raw$", "", os.path.basename(self.raw_fname))
-        logger.info("Raw file:   %s", self.raw_fname)
-        logger.info("GPS file:   %s", self.gps_fname)
-        logger.info("PPS file:   %s", self.pps_fname)
-        logger.info("L1 OSP dir: %s", self.l1_osp_dir.l1_osp_dir)
+        logger.info(f"Raw file:   {self.raw_fname}")
+        logger.info(f"GPS file:   {self.gps_fname}")
+        logger.info(f"PPS file:   {self.pps_fname}")
+        logger.info(f"L1 OSP dir: {self.l1_osp_dir.l1_osp_dir}")
 
     def calc_line_average(self):
         """AVIRIS-NG is oversampled in the downtrack direction, with the

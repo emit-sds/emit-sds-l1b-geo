@@ -2,6 +2,7 @@ import geocal
 import numpy as np
 from emit_swig import set_file_description, set_band_description
 from contextlib import contextmanager
+from pathlib import Path
 
 
 class EnviFile:
@@ -24,7 +25,7 @@ class EnviFile:
     ):
         """Create or read a EnviFile like a numpy array. The array shape
         should be nband x nline x nsamp."""
-        self.file_name = fname
+        self.file_name = Path(fname)
         self.description = description
         if mode not in ("w", "r", "r+"):
             raise ValueError("Unknown mode")
@@ -47,11 +48,17 @@ class EnviFile:
                 raise ValueError("Unsupported data type")
             if map_info is not None:
                 t = geocal.GdalRasterImage(
-                    fname, "ENVI", map_info, shape[0], gtype, "INTERLEAVE=BIL"
+                    str(fname), "ENVI", map_info, shape[0], gtype, "INTERLEAVE=BIL"
                 )
             else:
                 t = geocal.GdalRasterImage(
-                    fname, "ENVI", shape[1], shape[2], shape[0], gtype, "INTERLEAVE=BIL"
+                    str(fname),
+                    "ENVI",
+                    shape[1],
+                    shape[2],
+                    shape[0],
+                    gtype,
+                    "INTERLEAVE=BIL",
                 )
             set_file_description(t, description)
             t.close()
@@ -59,13 +66,13 @@ class EnviFile:
                 # Force ENVI, every once in a while GDAL gets confused and
                 # tries to open as another file type (probably magic number
                 # matches a driver higher in the list)
-                t = geocal.GdalRasterImage(fname, i + 1, "ENVI", "", "", 4, True)
+                t = geocal.GdalRasterImage(str(fname), i + 1, "ENVI", "", "", 4, True)
                 set_band_description(t, desc)
                 t.close()
             # We shuffle the shape around to get band interleave, memmap
             # assumes C order
             self._d = np.memmap(
-                fname, shape=(shape[1], shape[0], shape[2]), dtype=dtype, mode="r+"
+                str(fname), shape=(shape[1], shape[0], shape[2]), dtype=dtype, mode="r+"
             ).transpose(1, 0, 2)
             interleave = "bil"
             self.metadata = {"interleave": interleave}
@@ -106,14 +113,14 @@ class EnviFile:
             # assumes C order
             if interleave == "bil":
                 self._d = np.memmap(
-                    fname,
+                    str(fname),
                     shape=(r.number_line, t.number_band, r.number_sample),
                     dtype=dtype,
                     mode=mode,
                 ).transpose(1, 0, 2)
             elif interleave == "bip":
                 self._d = np.memmap(
-                    fname,
+                    str(fname),
                     shape=(r.number_line, r.number_sample, t.number_band),
                     dtype=dtype,
                     mode=mode,
@@ -129,7 +136,7 @@ class EnviFile:
         stuff around so you can just use the data as normal."""
         doriginal = self._d
         self._d = np.memmap(
-            self.file_name,
+            str(self.file_name),
             shape=(self.shape[1], self.shape[0], self.shape[2]),
             dtype=self.data.dtype,
             mode="r+",
