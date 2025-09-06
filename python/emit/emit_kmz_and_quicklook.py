@@ -3,10 +3,8 @@ import geocal
 import numpy as np
 from emit_swig import EmitL1bImage, Resampler
 import subprocess
-import logging
+from loguru import logger
 import os
-
-logger = logging.getLogger("l1b_geo_process.loc")
 
 
 class EmitKmzAndQuicklook(object):
@@ -66,7 +64,7 @@ class EmitKmzAndQuicklook(object):
                 f"Funny map, ending process. File name: {self.file_base_name} Map info: {res.map_info}"
             )
         for b in self.band_list:
-            ras = EmitL1bImage(self.rad_fname, b, 1.0)
+            ras = EmitL1bImage(str(self.rad_fname), b, 1.0)
             data = res.resample_field(ras).copy()
             data2 = ras.read_all_double().copy()
             # Set bad values to 0

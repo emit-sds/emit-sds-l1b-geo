@@ -3,14 +3,12 @@
 # This runs the L1B Geo process.
 import geocal
 import emit
-import logging
-import traceback
+from loguru import logger
 import os
 import sys
-import json
 
 version = "1.0.0"
-usage='''Usage:
+usage = """Usage:
   aviris_ng_geo_process [options] <prod_dir> <l1_osp_dir> <orbit_file> <line_time_file> <rad_file>
   aviris_ng_geo_process -h | --help
   aviris_ng_geo_process -v | --version
@@ -55,63 +53,41 @@ Options:
 
   -v --version      
        Print program version
-'''
+"""
 
 args = geocal.docopt_simple(usage, version=version)
 
 # Read in additional configuration parameters
 l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
 
-# Set up logging. 
+# Set up logging.
 os.makedirs(args.prod_dir, exist_ok=True)
-log_fname = args.prod_dir + "/aviris_ng_geo.log"
-logger = logging.getLogger('l1b_geo_process')
-fh = None
-fh = logging.FileHandler(log_fname)
-fh.setFormatter(emit.L1bGeoLogFormatter(add_color = False))
-fh.setLevel(logging.INFO)
-logger.addHandler(fh)
-lformat = emit.L1bGeoLogFormatter(add_color = not args.no_color)
-if(not args.log_file_only):    
-    h = logging.StreamHandler()
-    h.setFormatter(lformat)
-    logger.addHandler(h)
-if(args.debug):
-    if(h):
-        h.setLevel(logging.DEBUG)
-    logger.setLevel(logging.DEBUG)
-elif(args.verbose):
-    if(h):
-        h.setLevel(logging.DEBUG)
-    logger.setLevel(logging.INFO)
-elif(args.quiet):
-    if(h):
-        h.setLevel(1000)
-    logger.setLevel(1000)
-else:    
-    if(h):
-        h.setLevel(logging.INFO)
-    logger.setLevel(logging.INFO)
+logger.remove()
+if args.verbose:
+    logger.add(sys.stderr, level="DEBUG")
+else:
+    logger.add(sys.stderr, level="INFO")
+logger.add(args.prod_dir + "/aviris_ng_geo.log", level="DEBUG")
 
 try:
-    logger.info("Starting %s version %s processing", l1_osp_dir.pge_name,
-                l1_osp_dir.pge_version)
-    orb_fname = os.path.abspath(args.orbit_file)
-    tt_fname = os.path.abspath(args.line_time_file)
-    rad_fname = os.path.abspath(args.rad_file)
-    curdir = os.getcwd()
-    try:
-        os.chdir(args.prod_dir)
-        t = emit.AvirisNgGeoGenerate(l1_osp_dir, orb_fname, tt_fname,
-                                     rad_fname)
-        t.run()
-    finally:
-        os.chdir(curdir)
-    logger.info("Done with aviris_ng_geo processing")
-except Exception as e:
-    logger.exception(e)
-    logger.exception("Traceback:")
-    logger.exception(traceback.format_exc())
+    with logger.catch(reraise=True):
+        logger.info(
+            f"Starting {l1_osp_dir.pge_name} version {l1_osp_dir.pge_version} processing"
+        )
+        orb_fname = os.path.abspath(args.orbit_file)
+        tt_fname = os.path.abspath(args.line_time_file)
+        rad_fname = os.path.abspath(args.rad_file)
+        curdir = os.getcwd()
+        try:
+            os.chdir(args.prod_dir)
+            t = emit.AvirisNgGeoGenerate(l1_osp_dir, orb_fname, tt_fname, rad_fname)
+            t.run()
+        finally:
+            os.chdir(curdir)
+        logger.info("Done with aviris_ng_geo processing")
+except Exception:
     logger.fatal("aviris_ng_geo processing failed")
-    sys.exit(1)
-
+    raise
+except:
+    logger.fatal("aviris_ng_geo processing failed")
+    raise

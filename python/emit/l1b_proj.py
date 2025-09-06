@@ -1,10 +1,8 @@
 import subprocess
 import geocal
 import os
-import logging
+from loguru import logger
 import re
-
-logger = logging.getLogger("l1b_geo_process.l1b_proj")
 
 
 class L1bProj(object):
@@ -28,7 +26,7 @@ class L1bProj(object):
         igc_fname = "igc_%s_%03d.xml" % (self.img_type, i + 1)
         proj_fname = "proj_%s_%03d.img" % (self.img_type, i + 1)
         ref_fname = "ref_%s_%03d.img" % (self.img_type, i + 1)
-        logger.info("Creating %s", proj_fname)
+        logger.info(f"Creating {proj_fname}")
         geocal.write_shelve(mi_fname, mi)
         geocal.write_shelve(igc_fname, igc)
         try:
@@ -36,7 +34,7 @@ class L1bProj(object):
         except RuntimeError as e:
             if not re.search("RasterImage doesn't cover any of the area", str(e)):
                 raise
-            logger.info("Don't have reference data for scene %03d, skipping", i + 1)
+            logger.info(f"Don't have reference data for scene {i + 1:03d}, skipping")
             return None
         subprocess.run(
             [

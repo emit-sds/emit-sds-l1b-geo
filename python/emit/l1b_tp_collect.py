@@ -2,9 +2,7 @@ from .l1b_proj import L1bProj
 import geocal
 import shutil
 import os
-import logging
-
-logger = logging.getLogger("l1b_geo_process.l1b_tp_collect")
+from loguru import logger
 
 
 class L1bTpCollect:
@@ -147,57 +145,53 @@ class L1bTpCollect:
         ntpoint_final = 0
         number_match_try = 0
         try:
-            tt = self.igccol.image_ground_connection(i).ipi.time_table
-            for i2, tpcol in enumerate(self.tpcollect):
-                tpcol.image_index1 = i
-                tpcol.surface_image_fname = self.proj_fname
-                tpcol.ref_image_fname = self.ref_fname[i]
-                tpcol.log_file = self.log_file[i] + "_%d" % i2
-                tpcol.run_dir_name = self.run_dir_name[i] + "_%d" % i2
-                shutil.rmtree(tpcol.run_dir_name, ignore_errors=True)
-                logger.info(
-                    "Collecting tp for %s try %d" % (self.igccol.title(i), i2 + 1)
-                )
-                res = tpcol.tie_point_grid(
-                    self.l1_osp_dir.num_tiepoint_x, self.l1_osp_dir.num_tiepoint_y
-                )
-                # Try this, and see how it works
-                ntpoint_initial = len(res)
-                ntpoint_removed = 0
-                if len(res) >= self.min_tp_per_scene:
-                    len1 = len(res)
-                    res = geocal.outlier_reject_ransac(
-                        res,
-                        ref_image=geocal.VicarLiteRasterImage(self.ref_fname[i]),
-                        igccol=self.igccol,
-                        threshold=3,
-                    )
-                    ntpoint_removed = len1 - len(res)
+            with logger.catch(reraise=True):
+                tt = self.igccol.image_ground_connection(i).ipi.time_table
+                for i2, tpcol in enumerate(self.tpcollect):
+                    tpcol.image_index1 = i
+                    tpcol.surface_image_fname = self.proj_fname
+                    tpcol.ref_image_fname = self.ref_fname[i]
+                    tpcol.log_file = self.log_file[i] + "_%d" % i2
+                    tpcol.run_dir_name = self.run_dir_name[i] + "_%d" % i2
+                    shutil.rmtree(tpcol.run_dir_name, ignore_errors=True)
                     logger.info(
-                        "Removed %d tie-points using RANSAC for %s"
-                        % (len1 - len(res), self.igccol.title(i))
+                        f"Collecting tp for {self.igccol.title(i)} try {i2 + 1}"
                     )
-                if len(res) >= self.min_tp_per_scene:
-                    break
-            number_match_try = i2 + 1
-            if len(res) < self.min_tp_per_scene:
-                logger.info(
-                    "Too few tie-point found. Found %d, and require at least %d. Rejecting tie-points for %s"
-                    % (len(res), self.min_tp_per_scene, self.igccol.title(i))
-                )
-                res = []
-            else:
-                logger.info(
-                    "Found %d tie-points for %s try %d"
-                    % (len(res), self.igccol.title(i), number_match_try)
-                )
-            logger.info("Done collecting tp for %s" % self.igccol.title(i))
-        except Exception as e:
+                    res = tpcol.tie_point_grid(
+                        self.l1_osp_dir.num_tiepoint_x, self.l1_osp_dir.num_tiepoint_y
+                    )
+                    # Try this, and see how it works
+                    ntpoint_initial = len(res)
+                    ntpoint_removed = 0
+                    if len(res) >= self.min_tp_per_scene:
+                        len1 = len(res)
+                        res = geocal.outlier_reject_ransac(
+                            res,
+                            ref_image=geocal.VicarLiteRasterImage(self.ref_fname[i]),
+                            igccol=self.igccol,
+                            threshold=3,
+                        )
+                        ntpoint_removed = len1 - len(res)
+                        logger.info(
+                            f"Removed {len1 - len(res)} tie-points using RANSAC for {self.igccol.title(i)}"
+                        )
+                    if len(res) >= self.min_tp_per_scene:
+                        break
+                number_match_try = i2 + 1
+                if len(res) < self.min_tp_per_scene:
+                    logger.info(
+                        f"Too few tie-point found. Found {len(res)}, and require at least {self.min_tp_per_scene}. Rejecting tie-points for {self.igccol.title(i)}"
+                    )
+                    res = []
+                else:
+                    logger.info(
+                        f"Found {len(res)} tie-points for {self.igccol.title(i)} try {number_match_try}"
+                    )
+                logger.info(f"Done collecting tp for {self.igccol.title(i)}")
+        except Exception:
             logger.info(
-                "Exception occurred while collecting tie-points for %s",
-                self.igccol.title(i),
+                f"Exception occurred while collecting tie-points for {self.igccol.title(i)}",
             )
-            logger.exception(e, stack_info=True)
             logger.info("Skipping tie-points for this scene and continuing processing")
             res = []
         ntpoint_final = len(res)

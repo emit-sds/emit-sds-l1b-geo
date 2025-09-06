@@ -7,6 +7,7 @@ import struct
 import scipy.interpolate
 from pathlib import Path
 
+
 class AvirisNgRaw:
     """This is used to read the metadata from the raw AVIRIS-NG files.
     We don't actually care about most of this, instead we just want to

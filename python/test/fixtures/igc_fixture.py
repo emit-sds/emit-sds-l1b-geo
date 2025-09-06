@@ -48,7 +48,7 @@ def igc(orbit_fname, time_table_fname, l1b_rdn_fname, l1_osp_dir):
 @pytest.fixture(scope="function")
 def emit_igccol(test_data, l1_osp_dir):
     l1a_att = next(test_data.glob("*_o80000_l1a_att_*.nc"))
-    line_time = test_data.glob("*_o80000_*_l1a_line_time*.nc")
+    line_time = test_data.glob("*_o80000_*_l1a_line_time*.txt")
     l1b_rad = test_data.glob("*_o80000_*_l1b_rdn_*.img")
     rad_band = 1
     igccol = emit.EmitIgcCollection.create(

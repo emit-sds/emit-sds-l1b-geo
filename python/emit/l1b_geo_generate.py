@@ -7,12 +7,9 @@ from .emit_kmz_and_quicklook import EmitKmzAndQuicklook
 from .misc import emit_file_name
 from .standard_metadata import StandardMetadata
 from emit_swig import EmitIgcCollection
-import logging
+from loguru import logger
 import subprocess
-import traceback
 from multiprocessing import Pool
-
-logger = logging.getLogger("l1b_geo_process.l1b_geo_generate")
 
 
 class L1bGeoGenerate:
@@ -67,7 +64,7 @@ class L1bGeoGenerate:
         scene_time = self.scene_time_list[i]
         rdn_fname = self.rdn_fname_list[i]
         scene_index = self.scene_index_list[i]
-        logger.info("Processing %s", igc.title)
+        logger.info(f"Processing {igc.title}")
         # TODO Create actual QA value here.
         if self.geo_qa and self.geo_qa.qa_flag:
             qa_value = self.geo_qa.qa_flag[i]
@@ -142,15 +139,12 @@ class L1bGeoGenerate:
         glt.run()
         if kmz:
             try:
-                kmz.run()
-            except (RuntimeError, subprocess.SubprocessError) as e:
+                with logger.catch(reraise=True):
+                    kmz.run()
+            except (RuntimeError, subprocess.SubprocessError):
                 logger.warn(
-                    "KMZ failed for %s. Skipping generation of KMZ and quicklook"
-                    % (i + 1)
+                    f"KMZ failed for {i + 1}. Skipping generation of KMZ and quicklook"
                 )
-                logger.exception(e)
-                logger.exception("Traceback:")
-                logger.exception(traceback.format_exc())
                 logger.warn("Continuing with processing")
 
     def run(self):
@@ -164,7 +158,7 @@ class L1bGeoGenerate:
         """Internal run function. Just pulled out so we can wrap the
         call with a try/finally block w/o being deeply nested"""
         if self.l1_osp_dir.number_process > 1:
-            logger.info("Using %d processors", self.l1_osp_dir.number_process)
+            logger.info(f"Using {self.l1_osp_dir.number_process} processors")
             pool = Pool(self.l1_osp_dir.number_process)
         else:
             logger.info("Using 1 processor")

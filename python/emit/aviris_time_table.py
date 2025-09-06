@@ -1,6 +1,6 @@
 import geocal
-import os
 from pathlib import Path
+
 
 class AvirisTimeTable(geocal.MeasuredTimeTable):
     """This create a time table from an AVIRIS obs file. We get the day

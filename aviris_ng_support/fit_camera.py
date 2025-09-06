@@ -5,7 +5,6 @@ from aviris_ng_util import *
 import os
 import math
 from multiprocessing import Pool
-import logging
 import pandas as pd
 from pptx import Presentation
 

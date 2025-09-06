@@ -2,6 +2,7 @@ from emit import EmitGlt, EmitLoc
 import geocal
 import pytest
 
+
 def test_generate_glt(isolated_dir, emit_loc, igc, test_data):
     t = EmitGlt("test_glt.img", emit_loc)
     print(t.map_info_rotated())
@@ -13,9 +14,9 @@ def test_generate_glt(isolated_dir, emit_loc, igc, test_data):
     for smp in range(0, t.shape[2], 100):
         if g.glt_line[ln, smp] != -999:
             ic = geocal.ImageCoordinate(
-                float(g.glt_line[ln, smp]-1), float(g.glt_sample[ln, smp]-1)
+                float(g.glt_line[ln, smp] - 1), float(g.glt_sample[ln, smp] - 1)
             )
-            if(ic.line >= 0 and ic.sample >= 0):
+            if ic.line >= 0 and ic.sample >= 0:
                 gc = f.ground_coordinate(geocal.ImageCoordinate(ln, smp), igc.dem)
                 ic2 = igc.image_coordinate(gc)
                 # TODO

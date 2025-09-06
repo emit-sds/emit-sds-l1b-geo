@@ -3,14 +3,13 @@
 # This runs the L1B Geo process.
 import geocal
 import emit
-import logging
-import traceback
+from loguru import logger
 import os
 import sys
 import json
 
 version = "1.0.0"
-usage='''Usage:
+usage = """Usage:
   l1b_geo_process [options] <prod_dir> <l1_osp_dir> <l1a_att> (<line_time> <l1b_rad>)...
   l1b_geo_process [options] <prod_dir> <l1_osp_dir> <run_config>
   l1b_geo_process -h | --help
@@ -62,46 +61,24 @@ Options:
 
   -v --version      
        Print program version
-'''
+"""
 
 args = geocal.docopt_simple(usage, version=version)
 
-# Set up logging. 
+# Set up logging.
 os.makedirs(args.prod_dir, exist_ok=True)
-log_fname = args.prod_dir + "/l1b_geo.log"
-logger = logging.getLogger('l1b_geo_process')
-fh = None
-fh = logging.FileHandler(log_fname)
-fh.setFormatter(emit.L1bGeoLogFormatter(add_color = False))
-fh.setLevel(logging.INFO)
-logger.addHandler(fh)
-lformat = emit.L1bGeoLogFormatter(add_color = not args.no_color)
-if(not args.log_file_only):    
-    h = logging.StreamHandler()
-    h.setFormatter(lformat)
-    logger.addHandler(h)
-if(args.debug):
-    if(h):
-        h.setLevel(logging.DEBUG)
-    logger.setLevel(logging.DEBUG)
-elif(args.verbose):
-    if(h):
-        h.setLevel(logging.DEBUG)
-    logger.setLevel(logging.INFO)
-elif(args.quiet):
-    if(h):
-        h.setLevel(1000)
-    logger.setLevel(1000)
-else:    
-    if(h):
-        h.setLevel(logging.INFO)
-    logger.setLevel(logging.INFO)
+logger.remove()
+if args.verbose:
+    logger.add(sys.stderr, level="DEBUG")
+else:
+    logger.add(sys.stderr, level="INFO")
+logger.add(args.prod_dir + "/l1b_geo.log", level="DEBUG")
 
 # Read in additional configuration parameters
 l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
 
 # Run actual process
-if(args.l1a_att):
+if args.l1a_att:
     l1a_att = os.path.abspath(args.l1a_att)
     line_time = [os.path.abspath(f) for f in args.line_time]
     l1b_rad = [os.path.abspath(f) for f in args.l1b_rad]
@@ -111,30 +88,35 @@ else:
         f = json.load(open(args.run_config))
         os.chdir(os.path.dirname(args.run_config))
         l1a_att = os.path.abspath(os.path.expandvars(f["attitude_ephemeris_file"]))
-        line_time = [os.path.abspath(os.path.expandvars(t['timestamps_file'])) for t in f["timestamp_radiance_pairs"]]
-        l1b_rad = [os.path.abspath(os.path.expandvars(t['radiance_file'])) for t in f["timestamp_radiance_pairs"]]
+        line_time = [
+            os.path.abspath(os.path.expandvars(t["timestamps_file"]))
+            for t in f["timestamp_radiance_pairs"]
+        ]
+        l1b_rad = [
+            os.path.abspath(os.path.expandvars(t["radiance_file"]))
+            for t in f["timestamp_radiance_pairs"]
+        ]
     finally:
         os.chdir(curdir)
-logger.info("l1_att file: %s", l1a_att)
-logger.info("line_time files %s", line_time)
-logger.info("l1b_rad files %s", l1b_rad)
+logger.info(f"l1_att file: {l1a_att}")
+logger.info(f"line_time files {line_time}")
+logger.info(f"l1b_rad files {l1b_rad}")
 try:
-    logger.info("Starting %s version %s processing",
-                l1_osp_dir.pge_name,
-                l1_osp_dir.pge_version)
-    curdir = os.getcwd()
-    try:
-        os.chdir(args.prod_dir)
-        t = emit.L1bGeoGenerate(l1_osp_dir, l1a_att, line_time,
-                                l1b_rad)
-        t.run()
-    finally:
-        os.chdir(curdir)
-    logger.info("Done with l1b_geo processing")
-except Exception as e:
-    logger.exception(e)
-    logger.exception("Traceback:")
-    logger.exception(traceback.format_exc())
+    with logger.catch(reraise=True):
+        logger.info(
+            f"Starting {l1_osp_dir.pge_name} version {l1_osp_dir.pge_version} processing"
+        )
+        curdir = os.getcwd()
+        try:
+            os.chdir(args.prod_dir)
+            t = emit.L1bGeoGenerate(l1_osp_dir, l1a_att, line_time, l1b_rad)
+            t.run()
+        finally:
+            os.chdir(curdir)
+        logger.info("Done with l1b_geo processing")
+except Exception:
     logger.fatal("L1b_geo processing failed")
-    sys.exit(1)
-
+    raise
+except:
+    logger.fatal("L1b_geo processing failed")
+    raise

@@ -3,10 +3,8 @@ import geocal
 import os
 import re
 import math
-import logging
+from loguru import logger
 import subprocess
-
-logger = logging.getLogger("l1b_geo_process.emit_dem")
 
 
 def band_to_landsat_band(lband):

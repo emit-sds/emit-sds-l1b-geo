@@ -1,14 +1,12 @@
 from .l1b_tp_collect import L1bTpCollect
 from .misc import process_run
 import geocal
-import logging
+from loguru import logger
 import os
 import pickle
 import pandas as pd
 import scipy.optimize
 import numpy as np
-
-logger = logging.getLogger("l1b_geo_process.l1b_correct")
 
 
 class L1bCorrect:
@@ -48,14 +46,10 @@ class L1bCorrect:
         just a human readable summary of the data."""
         res = self.collinearity_residual(parm)
         logger.info(
-            "%s Line residual summary: %s",
-            desc,
-            pd.DataFrame(np.abs(res[0::2])).describe(),
+            f"{desc} Line residual summary: {pd.DataFrame(np.abs(res[0::2])).describe()}"
         )
         logger.info(
-            "%s Sample residual summary: %s",
-            desc,
-            pd.DataFrame(np.abs(res[1::2])).describe(),
+            f"{desc} Sample residual summary: {pd.DataFrame(np.abs(res[1::2])).describe()}"
         )
 
     def fit_camera(self):
@@ -99,7 +93,7 @@ class L1bCorrect:
         # just use the default scipy least squares optimization. We choose
         # a version of this that works a bit better with outliers
         r = scipy.optimize.least_squares(self.collinearity_residual, x0, loss="huber")
-        logger.info("Fitting results: %s", r)
+        logger.info(f"Fitting results: {r}")
         logger.info("Fitted camera value:")
         for v, desc in zip(cam.parameter_subset, cam.parameter_name_subset):
             logger.info(f"{desc}: {v}")

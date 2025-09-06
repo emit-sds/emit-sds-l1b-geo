@@ -6,6 +6,7 @@ import geocal
 import re
 from math import acos, sin, cos
 
+
 class AvirisNgObs(EnviFile):
     """This reads the AVIRIS NG obs data."""
 
@@ -117,7 +118,7 @@ class AvirisNgObs(EnviFile):
 
     def run_scene(self, i):
         nline = min(self.number_line_process, self.igc.number_line - i)
-        logger.info(f"Generating OBS data for {self.igc.title} ({i}, {i+nline})")
+        logger.info(f"Generating OBS data for {self.igc.title} ({i}, {i + nline})")
         with self.multiprocess_data():
             for ln in range(i, i + nline):
                 pos = self.igc.cf_look_vector_pos(geocal.ImageCoordinate(ln, 0))

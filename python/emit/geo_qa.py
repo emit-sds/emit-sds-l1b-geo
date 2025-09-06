@@ -5,10 +5,8 @@ import h5py
 import numpy as np
 import pandas as pd
 import geocal
-import logging
+from loguru import logger
 from packaging import version
-
-logger = logging.getLogger("l1b_geo_process.geo_qa")
 
 
 class GeoQa:
@@ -35,7 +33,7 @@ class GeoQa:
             "L1A ATT Filename",
             ("j",),
             data=[
-                l1a_att_fname.encode("utf8"),
+                str(l1a_att_fname).encode("utf8"),
             ],
             dtype=h5py.special_dtype(vlen=bytes),
         )
@@ -43,12 +41,12 @@ class GeoQa:
             "L1 OSP Dir",
             ("j",),
             data=[
-                l1_osp_dir.l1_osp_dir.encode("utf8"),
+                str(l1_osp_dir.l1_osp_dir).encode("utf8"),
             ],
             dtype=h5py.special_dtype(vlen=bytes),
         )
-        tt_fname = [tname.encode("utf8") for tname, rname in tt_and_rdn_fname]
-        rdn_fname = [rname.encode("utf8") for tname, rname in tt_and_rdn_fname]
+        tt_fname = [str(tname).encode("utf8") for tname, rname in tt_and_rdn_fname]
+        rdn_fname = [str(rname).encode("utf8") for tname, rname in tt_and_rdn_fname]
         g.create_variable(
             "Line Time Filename",
             ("i",),
@@ -356,11 +354,10 @@ the reference image, in Ecr coordinates (in meters).
                 self.tp_stat[i, 8] = -9999
             if self.tp_stat[i, 4] >= 0 and self.tp_stat[i, 5] >= 0:
                 logger.info(
-                    "Scene %d initial error: %0.1f m final error: %0.1f m QA: %s"
-                    % (i + 1, self.tp_stat[i, 4], self.tp_stat[i, 5], qa_val)
+                    f"Scene {i + 1} initial error: {self.tp_stat[i, 4]:0.1f} m final error: {self.tp_stat[i, 5]:0.1f} m QA: {qa_val}"
                 )
             else:
-                logger.info("Scene %d no tiepoints QA: %s" % (i + 1, qa_val))
+                logger.info(f"Scene {i + 1} no tiepoints QA: {qa_val}")
 
     def close(self):
         try:

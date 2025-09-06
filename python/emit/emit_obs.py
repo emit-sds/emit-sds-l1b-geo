@@ -1,11 +1,9 @@
 from .envi_file import EnviFile
 from .standard_metadata import StandardMetadata
 from emit_swig import EmitObsCalc
-import logging
+from loguru import logger
 import numpy as np
 import pandas as pd
-
-logger = logging.getLogger("l1b_geo_process.emit_loc")
 
 
 class EmitObs(EnviFile):
@@ -109,7 +107,7 @@ class EmitObs(EnviFile):
 
     def run(self):
         """Actually generate the output data."""
-        logger.info("Generating OBS data for %s", self.igc.title)
+        logger.info(f"Generating OBS data for {self.igc.title}")
         latsubpixel, lonsubpixel = self.loc.scaled_lat_lon_grid(2)
         ocalc = EmitObsCalc(
             self.igc,
