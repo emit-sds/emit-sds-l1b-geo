@@ -21,6 +21,8 @@ class L1bProj(object):
     def proj_scene(self, i):
         """Project data for a scene."""
         igc = self.igccol.image_ground_connection(i)
+        if(igc.crosses_dateline):
+            raise RuntimeError("Add handler here")
         mi = self.l1_osp_dir.match_mapinfo(igc)
         mi_fname = "map_info_%s_%03d.xml" % (self.img_type, i + 1)
         igc_fname = "igc_%s_%03d.xml" % (self.img_type, i + 1)

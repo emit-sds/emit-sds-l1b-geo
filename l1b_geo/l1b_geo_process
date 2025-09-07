@@ -7,6 +7,7 @@ from loguru import logger
 import os
 import sys
 import json
+from pathlib import Path
 
 version = "1.0.0"
 usage = """Usage:
@@ -75,25 +76,26 @@ else:
 logger.add(args.prod_dir + "/l1b_geo.log", level="DEBUG")
 
 # Read in additional configuration parameters
-l1_osp_dir = emit.L1OspDir(args.l1_osp_dir)
+l1_osp_dir = emit.L1OspDir(Path(args.l1_osp_dir).absolute())
 
 # Run actual process
 if args.l1a_att:
-    l1a_att = os.path.abspath(args.l1a_att)
-    line_time = [os.path.abspath(f) for f in args.line_time]
-    l1b_rad = [os.path.abspath(f) for f in args.l1b_rad]
+    l1a_att = Path(args.l1a_att).absolute()
+    line_time = [Path(f).absolute() for f in args.line_time]
+    l1b_rad = [Path(f).absolute() for f in args.l1b_rad]
 else:
     curdir = os.getcwd()
     try:
-        f = json.load(open(args.run_config))
-        os.chdir(os.path.dirname(args.run_config))
-        l1a_att = os.path.abspath(os.path.expandvars(f["attitude_ephemeris_file"]))
+        run_config_fname = Path(args.run_config).absolute()
+        f = json.load(open(run_config_fname))
+        os.chdir(run_config_fname.parent)
+        l1a_att = Path(os.path.expandvars(f["attitude_ephemeris_file"])).absolute()
         line_time = [
-            os.path.abspath(os.path.expandvars(t["timestamps_file"]))
+            Path(os.path.expandvars(t["timestamps_file"])).absolute()
             for t in f["timestamp_radiance_pairs"]
         ]
         l1b_rad = [
-            os.path.abspath(os.path.expandvars(t["radiance_file"]))
+            Path(os.path.expandvars(t["radiance_file"])).absolute()
             for t in f["timestamp_radiance_pairs"]
         ]
     finally:
@@ -108,7 +110,7 @@ try:
         )
         curdir = os.getcwd()
         try:
-            os.chdir(args.prod_dir)
+            os.chdir(Path(args.prod_dir).absolute())
             t = emit.L1bGeoGenerate(l1_osp_dir, l1a_att, line_time, l1b_rad)
             t.run()
         finally:

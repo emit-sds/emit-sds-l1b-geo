@@ -60,6 +60,8 @@ class L1bGeoGenerate:
 
     def run_scene(self, i):
         igc = self.igccol_corrected.image_ground_connection(i)
+        if(igc.crosses_dateline):
+            raise RuntimeError("Add handler here")
         scene = self.scene_list[i]
         scene_time = self.scene_time_list[i]
         rdn_fname = self.rdn_fname_list[i]
