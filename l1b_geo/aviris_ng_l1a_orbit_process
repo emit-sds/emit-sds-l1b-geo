@@ -102,8 +102,8 @@ try:
             os.chdir(curdir)
         logger.info("Done with aviris_ng_l1a_orbit processing")
 except Exception:
-    logger.fatal("aviris_ng_l1a_orbit processing failed")
+    logger.critical("aviris_ng_l1a_orbit processing failed")
     raise
 except:
-    logger.fatal("aviris_ng_l1a_orbit processing failed")
+    logger.critical("aviris_ng_l1a_orbit processing failed")
     raise

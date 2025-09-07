@@ -86,8 +86,8 @@ try:
             os.chdir(curdir)
         logger.info("Done with aviris_ng_geo processing")
 except Exception:
-    logger.fatal("aviris_ng_geo processing failed")
+    logger.critical("aviris_ng_geo processing failed")
     raise
 except:
-    logger.fatal("aviris_ng_geo processing failed")
+    logger.critical("aviris_ng_geo processing failed")
     raise

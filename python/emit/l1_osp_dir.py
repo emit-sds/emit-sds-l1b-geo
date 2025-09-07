@@ -9,7 +9,7 @@ from pathlib import Path
 
 # Temp, this should probably get moved into geocal. But for now place here
 # This should also get expanded, right now this doesn't handle resizing etc.
-def _create_subset_file(self, fname, driver, Desired_map_info=None, Translate_arg=None):
+def _create_subset_file(self, fname, driver, pt_list, Desired_map_info=None, Translate_arg=None):
     r = geocal.SubRasterImage(self, Desired_map_info)
     geocal.GdalRasterImage.save(fname, driver, r, geocal.GdalRasterImage.Int16)
 

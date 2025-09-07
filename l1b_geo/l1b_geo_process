@@ -115,8 +115,8 @@ try:
             os.chdir(curdir)
         logger.info("Done with l1b_geo processing")
 except Exception:
-    logger.fatal("L1b_geo processing failed")
+    logger.critical("L1b_geo processing failed")
     raise
 except:
-    logger.fatal("L1b_geo processing failed")
+    logger.critical("L1b_geo processing failed")
     raise

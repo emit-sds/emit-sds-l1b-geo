@@ -43,7 +43,8 @@ class AvirisNgGeoGenerate:
         self.igc = geocal.IpiImageGroundConnection(
             self.ipi, self.l1_osp_dir.dem, self.rad
         )
-        self.geo_qa = GeoQa(self.basename + "_geoqa.nc", "aviris_ng_geo.log")
+        self.geo_qa = GeoQa(self.basename + "_geoqa.nc", "aviris_ng_geo.log", self.orb_fname,
+                            [(self.tt_fname, self.rad_fname),], self.l1_osp_dir)
 
     def create_scene(self):
         # For tiepointing, we want to break the data up into roughly square
@@ -78,7 +79,10 @@ class AvirisNgGeoGenerate:
             # IpiImageGroundConnection
             # igcsub = geocal.OffsetImageGroundConnection(self.igc, r.start,
             #                   0, len(r), self.igc.number_sample)
-            ttsub = geocal.MeasuredTimeTable(tline[r.start : r.stop])
+            tlinev = geocal.Vector_Time()
+            for tl in tline[r.start : r.stop]:
+                tlinev.push_back(tl)
+            ttsub = geocal.MeasuredTimeTable(tlinev)
             radsub = geocal.SubRasterImage(
                 self.rad, r.start, 0, len(r), self.rad.number_sample
             )
