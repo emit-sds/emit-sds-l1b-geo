@@ -21,9 +21,10 @@ class L1bProj(object):
     def proj_scene(self, i):
         """Project data for a scene."""
         igc = self.igccol.image_ground_connection(i)
-        if(igc.crosses_dateline):
-            raise RuntimeError("Add handler here")
-        mi = self.l1_osp_dir.match_mapinfo(igc)
+        change_to_geodetic360 = igc.crosses_dateline
+        mi = self.l1_osp_dir.match_mapinfo(
+            igc, change_to_geodetic360=change_to_geodetic360
+        )
         mi_fname = "map_info_%s_%03d.xml" % (self.img_type, i + 1)
         igc_fname = "igc_%s_%03d.xml" % (self.img_type, i + 1)
         proj_fname = "proj_%s_%03d.img" % (self.img_type, i + 1)

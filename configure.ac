@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(emit, 1.6.19)
+AC_INIT(emit, 1.6.29)
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIRS([config/m4])
 AC_CONFIG_MACRO_DIRS([config/m4_local])

@@ -11,7 +11,9 @@ from packaging.version import parse as parse_version
 class EmitLoc(EnviFile):
     """Generate or read the LOC file for EMIT."""
 
-    def __init__(self, fname, igc=None, standard_metadata=None):
+    def __init__(
+        self, fname, igc=None, standard_metadata=None, change_to_geodetic360=False
+    ):
         """Open a file. As a convention if the IGC is supplied we just
         assume we are creating a file. Otherwise, we read an existing one.
 
@@ -21,6 +23,7 @@ class EmitLoc(EnviFile):
         Note that the shape is (3, number_line, number_sample)
         """
         self.igc = igc
+        self.change_to_geodetic360 = change_to_geodetic360
         if self.igc is None:
             mode = "r"
             shape = None
@@ -66,8 +69,10 @@ class EmitLoc(EnviFile):
         lat = self.latitude[:]
         lon = self.longitude[:]
         # TODO Put in handling for crossing dateline
-        if self.crosses_date_line:
-            raise RuntimeError("Don't yet work when we cross the dateline")
+        if self.crosses_date_line and not self.change_to_geodetic360:
+            raise RuntimeError(
+                "We cross the dateline, need to set change_to_geodetic360 to True for proper handling"
+            )
         latf = scipy.interpolate.RectBivariateSpline(
             np.arange(lat.shape[0]),
             np.arange(lat.shape[1]),
@@ -93,7 +98,10 @@ class EmitLoc(EnviFile):
     def ground_coordinate(self, ln, smp):
         """Return the Geodetic point for the given line/sample"""
         lon, lat, elv = self[:, ln, smp]
-        return geocal.Geodetic(lat, lon, elv)
+        if self.change_to_geodetic360:
+            return geocal.Geodetic360(lat, lon, elv)
+        else:
+            return geocal.Geodetic(lat, lon, elv)
 
     @property
     def crosses_date_line(self):
@@ -119,16 +127,21 @@ class EmitLoc(EnviFile):
         while not rcast.last_position:
             gpos = rcast.next_position()
             for i in range(gpos.shape[1]):
-                gp = geocal.Geodetic(
-                    geocal.Ecr(
-                        gpos[0, i, 0, 0, 0, 0],
-                        gpos[0, i, 0, 0, 0, 1],
-                        gpos[0, i, 0, 0, 0, 2],
-                    )
+                gp_ecr = geocal.Ecr(
+                    gpos[0, i, 0, 0, 0, 0],
+                    gpos[0, i, 0, 0, 0, 1],
+                    gpos[0, i, 0, 0, 0, 2],
                 )
-                self[0, rcast.current_position, i] = gp.longitude
-                self[1, rcast.current_position, i] = gp.latitude
-                self[2, rcast.current_position, i] = gp.height_reference_surface
+                if self.change_to_geodetic360:
+                    gp = geocal.Geodetic360(gp_ecr)
+                    self[0, rcast.current_position, i] = gp.longitude360
+                    self[1, rcast.current_position, i] = gp.latitude
+                    self[2, rcast.current_position, i] = gp.height_reference_surface
+                else:
+                    gp = geocal.Geodetic(gp_ecr)
+                    self[0, rcast.current_position, i] = gp.longitude
+                    self[1, rcast.current_position, i] = gp.latitude
+                    self[2, rcast.current_position, i] = gp.height_reference_surface
         self.standard_metadata.write_metadata(self)
 
     def compare(self, f2):

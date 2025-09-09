@@ -23,7 +23,7 @@ EMIT_ANCILLARY=/store/shared/
 AFIDS_DATA_ELEV_ROOT=$(EMIT_ANCILLARY)/dem/srtm_v3_dem_L2
 AFIDS_DATA_SPICEDATA=$(EMIT_ANCILLARY)/spice_data/cspice
 AFIDS_DATA_ORTHO=$(EMIT_ANCILLARY)/landsat
-EMIT_OSP_DIR=/store/emit/ops/repos/emit_l1b_osp_installs/1.6.19
+EMIT_OSP_DIR=/store/emit/ops/repos/emit_l1b_osp_installs/1.6.29
 # Not used yet, but put in as placeholders. We have these in ECOSTRESS,
 # so they may migrate to emit
 AFIDS_DATA_LWM=$(EMIT_ANCILLARY)/dem/srtm_v3_lwm

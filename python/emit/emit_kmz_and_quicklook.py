@@ -32,6 +32,7 @@ class EmitKmzAndQuicklook(object):
         l1_osp_dir=None,
         generate_quicklook=True,
         generate_erdas=False,
+        change_to_geodetic360=False,
     ):
         self.file_base_name = file_base_name
         self.loc = loc
@@ -46,12 +47,15 @@ class EmitKmzAndQuicklook(object):
         self.scene_index = scene_index
         self.igc_index = igc_index
         self.l1_osp_dir = l1_osp_dir
+        self.change_to_geodetic360 = change_to_geodetic360
 
     def run(self):
         logger.info("Generating KMZ and quicklook")
         mi = geocal.cib01_mapinfo(self.resolution)
+        if self.change_to_geodetic360:
+            mi.change_to_geodetic360()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lat, lon, mi, self.number_subpixel, False)
+        res = Resampler(lon, lat, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%s.vrt" % self.scene_index
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
         # Create second unprojected version. Both upstread and downstream
@@ -120,7 +124,7 @@ class EmitKmzAndQuicklook(object):
             "-of",
             "KMLSUPEROVERLAY",
             vrt_fname,
-            self.file_base_name + ".kmz",
+            str(self.file_base_name) + ".kmz",
         ]
         if not self.use_jpeg:
             cmd.extend(["-co", "FORMAT=PNG"])
@@ -134,7 +138,7 @@ class EmitKmzAndQuicklook(object):
             "-a_nodata",
             "none",
             vrt_fname,
-            self.file_base_name + "_proj.png",
+            str(self.file_base_name) + "_proj.png",
         ]
         cmd2 = [
             "gdal_translate",
@@ -144,22 +148,22 @@ class EmitKmzAndQuicklook(object):
             "-a_nodata",
             "none",
             vrt_fname2,
-            self.file_base_name + ".png",
+            str(self.file_base_name) + ".png",
         ]
         if self.generate_quicklook:
             subprocess.run(cmd, check=True)
             subprocess.run(cmd2, check=True)
         # Remove the .aux.xml file GDAL generates
         try:
-            os.unlink(self.file_base_name + ".kmz" + ".aux.xml")
+            os.unlink(str(self.file_base_name) + ".kmz" + ".aux.xml")
         except FileNotFoundError:
             pass
         try:
-            os.unlink(self.file_base_name + ".png" + ".aux.xml")
+            os.unlink(str(self.file_base_name) + ".png" + ".aux.xml")
         except FileNotFoundError:
             pass
         try:
-            os.unlink(self.file_base_name + "_proj.png" + ".aux.xml")
+            os.unlink(str(self.file_base_name) + "_proj.png" + ".aux.xml")
         except FileNotFoundError:
             pass
 

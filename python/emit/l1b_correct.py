@@ -64,7 +64,10 @@ class L1bCorrect:
         # with EMIT also
 
         # Grab the camera object.
-        cam = self.igccolcorr.camera
+        if hasattr(self.igccolcorr, "camera"):
+            cam = self.igccolcorr.camera
+        else:
+            cam = self.igccolcorr.image_ground_connection(0).ipi.camera
         # Set the variables we will fit
         cam.fit_epsilon = True
         cam.fit_beta = True
@@ -168,8 +171,17 @@ class L1bCorrect:
         # Note we could have parameters for the time table (e.g., a
         # timing offset). But for now we'll leave this off and only
         # include the camera and orbit
-        self.igccolcorr.add_object(self.igccolcorr.camera)
-        self.igccolcorr.add_object(self.igccolcorr.orbit)
+        if hasattr(self.igccolcorr, "camera"):
+            self.igccolcorr.add_object(self.igccolcorr.camera)
+            self.igccolcorr.add_object(self.igccolcorr.orbit)
+        else:
+            # Older Aviris NG version,
+            self.igccolcorr.add_object(
+                self.igccolcorr.image_ground_connection(0).ipi.camera
+            )
+            self.igccolcorr.add_object(
+                self.igccolcorr.image_ground_connection(0).ipi.orbit
+            )
         geocal.write_shelve("igccolcorr_initial.xml", self.igccolcorr)
         # Can also save this whole object, if you want to be able to
         # play with fitting data.

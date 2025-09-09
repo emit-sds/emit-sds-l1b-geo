@@ -36,6 +36,7 @@ class EmitGlt(EnviFile):
         resolution=60,
         number_subpixel=3,
         rotated_map=False,
+        change_to_geodetic360=False,
     ):
         self.fname = Path(fname)
         self.loc = loc
@@ -43,6 +44,7 @@ class EmitGlt(EnviFile):
         self.standard_metadata = standard_metadata
         self.number_subpixel = number_subpixel
         self.rotated_map = rotated_map
+        self.change_to_geodetic360 = change_to_geodetic360
         # Note that if we are writing the file, then we actually need to
         # wait on calling __init__ because we don't know the size yet.
         if self.loc is None:
@@ -50,20 +52,17 @@ class EmitGlt(EnviFile):
 
     def map_info_not_rotated(self):
         mi = geocal.cib01_mapinfo(self.resolution)
+        if self.change_to_geodetic360:
+            mi.change_to_geodetic360()
         # We only need the edges pixels, this defines the full
         # range of data here
         lat = self.loc.latitude
         lon = self.loc.longitude
-        pt = [geocal.Geodetic(lat[0, i], lon[0, i]) for i in range(self.loc.shape[2])]
-        pt.extend(
-            geocal.Geodetic(lat[-1, i], lon[-1, i]) for i in range(self.loc.shape[2])
-        )
-        pt.extend(
-            geocal.Geodetic(lat[i, 0], lon[i, 0]) for i in range(self.loc.shape[1])
-        )
-        pt.extend(
-            geocal.Geodetic(lat[i, -1], lon[i, -1]) for i in range(self.loc.shape[1])
-        )
+        cclass = geocal.Geodetic360 if self.change_to_geodetic360 else geocal.Geodetic
+        pt = [cclass(lat[0, i], lon[0, i]) for i in range(self.loc.shape[2])]
+        pt.extend(cclass(lat[-1, i], lon[-1, i]) for i in range(self.loc.shape[2]))
+        pt.extend(cclass(lat[i, 0], lon[i, 0]) for i in range(self.loc.shape[1]))
+        pt.extend(cclass(lat[i, -1], lon[i, -1]) for i in range(self.loc.shape[1]))
         mi = mi.cover(pt)
         return mi
 
@@ -71,23 +70,18 @@ class EmitGlt(EnviFile):
         """Return the gring, which is latitude/longitude of the bounding
         rectangle"""
         mi = geocal.cib01_mapinfo(self.resolution)
+        if self.change_to_geodetic360:
+            mi.change_to_geodetic360()
         # We only need the edges pixels, this defines the full
         # range of data here
         f = mi.coordinate_converter.convert_to_coordinate
         lat = self.loc.latitude
         lon = self.loc.longitude
-        pt = [
-            f(geocal.Geodetic(lat[0, i], lon[0, i])) for i in range(self.loc.shape[2])
-        ]
-        pt.extend(
-            f(geocal.Geodetic(lat[-1, i], lon[-1, i])) for i in range(self.loc.shape[2])
-        )
-        pt.extend(
-            f(geocal.Geodetic(lat[i, 0], lon[i, 0])) for i in range(self.loc.shape[1])
-        )
-        pt.extend(
-            f(geocal.Geodetic(lat[i, -1], lon[i, -1])) for i in range(self.loc.shape[1])
-        )
+        cclass = geocal.Geodetic360 if self.change_to_geodetic360 else geocal.Geodetic
+        pt = [f(cclass(lat[0, i], lon[0, i])) for i in range(self.loc.shape[2])]
+        pt.extend(f(cclass(lat[-1, i], lon[-1, i])) for i in range(self.loc.shape[2]))
+        pt.extend(f(cclass(lat[i, 0], lon[i, 0])) for i in range(self.loc.shape[1]))
+        pt.extend(f(cclass(lat[i, -1], lon[i, -1])) for i in range(self.loc.shape[1]))
         # Note cv2 convexhull can't work with noncontigous array. The
         # error message returned is very confusing, it complains that the
         # type isn't float32 - even though it is. But we just make sure
@@ -99,23 +93,18 @@ class EmitGlt(EnviFile):
 
     def map_info_rotated(self):
         mi = geocal.cib01_mapinfo(self.resolution)
+        if self.change_to_geodetic360:
+            mi.change_to_geodetic360()
         # We only need the edges pixels, this defines the full
         # range of data here
         f = mi.coordinate_converter.convert_to_coordinate
         lat = self.loc.latitude
         lon = self.loc.longitude
-        pt = [
-            f(geocal.Geodetic(lat[0, i], lon[0, i])) for i in range(self.loc.shape[2])
-        ]
-        pt.extend(
-            f(geocal.Geodetic(lat[-1, i], lon[-1, i])) for i in range(self.loc.shape[2])
-        )
-        pt.extend(
-            f(geocal.Geodetic(lat[i, 0], lon[i, 0])) for i in range(self.loc.shape[1])
-        )
-        pt.extend(
-            f(geocal.Geodetic(lat[i, -1], lon[i, -1])) for i in range(self.loc.shape[1])
-        )
+        cclass = geocal.Geodetic360 if self.change_to_geodetic360 else geocal.Geodetic
+        pt = [f(cclass(lat[0, i], lon[0, i])) for i in range(self.loc.shape[2])]
+        pt.extend(f(cclass(lat[-1, i], lon[-1, i])) for i in range(self.loc.shape[2]))
+        pt.extend(f(cclass(lat[i, 0], lon[i, 0])) for i in range(self.loc.shape[1]))
+        pt.extend(f(cclass(lat[i, -1], lon[i, -1])) for i in range(self.loc.shape[1]))
         # Note cv2 convexhull can't work with noncontigous array. The
         # error message returned is very confusing, it complains that the
         # type isn't float32 - even though it is. But we just make sure
@@ -138,7 +127,8 @@ class EmitGlt(EnviFile):
         )
         # In general, mi2 will cover invalid lat/lon. Just pull in to a
         # reasonable area, we handling the actual cover later
-        mi2 = mi2.cover([geocal.Geodetic(10, 10), geocal.Geodetic(20, 20)])
+        cclass = geocal.Geodetic360 if self.change_to_geodetic360 else geocal.Geodetic
+        mi2 = mi2.cover([cclass(10, 10), cclass(20, 20)])
         s = mi.resolution_meter / mi2.resolution_meter
         mi2 = mi2.scale(s, s)
         return mi2
@@ -158,7 +148,7 @@ class EmitGlt(EnviFile):
         else:
             mi = self.map_info_not_rotated()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lat, lon, mi, self.number_subpixel, False)
+        res = Resampler(lon, lat, mi, self.number_subpixel, False)
         if res.map_info.number_y_pixel > 10000 or res.map_info.number_x_pixel > 10000:
             raise RuntimeError(
                 f"Funny map, ending process. File name: {self.fname} Map info: {res.map_info}"

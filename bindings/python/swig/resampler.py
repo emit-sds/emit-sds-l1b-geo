@@ -168,8 +168,8 @@ import geocal_swig.geocal_exception
 class Resampler(geocal_swig.generic_object.GenericObject):
     r"""
 
-    This is used to take the LOC latitude and longitude fields and project
-    data to a given MapInfo.
+    This is used to take the LOC latitude and longitude fields and (or
+    other coordinate X and Y) and project data to a given MapInfo.
 
     Note that this is pretty much a duplicate of the code we have in
     ECOSTRESS. Given that this was already used in two places, we probably
@@ -180,10 +180,9 @@ class Resampler(geocal_swig.generic_object.GenericObject):
 
     This is a bit brute force, and we don't worry about memory usage. The
     arrays are something like 10Kx10K floating point, so we are talking GB
-    but not 10's of GB. Since this is something we only run occasionally,
-    this memory usage is probably fine. But if this becomes an issue, we
-    can revisit this and make this code more efficient - but for now this
-    doesn't seem to be worth the effort.
+    but not 10's of GB. But if this becomes an issue, we can revisit this
+    and make this code more efficient - but for now this doesn't seem to
+    be worth the effort.
 
     C++ includes: resampler.h 
     """
@@ -194,17 +193,22 @@ class Resampler(geocal_swig.generic_object.GenericObject):
     def __init__(self, *args):
         r"""
 
-        Resampler::Resampler(const boost::shared_ptr< GeoCal::RasterImage > &Latitude, const
-        boost::shared_ptr< GeoCal::RasterImage > &Longitude, const
+        Resampler::Resampler(const boost::shared_ptr< GeoCal::RasterImage > &X_coor, const
+        boost::shared_ptr< GeoCal::RasterImage > &Y_coor, const
         GeoCal::MapInfo &Mi, int Num_sub_pixel=2, bool Exactly_match_mi=false)
         Emit::Resampler::Resampler
         Constructor.
-        This takes the latitude and longitude fields as RasterImage (we could
-        have taken the L1B_GEO file name, but taking RasterImage seems a
-        little more general). We take the MapInfo that we will resample to
-        (you can get that from something like mi =
+        This takes the latitude (Y) and longitude (X) fields as RasterImage
+        (we could have taken the L1B_GEO file name, but taking RasterImage
+        seems a little more general). We take the MapInfo that we will
+        resample to (you can get that from something like mi =
         Landsat7Global("/raid22",Landsat7Global.BAND5).map_info.scale(2,2)
         in python).
+
+        For a geodetic map, this is longitude (X) and latitude (Y). For other
+        map projections, this is just the general X and Y coordinates. Note
+        that these should already be converted to the coordinate system of the
+        map info.
 
         We make sure the mapinfo covers the latitude/longitude range
 

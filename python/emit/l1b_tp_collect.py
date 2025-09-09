@@ -146,9 +146,6 @@ class L1bTpCollect:
         number_match_try = 0
         try:
             with logger.catch(reraise=True):
-                if(self.igccol.image_ground_connection(i).crosses_dateline):
-                    # Might not need to do anything here, but we'll want to check
-                    raise RuntimeError("Add handler here")
                 tt = self.igccol.image_ground_connection(i).ipi.time_table
                 for i2, tpcol in enumerate(self.tpcollect):
                     tpcol.image_index1 = i

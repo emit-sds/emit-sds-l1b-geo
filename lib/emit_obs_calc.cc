@@ -26,8 +26,12 @@ EmitObsCalc::EmitObsCalc
     tm(i) = Time(Igc.pixel_time(ImageCoordinate(i,0)));
     pos(i) = Igc.cf_look_vector_pos(ImageCoordinate(i,0));
     for(int j = 0; j < gc.cols(); ++j) {
-      gc(i,j) = boost::make_shared<Geodetic>(Latitude(i,j),
-					     Longitude(i,j), Height(i,j));
+      if(Longitude(i,j) >= 180.0)
+	gc(i,j) = boost::make_shared<Geodetic360>(Latitude(i,j),
+						  Longitude(i,j), Height(i,j));
+      else
+	gc(i,j) = boost::make_shared<Geodetic>(Latitude(i,j),
+					       Longitude(i,j), Height(i,j));
       CartesianFixedLookVector clv(*gc(i,j), *pos(i));
       lv(i,j) = LnLookVector(clv, *gc(i,j));
       slv(i,j) = LnLookVector::solar_look_vector(tm(i), *gc(i,j));
@@ -37,8 +41,12 @@ EmitObsCalc::EmitObsCalc
   gcsubpixel.resize(Igc.number_line()*scale, Igc.number_sample()*scale);
   for(int i = 0; i < gcsubpixel.rows(); ++i) {
     for(int j = 0; j < gcsubpixel.cols(); ++j) {
-      gcsubpixel(i,j) = boost::make_shared<Geodetic>(Latitude_subpixel(i,j),
-						     Longitude_subpixel(i,j));
+      if(Longitude_subpixel(i,j) >= 180.0)
+	gcsubpixel(i,j) = boost::make_shared<Geodetic360>(Latitude_subpixel(i,j),
+							  Longitude_subpixel(i,j));
+      else
+	gcsubpixel(i,j) = boost::make_shared<Geodetic>(Latitude_subpixel(i,j),
+						       Longitude_subpixel(i,j));
     }
   }
 }

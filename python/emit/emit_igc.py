@@ -60,17 +60,25 @@ class EmitIgc(geocal.IpiImageGroundConnection):
 
 
 def _crosses_dateline(self) -> bool:
-    lon1 = self.ground_coordinate(geocal.ImageCoordinate(0,0)).longitude
-    lon2 = self.ground_coordinate(geocal.ImageCoordinate(0,self.number_sample-1)).longitude
-    lon3 = self.ground_coordinate(geocal.ImageCoordinate(self.number_line-1,self.number_sample-1)).longitude
-    lon4 = self.ground_coordinate(geocal.ImageCoordinate(self.number_line-1,0)).longitude
-    lon_g170 = (lon1 > 170 or lon2 > 170 or lon3 > 170 or lon4 > 170)
-    lon_ln170 = (lon1 < -170 or lon2 < -170 or lon3 < -170 or lon4 < -170)
-    return lon_g170 and lon_ln170;
+    lon1 = self.ground_coordinate(geocal.ImageCoordinate(0, 0)).longitude
+    lon2 = self.ground_coordinate(
+        geocal.ImageCoordinate(0, self.number_sample - 1)
+    ).longitude
+    lon3 = self.ground_coordinate(
+        geocal.ImageCoordinate(self.number_line - 1, self.number_sample - 1)
+    ).longitude
+    lon4 = self.ground_coordinate(
+        geocal.ImageCoordinate(self.number_line - 1, 0)
+    ).longitude
+    lon_g170 = lon1 > 170 or lon2 > 170 or lon3 > 170 or lon4 > 170
+    lon_ln170 = lon1 < -170 or lon2 < -170 or lon3 < -170 or lon4 < -170
+    return lon_g170 and lon_ln170
+
 
 geocal.IpiImageGroundConnection.crosses_dateline = property(
     _crosses_dateline, doc="True if we cross the dateline"
 )
+
 
 # We assume here that the same orbit and camera is used for each of the
 # ImageGroundConnection in EmitIgcCollection. This is mostly just a

@@ -66,7 +66,7 @@ $(swigsrc)/%_wrap.Pcc : %.i $(SWIG_TARGET)
 
 $(srcdir)/$(swigsrc)/swig_wrap.cc: $(pythonswigsrc)/swig_wrap.tmpl config/create_python_init.py Makefile $(PYTHON_TARGET)
 	export LD_LIBRARY_PATH="${PYTHON_LDPATH}${LD_LIBRARY_PATH}" && \
-        $(PYTHON) $(srcdir)/config/create_python_init.py $< $@ swig ecostress $(patsubst %_wrap.cc,%,$(notdir $(SWIG_SRC)))
+        $(PYTHON) $(srcdir)/config/create_python_init.py $< $@ swig emit $(patsubst %_wrap.cc,%,$(notdir $(SWIG_SRC)))
 
 $(srcdir)/$(swigsrc)/%_wrap.cc: %.i %.h %.cc $(DOXYGEN_TARGET) $(SWIG_TARGET)
 	mkdir -p $*_doc

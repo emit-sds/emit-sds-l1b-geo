@@ -27,12 +27,17 @@ EMIT_IMPLEMENT(Resampler);
 const int fill_value_threshold = -999;
 
 //-------------------------------------------------------------------------
-/// Constructor. This takes the latitude and longitude fields as
+/// Constructor. This takes the latitude (Y) and longitude (X) fields as
 /// RasterImage (we could have taken the L1B_GEO file name, but taking
 /// RasterImage seems a little more general). We take the MapInfo that
 /// we will resample to (you can get that from something like
 /// mi = Landsat7Global("/raid22",Landsat7Global.BAND5).map_info.scale(2,2)
 /// in python).
+///
+/// For a geodetic map, this is longitude (X) and latitude (Y). For
+/// other map projections, this is just the general X and Y
+/// coordinates. Note that these should already be converted to the
+/// coordinate system of the map info.
 ///
 /// We make sure the mapinfo covers the latitude/longitude range
 ///
@@ -49,18 +54,18 @@ const int fill_value_threshold = -999;
 //-------------------------------------------------------------------------
 
 Resampler::Resampler
-(const boost::shared_ptr<GeoCal::RasterImage>& Latitude,
- const boost::shared_ptr<GeoCal::RasterImage>& Longitude,
+(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
+ const boost::shared_ptr<GeoCal::RasterImage>& Y_coor,
  const GeoCal::MapInfo& Mi, int Num_sub_pixel, bool Exactly_match_mi)
   : nsub(Num_sub_pixel)
 {
-  MagnifyBilinear latmag(Latitude, Num_sub_pixel);
-  MagnifyBilinear lonmag(Longitude, Num_sub_pixel);
-  blitz::Array<double, 2> lat = latmag.read_double(0,0, latmag.number_line(),
-						   latmag.number_sample());
-  blitz::Array<double, 2> lon = lonmag.read_double(0,0, lonmag.number_line(),
-						   lonmag.number_sample());
-  init(lat, lon, Mi, Exactly_match_mi);
+  MagnifyBilinear xmag(X_coor, Num_sub_pixel);
+  MagnifyBilinear ymag(Y_coor, Num_sub_pixel);
+  blitz::Array<double, 2> x = xmag.read_double(0,0, xmag.number_line(),
+					       xmag.number_sample());
+  blitz::Array<double, 2> y = ymag.read_double(0,0, ymag.number_line(),
+					       ymag.number_sample());
+  init(x, y, Mi, Exactly_match_mi);
 }
 
 //-------------------------------------------------------------------------
@@ -70,30 +75,23 @@ Resampler::Resampler
 //-------------------------------------------------------------------------
 
 Resampler::Resampler
-(const blitz::Array<double, 2>& Latitude_interpolated,
- const blitz::Array<double, 2>& Longitude_interpolated,
+(const blitz::Array<double, 2>& X_coor_interpolated,
+ const blitz::Array<double, 2>& Y_coor_interpolated,
  const GeoCal::MapInfo& Mi, int Num_sub_pixel, bool Exactly_match_mi)
   : nsub(Num_sub_pixel)
 {
-  init(Latitude_interpolated, Longitude_interpolated, Mi, Exactly_match_mi);
+  init(X_coor_interpolated, Y_coor_interpolated, Mi, Exactly_match_mi);
 }
 
-void Resampler::init(const blitz::Array<double, 2>& lat,
-		     const blitz::Array<double, 2>& lon,
+void Resampler::init(const blitz::Array<double, 2>& X_coor,
+		     const blitz::Array<double, 2>& Y_coor,
 		     const GeoCal::MapInfo& Mi, bool Exactly_match_mi)
 {
   blitz::Range ra = blitz::Range::all();
-  // As an optimization, we assume the map uses a
-  // GeodeticConverter. We could relax this if needed, at the cost of
-  // some speed. But for now, just assume this and trigger an error if
-  // we don't have this.
-  GeoCal::GeodeticConverter g;
-  if(!Mi.coordinate_converter().is_same(g))
-    throw GeoCal::Exception("Resampler only works with MapInfo that uses a GeodeticConverter");
 
-  data_index.resize(lat.rows(), lon.cols(), 2);
+  data_index.resize(X_coor.rows(), X_coor.cols(), 2);
   blitz::Array<double, 2> xindex, yindex;
-  Mi.coordinate_to_index(lon, lat, xindex, yindex);
+  Mi.coordinate_to_index(X_coor, Y_coor, xindex, yindex);
   data_index(ra,ra,0) = blitz::cast<int>(blitz::rint(yindex));
   data_index(ra,ra,1) = blitz::cast<int>(blitz::rint(xindex));
   if(Exactly_match_mi) {
@@ -104,9 +102,9 @@ void Resampler::init(const blitz::Array<double, 2>& lat,
   // with lat/lon that are fill values.
   bool first = true;
   int minx = 0, miny = 0, maxx = 0, maxy = 0;
-  for(int i = 0; i < lat.rows(); ++i)
-    for(int j = 0; j < lat.cols(); ++j)
-      if(lat(i, j) > -1000 && lon(i, j) > -1000) {
+  for(int i = 0; i < X_coor.rows(); ++i)
+    for(int j = 0; j < X_coor.cols(); ++j)
+      if(Y_coor(i, j) > -1000 && X_coor(i, j) > -1000) {
 	if(first) {
 	  minx = data_index(i,j,1);
 	  miny = data_index(i,j,0);
@@ -124,9 +122,9 @@ void Resampler::init(const blitz::Array<double, 2>& lat,
   data_index(ra,ra,1) -= minx;
   // Make sure all the lat/lon fill values have data_index out of
   // range so we don't use the data.
-  for(int i = 0; i < lat.rows(); ++i)
-    for(int j = 0; j < lat.cols(); ++j)
-      if(lat(i, j) <= -1000 && lon(i, j) <= -1000)
+  for(int i = 0; i < X_coor.rows(); ++i)
+    for(int j = 0; j < X_coor.cols(); ++j)
+      if(Y_coor(i, j) <= -1000 && X_coor(i, j) <= -1000)
 	data_index(i,j,ra) = -9999;
 }
 

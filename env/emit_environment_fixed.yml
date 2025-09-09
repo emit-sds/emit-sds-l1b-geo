@@ -123,7 +123,7 @@ dependencies:
   - gdal=3.9.2=py311h5159542_7
   - gdb=16.3=py311h3451168_2
   - gdk-pixbuf=2.42.12=hb9ae30d_0
-  - geocal=20250825=np126h6e6da18_0
+  - geocal=20250904=np126h6e6da18_0
   - geos=3.13.0=h5888daf_0
   - geotiff=1.7.4=h3551947_0
   - gettext=0.25.1=h3f43e3d_1

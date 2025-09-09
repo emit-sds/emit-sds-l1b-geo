@@ -60,8 +60,7 @@ class L1bGeoGenerate:
 
     def run_scene(self, i):
         igc = self.igccol_corrected.image_ground_connection(i)
-        if(igc.crosses_dateline):
-            raise RuntimeError("Add handler here")
+        change_to_geodetic360 = igc.crosses_dateline
         scene = self.scene_list[i]
         scene_time = self.scene_time_list[i]
         rdn_fname = self.rdn_fname_list[i]
@@ -111,13 +110,19 @@ class L1bGeoGenerate:
             int(self.product_version),
             "",
         )
-        loc = EmitLoc(loc_fname, igc=igc, standard_metadata=standard_metadata)
+        loc = EmitLoc(
+            loc_fname,
+            igc=igc,
+            standard_metadata=standard_metadata,
+            change_to_geodetic360=change_to_geodetic360,
+        )
         obs = EmitObs(obs_fname, igc=igc, standard_metadata=standard_metadata, loc=loc)
         glt = EmitGlt(
             glt_fname,
             loc=loc,
             standard_metadata=standard_metadata,
             rotated_map=self.glt_rotated,
+            change_to_geodetic360=change_to_geodetic360,
         )
         kmz = None
         if self.generate_kmz or self.generate_quicklook or self.generate_erdas:
@@ -135,6 +140,7 @@ class L1bGeoGenerate:
                 generate_erdas=self.generate_erdas,
                 generate_quicklook=self.generate_quicklook,
                 l1_osp_dir=self.l1_osp_dir,
+                change_to_geodetic360=change_to_geodetic360,
             )
         loc.run()
         obs.run()

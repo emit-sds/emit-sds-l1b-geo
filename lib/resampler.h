@@ -6,7 +6,7 @@
 namespace Emit {
 /****************************************************************//**
   This is used to take the LOC latitude and longitude fields and
-  project data to a given MapInfo.
+  (or other coordinate X and Y) and project data to a given MapInfo.
 
   Note that this is pretty much a duplicate of the code we have in 
   ECOSTRESS. Given that this was already used in two places, we
@@ -17,20 +17,19 @@ namespace Emit {
   
   This is a bit brute force, and we don't worry about memory usage. 
   The arrays are something like 10Kx10K floating point, so we are
-  talking GB but not 10's of GB. Since this is something we only run
-  occasionally, this memory usage is probably fine. But if this
+  talking GB but not 10's of GB. But if this
   becomes an issue, we can revisit this and make this code more
   efficient - but for now this doesn't seem to be worth the effort.
 *******************************************************************/
 
 class Resampler : public GeoCal::Printable<Resampler> {
 public:
-  Resampler(const boost::shared_ptr<GeoCal::RasterImage>& Latitude,
-	    const boost::shared_ptr<GeoCal::RasterImage>& Longitude,
+  Resampler(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
+	    const boost::shared_ptr<GeoCal::RasterImage>& Y_coor,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
-  Resampler(const blitz::Array<double, 2>& Latitude_interpolated,
-	    const blitz::Array<double, 2>& Longitude_interpolated,
+  Resampler(const blitz::Array<double, 2>& X_coor_interpolated,
+	    const blitz::Array<double, 2>& Y_coor_interpolated,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
   virtual ~Resampler() {}
@@ -52,8 +51,8 @@ public:
   virtual void print(std::ostream& Os) const
   { Os << "ECOSTRESS Resampler";}
 private:
-  void init(const blitz::Array<double, 2>& lat,
-	    const blitz::Array<double, 2>& lon,
+  void init(const blitz::Array<double, 2>& X_coor,
+	    const blitz::Array<double, 2>& Y_coor,
 	    const GeoCal::MapInfo& Mi, bool Exactly_match_mi);
   GeoCal::MapInfo mi;
   int nsub;

@@ -2472,7 +2472,7 @@ python-install:
 	pip install --prefix=@prefix@ $(srcdir)/@srcpython@
 
 python-check:
-	source $(prefix)/setup_ecostress.sh && pytest -n 10 $(srcdir)/@srcpython@/test
+	source $(prefix)/setup_emit.sh && pytest -n 10 $(srcdir)/@srcpython@/test
 
 dist-clean-up-python:
 	rm -rf `find $(distdir) -name '__pycache__'`
@@ -2505,7 +2505,7 @@ install-python: all
 
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@$(srcdir)/$(swigsrc)/swig_wrap.cc: $(pythonswigsrc)/swig_wrap.tmpl config/create_python_init.py Makefile $(PYTHON_TARGET)
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@	export LD_LIBRARY_PATH="${PYTHON_LDPATH}${LD_LIBRARY_PATH}" && \
-@HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@        $(PYTHON) $(srcdir)/config/create_python_init.py $< $@ swig ecostress $(patsubst %_wrap.cc,%,$(notdir $(SWIG_SRC)))
+@HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@        $(PYTHON) $(srcdir)/config/create_python_init.py $< $@ swig emit $(patsubst %_wrap.cc,%,$(notdir $(SWIG_SRC)))
 
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@$(srcdir)/$(swigsrc)/%_wrap.cc: %.i %.h %.cc $(DOXYGEN_TARGET) $(SWIG_TARGET)
 @HAVE_SWIG_TRUE@@MAINTAINER_MODE_TRUE@	mkdir -p $*_doc

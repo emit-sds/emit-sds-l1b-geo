@@ -84,7 +84,7 @@ class AvirisNgGlt(EnviFile):
         else:
             mi = self.map_info_not_rotated()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lat, lon, mi, self.number_subpixel, False)
+        res = Resampler(lon, lat, mi, self.number_subpixel, False)
         super().__init__(
             self.fname,
             map_info=res.map_info,

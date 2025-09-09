@@ -9,7 +9,9 @@ from pathlib import Path
 
 # Temp, this should probably get moved into geocal. But for now place here
 # This should also get expanded, right now this doesn't handle resizing etc.
-def _create_subset_file(self, fname, driver, pt_list, Desired_map_info=None, Translate_arg=None):
+def _create_subset_file(
+    self, fname, driver, pt_list, Desired_map_info=None, Translate_arg=None
+):
     r = geocal.SubRasterImage(self, Desired_map_info)
     geocal.GdalRasterImage.save(fname, driver, r, geocal.GdalRasterImage.Int16)
 
@@ -169,21 +171,38 @@ class L1OspDir:
             self.ortho_base_dir, band_to_landsat_band(self.landsat_band)
         )
 
-    def match_mapinfo(self, igc):
+    def match_mapinfo(self, igc, change_to_geodetic360=False):
         """Determine the MapInfo we should using for matching the given
         ImageGroundConnection with our orthobase"""
         ortho_scale = round(
             self.match_resolution / self.ortho_base.map_info.resolution_meter
         )
-        mibase = self.ortho_base.map_info.scale(ortho_scale, ortho_scale)
+        obase = self.ortho_base
+        if change_to_geodetic360:
+            try:
+                obase = self.ortho_base
+                obase.change_to_geodetic360()
+                mibase = obase.map_info.scale(ortho_scale, ortho_scale)
+            finally:
+                obase.change_to_geodetic()
+        else:
+            mibase = self.ortho_base.map_info.scale(ortho_scale, ortho_scale)
         return igc.cover(mibase)
 
     def write_ortho_base_subset(self, ref_fname, map_info):
         """Create a VICAR file with the given name, containing the
         reference image we should match against."""
-        self.ortho_base.create_subset_file(
-            ref_fname, "VICAR", [], map_info, "-ot Int16"
-        )
+        if isinstance(map_info.coordinate_converter, geocal.Geodetic360Converter):
+            try:
+                obase = self.ortho_base
+                obase.change_to_geodetic360()
+                obase.create_subset_file(ref_fname, "VICAR", [], map_info, "-ot Int16")
+            finally:
+                obase.change_to_geodetic()
+        else:
+            self.ortho_base.create_subset_file(
+                ref_fname, "VICAR", [], map_info, "-ot Int16"
+            )
 
     def camera(self):
         logger.info(f"Camera file: {self.l1_osp_dir / 'camera.xml'}")

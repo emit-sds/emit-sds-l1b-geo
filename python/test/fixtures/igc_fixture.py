@@ -56,11 +56,17 @@ def emit_igccol(test_data, l1_osp_dir):
     )
     return igccol
 
+
 @pytest.fixture(scope="function")
 def emit_dateline_igccol(test_data, l1_osp_dir):
     l1a_att = test_data / "emit20240101t231526_o00116_l1a_att_b0106_v01.nc"
-    line_time = [test_data / "emit20240102t001521_o00116_s001_l1a_raw_b0106_v01_line_timestamps.txt",]
-    l1b_rad = [test_data / "emit20240102t001521_o00116_s001_l1b_rdn_b0106_v01.img",]
+    line_time = [
+        test_data
+        / "emit20240102t001521_o00116_s001_l1a_raw_b0106_v01_line_timestamps.txt",
+    ]
+    l1b_rad = [
+        test_data / "emit20240102t001521_o00116_s001_l1b_rdn_b0106_v01.img",
+    ]
     # Red band for matching
     rad_band = 38
     igccol = emit.EmitIgcCollection.create(

@@ -43,8 +43,15 @@ class AvirisNgGeoGenerate:
         self.igc = geocal.IpiImageGroundConnection(
             self.ipi, self.l1_osp_dir.dem, self.rad
         )
-        self.geo_qa = GeoQa(self.basename + "_geoqa.nc", "aviris_ng_geo.log", self.orb_fname,
-                            [(self.tt_fname, self.rad_fname),], self.l1_osp_dir)
+        self.geo_qa = GeoQa(
+            self.basename + "_geoqa.nc",
+            "aviris_ng_geo.log",
+            self.orb_fname,
+            [
+                (self.tt_fname, self.rad_fname),
+            ],
+            self.l1_osp_dir,
+        )
 
     def create_scene(self):
         # For tiepointing, we want to break the data up into roughly square
@@ -70,6 +77,7 @@ class AvirisNgGeoGenerate:
         # Create subsetted ImageGroundConnection, and put into an
         # overall IgcArray
         self.igccol_initial = geocal.IgcArray([])
+        self.assume_igc_independent = False
         for i, r in enumerate(rset):
             # OffsetImageGroundConnection is simpler to subset, but
             # our ray tracing code actually assumes we have a
@@ -93,9 +101,10 @@ class AvirisNgGeoGenerate:
                 ipisub, self.l1_osp_dir.dem, radsub, f"Scene {i + 1}"
             )
             self.igccol_initial.add_igc(igcsub)
-        self.igccol_initial.add_object(self.cam)
-        self.igccol_initial.add_object(self.orb)
-        self.igccol_initial.add_object(self.tt)
+        # This gets added in L1bCorrect, so we don't want to do that here also
+        # self.igccol_initial.add_object(self.cam)
+        # self.igccol_initial.add_object(self.orb)
+        # self.igccol_initial.add_object(self.tt)
 
     def run(self):
         logger.info("Starting AvirisNgGeoGenerate")
@@ -114,7 +123,9 @@ class AvirisNgGeoGenerate:
                 "Not enough lines of image data to do matching, using original guess as exterior orientation"
             )
         else:
-            l1b_correct = L1bCorrect(self.igccol_initial, self.l1_osp_dir, self.geo_qa)
+            l1b_correct = L1bCorrect(
+                self.igccol_initial, self.l1_osp_dir, self.geo_qa, fit_camera_only=True
+            )
             self.igccol_corrected = l1b_correct.igccol_corrected(pool=pool)
             self.cam.parameter = self.igccol_corrected.image_ground_connection(
                 0
