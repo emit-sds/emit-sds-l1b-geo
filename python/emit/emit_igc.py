@@ -2,7 +2,7 @@ from .emit_orbit_extension import EmitOrbit
 from .emit_time_table import EmitTimeTable
 from .emit_camera import EmitCamera
 from .envi_file import EnviFile
-from .misc import orb_and_scene_from_file_name
+from .misc import orb_and_scene_from_file_name, time_from_file_name
 from emit_swig import EmitIgcCollection, EmitL1bImage, ReverseCamera
 from loguru import logger
 import geocal
@@ -127,7 +127,14 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band, l1_osp_dir, include_im
     index_to_scene_time = {}
     index_to_rdn_fname = {}
     for tt_fname, rdn_fname in tt_and_rdn_fname:
-        orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
+        try:
+            orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
+        except RuntimeError:
+            # The newer naming convention doesn't have orbit number and scene it it.
+            # Just use the stime
+            orbit_number = None
+            scene = None
+            stime = time_from_file_name(rdn_fname)
         reverse_image = False
         if include_img:
             img = EmitL1bImage(str(rdn_fname), l1b_band, l1_osp_dir.rad_match_scale)

@@ -36,9 +36,9 @@ class L1bGeoGenerate:
         qa_fname = emit_file_name(
             "l1b_geoqa",
             tstart,
-            int(self.orbit_number),
             None,
-            int(self.build_version),
+            None,
+            None,
             int(self.product_version),
             ".nc",
         )
@@ -77,36 +77,36 @@ class L1bGeoGenerate:
         loc_fname = emit_file_name(
             "l1b_loc",
             scene_time,
-            int(self.orbit_number),
-            int(scene),
-            int(self.build_version),
+            None,
+            None,
+            None,
             int(self.product_version),
             ".img",
         )
         obs_fname = emit_file_name(
             "l1b_obs",
             scene_time,
-            int(self.orbit_number),
-            int(scene),
-            int(self.build_version),
+            None,
+            None,
+            None,
             int(self.product_version),
             ".img",
         )
         glt_fname = emit_file_name(
             "l1b_glt",
             scene_time,
-            int(self.orbit_number),
-            int(scene),
-            int(self.build_version),
+            None,
+            None,
+            None,
             int(self.product_version),
             ".img",
         )
         kmz_base_fname = emit_file_name(
             "l1b_rdnrgb",
             scene_time,
-            int(self.orbit_number),
-            int(scene),
-            int(self.build_version),
+            None,
+            None,
+            None,
             int(self.product_version),
             "",
         )
@@ -177,9 +177,9 @@ class L1bGeoGenerate:
         orb_fname = emit_file_name(
             "l1b_att",
             tstart,
-            int(self.orbit_number),
             None,
-            int(self.build_version),
+            None,
+            None,
             int(self.product_version),
             ".nc",
         )

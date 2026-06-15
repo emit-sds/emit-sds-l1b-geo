@@ -88,6 +88,14 @@ def emit_file_name(file_type, dstring, onum, snum, bnum, vnum, ext):
         dstring = re.sub(
             r"T", "t", re.sub(r"[-:]", "", re.split(r"\.", str(dstring))[0])
         )
+    if onum is None:
+        # Newer short file name
+        return "emit%s_%s_v%02d%s" % (
+            dstring,
+            file_type,
+            vnum,
+            ext,
+        )
     if snum is None:
         return "emit%s_o%05d_%s_b%03d_v%02d%s" % (
             dstring,
@@ -115,6 +123,14 @@ def orb_and_scene_from_file_name(fname):
     if not m:
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
     return (m.group(2), m.group(3), m.group(1))
+
+def time_from_file_name(fname):
+    """Get the time from a file name, using the emit naming
+    convention."""
+    m = re.search(r"emit(\d+t\d+)_", os.path.basename(str(fname)))
+    if not m:
+        raise RuntimeError(f"Don't recognize the format of file name {fname}")
+    return m.group(1)
 
 
 def extended_orb_from_file_name(fname):
@@ -179,5 +195,6 @@ __all__ = [
     "extended_orb_from_file_name",
     "emit_file_name",
     "orb_and_scene_from_file_name",
+    "time_from_file_name",
     "process_run",
 ]
