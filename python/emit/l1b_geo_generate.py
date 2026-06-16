@@ -36,7 +36,7 @@ class L1bGeoGenerate:
         qa_fname = emit_file_name(
             "l1b_geoqa",
             tstart,
-            None,
+            int(self.orbit_number),
             None,
             None,
             int(self.product_version),
@@ -177,7 +177,7 @@ class L1bGeoGenerate:
         orb_fname = emit_file_name(
             "l1b_att",
             tstart,
-            None,
+            int(self.orbit_number),
             None,
             None,
             int(self.product_version),

@@ -69,3 +69,40 @@ def test_create_igccollection(isolated_dir, test_data, l1_osp_dir):
         igccol.image_ground_connection(1).ipi.time_table.min_time
         < igccol.image_ground_connection(2).ipi.time_table.min_time
     )
+
+def test_create_new_fname_igccollection(isolated_dir, test_data, l1_osp_dir):
+    # Use the new file naming convention, which is shorter
+    l1a_att = test_data / "emit20200610t014911_o80000_l1a_att_v01.nc"
+    line_time = [
+        test_data / "emit20200610t015051_l1a_line_time_v01.txt",
+        test_data / "emit20200610t015103_l1a_line_time_v01.txt",
+        test_data / "emit20200610t015115_l1a_line_time_v01.txt",
+    ]
+    l1b_rad = [
+        test_data / "emit20200610t015051_l1b_rdn_v01.img",
+        test_data / "emit20200610t015103_l1b_rdn_v01.img",
+        test_data / "emit20200610t015115_l1b_rdn_v01.img",
+    ]
+    rad_band = 1
+    print(l1_osp_dir)
+    print(l1_osp_dir.spice_data_dir)
+    igccol = EmitIgcCollection.create(
+        l1a_att, zip(line_time, l1b_rad), rad_band, l1_osp_dir=l1_osp_dir
+    )
+    assert igccol.orbit_number == "80000"
+    assert igccol.scene_list == [None, None, None]
+    assert igccol.number_image == 3
+    assert igccol.image_ground_connection(0).title == "20200610t015051"
+    assert igccol.image_ground_connection(1).title == "20200610t015103"
+    assert igccol.image_ground_connection(2).title == "20200610t015115"
+    assert (
+        igccol.image_ground_connection(0).ipi.time_table.min_time
+        < igccol.image_ground_connection(1).ipi.time_table.min_time
+    )
+    print(igccol.image_ground_connection(1).ipi.time_table.min_time)
+    print(igccol.image_ground_connection(2).ipi.time_table.min_time)
+    assert (
+        igccol.image_ground_connection(1).ipi.time_table.min_time
+        < igccol.image_ground_connection(2).ipi.time_table.min_time
+    )
+    

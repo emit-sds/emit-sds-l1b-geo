@@ -131,8 +131,9 @@ def _create(cls, orbit_fname, tt_and_rdn_fname, l1b_band, l1_osp_dir, include_im
             orbit_number, scene, stime = orb_and_scene_from_file_name(rdn_fname)
         except RuntimeError:
             # The newer naming convention doesn't have orbit number and scene it it.
-            # Just use the stime
-            orbit_number = None
+            # Use the orbit file  that has orbit number, and get the time from the
+            # radiance file. Leave the scene as None.
+            orbit_number, _, _ = orb_and_scene_from_file_name(orbit_fname)
             scene = None
             stime = time_from_file_name(rdn_fname)
         reverse_image = False

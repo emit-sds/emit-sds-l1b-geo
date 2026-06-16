@@ -97,11 +97,10 @@ def emit_file_name(file_type, dstring, onum, snum, bnum, vnum, ext):
             ext,
         )
     if snum is None:
-        return "emit%s_o%05d_%s_b%03d_v%02d%s" % (
+        return "emit%s_o%05d_%s_v%02d%s" % (
             dstring,
             onum,
             file_type,
-            bnum,
             vnum,
             ext,
         )
@@ -119,10 +118,10 @@ def emit_file_name(file_type, dstring, onum, snum, bnum, vnum, ext):
 def orb_and_scene_from_file_name(fname):
     """Get the orbit and scene from a file name, using the emit naming
     convention."""
-    m = re.search(r"emit(\d+t\d+)_o(\d+)_s(\d+)_", os.path.basename(str(fname)))
+    m = re.search(r"emit(?P<stime>\d+t\d+)_o(?P<orbit>\d+)_(s(?P<scene>\d+)_)?", os.path.basename(str(fname)))
     if not m:
         raise RuntimeError(f"Don't recognize the format of file name {fname}")
-    return (m.group(2), m.group(3), m.group(1))
+    return (m["orbit"], m["scene"], m["stime"])
 
 def time_from_file_name(fname):
     """Get the time from a file name, using the emit naming
