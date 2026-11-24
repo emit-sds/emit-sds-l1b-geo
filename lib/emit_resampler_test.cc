@@ -1,12 +1,12 @@
 #include "unit_test_support.h"
-#include "resampler.h"
+#include "emit_resampler.h"
 #include "geocal/gdal_raster_image.h"
 #include "geocal/landsat7_global.h"
 #include <boost/make_shared.hpp>
 using namespace Emit;
 using namespace GeoCal;
 
-BOOST_FIXTURE_TEST_SUITE(resampler, GlobalFixture)
+BOOST_FIXTURE_TEST_SUITE(emit_resampler, GlobalFixture)
 
 BOOST_AUTO_TEST_CASE(basic_test)
 {
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(basic_test)
   boost::shared_ptr<GdalRasterImage> swir_dn = boost::make_shared<GdalRasterImage>("HDF5:\"" + fname2 + "\"://SWIR/swir_dn");
   Landsat7Global orth(landsat7_dir(), Landsat7Global::BAND5);
   MapInfo mi = orth.map_info().scale(2, 2);
-  Resampler r(lat, lon, mi);
+  EmitResampler r(lat, lon, mi);
   r.resample_field("swir_res.img", swir_dn);
 }
 

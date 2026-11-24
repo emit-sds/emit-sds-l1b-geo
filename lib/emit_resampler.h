@@ -1,5 +1,5 @@
-#ifndef RESAMPLER_H
-#define RESAMPLER_H
+#ifndef EMIT_RESAMPLER_H
+#define EMIT_RESAMPLER_H
 #include "geocal/raster_image.h"
 #include "geocal/dem.h"
 
@@ -22,17 +22,17 @@ namespace Emit {
   efficient - but for now this doesn't seem to be worth the effort.
 *******************************************************************/
 
-class Resampler : public GeoCal::Printable<Resampler> {
+class EmitResampler : public GeoCal::Printable<EmitResampler> {
 public:
-  Resampler(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
+  EmitResampler(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
 	    const boost::shared_ptr<GeoCal::RasterImage>& Y_coor,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
-  Resampler(const blitz::Array<double, 2>& X_coor_interpolated,
+  EmitResampler(const blitz::Array<double, 2>& X_coor_interpolated,
 	    const blitz::Array<double, 2>& Y_coor_interpolated,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
-  virtual ~Resampler() {}
+  virtual ~EmitResampler() {}
   const GeoCal::MapInfo& map_info() const { return mi; }
   int number_sub_pixel() const {return nsub; }
   blitz::Array<double, 2> resample_field
@@ -49,7 +49,7 @@ public:
 		  blitz::Array<double, 2>& Lat, blitz::Array<double, 2>& Lon,
 		  blitz::Array<double, 2>& Height) const;
   virtual void print(std::ostream& Os) const
-  { Os << "ECOSTRESS Resampler";}
+  { Os << "EmitResampler";}
 private:
   void init(const blitz::Array<double, 2>& X_coor,
 	    const blitz::Array<double, 2>& Y_coor,
@@ -57,7 +57,7 @@ private:
   GeoCal::MapInfo mi;
   int nsub;
   blitz::Array<int, 3> data_index;
-  Resampler() {}
+  EmitResampler() {}
   friend class boost::serialization::access;
   template<class Archive>
   void serialize(Archive & ar, const unsigned int version);
@@ -65,5 +65,5 @@ private:
 
 }
 
-BOOST_CLASS_EXPORT_KEY(Emit::Resampler);
+BOOST_CLASS_EXPORT_KEY(Emit::EmitResampler);
 #endif

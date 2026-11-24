@@ -1,6 +1,6 @@
 import geocal
 import numpy as np
-from emit_swig import Resampler
+from emit_swig import EmitResampler
 from .envi_file import EnviFile
 from loguru import logger
 
@@ -84,7 +84,7 @@ class AvirisNgGlt(EnviFile):
         else:
             mi = self.map_info_not_rotated()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lon, lat, mi, self.number_subpixel, False)
+        res = EmitResampler(lon, lat, mi, self.number_subpixel, False)
         super().__init__(
             self.fname,
             map_info=res.map_info,

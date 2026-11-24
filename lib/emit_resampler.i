@@ -4,7 +4,7 @@
 %include "emit_common.i"
 
 %{
-#include "resampler.h"
+#include "emit_resampler.h"
 #include "geocal/image_ground_connection.h"
 %}
 
@@ -13,15 +13,15 @@
 %import "map_info.i"
 %import "dem.i"
 
-%emit_shared_ptr(Emit::Resampler);
+%emit_shared_ptr(Emit::EmitResampler);
 namespace Emit {
-class Resampler : public GeoCal::GenericObject {
+class EmitResampler : public GeoCal::GenericObject {
 public:
-  Resampler(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
+  EmitResampler(const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
 	    const boost::shared_ptr<GeoCal::RasterImage>& Y_coor,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
-  Resampler(const blitz::Array<double, 2>& X_coor_interpolated,
+  EmitResampler(const blitz::Array<double, 2>& X_coor_interpolated,
 	    const blitz::Array<double, 2>& Y_coor_interpolated,
 	    const GeoCal::MapInfo& Mi, int Num_sub_pixel = 2,
 	    bool Exactly_match_mi = false);
@@ -47,4 +47,4 @@ public:
 }
 
 // List of things "import *" will include
-%python_export("Resampler")
+%python_export("EmitResampler")

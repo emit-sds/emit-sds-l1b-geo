@@ -21,5 +21,6 @@ gdb = "*"
 mypy = "*"
 ruff = "*"
 pandas-stubs = "*"
-# Swig 4.4.0 just came out, and doesn't seem to work. Restrict to the older version
-swig = "<4.4.0"
+# geocal's installed swig wrappers (geocal_swig) are generated with SWIG 4.4.0, and ecostress-level1
+# regenerated its wrappers with 4.4.0. Use the same version for all the wrappers here.
+swig = "4.4.0"

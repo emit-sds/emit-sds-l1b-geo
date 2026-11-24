@@ -1,7 +1,7 @@
 from .gaussian_stretch import gaussian_stretch
 import geocal
 import numpy as np
-from emit_swig import EmitL1bImage, Resampler
+from emit_swig import EmitL1bImage, EmitResampler
 import subprocess
 from loguru import logger
 import os
@@ -55,7 +55,7 @@ class EmitKmzAndQuicklook(object):
         if self.change_to_geodetic360:
             mi.change_to_geodetic360()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lon, lat, mi, self.number_subpixel, False)
+        res = EmitResampler(lon, lat, mi, self.number_subpixel, False)
         vrt_fname = "map_scaled_%s.vrt" % self.scene_index
         cmd_merge = ["gdalbuildvrt", "-q", "-separate", vrt_fname]
         # Create second unprojected version. Both upstread and downstream

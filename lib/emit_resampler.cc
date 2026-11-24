@@ -1,4 +1,4 @@
-#include "resampler.h"
+#include "emit_resampler.h"
 #include "emit_serialize_support.h"
 #include "geocal/magnify_replicate.h"
 #include "geocal/magnify_bilinear.h"
@@ -9,15 +9,15 @@ using namespace Emit;
 using namespace GeoCal;
 
 template<class Archive>
-void Resampler::serialize(Archive & ar, const unsigned int version)
+void EmitResampler::serialize(Archive & ar, const unsigned int version)
 {
-  EMIT_GENERIC_BASE(Resampler);
+  EMIT_GENERIC_BASE(EmitResampler);
   ar & GEOCAL_NVP(mi)
     & GEOCAL_NVP(nsub)
     & GEOCAL_NVP(data_index);
 }
 
-EMIT_IMPLEMENT(Resampler);
+EMIT_IMPLEMENT(EmitResampler);
 
 // We don't actually have a fill value yet, but we might get one in
 // the future. For now, just put this in here as a placeholder. But if
@@ -53,7 +53,7 @@ const int fill_value_threshold = -999;
 /// existing file.
 //-------------------------------------------------------------------------
 
-Resampler::Resampler
+EmitResampler::EmitResampler
 (const boost::shared_ptr<GeoCal::RasterImage>& X_coor,
  const boost::shared_ptr<GeoCal::RasterImage>& Y_coor,
  const GeoCal::MapInfo& Mi, int Num_sub_pixel, bool Exactly_match_mi)
@@ -74,7 +74,7 @@ Resampler::Resampler
 /// in python use scaled_lat_lon_grid)
 //-------------------------------------------------------------------------
 
-Resampler::Resampler
+EmitResampler::EmitResampler
 (const blitz::Array<double, 2>& X_coor_interpolated,
  const blitz::Array<double, 2>& Y_coor_interpolated,
  const GeoCal::MapInfo& Mi, int Num_sub_pixel, bool Exactly_match_mi)
@@ -83,7 +83,7 @@ Resampler::Resampler
   init(X_coor_interpolated, Y_coor_interpolated, Mi, Exactly_match_mi);
 }
 
-void Resampler::init(const blitz::Array<double, 2>& X_coor,
+void EmitResampler::init(const blitz::Array<double, 2>& X_coor,
 		     const blitz::Array<double, 2>& Y_coor,
 		     const GeoCal::MapInfo& Mi, bool Exactly_match_mi)
 {
@@ -141,7 +141,7 @@ void Resampler::init(const blitz::Array<double, 2>& X_coor,
 /// line/sample that sees a particular grid cell.
 //-------------------------------------------------------------------------
 
-blitz::Array<double, 2> Resampler::resample_field
+blitz::Array<double, 2> EmitResampler::resample_field
 (const boost::shared_ptr<GeoCal::RasterImage>& Data,
  double Scale_data, bool Negative_to_zero, double Fill_value,
  bool Use_smallest_ic) const
@@ -211,7 +211,7 @@ blitz::Array<double, 2> Resampler::resample_field
 /// data without large negative fill values (e.g., -9999)
 //-------------------------------------------------------------------------
 
-void Resampler::resample_field
+void EmitResampler::resample_field
 (const std::string& Fname,
  const boost::shared_ptr<GeoCal::RasterImage>& Data,
  double Scale_data, const std::string& File_type, bool Negative_to_zero,
@@ -229,7 +229,7 @@ void Resampler::resample_field
 /// because this is much faster to do in C++ vs. looping in python.
 //-------------------------------------------------------------------------
 
-void Resampler::map_values
+void EmitResampler::map_values
 (const GeoCal::Dem& d,
  blitz::Array<double, 2>& Lat, blitz::Array<double, 2>& Lon,
  blitz::Array<double, 2>& Height) const

@@ -1,6 +1,6 @@
 import geocal
 import numpy as np
-from emit_swig import Resampler
+from emit_swig import EmitResampler
 from .envi_file import EnviFile
 import cv2
 import math
@@ -148,7 +148,7 @@ class EmitGlt(EnviFile):
         else:
             mi = self.map_info_not_rotated()
         lat, lon = self.loc.scaled_lat_lon_grid(self.number_subpixel)
-        res = Resampler(lon, lat, mi, self.number_subpixel, False)
+        res = EmitResampler(lon, lat, mi, self.number_subpixel, False)
         if res.map_info.number_y_pixel > 10000 or res.map_info.number_x_pixel > 10000:
             raise RuntimeError(
                 f"Funny map, ending process. File name: {self.fname} Map info: {res.map_info}"
