@@ -88,6 +88,11 @@ if test "x$want_boost" = "xyes"; then
                if test -e "$ac_boost_path/lib/libboost_system.so" -o -e "$ac_boost_path/lib/libboost_system.la" -o -e "$ac_boost_path/lib/libboost_system.dylib"; then
                   BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_system"
                fi
+               # Boost 1.88 and later has process v2 as a compiled library, older versions
+               # are header only.
+               if test -e "$ac_boost_path/lib/libboost_process.so" -o -e "$ac_boost_path/lib/libboost_process.la" -o -e "$ac_boost_path/lib/libboost_process.dylib"; then
+                  BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_process"
+               fi
                BOOST_DATETIME_LIB="-lboost_date_time"
                BOOST_IOSTREAMS_LIB="-lboost_iostreams"
                BOOST_SERIALIZATION_LIB="-lboost_serialization"
@@ -103,6 +108,11 @@ if test "x$want_boost" = "xyes"; then
 		       BOOST_FILESYSTEM_LIB="-lboost_filesystem"
 		       if test -e "$ac_boost_lib_base/libboost_system.so" -o -e "$ac_boost_lib_base/libboost_system.la" -o -e "$ac_boost_lib_base/libboost_system.dylib"; then
 		          BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_system"
+		       fi
+		       # Boost 1.88 and later has process v2 as a compiled library, older versions
+		       # are header only.
+		       if test -e "$ac_boost_lib_base/libboost_process.so" -o -e "$ac_boost_lib_base/libboost_process.la" -o -e "$ac_boost_lib_base/libboost_process.dylib"; then
+		          BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_process"
 		       fi
                        BOOST_DATETIME_LIB="-lboost_date_time"
 		       BOOST_IOSTREAMS_LIB="-lboost_iostreams"
@@ -120,6 +130,11 @@ if test "x$want_boost" = "xyes"; then
 		       BOOST_FILESYSTEM_LIB="-lboost_filesystem-mt"
 		       if test -e "$ac_boost_lib_base/libboost_system-mt.so" -o -e "$ac_boost_lib_base/libboost_system-mt.la" -o -e "$ac_boost_lib_base/libboost_system-mt.dylib"; then
 		          BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_system-mt"
+		       fi
+		       # Boost 1.88 and later has process v2 as a compiled library, older versions
+		       # are header only.
+		       if test -e "$ac_boost_lib_base/libboost_process-mt.so" -o -e "$ac_boost_lib_base/libboost_process-mt.la" -o -e "$ac_boost_lib_base/libboost_process-mt.dylib"; then
+		          BOOST_FILESYSTEM_LIB="$BOOST_FILESYSTEM_LIB -lboost_process-mt"
 		       fi
                        BOOST_DATETIME_LIB="-lboost_date_time-mt"
                        BOOST_IOSTREAMS_LIB="-lboost_iostreams-mt"

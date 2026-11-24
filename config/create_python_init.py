@@ -29,7 +29,7 @@ initcmd = []
 end_count = 0
 for i in sys.argv[5:]:
     # Handle stuff we are including conditionally
-    if(re.search('\AHAVE', i)):
+    if(re.search(r'\AHAVE', i)):
         for c in range(end_count):
             prototypes.append("#endif")
             initcmd.append("#endif")
