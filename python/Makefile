@@ -28,17 +28,17 @@ install2:
 # ------------------------------------------------------------------
 
 lint:
-	ruff check emit test
+	ruff check emit tests
 
 # Add some extra rules
 lint-strict:
-	ruff check --extend-select N emit test
+	ruff check --extend-select N emit tests
 
 lint-fix:
-	ruff check --fix emit test
+	ruff check --fix emit tests
 
 format:
-	ruff format emit test
+	ruff format emit tests
 
 # Note that PYTHONPATH is required, at least as of pip 24.3.1. The py.typed file needed to
 # tell mypy that our modules have types doesn't get translated through using
@@ -55,6 +55,6 @@ mypy:
 	PYTHONPATH=$(PWD) mypy --disallow-untyped-defs emit
 
 check:
-	pytest -n 10 test
+	pytest -n 10 tests
 
 

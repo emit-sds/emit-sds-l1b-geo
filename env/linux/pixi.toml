@@ -1,0 +1,25 @@
+[workspace]
+authors = ["Mike Smyth <Mike.M.Smyth@jpl.nasa.gov>"]
+channels = ["conda-forge", "fake-afids-conda-channel"]
+name = "build-pixi"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+# Same environment as ecostress-level1 (geocal 1.x, SWIG based), plus what emit needs.
+# There is no pixi.lock yet: run "make update-lock" after the first successful
+# "make create-env PIXI_LOCKED=no", then PIXI_LOCKED=yes (the default) uses it.
+[dependencies]
+geocal = "*"
+afids-development-tools = "*"
+afids = "*"
+conda = "*"
+h5netcdf = "*"
+loguru = "*"
+loguru-config = "*"
+pytest-loguru = "*"
+gdb = "*"
+mypy = "*"
+ruff = "*"
+pandas-stubs = "*"
+# Swig 4.4.0 just came out, and doesn't seem to work. Restrict to the older version
+swig = "<4.4.0"

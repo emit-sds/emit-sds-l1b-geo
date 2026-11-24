@@ -12,3 +12,9 @@ igc_sim*
 .tramp_history
 end_to_end_testing/*.xml
 end_to_end_testing/*.pkl
+python/build
+python/emit.egg-info
+python/pytest_tmp
+python/tt.xml
+python/ttreverse.xml
+claude_notes/*.html
