@@ -1,5 +1,5 @@
 from emit import GeoQa, L1bCorrect
-from multiprocessing import Pool
+from multiprocessing import get_context
 import pytest
 
 
@@ -29,6 +29,6 @@ def test_l1b_correct(isolated_dir, l1_osp_dir, emit_igccol, test_data):
         l1_osp_dir,
     )
     t = L1bCorrect(emit_igccol, l1_osp_dir, geo_qa)
-    pool = Pool(10)
+    pool = get_context("fork").Pool(10)
     igccol_corrected = t.igccol_corrected(pool=pool)
     print(igccol_corrected)

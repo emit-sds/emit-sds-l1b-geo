@@ -1,5 +1,5 @@
 from emit import GeoQa, L1bTpCollect
-from multiprocessing import Pool
+from multiprocessing import get_context
 import pytest
 
 
@@ -29,6 +29,6 @@ def test_l1b_tp_collect(isolated_dir, l1_osp_dir, emit_igccol, test_data):
         l1_osp_dir,
     )
     t = L1bTpCollect(emit_igccol, l1_osp_dir, geo_qa)
-    pool = Pool(10)
+    pool = get_context("fork").Pool(10)
     res = t.tpcol(pool=pool)
     print(res)

@@ -1,6 +1,6 @@
 from emit import AvirisNgIgm, AvirisNgLoc
 import geocal
-from multiprocessing import Pool
+from multiprocessing import get_context
 import pytest
 
 
@@ -15,7 +15,7 @@ def test_aviris_ng_igm(aviris_ng_full_test_data):
 def test_generate_avris_igm(aviris_igc_full, isolated_dir, test_data):
     loc = AvirisNgLoc(test_data / "aviris_ng_old" / "aviris_ng_full_loc")
     igm = AvirisNgIgm("test_igm", igc=aviris_igc_full, loc=loc)
-    pool = Pool(20)
+    pool = get_context("fork").Pool(20)
     igm.run(pool=pool)
     print(igm.ground_coordinate(0, igm.shape[2] // 2))
     print(geocal.Geodetic(igm.ground_coordinate(0, igm.shape[2] // 2)))

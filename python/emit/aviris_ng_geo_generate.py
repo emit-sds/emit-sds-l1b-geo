@@ -11,7 +11,7 @@ import geocal
 from loguru import logger
 import re
 import os
-from multiprocessing import Pool
+from multiprocessing import get_context
 
 
 class AvirisNgGeoGenerate:
@@ -113,7 +113,9 @@ class AvirisNgGeoGenerate:
         )
         if self.l1_osp_dir.number_process > 1:
             logger.info(f"Using {self.l1_osp_dir.number_process} processors")
-            pool = Pool(self.l1_osp_dir.number_process)
+            # fork, not python 3.14's default forkserver: jobs share state
+            # (e.g., memory mapped files) with the parent process.
+            pool = get_context("fork").Pool(self.l1_osp_dir.number_process)
         else:
             logger.info("Using 1 processor")
             pool = None

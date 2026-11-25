@@ -1,6 +1,6 @@
 from emit import AvirisNgLoc
 import geocal
-from multiprocessing import Pool
+from multiprocessing import get_context
 import pytest
 
 
@@ -22,5 +22,5 @@ def test_generate_avris_loc(aviris_igc_full, isolated_dir):
     print(aviris_igc_full.image)
     geocal.write_shelve("igc.xml", aviris_igc_full)
     g = AvirisNgLoc("test_loc.img", igc=aviris_igc_full)
-    pool = Pool(20)
+    pool = get_context("fork").Pool(20)
     g.run(pool=pool)

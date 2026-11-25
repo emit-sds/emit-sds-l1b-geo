@@ -4,7 +4,7 @@ from tp_pair_col import TpPairCol
 from aviris_ng_util import *
 import os
 import math
-from multiprocessing import Pool
+from multiprocessing import get_context
 import pandas as pd
 from pptx import Presentation
 
@@ -60,13 +60,13 @@ m = CcorrLsmMatcher(CcorrMatcher(15, 15, 9, 9,min_corr,min_var),
                     LsmMatcher(11, 11))
 if False:
     tcol = TpPairCol(igccol3_1, rot_mi(igc3), matcher=m)
-    pool = Pool(20)
+    pool = get_context("fork").Pool(20)
     tpcol = tcol.tpcol(pool=pool, llist=range(lnstart_3_1,lnend_3_1,10))
     write_shelve("camera_model_fitted/tpcol_3_1.xml", tpcol)
     pool.close()
 if False:
     tcol = TpPairCol(igccol3_2, rot_mi(igc3), matcher=m)
-    pool = Pool(20)
+    pool = get_context("fork").Pool(20)
     tpcol = tcol.tpcol(pool=pool, llist=range(lnstart_3_2,lnend_3_2,10))
     write_shelve("camera_model_fitted/tpcol_3_2.xml", tpcol)
     pool.close()
