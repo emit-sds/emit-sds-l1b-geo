@@ -49,7 +49,9 @@ class StandardMetadata:
     def write_metadata(self, envi_file):
         """Write out the metadata to the given EnviFile"""
         envi_file.flush()
-        fh = geocal.GdalRasterImage(str(envi_file.file_name), 1, 4, True)
+        fh = geocal.GdalRasterImage(
+            str(envi_file.file_name), 1, "ENVI", "", "", 4, True
+        )
         # The description seems to get overwritten with the file name every
         # time GDAL writes it out. So reset the description, even though
         # this was already set.

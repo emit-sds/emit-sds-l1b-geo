@@ -185,7 +185,9 @@ class EmitGlt(EnviFile):
         self.glt_line[self.glt_line < 0] = 0
         self.glt_sample[self.glt_sample < 0] = 0
         self.flush()
-        fh = geocal.GdalRasterImage(str(self.file_name), 1, 4, True)
+        fh = geocal.GdalRasterImage(
+            str(self.file_name), 1, "ENVI", "", "", 4, True
+        )
         fh["ENVI", "GRing"] = self.gring()
         fh.close()
         if self.standard_metadata:
